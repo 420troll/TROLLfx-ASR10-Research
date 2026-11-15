@@ -55,6 +55,7 @@ int main(int argc, char **argv) {
     struct Tone { double t, f, amp, dur; char side; };
     std::vector<Tone> tones;
     std::string in_wav; double in_wav_t = 0;
+    bool dac_ideal = false;
     for (int i = 1; i < argc; i++) {
         std::string a = argv[i];
         auto next = [&]() { return std::string(i + 1 < argc ? argv[++i] : ""); };
@@ -65,6 +66,7 @@ int main(int argc, char **argv) {
         else if (a == "--seconds") seconds = atof(next().c_str());
         else if (a == "--aux-wav") { aux_wav = next(); for (auto &x : m_aux_flag) x = false; }
         else if (a == "--wav") wav = next();
+        else if (a == "--dac") dac_ideal = next() == "ideal";   // tda1541a (default) | ideal
         else if (a == "--ram") ram_mb = atoi(next().c_str());
         else if (a == "--trace-io") trace_io = true;
         else if (a == "--write-back") write_back = true;
@@ -125,6 +127,7 @@ int main(int argc, char **argv) {
         }
     }
     Asr10 m;
+    m.dac.set_model(dac_ideal ? DacOut::IDEAL : DacOut::TDA1541A);
     m.set_ram_mb(ram_mb);
     for (int i = 0; i < 3; i++) m.aux_to_main[i] = m_aux_flag[i];
     bool rom_ok = (lo_set || hi_set) ? m.load_rom(lo, hi) : (m.load_rom_dir(rom_dir) || m.load_rom(lo, hi));

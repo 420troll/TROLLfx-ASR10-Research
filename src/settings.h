@@ -20,6 +20,7 @@ struct Settings {
     bool show_keyboard = true;         // strip with the wheels, Patch Select and the keyboard
     // display: false = the original VFD, true = the purple graphic LCD
     bool lcd = false;
+    bool dac_tda = true;               // outputs through the TDA1541A converters (else a perfect converter)
     // SCSI drives: folder with ZuluSCSI-style images (HD0.img, CD5.iso ...); "" = the "scsi" folder
     // next to the program
     std::string scsi_dir;

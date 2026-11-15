@@ -12,6 +12,7 @@
 #include "fdc.h"
 #include "es5506.h"
 #include "es5510.h"
+#include "dac_out.h"
 #include "panel.h"
 #include "scsi.h"
 
@@ -117,8 +118,9 @@ private:
 
     uint64_t total_cycles = 0;
     double otto_acc = 0, duart_acc = 0;
-    double resamp_pos = 0;
-    float last[8] = {};
+public:
+    DacOut dac;                        // the TDA1541A converters, and the step to out_rate
+private:
     void otto_frame();
     void input_frame(double frame_rate);
     std::mutex input_mx;

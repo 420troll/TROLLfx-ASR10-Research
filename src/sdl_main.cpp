@@ -769,6 +769,7 @@ int main(int argc, char **argv) {
         if (aio.in_channels() == 2 && cfg.audio_api == "sdl") { in_rel_l = 0; in_rel_r = 1; }
         cur_rate = ok ? aio.rate() : 48000;
         m.out_rate = cur_rate;
+        m.dac.set_model(cfg.dac_tda ? DacOut::TDA1541A : DacOut::IDEAL);
         unsigned buf = ok ? aio.buffer() : 256;
         target_frames = std::max(2 * buf, (unsigned)(cur_rate * 0.006)) + 32;   // ~6 ms ahead of the device
         underruns = 0;
@@ -792,7 +793,7 @@ int main(int argc, char **argv) {
     std::vector<std::string> midi_ins, midi_outs;
     NativeMenu nmenu;
     std::string opt_msg, scsi_note;
-    enum { O_API, O_OUT, O_RATE, O_BUF, O_MAIN, O_AUX1, O_AUX2, O_AUX3, O_IN, O_INL, O_INR, O_MIDIIN, O_MIDIOUT, O_SCSI, O_NEWSIZE, O_NEWMAKE, O_BOOT, O_DISPLAY, O_N };
+    enum { O_API, O_OUT, O_RATE, O_BUF, O_MAIN, O_AUX1, O_AUX2, O_AUX3, O_IN, O_INL, O_INR, O_MIDIIN, O_MIDIOUT, O_SCSI, O_NEWSIZE, O_NEWMAKE, O_BOOT, O_DISPLAY, O_DAC, O_N };
     static const unsigned BUFS[] = { 32, 64, 128, 256, 512, 1024, 2048 };
     auto out_dev_info = [&](const Settings &st) -> AudioDevice {
         for (auto &d : devices_of(st.audio_api)) if (d.outputs > 0 && (d.name == st.audio_out || (st.audio_out.empty() && d.default_out))) return d;
@@ -916,6 +917,9 @@ int main(int argc, char **argv) {
         r[O_DISPLAY].label = "Screen type";
         r[O_DISPLAY].items = { "VFD (original, cyan)", "LCD (purple backlight)" };
         r[O_DISPLAY].sel = edit.lcd ? 1 : 0;
+        r[O_DAC].label = "D/A converters";
+        r[O_DAC].items = { "TDA1541A (as the ASR-10)", "Ideal (perfect converter)" };
+        r[O_DAC].sel = edit.dac_tda ? 0 : 1;
         r[O_BOOT].label = "Boot from";
         r[O_BOOT].items = { "Floppy: the OS disk image", "SCSI drive (no floppy at start)" };
         r[O_BOOT].sel = edit.boot_scsi ? 1 : 0;
@@ -941,6 +945,7 @@ int main(int argc, char **argv) {
         case O_MIDIIN: edit.midi_in = x.sel == 0 ? "" : v; edit.midi_in_set = true; break;
         case O_MIDIOUT: edit.midi_out = x.sel == 0 ? "" : v; break;
         case O_DISPLAY: edit.lcd = x.sel == 1; break;
+        case O_DAC: edit.dac_tda = x.sel == 0; break;
         case O_BOOT: edit.boot_scsi = x.sel == 1; break;
         case O_NEWSIZE: new_mb = NEW_SIZES[std::clamp(x.sel, 0, (int)NEW_SIZES.size() - 1)]; break;
         case O_SCSI:
@@ -1007,7 +1012,7 @@ int main(int argc, char **argv) {
         { "Input (sampler and Audio Tracks)", 1, Y0, O_IN, O_INR },
         { "MIDI", 1, Y0 + ROW_H * 4 + 18, O_MIDIIN, O_MIDIOUT },
         { "SCSI drives (ZuluSCSI-style: HD0.img, CD5.iso ...)", 1, Y0 + ROW_H * 7 + 30, O_SCSI, O_BOOT },
-        { "Display", 0, Y0 + ROW_H * 9 + 18, O_DISPLAY, O_DISPLAY } };
+        { "Display and sound", 0, Y0 + ROW_H * 9 + 6, O_DISPLAY, O_DAC } };
     auto field_rect = [&](int row) -> SDL_Rect {
         for (const Sect &sc : sects)
             if (row >= sc.first && row <= sc.last)
@@ -1037,7 +1042,7 @@ int main(int argc, char **argv) {
         drop_top = std::clamp(drop_top, 0, std::max(0, n - DROP_MAX));
     };
     // keyboard order of the fields
-    const int ORDER[O_N] = { O_API, O_OUT, O_RATE, O_BUF, O_MAIN, O_AUX1, O_AUX2, O_AUX3, O_IN, O_INL, O_INR, O_MIDIIN, O_MIDIOUT, O_SCSI, O_NEWSIZE, O_NEWMAKE, O_BOOT, O_DISPLAY };
+    const int ORDER[O_N] = { O_API, O_OUT, O_RATE, O_BUF, O_MAIN, O_AUX1, O_AUX2, O_AUX3, O_IN, O_INL, O_INR, O_MIDIIN, O_MIDIOUT, O_SCSI, O_NEWSIZE, O_NEWMAKE, O_BOOT, O_DISPLAY, O_DAC };
     auto order_pos = [&](int row) { for (int i = 0; i < O_N; i++) if (ORDER[i] == row) return i; return 0; };
     bool show_kb = cfg.show_keyboard;
     // window layout: keyboard strip shown or hidden (it is always there while the options are
