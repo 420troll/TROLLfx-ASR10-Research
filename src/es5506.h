@@ -24,6 +24,9 @@ public:
     double sample_rate(double clock) const { return clock / (16.0 * (m_active_voices + 1)); }
 
     std::function<uint16_t(int bank, uint32_t addr)> read_sample;
+    // the same as a plain function (used instead when set: no std::function call per sample)
+    uint16_t (*read_sample_fn)(void *ctx, int bank, uint32_t addr) = nullptr;
+    void *read_sample_ctx = nullptr;
     int cur_voice = 0;                                             // voice being fetched (for read_sample)  // 16-bit word fetch
     std::function<uint16_t()> read_pot;                            // 10-bit POT A/D
     std::function<void(bool)> irq_cb;                              // IRQB asserted (true) / released

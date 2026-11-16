@@ -170,8 +170,14 @@ void ES5506::generate_voice(Voice &v, int32_t *dest) {
     uint64_t accum = v.accum & m_acc_mask;
     if (!(v.control & CONTROL_STOPMASK)) {
         int bank = (v.control >> 14) & 3;
-        int32_t s1 = read_sample(bank, (uint32_t)integer_addr(accum));
-        int32_t s2 = read_sample(bank, (uint32_t)integer_addr(accum, 1));
+        int32_t s1, s2;
+        if (read_sample_fn) {
+            s1 = read_sample_fn(read_sample_ctx, bank, (uint32_t)integer_addr(accum));
+            s2 = read_sample_fn(read_sample_ctx, bank, (uint32_t)integer_addr(accum, 1));
+        } else {
+            s1 = read_sample(bank, (uint32_t)integer_addr(accum));
+            s2 = read_sample(bank, (uint32_t)integer_addr(accum, 1));
+        }
         if (v.control & CONTROL_CMPD) {
             s1 = m_ulaw[(uint16_t)s1 >> (16 - ULAW_MAXBITS)];
             s2 = m_ulaw[(uint16_t)s2 >> (16 - ULAW_MAXBITS)];

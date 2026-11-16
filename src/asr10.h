@@ -102,6 +102,20 @@ public:
     bool trace_io = false;
     bool trace_unknown = true;
     uint32_t last_pc() const;
+    // the 68000's word and long reads: RAM pages at once (inline), everything else through read()
+    uint32_t read16(uint32_t a) {
+        a &= 0xffffff;
+        if (a >= 0xf8 && rmap[a >> 13] == P_RAM) { const uint32_t o = a & ram_mask; return (ram[o] << 8) | ram[(o + 1) & ram_mask]; }
+        return read(a, 2);
+    }
+    uint32_t read32(uint32_t a) {
+        a &= 0xffffff;
+        if (a >= 0xf8 && rmap[a >> 13] == P_RAM) {
+            const uint32_t o = a & ram_mask;
+            return ((uint32_t)ram[o] << 24) | (ram[(o + 1) & ram_mask] << 16) | (ram[(o + 2) & ram_mask] << 8) | ram[(o + 3) & ram_mask];
+        }
+        return read(a, 4);
+    }
 
     // diagnostic hooks
     std::function<void(uint32_t)> on_instr;
