@@ -304,15 +304,18 @@ void M68302::timer_tick(int n, int clocks) {
     if (iclk == 0 || iclk == 3) return;
     double div = (double)((t.tmr >> 8) + 1) * (iclk == 2 ? 16 : 1);
     t.pre += clocks;
-    while (t.pre >= div) {
-        t.pre -= div;
-        if (t.tcn == t.trr) {
-            t.ter |= 2;
-            if (t.tmr & 0x10) raise(n == 0 ? 9 : 6);
-            if (t.tmr & 8) { t.tcn = 0; continue; }
-        }
-        t.tcn++;
-    }
+    if (t.pre < div) return;
+    // k timer ticks at once (all integers: exact). Each tick: at TCN == TRR the reference event
+    // (TER, interrupt), then TCN goes to 0 (restart mode) or on counting; otherwise TCN + 1.
+    uint64_t k = (uint64_t)(t.pre / div);
+    t.pre -= (double)k * div;
+    const uint32_t d = (uint16_t)(t.trr - t.tcn);       // ticks until TCN == TRR
+    if (k <= d) { t.tcn = (uint16_t)(t.tcn + k); return; }
+    k -= (uint64_t)d + 1;                               // the tick of the event
+    t.ter |= 2;
+    if (t.tmr & 0x10) raise(n == 0 ? 9 : 6);           // (more events in the same batch: the same flags)
+    if (t.tmr & 8) t.tcn = (uint16_t)(k % ((uint64_t)t.trr + 1));   // restart: a period of TRR + 1 ticks
+    else t.tcn = (uint16_t)(t.trr + 1 + k);                         // free running: wraps at 16 bits
 }
 
 // ---------------------------------------------------------------- IDMA

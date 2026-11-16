@@ -29,8 +29,8 @@ Asr10 *g_machine = nullptr;
 // --------------------------------------------------------------- Musashi glue
 extern "C" {
 unsigned int m68k_read_memory_8(unsigned int a) { return g_machine->read(a, 1); }
-unsigned int m68k_read_memory_16(unsigned int a) { return g_machine->read(a, 2); }
-unsigned int m68k_read_memory_32(unsigned int a) { return g_machine->read(a, 4); }
+unsigned int m68k_read_memory_16(unsigned int a) { return g_machine->read16(a); }
+unsigned int m68k_read_memory_32(unsigned int a) { return g_machine->read32(a); }
 void m68k_write_memory_8(unsigned int a, unsigned int v) { g_machine->write(a, v, 1); }
 void m68k_write_memory_16(unsigned int a, unsigned int v) { g_machine->write(a, v, 2); }
 void m68k_write_memory_32(unsigned int a, unsigned int v) { g_machine->write(a, v, 4); }
@@ -95,6 +95,16 @@ Asr10::Asr10() {
         uint32_t chunk = ((cs1[o] << 8) | cs1[o + 1]) & 0xf;
         uint32_t ba = ((chunk << 20) | ((addr << 1) & 0xfffff)) & ram_mask;
         return (ram[ba] << 8) | ram[(ba + 1) & ram_mask];
+    };
+    otto.read_sample_ctx = this;
+    otto.read_sample_fn = [](void *ctx, int, uint32_t addr) -> uint16_t {      // (the same, without std::function)
+        Asr10 *m = (Asr10 *)ctx;
+        int slot = (m->otto.cur_voice + m->voice_slot_offset) & 31;
+        int page = (addr >> 19) & 3;
+        int o = 0x1f00 + slot * 8 + page * 2;
+        uint32_t chunk = ((m->cs1[o] << 8) | m->cs1[o + 1]) & 0xf;
+        uint32_t ba = ((chunk << 20) | ((addr << 1) & 0xfffff)) & m->ram_mask;
+        return (m->ram[ba] << 8) | m->ram[(ba + 1) & m->ram_mask];
     };
     // analog controllers: a 4051-style mux selected by PB2-PB0 feeds the OTTO POT A/D
     otto.read_pot = [this]() -> uint16_t {
