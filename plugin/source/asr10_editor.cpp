@@ -3,6 +3,7 @@
 #include "vstgui/lib/platform/iplatformbitmap.h"
 #include "vstgui/lib/cfileselector.h"
 #include <cstring>
+#include <string>
 #include <chrono>
 #include <algorithm>
 #include <functional>
@@ -75,6 +76,30 @@ public:
         rs.in_left = snap.in_left; rs.in_right = snap.in_right; rs.input_level = plug->engine().input_level();
         rs.power_held = power_held;
         for (int l = 0; l < 4; l++) rs.audio_led[l] = snap.audio_led[l];
+        // draw only when something visible changed (the panel is drawn by the software renderer)
+        {
+            const uint32_t t = rs.ticks;
+            if (snap.scsi_activity != seen_scsi || snap.scsi_writes != seen_scsiw) { seen_scsi = snap.scsi_activity; seen_scsiw = snap.scsi_writes; scsi_t = t; }
+            uint64_t hb = 0;
+            for (int i = 0; i < 64; i++) if (held[i]) hb |= 1ull << i;
+            char k[256];
+            snprintf(k, sizeof k, "%llu %u %llx %.4f %.4f %d %d %u %d", (unsigned long long)snap.panel.updates, (t / 250) & 1, (unsigned long long)hb,
+                     rs.volume, rs.data, (int)snap.disk, (int)snap.drive_busy, t - scsi_t < 1500 ? t / 25 : 0, (int)power_held);
+            size_t n = strlen(k);
+        snprintf(k + n, sizeof k - n, " %d %d %d %d%d%d%d", (int)(snap.in_left * 64), (int)(snap.in_right * 64), (int)(rs.input_level * 1000),
+                 snap.audio_led[0], snap.audio_led[1], snap.audio_led[2], snap.audio_led[3]);
+        n = strlen(k);
+        snprintf(k + n, sizeof k - n, " %d", (int)plug->engine().lcd());
+            (void)n;
+            std::string key = k;                 // (and the display itself)
+            const Panel &pn = snap.panel;
+            key.append(pn.disp, Panel::COLS);
+            key.append((const char *)pn.attr, Panel::COLS);
+            key.append((const char *)pn.ind, 16); key.append((const char *)pn.ind2, 16); key.append((const char *)pn.ind3, 16);
+            key += std::to_string(pn.meter) + "," + std::to_string(pn.meter_a);
+            if (last_key == key) return;
+            last_key = key;
+        }
         off.set_lcd(plug->engine().lcd());
         off.render(rs);
         copy_pixels();
@@ -202,6 +227,8 @@ private:
     bool rec_latched = false, power_held = false, arrows_both = false;
     uint32_t power_t = 0;
     double data = 0.5;
+    std::string last_key;                 // what the last drawing showed
+    uint32_t seen_scsi = 0, seen_scsiw = 0, scsi_t = 0;
 };
 
 // ------------------------------------------------------------------ editor
