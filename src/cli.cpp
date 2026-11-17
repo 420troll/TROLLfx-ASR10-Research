@@ -3,6 +3,18 @@
 #include "asr10.h"
 #include "efe_disk.h"
 #include <cstdio>
+#include <chrono>
+#if defined(__has_include)
+#if __has_include(<valgrind/callgrind.h>)
+#include <valgrind/callgrind.h>
+#define ESP_BENCH_START() CALLGRIND_START_INSTRUMENTATION
+#define ESP_BENCH_STOP() CALLGRIND_STOP_INSTRUMENTATION
+#endif
+#endif
+#ifndef ESP_BENCH_START
+#define ESP_BENCH_START()
+#define ESP_BENCH_STOP()
+#endif
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
@@ -308,6 +320,15 @@ int main(int argc, char **argv) {
     }
     if (!dump_ram.empty()) { FILE *f = fopen(dump_ram.c_str(), "wb"); fwrite(m.ram.data(), 1, m.ram.size(), f); fclose(f); }
     if (write_back && m.fdc.dirty) { if (m.fdc.save()) fprintf(stderr, "disk image written back\n"); }
+    if (const char *eb = getenv("ESP_BENCH")) {    // debug: time the effect processor alone on its state at the end
+        ES5510 e = m.esp; const long n = atol(eb); uint64_t sum = 0;
+        auto t0 = std::chrono::steady_clock::now();
+        ESP_BENCH_START();
+        for (long i = 0; i < n; i++) { for (int c = 0; c < 8; c++) e.ser_w(c, (int16_t)(i * (c + 3))); e.run_frame(); for (int c = 0; c < 8; c++) sum = sum * 31 + (uint16_t)e.ser_r(c); }
+        ESP_BENCH_STOP();
+        double dt = std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count();
+        fprintf(stderr, "ESP_BENCH %ld frames: %.1f ns/frame, checksum %016llx\n", n, dt / n * 1e9, (unsigned long long)sum);
+    }
     if (!wav.empty()) write_wav(wav.c_str(), m.audio, (int)m.out_rate);
     if (!dig_wav.empty()) write_wav(dig_wav.c_str(), m.audio_dig, (int)m.out_rate);
     if (!aux_wav.empty()) {                 // AUX1-3 (Output Expander) summed to one stereo file
