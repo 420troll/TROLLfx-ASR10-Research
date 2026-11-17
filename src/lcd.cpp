@@ -288,6 +288,7 @@ void LcdRenderer::draw(const Panel &p, float x, float y, uint32_t ticks, float s
         if (i == Panel::COLS - 1 && rep_lit && ch >= '0' && ch <= '9') ch = (unsigned char)"!#%():;[\\]"[ch - '0'];   // the last digit of REP always has its dot
         SDL_Texture *tx = nullptr, *tg = nullptr;
         const int gi = (ch >= 0x20 && ch < 0x60) ? ch - 0x20 : 0;
+        if ((p.attr[i] & 4) && !blink) continue;                            // blinking text ($60 0): off with the annunciators
         if (p.attr[i] & 3) {                                                // selected field / edit cursor: inverted
             SDL_FRect d{ cx, cy - u, 8 * u, 16 * u };
             blit(cur[gi], cur_g[gi], d);
