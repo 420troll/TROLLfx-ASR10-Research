@@ -1050,7 +1050,7 @@ int main(int argc, char **argv) {
     };
     // layout of the options page: a faceplate-like panel with two columns of drop-down fields
     const int OX = 110, OY = 52, OW = 1180, OH = 548;
-    const int ROW_H = 30, Y0 = OY + 74, LABEL_W = 214, FIELD_W = 330, COL_X[2] = { OX + 36, OX + 616 };
+    const int ROW_H = 26, Y0 = OY + 70, LABEL_W = 214, FIELD_W = 330, COL_X[2] = { OX + 36, OX + 616 };
     const SDL_Rect btn_apply{OX + OW - 214, OY + OH - 46, 70, 26}, btn_close{OX + OW - 112, OY + OH - 46, 70, 26};
     struct Sect { const char *title; int col, y, first, last; };
     // sections: title, column, top, first and last row
