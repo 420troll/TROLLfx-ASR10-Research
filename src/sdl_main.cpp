@@ -709,19 +709,22 @@ int main(int argc, char **argv) {
             bool playing = pn.ind3[12] != 0 || ((pn.ind3[3] || pn.ind3[14]) && !pn.ind3[11]);
             rec.process(m.audio.data(), m.audio.size() / 2, (int)m.out_rate, playing, pn.disp);
         }
+        // the S/PDIF output frames that go with these (the stream may run a frame apart from the main one)
+        const size_t nd = std::min(m.audio.size() / 2, m.audio_dig.size() / 2);
         if (audio_active) {
             size_t n = m.audio.size() / 2;
             bool sep = m.audio_aux.size() >= n * 6;
-            bool dig = m.audio_dig.size() >= n * 2;
             float fr[AudioRing::CH] = {};
             for (size_t i = 0; i < n; i++) {
                 fr[0] = m.audio[i * 2]; fr[1] = m.audio[i * 2 + 1];
                 for (int c = 0; c < 6; c++) fr[2 + c] = sep ? m.audio_aux[i * 6 + c] : 0.0f;
-                fr[8] = dig ? m.audio_dig[i * 2] : 0.0f; fr[9] = dig ? m.audio_dig[i * 2 + 1] : 0.0f;
+                fr[8] = i < nd ? m.audio_dig[i * 2] : 0.0f; fr[9] = i < nd ? m.audio_dig[i * 2 + 1] : 0.0f;
                 if (!ring.push(fr)) break;
             }
         }
-        m.audio.clear(); m.audio_aux.clear(); m.audio_dig.clear();
+        m.audio.clear(); m.audio_aux.clear();
+        m.audio_dig.erase(m.audio_dig.begin(), m.audio_dig.begin() + (ptrdiff_t)nd * 2);
+        if (m.audio_dig.size() > 64) m.audio_dig.clear();
     };
     std::thread emu([&]() {
         SDL_SetThreadPriority(SDL_THREAD_PRIORITY_HIGH);

@@ -167,14 +167,14 @@ void Asr10Engine::process(float *const *out, const float *in_l, const float *in_
         else memset(out[c], 0, sizeof(float) * frames);
     }
     // DI-10 S/PDIF output (outputs 9-10)
-    const bool dig = m->di10 && m->audio_dig.size() >= (size_t)frames * 2;
+    const size_t nd = std::min((size_t)frames, m->audio_dig.size() / 2);   // (it may run a frame apart)
     for (int c = 8; c < 10; c++) {
         if (!out[c]) continue;
-        if (dig) { const float *x = m->audio_dig.data(); for (int i = 0; i < frames; i++) out[c][i] = x[2 * i + (c - 8)]; }
-        else memset(out[c], 0, sizeof(float) * frames);
+        const float *x = m->audio_dig.data();
+        for (int i = 0; i < frames; i++) out[c][i] = (size_t)i < nd ? x[2 * i + (c - 8)] : 0.0f;
     }
-    if (dig) m->audio_dig.erase(m->audio_dig.begin(), m->audio_dig.begin() + (size_t)frames * 2);
-    else m->audio_dig.clear();
+    m->audio_dig.erase(m->audio_dig.begin(), m->audio_dig.begin() + (ptrdiff_t)nd * 2);
+    if (m->audio_dig.size() > m->audio.size() + 64) m->audio_dig.clear();   // (keeps pace with the main stream)
     m->audio.erase(m->audio.begin(), m->audio.begin() + (size_t)frames * 2);
     if (sep) m->audio_aux.erase(m->audio_aux.begin(), m->audio_aux.begin() + (size_t)frames * 6);
     else m->audio_aux.clear();
