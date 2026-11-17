@@ -131,7 +131,7 @@ static void ctl_from_mouse(Ctl &c, int x, int y) {
 // Single producer (emulation thread) / single consumer (audio callback). One frame = 8 floats:
 // main L/R, AUX1 L/R, AUX2 L/R, AUX3 L/R.
 struct AudioRing {
-    static constexpr int CH = 8;
+    static constexpr int CH = 10;           // main, AUX 1-3, S/PDIF out
     explicit AudioRing(size_t frames) : buf(frames * CH), cap(frames) {}
     size_t size() const { return w.load(std::memory_order_acquire) - r.load(std::memory_order_acquire); }
     bool push(const float *f) {
@@ -499,6 +499,7 @@ int main(int argc, char **argv) {
         cfg.load(dir + "asr10.cfg");
         cfg.path = dir + "asr10.cfg";
     }
+    m.di10 = cfg.di10();                            // DI-10 Digital I/O board (the OS looks for it at start)
     // record the program's folder: the VST3 plug-in looks for the ROMs, the OS disk and the
     // "scsi" folder there too, so that both use the same files. When the ROMs came from a roms
     // folder elsewhere (macOS: next to the .app) the folder that holds it is recorded instead.
@@ -637,6 +638,7 @@ int main(int argc, char **argv) {
     std::atomic<bool> stop{false}, audio_active{false}, input_on{true};
     std::atomic<unsigned> target_frames{1024}, cur_rate{48000}, underruns{0};
     std::atomic<int> route_main{0}, route_aux[3], in_rel_l{0}, in_rel_r{1};
+    std::atomic<int> route_dig{-1}, in_rel_dig{-1};   // DI-10: S/PDIF output pair, input pair (first channel)
     for (auto &a : route_aux) a = -1;
     AudioIO aio;
     std::string audio_status;
@@ -649,6 +651,7 @@ int main(int argc, char **argv) {
         std::fill(out, out + (size_t)ch * frames, 0.0f);
         const int mp = route_main * 2;
         int ap[3]; for (int a = 0; a < 3; a++) ap[a] = route_aux[a] >= 0 ? route_aux[a] * 2 : -1;
+        const int dp = route_dig >= 0 ? route_dig * 2 : -1;
         float fr[AudioRing::CH];
         for (int f = 0; f < frames; f++) {
             if (!ring.pop(fr)) { underruns++; continue; }
@@ -656,10 +659,22 @@ int main(int argc, char **argv) {
             auto add = [&](int c, float v) { if (c >= 0 && c < ch) o[c] += v; };
             add(mp, fr[0]); add(mp + 1, fr[1]);
             for (int a = 0; a < 3; a++) if (ap[a] >= 0) { add(ap[a], fr[2 + a * 2]); add(ap[a] + 1, fr[3 + a * 2]); }
+            if (dp >= 0) { add(dp, fr[8]); add(dp + 1, fr[9]); }
         }
     };
     auto capture = [&](const float *in, int ch, int frames) {
-        if (!input_on || wav_playing) return;
+        if (!input_on) return;
+        const int dl = in_rel_dig;
+        if (dl >= 0 && dl + 1 < ch) {               // DI-10 S/PDIF input
+            float buf[2 * 256];
+            for (int done = 0; done < frames; ) {
+                int n = std::min(256, frames - done);
+                for (int i = 0; i < n; i++) { buf[i * 2] = in[(size_t)(done + i) * ch + dl]; buf[i * 2 + 1] = in[(size_t)(done + i) * ch + dl + 1]; }
+                m.feed_digital(buf, (size_t)n, (double)cur_rate);
+                done += n;
+            }
+        }
+        if (wav_playing) return;
         int l = std::min((int)in_rel_l, ch - 1), r = std::min((int)in_rel_r, ch - 1);
         float buf[2 * 256];
         for (int done = 0; done < frames; ) {
@@ -694,6 +709,8 @@ int main(int argc, char **argv) {
             bool playing = pn.ind3[12] != 0 || ((pn.ind3[3] || pn.ind3[14]) && !pn.ind3[11]);
             rec.process(m.audio.data(), m.audio.size() / 2, (int)m.out_rate, playing, pn.disp);
         }
+        // the S/PDIF output frames that go with these (the stream may run a frame apart from the main one)
+        const size_t nd = std::min(m.audio.size() / 2, m.audio_dig.size() / 2);
         if (audio_active) {
             size_t n = m.audio.size() / 2;
             bool sep = m.audio_aux.size() >= n * 6;
@@ -701,10 +718,13 @@ int main(int argc, char **argv) {
             for (size_t i = 0; i < n; i++) {
                 fr[0] = m.audio[i * 2]; fr[1] = m.audio[i * 2 + 1];
                 for (int c = 0; c < 6; c++) fr[2 + c] = sep ? m.audio_aux[i * 6 + c] : 0.0f;
+                fr[8] = i < nd ? m.audio_dig[i * 2] : 0.0f; fr[9] = i < nd ? m.audio_dig[i * 2 + 1] : 0.0f;
                 if (!ring.push(fr)) break;
             }
         }
         m.audio.clear(); m.audio_aux.clear();
+        m.audio_dig.erase(m.audio_dig.begin(), m.audio_dig.begin() + (ptrdiff_t)nd * 2);
+        if (m.audio_dig.size() > 64) m.audio_dig.clear();
     };
     std::thread emu([&]() {
         SDL_SetThreadPriority(SDL_THREAD_PRIORITY_HIGH);
@@ -735,7 +755,7 @@ int main(int argc, char **argv) {
         audio_active = false;
         aio.close();
         ring.reset();
-        m.audio.clear(); m.audio_aux.clear();
+        m.audio.clear(); m.audio_aux.clear(); m.audio_dig.clear();
         const auto &devs = devices_of(cfg.audio_api);
         // outputs needed by the routing
         int outs = 2;
@@ -743,12 +763,18 @@ int main(int argc, char **argv) {
         if (cfg.audio_api == "sdl") outs = 2;
         int need = cfg.main_pair * 2 + 2;
         for (int a = 0; a < 3; a++) if (cfg.aux_pair[a] >= 0) need = std::max(need, cfg.aux_pair[a] * 2 + 2);
+        if (cfg.spdif_out >= 0) need = std::max(need, cfg.spdif_out * 2 + 2);
         AudioSetup s;
         s.api = cfg.audio_api; s.out_dev = cfg.audio_out; s.in_dev = cfg.audio_in;
         s.rate = cfg.rate; s.buffer = cfg.buffer;
         s.out_channels = std::max(2, std::min(need, outs));
         s.in_first = std::min(cfg.in_left, cfg.in_right);
         s.in_count = std::abs(cfg.in_left - cfg.in_right) + 1;
+        if (cfg.spdif_in >= 0) {                     // the S/PDIF input pair is opened too
+            int last = std::max(s.in_first + s.in_count, cfg.spdif_in + 2);
+            s.in_first = std::min(s.in_first, cfg.spdif_in);
+            s.in_count = last - s.in_first;
+        }
         std::string err;
         bool ok = aio.open(s, render, capture, err);
         if (!ok && s.api != "sdl") {                 // fall back to SDL's default output so there is sound
@@ -766,6 +792,8 @@ int main(int argc, char **argv) {
             route_aux[a] = sep ? p : -1;
         }
         in_rel_l = cfg.in_left - s.in_first; in_rel_r = cfg.in_right - s.in_first;
+        in_rel_dig = cfg.spdif_in >= 0 && cfg.audio_api != "sdl" ? cfg.spdif_in - s.in_first : -1;
+        route_dig = cfg.spdif_out >= 0 && cfg.spdif_out * 2 + 1 < och ? cfg.spdif_out : -1;
         if (aio.in_channels() == 2 && cfg.audio_api == "sdl") { in_rel_l = 0; in_rel_r = 1; }
         cur_rate = ok ? aio.rate() : 48000;
         m.out_rate = cur_rate;
@@ -793,7 +821,7 @@ int main(int argc, char **argv) {
     std::vector<std::string> midi_ins, midi_outs;
     NativeMenu nmenu;
     std::string opt_msg, scsi_note;
-    enum { O_API, O_OUT, O_RATE, O_BUF, O_MAIN, O_AUX1, O_AUX2, O_AUX3, O_IN, O_INL, O_INR, O_MIDIIN, O_MIDIOUT, O_SCSI, O_NEWSIZE, O_NEWMAKE, O_BOOT, O_DISPLAY, O_DAC, O_N };
+    enum { O_API, O_OUT, O_RATE, O_BUF, O_MAIN, O_AUX1, O_AUX2, O_AUX3, O_DOUT, O_IN, O_INL, O_INR, O_DIN, O_MIDIIN, O_MIDIOUT, O_SCSI, O_NEWSIZE, O_NEWMAKE, O_BOOT, O_DISPLAY, O_DAC, O_N };
     static const unsigned BUFS[] = { 32, 64, 128, 256, 512, 1024, 2048 };
     auto out_dev_info = [&](const Settings &st) -> AudioDevice {
         for (auto &d : devices_of(st.audio_api)) if (d.outputs > 0 && (d.name == st.audio_out || (st.audio_out.empty() && d.default_out))) return d;
@@ -881,6 +909,11 @@ int main(int argc, char **argv) {
             for (int p = 0; p < pairs; p++) x.items.push_back("outputs " + std::to_string(p * 2 + 1) + "-" + std::to_string(p * 2 + 2));
             x.sel = edit.aux_pair[a] < 0 || edit.aux_pair[a] >= pairs ? 0 : edit.aux_pair[a] + 1;
         }
+        // DI-10 Digital I/O (S/PDIF): fitted when its input or output is used
+        r[O_DOUT].label = "Digital Out (DI-10 S/PDIF)";
+        r[O_DOUT].items.push_back("none");
+        for (int p = 0; p < pairs; p++) r[O_DOUT].items.push_back("outputs " + std::to_string(p * 2 + 1) + "-" + std::to_string(p * 2 + 2));
+        r[O_DOUT].sel = edit.spdif_out < 0 || edit.spdif_out >= pairs ? 0 : edit.spdif_out + 1;
         r[O_IN].label = "Input device";
         r[O_IN].items.push_back("(none)");
         r[O_IN].items.push_back("(default)");
@@ -897,6 +930,11 @@ int main(int argc, char **argv) {
         for (int c = 0; c < nin; c++) { r[O_INL].items.push_back(std::to_string(c + 1)); r[O_INR].items.push_back(std::to_string(c + 1)); }
         r[O_INL].sel = std::min(edit.in_left, nin - 1);
         r[O_INR].sel = std::min(edit.in_right, nin - 1);
+        r[O_DIN].label = "Digital In (DI-10 S/PDIF)";
+        r[O_DIN].items.push_back("none");
+        if (edit.audio_api != "sdl" && !edit.audio_in.empty())
+            for (int c = 0; c + 1 < nin; c += 2) r[O_DIN].items.push_back("inputs " + std::to_string(c + 1) + "-" + std::to_string(c + 2));
+        r[O_DIN].sel = edit.spdif_in >= 0 && edit.spdif_in / 2 + 1 < (int)r[O_DIN].items.size() ? edit.spdif_in / 2 + 1 : 0;
         r[O_MIDIIN].label = "MIDI In";
         r[O_MIDIIN].items.push_back("(none)");
         for (auto &p : midi_ins) { r[O_MIDIIN].items.push_back(p); if (p == edit.midi_in) r[O_MIDIIN].sel = (int)r[O_MIDIIN].items.size() - 1; }
@@ -933,13 +971,15 @@ int main(int argc, char **argv) {
         const std::string &v = x.items.empty() ? std::string() : x.items[x.sel];
         switch (row) {
         case O_API: edit.audio_api = apis[x.sel].id; edit.audio_out.clear(); edit.audio_in.clear(); edit.rate = 0;
-                    edit.main_pair = 0; for (auto &p : edit.aux_pair) p = -1; edit.in_left = 0; edit.in_right = 1; break;
+                    edit.main_pair = 0; for (auto &p : edit.aux_pair) p = -1; edit.in_left = 0; edit.in_right = 1; edit.spdif_in = edit.spdif_out = -1; break;
         case O_OUT: edit.audio_out = x.sel == 0 ? "" : v; edit.rate = 0; break;
         case O_RATE: edit.rate = x.sel == 0 ? 0 : (unsigned)atoi(v.c_str()); break;
         case O_BUF: edit.buffer = BUFS[x.sel]; break;
         case O_MAIN: edit.main_pair = x.sel; break;
         case O_AUX1: case O_AUX2: case O_AUX3: edit.aux_pair[row - O_AUX1] = x.sel - 1; break;
-        case O_IN: edit.audio_in = x.sel == 0 ? "" : x.sel == 1 ? "*" : v; edit.in_left = 0; edit.in_right = 1; break;
+        case O_DOUT: edit.spdif_out = x.sel - 1; break;
+        case O_DIN: edit.spdif_in = x.sel == 0 ? -1 : (x.sel - 1) * 2; break;
+        case O_IN: edit.audio_in = x.sel == 0 ? "" : x.sel == 1 ? "*" : v; edit.in_left = 0; edit.in_right = 1; edit.spdif_in = -1; break;
         case O_INL: edit.in_left = x.sel; break;
         case O_INR: edit.in_right = x.sel; break;
         case O_MIDIIN: edit.midi_in = x.sel == 0 ? "" : v; edit.midi_in_set = true; break;
@@ -975,6 +1015,7 @@ int main(int argc, char **argv) {
     auto apply_options = [&]() {           // call with mmx NOT held
         bool scsi_changed = edit.scsi_dir != cfg.scsi_dir;
         bool boot_changed = edit.boot_scsi != cfg.boot_scsi;
+        bool di10_changed = edit.di10() != cfg.di10();
         cfg = edit;
         cfg.midi_in_set = true;
         vfd.set_lcd(cfg.lcd);
@@ -996,6 +1037,12 @@ int main(int argc, char **argv) {
                                           : (os_disk.empty() ? "Restarted: no OS disk image found in the roms folder"
                                                              : "Restarted: booting from the OS disk image");
             }
+            if (di10_changed) {           // the OS looks for the DI-10 at start: switch the ASR-10 off and on again
+                m.di10 = cfg.di10();
+                if (!boot_changed) { if (m.fdc.has_disk() && m.fdc.dirty && !readonly) m.fdc.save(); m.reset(); }
+                scsi_note = cfg.di10() ? "Restarted with the DI-10 Digital I/O board (Sample: REC SRC=DIGITAL)"
+                                       : "Restarted without the DI-10 Digital I/O board";
+            }
         }
         midi.apply(cfg.midi_in, cfg.midi_out);
         opt_msg = midi.error.empty() ? "" : midi.error;
@@ -1008,11 +1055,11 @@ int main(int argc, char **argv) {
     struct Sect { const char *title; int col, y, first, last; };
     // sections: title, column, top, first and last row
     const Sect sects[5] = {
-        { "Audio outputs", 0, Y0, O_API, O_AUX3 },
-        { "Input (sampler and Audio Tracks)", 1, Y0, O_IN, O_INR },
-        { "MIDI", 1, Y0 + ROW_H * 4 + 18, O_MIDIIN, O_MIDIOUT },
-        { "SCSI drives (ZuluSCSI-style: HD0.img, CD5.iso ...)", 1, Y0 + ROW_H * 7 + 30, O_SCSI, O_BOOT },
-        { "Display and sound", 0, Y0 + ROW_H * 9 + 6, O_DISPLAY, O_DAC } };
+        { "Audio outputs", 0, Y0, O_API, O_DOUT },
+        { "Input (sampler and Audio Tracks)", 1, Y0, O_IN, O_DIN },
+        { "MIDI", 1, Y0 + ROW_H * 5 + 6, O_MIDIIN, O_MIDIOUT },
+        { "SCSI drives (ZuluSCSI-style: HD0.img, CD5.iso ...)", 1, Y0 + ROW_H * 8 + 12, O_SCSI, O_BOOT },
+        { "Display and sound", 0, Y0 + ROW_H * 10 + 6, O_DISPLAY, O_DAC } };
     auto field_rect = [&](int row) -> SDL_Rect {
         for (const Sect &sc : sects)
             if (row >= sc.first && row <= sc.last)
@@ -1042,7 +1089,7 @@ int main(int argc, char **argv) {
         drop_top = std::clamp(drop_top, 0, std::max(0, n - DROP_MAX));
     };
     // keyboard order of the fields
-    const int ORDER[O_N] = { O_API, O_OUT, O_RATE, O_BUF, O_MAIN, O_AUX1, O_AUX2, O_AUX3, O_IN, O_INL, O_INR, O_MIDIIN, O_MIDIOUT, O_SCSI, O_NEWSIZE, O_NEWMAKE, O_BOOT, O_DISPLAY, O_DAC };
+    const int ORDER[O_N] = { O_API, O_OUT, O_RATE, O_BUF, O_MAIN, O_AUX1, O_AUX2, O_AUX3, O_DOUT, O_IN, O_INL, O_INR, O_DIN, O_MIDIIN, O_MIDIOUT, O_SCSI, O_NEWSIZE, O_NEWMAKE, O_BOOT, O_DISPLAY, O_DAC };
     auto order_pos = [&](int row) { for (int i = 0; i < O_N; i++) if (ORDER[i] == row) return i; return 0; };
     bool show_kb = cfg.show_keyboard;
     // window layout: keyboard strip shown or hidden (it is always there while the options are

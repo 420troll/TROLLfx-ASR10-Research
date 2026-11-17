@@ -42,6 +42,7 @@ tresult PLUGIN_API Plugin::initialize(FUnknown *context) {
     addAudioOutput(STR16("AUX 1"), SpeakerArr::kStereo, kAux, 0);
     addAudioOutput(STR16("AUX 2"), SpeakerArr::kStereo, kAux, 0);
     addAudioOutput(STR16("AUX 3"), SpeakerArr::kStereo, kAux, 0);
+    addAudioOutput(STR16("S/PDIF Out (DI-10)"), SpeakerArr::kStereo, kAux, 0);   // when the app fits the DI-10
     addEventOutput(STR16("MIDI Out"), 16);
 
     parameters.addParameter(STR16("Volume"), STR16("%"), 0, volume, ParameterInfo::kCanAutomate, kVolume);
@@ -207,14 +208,14 @@ tresult PLUGIN_API Plugin::process(ProcessData &data) {
     if (data.numSamples <= 0) return kResultOk;
     std::stable_sort(midi.begin(), midi.end(), [](const EngineMidi &a, const EngineMidi &b) { return a.offset < b.offset; });
 
-    float *out[8] = {};
+    float *out[10] = {};
     bool aux_active[3] = {};
-    for (int32 b = 0; b < data.numOutputs && b < 4; b++) {
+    for (int32 b = 0; b < data.numOutputs && b < 5; b++) {
         AudioBusBuffers &bus = data.outputs[b];
         if (bus.numChannels < 2 || !bus.channelBuffers32) continue;
         out[b * 2] = bus.channelBuffers32[0]; out[b * 2 + 1] = bus.channelBuffers32[1];
         bus.silenceFlags = 0;
-        if (b > 0) aux_active[b - 1] = audioOutputs.size() > (size_t)b && audioOutputs[b]->isActive();
+        if (b > 0 && b < 4) aux_active[b - 1] = audioOutputs.size() > (size_t)b && audioOutputs[b]->isActive();
     }
     const float *in_l = nullptr, *in_r = nullptr;
     if (data.numInputs > 0 && data.inputs[0].numChannels >= 2 && data.inputs[0].channelBuffers32 &&

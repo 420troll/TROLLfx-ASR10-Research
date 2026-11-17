@@ -55,7 +55,11 @@ Asr10::Asr10() {
     imp.portb_in = [this]() -> uint16_t {
         uint16_t v = 0xffff;
         if (otto.irq_pending()) v &= ~(1 << 9);   // OTTO IRQB -> PB9 (active low)
-        if (!lrclk) v &= ~(1 << 3);                // audio frame clock -> PB3 (polled by the OS)
+        // audio frame clock -> PB3 (polled by the OS; also TIN1). With REC SRC=DIGITAL the DUART output
+        // pins select the DI-10's clock instead: the S/PDIF word clock, or nothing without the board
+        // (which is how the OS finds out whether a DI-10 is fitted)
+        if (!digital_selected()) { if (!lrclk) v &= ~(1 << 3); }
+        else if (di10 && !dig_lrclk) v &= ~(1 << 3);
         if (audio_button[0]) v &= ~(1 << 5);       // Audio Track A button -> PB5 (function code 8)
         if (audio_button[1]) v &= ~(1 << 6);       // Audio Track B button -> PB6 (function code 9)
         if (patch_button[0]) v &= ~(1 << 10);      // Patch Select left  -> PB10 (falling edge = interrupt)
@@ -63,6 +67,7 @@ Asr10::Asr10() {
         return v;
     };
     duart.irq = [this](bool s) { imp.set_irq_pin(6, s); };
+    duart.op_changed = [this](uint8_t opr) { op_pins = (uint8_t)~opr; update_tin(); };
     imp.portb_out = [this](uint16_t dat, uint16_t ddr) {
         pb_out = dat & ddr;
         if (DBG(ASR_DBG_PB)) fprintf(stderr, "PB dat=%04x ddr=%04x t=%.4f\n", dat, ddr, total_cycles / cpu_clock);
@@ -177,6 +182,58 @@ void Asr10::reset() {
     m68k_set_cpu_type(M68K_CPU_TYPE_68000);
     m68k_pulse_reset();
     total_cycles = 0;
+    op_pins = 0xff;
+    update_tin();
+}
+
+// TIN1 (PB3) counts the frame clock: the OS measures the S/PDIF input's rate with it (count over a
+// delay loop: 59 or more = 48 kHz). The emulated 68000 runs that loop without the wait states of the
+// real machine's DRAM (shared with the OTTO), so the edges are given in the same proportion: the
+// count comes out as on the real unit.
+void Asr10::update_tin() {
+    const double TIN_SCALE = 59.0 / (46050.0 * 7180.0 / 16000000.0);   // 46.05 kHz -> 59 in the 7180-clock loop
+    double f = !digital_selected() ? otto.sample_rate(otto_master()) : (di10 ? dig_rate : 0);
+    imp.tin_per_clock[0] = imp.tin_per_clock[1] = f * TIN_SCALE / cpu_clock;
+}
+
+void Asr10::feed_digital(const float *lr, size_t frames, double rate) {
+    // the S/PDIF receiver locks to 44.1 or 48 kHz: other device rates are converted (88.2/176.4 kHz to
+    // 44.1, the rest to 48); at 44.1 / 48 kHz the samples arrive untouched (16 bits, as the SCCs take them)
+    const double r = std::fmod(rate, 44100.0) == 0 ? 44100.0 : 48000.0;
+    std::lock_guard<std::mutex> g(dig_mx);
+    if (r != dig_rate) { dig_rate = r; dig_in.clear(); }
+    auto s16 = [](float x) -> int16_t { long v = lrintf(x * 32768.0f); return (int16_t)(v > 32767 ? 32767 : v < -32768 ? -32768 : v); };
+    if (rate == r) for (size_t i = 0; i < frames * 2; i++) dig_in.push_back(s16(lr[i]));
+    else {
+        double &pos = dig_rs_pos;
+        for (size_t i = 0; i < frames; i++) {
+            const float l = lr[i * 2], rr = lr[i * 2 + 1];
+            while (pos < 1.0) {
+                dig_in.push_back(s16(dig_rs_last[0] + (l - dig_rs_last[0]) * (float)pos));
+                dig_in.push_back(s16(dig_rs_last[1] + (rr - dig_rs_last[1]) * (float)pos));
+                pos += rate / r;                    // (input frames per output frame)
+            }
+            pos -= 1.0; dig_rs_last[0] = l; dig_rs_last[1] = rr;
+        }
+    }
+    const size_t maxs = (size_t)(r * 0.25) * 2;     // at most ~250 ms queued
+    while (dig_in.size() > maxs) { dig_in.pop_front(); dig_in.pop_front(); }
+    dig_count = dig_in.size();
+}
+
+// one S/PDIF input frame (DI-10 fitted, REC SRC=DIGITAL): the word clock edge on PB3 and the sample,
+// MSB first, into SCC1 (left) and SCC2 (right)
+void Asr10::digital_frame() {
+    dig_lrclk = !dig_lrclk;
+    int16_t s[2] = { dig_last[0], dig_last[1] };        // (no signal: the last sample is held)
+    if (dig_count.load(std::memory_order_relaxed) >= 2) {
+        std::lock_guard<std::mutex> g(dig_mx);
+        if (dig_in.size() >= 2) { s[0] = dig_in[0]; s[1] = dig_in[1]; dig_in.pop_front(); dig_in.pop_front(); }
+        dig_count = dig_in.size();
+    }
+    dig_last[0] = s[0]; dig_last[1] = s[1];
+    for (int c = 0; c < 2; c++) dig_peak[c] = std::max(dig_peak[c], std::fabs(s[c] / 32768.0f));
+    for (int c = 0; c < 2; c++) if (imp.scc_sync_active(c)) { imp.scc_sync_rx(c, (uint8_t)(s[c] >> 8)); imp.scc_sync_rx(c, (uint8_t)s[c]); }
 }
 
 uint32_t Asr10::last_pc() const { return m68k_get_reg(NULL, M68K_REG_PPC); }
@@ -397,6 +454,7 @@ void Asr10::input_frame(double frame_rate) {
     if (DBG(ASR_DBG_IN)) { static uint64_t n = 0; if ((++n % 29760) == 0) fprintf(stderr, "IN frames=%llu t=%.3f fr=%.1f q=%zu voices=%d\n", (unsigned long long)n, total_cycles / cpu_clock, frame_rate, input.size(), otto.active_voices()); }
     auto to_s16 = [](float x) -> int16_t { int v = (int)lrintf(x * 32767.0f); return (int16_t)(v > 32767 ? 32767 : v < -32768 ? -32768 : v); };
     int16_t sl = to_s16(l), sr = to_s16(r);
+    if (digital_selected()) return;            // the SCCs take the DI-10's data then
     if (imp.scc_sync_active(0)) { imp.scc_sync_rx(0, (uint8_t)(sl >> 8)); imp.scc_sync_rx(0, (uint8_t)sl); }
     if (imp.scc_sync_active(1)) { imp.scc_sync_rx(1, (uint8_t)(sr >> 8)); imp.scc_sync_rx(1, (uint8_t)sr); }
 }
@@ -440,6 +498,24 @@ void Asr10::otto_frame() {
     for (int a = 0; a < 3; a++) if (sep && !aux_to_main[a]) { cur[2 + a * 2] = ch[(3 + a) * 2] * k; cur[3 + a * 2] = ch[(3 + a) * 2 + 1] * k; }
     // the D/A converters (main, the three expander buses) and the computer's sample rate
     dac.push(cur, sep, otto.sample_rate(otto_master()), out_rate, audio, audio_aux);
+    // DI-10 S/PDIF output: the main DAC's data, 16 bits, when the system runs at 44.1 kHz (with the
+    // 30 kHz effects the output is off: a receiver cannot lock to it); straight to out_rate (at 44.1 kHz
+    // untouched)
+    if (di10) {
+        float dig[2] = { 0, 0 };
+        if (std::fabs(otto.sample_rate(otto_master()) - 44100.0) < 200) {
+            auto s16 = [](double x) { double v = std::floor(x * (32768.0 / 524288.0) + 0.5); return (float)(std::clamp(v, -32768.0, 32767.0) / 32768.0); };
+            dig[0] = s16(l); dig[1] = s16(r);
+        }
+        const double step = otto.sample_rate(otto_master()) / out_rate;
+        while (dig_out_pos < 1.0) {
+            const float t = (float)dig_out_pos;
+            for (int i = 0; i < 2; i++) audio_dig.push_back(last_dig[i] + (dig[i] - last_dig[i]) * t);
+            dig_out_pos += step;
+        }
+        dig_out_pos -= 1.0;
+        last_dig[0] = dig[0]; last_dig[1] = dig[1];
+    }
 }
 
 bool Asr10::insert_disk(const std::string &path) {
@@ -464,6 +540,7 @@ void Asr10::eject_disk() {
 
 void Asr10::run(int64_t clocks) {
     int64_t target = total_cycles + clocks;
+    update_tin();
     while ((int64_t)total_cycles < target) {
         int c = m68k_execute(32);
         total_cycles += c;
@@ -474,6 +551,10 @@ void Asr10::run(int64_t clocks) {
         otto_acc += c * (otto_master() / cpu_clock);
         double frame_clocks = 16.0 * (otto.active_voices() + 1);
         while (otto_acc >= frame_clocks) { otto_acc -= frame_clocks; otto_frame(); }
+        if (di10 && digital_selected()) {        // the S/PDIF input's own clock
+            dig_acc += c * (dig_rate / cpu_clock);
+            while (dig_acc >= 1.0) { dig_acc -= 1.0; digital_frame(); }
+        }
         // drive READY -> DUART IP0 (change detected by the OS), HD sensor -> IP2
         if (fdc.motor & 1) { if (motor_time < 4000000) motor_time += c; } else motor_time = 0;
         bool ready = motor_time >= 3200000 && fdc.has_disk();   // ~200 ms spin-up

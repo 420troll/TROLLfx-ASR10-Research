@@ -55,6 +55,17 @@ public:
         return (pa_ddr >> bit[n] & 1) && !(pa_dat >> bit[n] & 1);
     }     // left / right input peaks for the front panel LEDs (reset by the consumer)
 
+    // DI-10 Digital I/O option (S/PDIF: CS8412 receiver, CS8402 transmitter).
+    //  - in: REC SRC=DIGITAL. The source's word clock replaces the main board's frame clock on PB3 and
+    //    its samples go to the SCCs in place of the A/D's, at its own rate (44.1 or 48 kHz).
+    //  - out: the main output mix (the data of the main DAC) at the system rate, when it is 44.1 kHz.
+    bool di10 = false;
+    void feed_digital(const float *lr, size_t frames, double rate);   // S/PDIF input (thread safe)
+    double digital_rate() const { return dig_rate; }
+    bool digital_selected() const { return (op_pins & 0x2f) == 0; }   // DUART OP pins: REC SRC=DIGITAL
+    std::vector<float> audio_dig;      // S/PDIF output, interleaved L/R at out_rate (when di10)
+    float dig_peak[2] = { 0, 0 };      // S/PDIF input peaks (reset by the consumer)
+
     // MIDI in/out
     void midi_in(uint8_t b) { duart.rx_byte(0, b); }
     std::function<void(uint8_t)> midi_out;
@@ -146,6 +157,19 @@ private:
     bool drive_ready = false;
     bool lrclk = false;
     uint16_t pb_out = 0;
+    uint8_t op_pins = 0xff;            // DUART output pins (= ~OPR)
+    // DI-10 input: queue at the source rate, its frame clock
+    std::mutex dig_mx;
+    std::deque<int16_t> dig_in;
+    std::atomic<size_t> dig_count{0};
+    double dig_rate = 48000, dig_acc = 0;
+    bool dig_lrclk = false;
+    int16_t dig_last[2] = { 0, 0 };
+    double dig_rs_pos = 0; float dig_rs_last[2] = { 0, 0 };   // (converting other device rates)
+    void digital_frame();
+    void update_tin();
+    float last_dig[2] = { 0, 0 };
+    double dig_out_pos = 0;            // (the S/PDIF output's own step to out_rate)
 public:
     // 10-bit A/D values by mux channel (PB2-0; the OS scans 0,2,3,4,5,7 with PB4 set):
     //   0 pitch wheel (centre calibrated at power-up)  2 mod wheel  3 volume slider

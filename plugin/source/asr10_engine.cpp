@@ -116,7 +116,7 @@ void Asr10Engine::set_status(const std::string &s) { status = s; status_serial++
 void Asr10Engine::set_sample_rate(double rate) {
     std::lock_guard<std::mutex> g(g_mx);
     fs = rate > 1000 ? rate : 44100;
-    if (m) { m->out_rate = fs; m->audio.clear(); m->audio_aux.clear(); }
+    if (m) { m->out_rate = fs; m->audio.clear(); m->audio_aux.clear(); m->audio_dig.clear(); }
 }
 
 void Asr10Engine::run_commands() {
@@ -137,7 +137,7 @@ void Asr10Engine::process(float *const *out, const float *in_l, const float *in_
                           const std::vector<EngineMidi> &midi, const bool aux_active[3]) {
     std::lock_guard<std::mutex> g(g_mx);
     if (!ok || frames <= 0) {
-        for (int c = 0; c < 8; c++) if (out[c]) memset(out[c], 0, sizeof(float) * (frames > 0 ? frames : 0));
+        for (int c = 0; c < 10; c++) if (out[c]) memset(out[c], 0, sizeof(float) * (frames > 0 ? frames : 0));
         return;
     }
     activate();
@@ -150,6 +150,7 @@ void Asr10Engine::process(float *const *out, const float *in_l, const float *in_
         tmp.resize((size_t)frames * 2);
         for (int i = 0; i < frames; i++) { tmp[2 * i] = in_l[i]; tmp[2 * i + 1] = in_r[i]; }
         m->feed_input(tmp.data(), frames, fs);
+        if (m->di10) m->feed_digital(tmp.data(), frames, fs);   // the same host input is the DI-10's S/PDIF input
     }
     for (auto &e : midi) {
         ensure_frames((size_t)std::max(0, std::min(e.offset, frames)));
@@ -165,6 +166,15 @@ void Asr10Engine::process(float *const *out, const float *in_l, const float *in_
         if (sep) { const float *x = m->audio_aux.data(); for (int i = 0; i < frames; i++) out[c][i] = x[6 * i + (c - 2)]; }
         else memset(out[c], 0, sizeof(float) * frames);
     }
+    // DI-10 S/PDIF output (outputs 9-10)
+    const size_t nd = std::min((size_t)frames, m->audio_dig.size() / 2);   // (it may run a frame apart)
+    for (int c = 8; c < 10; c++) {
+        if (!out[c]) continue;
+        const float *x = m->audio_dig.data();
+        for (int i = 0; i < frames; i++) out[c][i] = (size_t)i < nd ? x[2 * i + (c - 8)] : 0.0f;
+    }
+    m->audio_dig.erase(m->audio_dig.begin(), m->audio_dig.begin() + (ptrdiff_t)nd * 2);
+    if (m->audio_dig.size() > m->audio.size() + 64) m->audio_dig.clear();   // (keeps pace with the main stream)
     m->audio.erase(m->audio.begin(), m->audio.begin() + (size_t)frames * 2);
     if (sep) m->audio_aux.erase(m->audio_aux.begin(), m->audio_aux.begin() + (size_t)frames * 6);
     else m->audio_aux.clear();
@@ -284,6 +294,10 @@ void Asr10Engine::apply_settings(Asr10 &a, bool first) {
     lcd_ = st.lcd;
     if (first && !input_level_set_) input_level_ = st.input_level;   // the app's Input Level pot
     a.input_gain.store(input_level_gain(input_level_.load()));
+    if (st.di10() != a.di10) {                 // DI-10 fitted or removed in the app: the OS looks for it at start
+        a.di10 = st.di10();
+        if (!first) { a.audio_dig.clear(); a.reset(); set_status(a.di10 ? "DI-10 Digital I/O fitted (from the app's options): the ASR-10 restarted" : "DI-10 Digital I/O removed (from the app's options): the ASR-10 restarted"); }
+    }
     if (first || st.scsi_dir != scsi_folder) {
         scsi_folder = st.scsi_dir;
         std::string d = attach_scsi_folder(a);

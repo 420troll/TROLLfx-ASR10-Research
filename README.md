@@ -25,6 +25,8 @@ for both.
 - Import of **AKAI** (S1000/S1100) and **Roland** sample libraries from CD-ROM images on the SCSI bus
   (e.g. `CD5.iso` in the `scsi` folder), with the OS's own translation (OS 3.00 or later; 3.53 recommended).
 - Output Expander outputs (AUX 1-3) on separate outputs of your audio interface.
+- **DI-10 Digital I/O** (S/PDIF): digital sampling at 44.1 or 48 kHz from a pair of inputs of your
+  interface, and the digital output on a pair of its outputs.
 - The full rack front panel, with an on-screen keyboard, pitch and mod wheels.
 - Two display types: the original **VFD**, or a **purple graphic LCD** (View > Options > Display > Screen type). The VST3 plug-in follows the choice made in the app.
 
@@ -127,6 +129,24 @@ choose another one in Options › SCSI drives.
 ASR-10's FORMAT SCSI DRIVE does it, so it is ready to use. Restart the ASR-10 (Power) so that the OS
 sees new drives.
 
+## DI-10 Digital I/O (S/PDIF)
+
+The DI-10 was Ensoniq's digital I/O option (Crystal CS8412 receiver, CS8402 transmitter). In
+Options choose **Digital In (DI-10 S/PDIF)** (a pair of inputs of the input device: your interface's
+S/PDIF input, or any other pair) and/or **Digital Out (DI-10 S/PDIF)** (a pair of outputs). The board
+is fitted as soon as either is used, and the ASR-10 restarts (its OS looks for the board at start).
+
+- **Digital sampling:** press Sample; the display shows `REC SRC=INPUTDRY LEFT`. Move the cursor left
+  and take the value up to `DIGITAL`. Without the board the values stop at MAIN-OUT, as on the real unit.
+  The OS measures the incoming rate: at 44.1 or 48 kHz the samples get that rate. With the interface
+  at 44.1 or 48 kHz the samples arrive untouched, bit for bit (16 bits). At 88.2 / 176.4 kHz the
+  input is converted to 44.1 kHz, at other rates to 48 kHz.
+- **Digital output:** the Main output mix (not AUX 1-3) as 16-bit data, when the current effect runs
+  at 44.1 kHz. With a 30 kHz effect the output is off, as the service manual says. With the interface
+  at 44.1 kHz the data is untouched; at other rates it is converted.
+- VST3: the plug-in follows the app. Its stereo input is also the S/PDIF input, and an extra output
+  bus, **S/PDIF Out (DI-10)**, carries the digital output.
+
 ## VST3 plug-in
 
 1. Copy the whole `VST3\ASR10.vst3` folder to `C:\Program Files\Common Files\VST3` (Windows) or to
@@ -135,8 +155,8 @@ sees new drives.
    the app.
 3. Rescan plug-ins in your host and load **ASR-10 Emulator** as an instrument.
 
-- Outputs: Main plus AUX 1-3 (enable them in the host to get them separately); a stereo input for
-  sampling and Audio Tracks; MIDI In and MIDI Out.
+- Outputs: Main plus AUX 1-3 (enable them in the host to get them separately), and S/PDIF Out when
+  the app fits the DI-10; a stereo input for sampling and Audio Tracks; MIDI In and MIDI Out.
 - The editor is just the panel: click the drive slot to choose a disk image (`.img`, `.ede`, `.eda`) or
   instrument files, or drag them onto the panel (where the host passes drops on to plug-ins), use the drive's eject
   button and the Power button, as in the app.

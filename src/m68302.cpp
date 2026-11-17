@@ -301,9 +301,10 @@ void M68302::timer_tick(int n, int clocks) {
     Timer &t = tim[n];
     if (!(t.tmr & 1)) return;
     int iclk = (t.tmr >> 1) & 3;
-    if (iclk == 0 || iclk == 3) return;
+    if (iclk == 0) return;
+    if (iclk == 3 && tin_per_clock[n] <= 0) return;
     double div = (double)((t.tmr >> 8) + 1) * (iclk == 2 ? 16 : 1);
-    t.pre += clocks;
+    t.pre += iclk == 3 ? clocks * tin_per_clock[n] : (double)clocks;   // (TIN: edges of the pin)
     if (t.pre < div) return;
     // k timer ticks at once (all integers: exact). Each tick: at TCN == TRR the reference event
     // (TER, interrupt), then TCN goes to 0 (restart mode) or on counting; otherwise TCN + 1.

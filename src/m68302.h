@@ -68,6 +68,8 @@ public:
     // diagnostics
     bool log = false;
     uint16_t pbdat_latch = 0;
+    // timers clocked from their TIN pin (TMR ICLK = 11): rate of the pin's edges, per CPU clock
+    double tin_per_clock[2] = { 0, 0 };
 
 private:
     // interrupt controller

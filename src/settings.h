@@ -31,6 +31,11 @@ struct Settings {
     // start-up: false = the OS is loaded from the OS disk image (floppy); true = no floppy at start, the machine
     // boots from a SCSI drive
     bool boot_scsi = false;
+    // DI-10 Digital I/O board (S/PDIF): the input channel pair of the input device that is the digital
+    // input, and the output pair of the output device for the digital output (0-based first channel /
+    // pair index, -1 = not used). The board is fitted when either is used.
+    int spdif_in = -1, spdif_out = -1;
+    bool di10() const { return spdif_in >= 0 || spdif_out >= 0; }
 
     std::string path;                  // file the settings were loaded from / are saved to
     bool load(const std::string &file);

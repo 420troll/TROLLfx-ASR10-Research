@@ -54,6 +54,10 @@ int main(int argc, char **argv) {
     uint32_t hex_addr = 0; int hex_len = 0;
     struct Tone { double t, f, amp, dur; char side; };
     std::vector<Tone> tones;
+    struct DTone { double t, f, amp, dur, rate; };
+    std::vector<DTone> dtones;
+    bool di10 = false;
+    std::string dig_wav;
     std::string in_wav; double in_wav_t = 0;
     bool dac_ideal = false;
     for (int i = 1; i < argc; i++) {
@@ -89,6 +93,13 @@ int main(int argc, char **argv) {
             std::string v = next(); double t, f, am, d; char side = 'B';
             if (sscanf(v.c_str(), "%lf:%lf:%lf:%lf:%c", &t, &f, &am, &d, &side) >= 4) tones.push_back({t, f, am, d, side});
         }
+        else if (a == "--di10") di10 = true;       // DI-10 Digital I/O board fitted
+        else if (a == "--digital-tone") {  // t:freq:amp:dur[:rate]  sine into the S/PDIF input (DI-10)
+            std::string v = next(); DTone d{0, 0, 0, 0, 48000};
+            if (sscanf(v.c_str(), "%lf:%lf:%lf:%lf:%lf", &d.t, &d.f, &d.amp, &d.dur, &d.rate) >= 4) dtones.push_back(d);
+            di10 = true;
+        }
+        else if (a == "--digital-wav") { dig_wav = next(); di10 = true; }   // S/PDIF output to a WAV file
         else if (a == "--input-wav") {   // t:file.wav (16-bit PCM)
             std::string v = next(); size_t c = v.find(':');
             if (c != std::string::npos) { in_wav_t = atof(v.substr(0, c).c_str()); in_wav = v.substr(c + 1); }
@@ -137,6 +148,7 @@ int main(int argc, char **argv) {
     m.panel.log = panel_log;
     m.panel.rack = rack_panel;
     m.fdc.log = fdc_log;
+    m.di10 = di10;
     m.reset();
     m.scsi_fitted = !no_scsi;
     m.scsi.log = scsi_log;
@@ -180,7 +192,7 @@ int main(int argc, char **argv) {
         if ((pc == trace_pc || trace_pc == 1) && m.cycles() / m.cpu_clock >= trace_after) tracing = true;
         if (tracing && trace_cnt > 0) {
             char buf[128]; m68k_disassemble(buf, pc, M68K_CPU_TYPE_68000);
-            fprintf(stderr, "T %06x: %-40s D0=%08x D1=%08x D2=%08x A0=%08x\n", pc, buf, m68k_get_reg(NULL, M68K_REG_D0), m68k_get_reg(NULL, M68K_REG_D1), m68k_get_reg(NULL, M68K_REG_D2), m68k_get_reg(NULL, M68K_REG_A0));
+            fprintf(stderr, "T %06x: %-40s D0=%08x D1=%08x D2=%08x D3=%08x A0=%08x\n", pc, buf, m68k_get_reg(NULL, M68K_REG_D0), m68k_get_reg(NULL, M68K_REG_D1), m68k_get_reg(NULL, M68K_REG_D2), m68k_get_reg(NULL, M68K_REG_D3), m68k_get_reg(NULL, M68K_REG_A0));
             if (--trace_cnt == 0) tracing = false;
         }
         ring[rp++ & 63] = pc;
@@ -249,6 +261,14 @@ int main(int argc, char **argv) {
                     wav_in_pos += take;
                 }
             } else if (any) m.feed_input(buf.data(), nfr, 44100);
+            for (auto &d : dtones) if (now >= d.t && now < d.t + d.dur) {   // S/PDIF input
+                static double dacc = 0; static double ph = 0;
+                dacc += d.rate * sl;
+                int n = (int)dacc; dacc -= n;
+                std::vector<float> db((size_t)n * 2);
+                for (int i = 0; i < n; i++) { float v = (float)(std::floor(d.amp * sin(ph) * 32767 + 0.5) / 32768.0); ph += 2 * M_PI * d.f / d.rate; db[i * 2] = v; db[i * 2 + 1] = -v; }
+                m.feed_digital(db.data(), (size_t)n, d.rate);
+            }
         }
         for (auto &pe : patchev) if (pe.first >= 0 && pe.first <= now) { m.set_patch_select(pe.second.first, pe.second.second != 0); pe.first = -1; }
         for (auto &a2 : analog_at) if (a2.first >= 0 && a2.first <= now) { m.analog[a2.second.first] = a2.second.second; a2.first = -1; }
@@ -292,6 +312,7 @@ int main(int argc, char **argv) {
     if (!dump_ram.empty()) { FILE *f = fopen(dump_ram.c_str(), "wb"); fwrite(m.ram.data(), 1, m.ram.size(), f); fclose(f); }
     if (write_back && m.fdc.dirty) { if (m.fdc.save()) fprintf(stderr, "disk image written back\n"); }
     if (!wav.empty()) write_wav(wav.c_str(), m.audio, (int)m.out_rate);
+    if (!dig_wav.empty()) write_wav(dig_wav.c_str(), m.audio_dig, (int)m.out_rate);
     if (!aux_wav.empty()) {                 // AUX1-3 (Output Expander) summed to one stereo file
         std::vector<float> st(m.audio_aux.size() / 3);
         for (size_t i = 0; i + 5 < m.audio_aux.size(); i += 6) {
