@@ -189,9 +189,13 @@ Technical notes (emulated hardware, protocols, tests), in Portuguese: [docs/TECH
 
 ## Credits and licences
 
+- This program is free software under the **GNU GPL v3** (`LICENSE`).
 - **Musashi** 68000 core by Karl Stenerud; **ES5506/ES5510** algorithms derived from MAME
-  (BSD-3-Clause); **RtMidi/RtAudio** by Gary P. Scavone; **SDL2** (zlib); **VST3 SDK/VSTGUI** by
-  Steinberg (MIT). With ASIO support the Windows build is under GPLv3 (ASIO SDK). See `LICENSES/`.
+  (BSD-3-Clause); **RtMidi/RtAudio** by Gary P. Scavone; **Steinberg ASIO SDK** (GPLv3);
+  **SDL2** (zlib); **VST3 SDK** (MIT) and **VSTGUI** (BSD-3-Clause) by Steinberg; panel and
+  options page lettering rendered from **GNU FreeFont** FreeSans (GPLv3 with the font exception);
+  the 8x8 bitmap font by Daniel Hepper (public domain). The licence texts are in `LICENSES/` (and
+  next to Musashi, RtMidi and RtAudio in their folders).
 - VST and ASIO are trademarks of Steinberg Media Technologies GmbH.
 - Ensoniq and ASR-10 are trademarks of their owners. This project is not affiliated with them; the
   ROM and OS are not included.
