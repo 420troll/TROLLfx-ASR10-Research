@@ -131,7 +131,7 @@ sees new drives.
 
 ## DI-10 Digital I/O (S/PDIF)
 
-The DI-10 was Ensoniq's digital I/O option (Crystal CS8412 receiver, CS8402 transmitter). In
+The DI-10 was Ensoniq's digital I/O option (Crystal CS8412-CP receiver, CS8402 transmitter). In
 Options choose **Digital In (DI-10 S/PDIF)** (a pair of inputs of the input device: your interface's
 S/PDIF input, or any other pair) and/or **Digital Out (DI-10 S/PDIF)** (a pair of outputs). The board
 is fitted as soon as either is used, and the ASR-10 restarts (its OS looks for the board at start).
@@ -139,8 +139,11 @@ is fitted as soon as either is used, and the ASR-10 restarts (its OS looks for t
 - **Digital sampling:** press Sample; the display shows `REC SRC=INPUTDRY LEFT`. Move the cursor left
   and take the value up to `DIGITAL`. Without the board the values stop at MAIN-OUT, as on the real unit.
   The OS measures the incoming rate: at 44.1 or 48 kHz the samples get that rate. With the interface
-  at 44.1 or 48 kHz the samples arrive untouched, bit for bit (16 bits). At 88.2 / 176.4 kHz the
-  input is converted to 44.1 kHz, at other rates to 48 kHz.
+  at 44.1 or 48 kHz the samples arrive untouched (the first 16 bits of each word, as the ASR-10 takes
+  them). The receiver behaves as the CS8412-CP: it locks to 25-55 kHz, so a 32 kHz source is
+  sampled at 32 kHz but labelled 44.1 kHz by the OS (as on the real unit); out of lock it outputs
+  silence (the board is still seen: its clock then runs at the VCO's minimum); on a gap it repeats the
+  last good sample. An interface at 88.2 / 96 / 176.4 / 192 kHz is taken down to 44.1 / 48 kHz.
 - **Digital output:** the Main output mix (not AUX 1-3) as 16-bit data, when the current effect runs
   at 44.1 kHz. With a 30 kHz effect the output is off, as the service manual says. With the interface
   at 44.1 kHz the data is untouched; at other rates it is converted.

@@ -192,17 +192,22 @@ void Asr10::reset() {
 // count comes out as on the real unit.
 void Asr10::update_tin() {
     const double TIN_SCALE = 59.0 / (46050.0 * 7180.0 / 16000000.0);   // 46.05 kHz -> 59 in the 7180-clock loop
-    double f = !digital_selected() ? otto.sample_rate(otto_master()) : (di10 ? dig_rate : 0);
+    double f = !digital_selected() ? otto.sample_rate(otto_master()) : (di10 ? dig_clock() : 0);
     imp.tin_per_clock[0] = imp.tin_per_clock[1] = f * TIN_SCALE / cpu_clock;
 }
 
+// The S/PDIF stream comes from the computer's input at the device's rate. The CS8412-CP locks to
+// 25-55 kHz (32, 44.1, 48 kHz): those arrive untouched. A device at 2x or 4x such a rate (88.2, 96,
+// 176.4, 192 kHz) is taken down to it, as if the source sent that; anything else is a stream the
+// receiver cannot lock to.
 void Asr10::feed_digital(const float *lr, size_t frames, double rate) {
-    // the S/PDIF receiver locks to 44.1 or 48 kHz: other device rates are converted (88.2/176.4 kHz to
-    // 44.1, the rest to 48); at 44.1 / 48 kHz the samples arrive untouched (16 bits, as the SCCs take them)
-    const double r = std::fmod(rate, 44100.0) == 0 ? 44100.0 : 48000.0;
+    auto lockable = [](double f) { return f >= 25000.0 && f <= 55000.0; };
+    const double r = lockable(rate) ? rate : lockable(rate / 2) ? rate / 2 : lockable(rate / 4) ? rate / 4 : 0;
+    dig_src_rate = r;
+    if (r == 0) return;
     std::lock_guard<std::mutex> g(dig_mx);
-    if (r != dig_rate) { dig_rate = r; dig_in.clear(); }
-    auto s16 = [](float x) -> int16_t { long v = lrintf(x * 32768.0f); return (int16_t)(v > 32767 ? 32767 : v < -32768 ? -32768 : v); };
+    // the receiver gives 24-bit words MSB first; the SCCs keep the first 16 bits (a truncation)
+    auto s16 = [](float x) -> int16_t { double v = std::floor((double)x * 32768.0); return (int16_t)(v > 32767 ? 32767 : v < -32768 ? -32768 : v); };
     if (rate == r) for (size_t i = 0; i < frames * 2; i++) dig_in.push_back(s16(lr[i]));
     else {
         double &pos = dig_rs_pos;
@@ -219,14 +224,32 @@ void Asr10::feed_digital(const float *lr, size_t frames, double rate) {
     const size_t maxs = (size_t)(r * 0.25) * 2;     // at most ~250 ms queued
     while (dig_in.size() > maxs) { dig_in.pop_front(); dig_in.pop_front(); }
     dig_count = dig_in.size();
+    dig_fed += frames;
+}
+
+// the CS8412 is locked while a stream it can lock to keeps arriving (no input for 50 ms: out of lock)
+void Asr10::update_lock() {
+    const uint64_t fed = dig_fed.load(std::memory_order_relaxed);
+    if (fed != dig_fed_seen) { dig_fed_seen = fed; dig_fed_cycle = total_cycles; }
+    const double src = dig_src_rate.load(std::memory_order_relaxed);
+    const bool locked = src > 0 && fed > 0 && (double)(total_cycles - dig_fed_cycle) < 0.05 * cpu_clock;
+    if (locked && !dig_locked) {                        // (re)locked: the queue starts from now
+        std::lock_guard<std::mutex> g(dig_mx);
+        dig_rate = src;
+        while (dig_in.size() > (size_t)(src * 0.01) * 2) { dig_in.pop_front(); dig_in.pop_front(); }
+        dig_count = dig_in.size();
+    }
+    if (locked) dig_rate = src;
+    dig_locked = locked;
 }
 
 // one S/PDIF input frame (DI-10 fitted, REC SRC=DIGITAL): the word clock edge on PB3 and the sample,
 // MSB first, into SCC1 (left) and SCC2 (right)
 void Asr10::digital_frame() {
     dig_lrclk = !dig_lrclk;
-    int16_t s[2] = { dig_last[0], dig_last[1] };        // (no signal: the last sample is held)
-    if (dig_count.load(std::memory_order_relaxed) >= 2) {
+    if (!dig_locked) { dig_last[0] = dig_last[1] = 0; }  // out of lock the CS8412 outputs zeros
+    int16_t s[2] = { dig_last[0], dig_last[1] };        // (an error: the last good sample is repeated)
+    if (dig_locked && dig_count.load(std::memory_order_relaxed) >= 2) {
         std::lock_guard<std::mutex> g(dig_mx);
         if (dig_in.size() >= 2) { s[0] = dig_in[0]; s[1] = dig_in[1]; dig_in.pop_front(); dig_in.pop_front(); }
         dig_count = dig_in.size();
@@ -540,6 +563,7 @@ void Asr10::eject_disk() {
 
 void Asr10::run(int64_t clocks) {
     int64_t target = total_cycles + clocks;
+    if (di10) update_lock();
     update_tin();
     while ((int64_t)total_cycles < target) {
         int c = m68k_execute(32);
@@ -552,7 +576,7 @@ void Asr10::run(int64_t clocks) {
         double frame_clocks = 16.0 * (otto.active_voices() + 1);
         while (otto_acc >= frame_clocks) { otto_acc -= frame_clocks; otto_frame(); }
         if (di10 && digital_selected()) {        // the S/PDIF input's own clock
-            dig_acc += c * (dig_rate / cpu_clock);
+            dig_acc += c * (dig_clock() / cpu_clock);
             while (dig_acc >= 1.0) { dig_acc -= 1.0; digital_frame(); }
         }
         // drive READY -> DUART IP0 (change detected by the OS), HD sensor -> IP2
