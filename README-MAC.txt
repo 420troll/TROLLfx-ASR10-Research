@@ -71,10 +71,14 @@ OPTION B - build it yourself on your Mac (sections 1 to 3).
    floppy drive and boots from a SCSI drive that has the OS (or: open the app with --boot scsi). A red LED
    above the floppy drive blinks on SCSI activity (slowly while reading, fast while writing).
 
+   DI-10 Digital I/O (S/PDIF): Options > Digital In / Digital Out (DI-10 S/PDIF) pick a pair of inputs
+   / outputs of the interface; the board is fitted when either is used. Sample > REC SRC=DIGITAL samples
+   from it at 44.1 or 48 kHz; the digital output carries the Main mix when the effect runs at 44.1 kHz.
+
 5. The VST3 plug-in (instrument)
    - It appears as "ASR-10 Emulator" in any VST3 host (Cubase, Studio One, Reaper, Bitwig,
      Ableton Live 11+...). Logic does not use VST3.
-   - Outputs: Main + AUX 1/2/3. Enable the AUX outputs in the host to get them separately.
+   - Outputs: Main + AUX 1/2/3 (+ S/PDIF Out with the DI-10). Enable them in the host to get them separately.
    - Stereo input (side chain) for sampling / recording Audio Tracks.
    - MIDI In and MIDI Out (the ASR's sequencer can play other instruments).
    - Panel only: drag disk images or .efa/.efe files onto the panel; the drive's eject button

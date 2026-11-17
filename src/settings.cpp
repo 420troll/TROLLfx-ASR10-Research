@@ -40,6 +40,8 @@ bool Settings::load(const std::string &file) {
         else if (k == "app_dir") app_dir = v;
         else if (k == "rom_dir") rom_dir = v;
         else if (k == "boot") boot_scsi = v == "scsi";
+        else if (k == "spdif_in") spdif_in = n > 0 ? n - 1 : -1;
+        else if (k == "spdif_out") spdif_out = n > 0 ? (n - 1) / 2 : -1;
     }
     fclose(f);
     if (in_left < 0) in_left = 0;
@@ -62,6 +64,9 @@ bool Settings::save() const {
     fprintf(f, "# Input Level pot: 0..1 (0 = off, 0.667 = 0 dB, 1 = +18 dB)\ninput_level=%.3f\n", input_level);
     fprintf(f, "# display: vfd (the original) or lcd (purple graphic LCD)\ndisplay=%s\n", lcd ? "lcd" : "vfd");
     fprintf(f, "# folder of the SCSI drive images (HD0.img, CD5.iso ...); empty = \"scsi\" next to the program\nscsi_dir=%s\n", scsi_dir.c_str());
+    fprintf(f, "# DI-10 Digital I/O (S/PDIF), fitted when either is set: spdif_in = first channel of the input pair\n"
+               "# (1 = inputs 1-2 of the input device), spdif_out = first output of the pair (1 = outs 1-2); 0 = not used\n");
+    fprintf(f, "spdif_in=%d\nspdif_out=%d\n", spdif_in < 0 ? 0 : spdif_in + 1, spdif_out < 0 ? 0 : spdif_out * 2 + 1);
     fprintf(f, "# start-up: floppy = load the OS disk image into the floppy drive; scsi = no floppy, boot from a SCSI drive\nboot=%s\n", boot_scsi ? "scsi" : "floppy");
     fprintf(f, "# folder of the program (written by it; the VST3 plug-in looks for the ROMs and disks there)\napp_dir=%s\n", app_dir.c_str());
     fprintf(f, "# folder of the ROMs chosen when they were not found (empty = the \"roms\" folder next to the program)\nrom_dir=%s\n", rom_dir.c_str());

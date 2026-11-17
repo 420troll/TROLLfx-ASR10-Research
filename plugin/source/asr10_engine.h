@@ -41,7 +41,8 @@ public:
     void message(const std::string &s) { set_status(s); }   // a line for the editor
 
     void set_sample_rate(double fs);
-    // out[0..7] = main L/R, aux1 L/R, aux2 L/R, aux3 L/R (any may be null); in = stereo input or null.
+    // out[0..9] = main L/R, aux1 L/R, aux2 L/R, aux3 L/R, S/PDIF L/R (any may be null); in = stereo
+    // input or null (the sampler input, and the DI-10 S/PDIF input when the board is fitted).
     // aux_active[i] = AUX i+1 output bus is active in the host (it is then left out of the main mix)
     void process(float *const *out, const float *in_l, const float *in_r, int frames,
                  const std::vector<EngineMidi> &midi, const bool aux_active[3]);
