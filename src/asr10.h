@@ -119,7 +119,12 @@ public:
     // the 68000's word and long reads: RAM pages at once (inline), everything else through read()
     uint32_t read16(uint32_t a) {
         a &= 0xffffff;
-        if (a >= 0xf8 && rmap[a >> 13] == P_RAM) { const uint32_t o = a & ram_mask; return (ram[o] << 8) | ram[(o + 1) & ram_mask]; }
+        const PageType t = rmap[a >> 13];
+        if (a >= 0xf8 && t == P_RAM) { const uint32_t o = a & ram_mask; return (ram[o] << 8) | ram[(o + 1) & ram_mask]; }
+        if (t == P_ROM && a >= 0xf8 && a != 0xf8258a) {          // (the instruction fetches; read() has the one patched word)
+            const uint32_t m = (uint32_t)rom.size() - 1, o = a & m;
+            return (rom[o] << 8) | rom[(o + 1) & m];
+        }
         return read(a, 2);
     }
     uint32_t read32(uint32_t a) {

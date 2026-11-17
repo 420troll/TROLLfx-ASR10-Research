@@ -4,6 +4,7 @@
 #include "panel.h"
 #include "vfd.h"
 #include <cmath>
+#include <cstring>
 #include <cstdlib>
 #include <algorithm>
 
@@ -23,6 +24,8 @@ float rnd(uint32_t x) { return (hash(x) & 0xffff) / 65535.0f; }
 
 RackUI::~RackUI() {
     if (plate) SDL_DestroyTexture(plate);
+    if (plate_px) SDL_DestroyTexture(plate_px);
+    for (auto *t : legend_px) if (t) SDL_DestroyTexture(t);
     if (glow) SDL_DestroyTexture(glow);
     for (auto *t : legend) if (t) SDL_DestroyTexture(t);
 }
@@ -120,6 +123,42 @@ bool RackUI::init(SDL_Renderer *r) {
         uint32_t c = LEGEND_COLOUR[l.colour & 3];
         SDL_SetTextureColorMod(t, c >> 16, (c >> 8) & 255, c & 255);
         legend.push_back(t);
+    }
+    return true;
+}
+
+// The faceplate and the legends scaled once to the pixel size they are drawn at (the software
+// renderer then copies them without scaling: much faster, and a clipped copy gives the same
+// pixels as a whole one, which the plug-in editor's partial redraws need).
+static SDL_Texture *scaled_copy(SDL_Renderer *R, SDL_Texture *src, int w, int h) {
+    if (w <= 0 || h <= 0) return nullptr;
+    SDL_Texture *t = SDL_CreateTexture(R, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, w, h);
+    if (!t) return nullptr;
+    SDL_BlendMode bm; SDL_GetTextureBlendMode(src, &bm);
+    Uint8 cr, cg, cb; SDL_GetTextureColorMod(src, &cr, &cg, &cb);
+    SDL_SetRenderTarget(R, t);
+    SDL_SetRenderDrawBlendMode(R, SDL_BLENDMODE_NONE);
+    SDL_SetRenderDrawColor(R, 0, 0, 0, 0);
+    SDL_RenderClear(R);
+    SDL_SetTextureBlendMode(src, SDL_BLENDMODE_NONE); SDL_SetTextureColorMod(src, 255, 255, 255);
+    SDL_RenderCopy(R, src, nullptr, nullptr);
+    SDL_SetTextureBlendMode(src, bm); SDL_SetTextureColorMod(src, cr, cg, cb);
+    SDL_SetRenderTarget(R, nullptr);
+    SDL_SetTextureBlendMode(t, bm); SDL_SetTextureColorMod(t, cr, cg, cb);
+    return t;
+}
+bool RackUI::prescale(VfdRenderer &vfd) {
+    if (!vfd.prescale((619 - 34) * K / VfdRenderer::WIDTH)) return false;   // (the scale draw() uses for the VFD)
+    auto px_rect = [](const SDL_FRect &f) { return SDL_Rect{ (int)f.x, (int)f.y, (int)f.w, (int)f.h }; };
+    plate_dst = px_rect(SDL_FRect{ X(85), Y(155), PW * K, PH * K });
+    plate_px = scaled_copy(R, plate, plate_dst.w, plate_dst.h);
+    if (!plate_px) return false;
+    size_t i = 0;
+    for (const PanelLegend &l : PANEL_LEGENDS) {
+        SDL_Rect d = px_rect(SDL_FRect{ X(l.x), Y(l.y), l.w * K, l.h * K });
+        SDL_Texture *t = scaled_copy(R, legend[i++], d.w, d.h);
+        if (!t) return false;
+        legend_px.push_back(t); legend_dst.push_back(d);
     }
     return true;
 }
@@ -243,7 +282,8 @@ void RackUI::draw(const RackState &s, VfdRenderer &vfd) {
     const bool blink = (s.ticks / 250) & 1;
     // faceplate
     SDL_FRect pl{ X(85), Y(155), PW * K, PH * K };
-    SDL_RenderCopyF(R, plate, nullptr, &pl);
+    if (plate_px) SDL_RenderCopy(R, plate_px, nullptr, &plate_dst);
+    else SDL_RenderCopyF(R, plate, nullptr, &pl);
     // screw heads in the ear slots are not drawn: the slots show what is behind the rack
 
     // ---- input level LEDs (peak red, signal green), power switch, phones jack, volume
@@ -354,6 +394,21 @@ void RackUI::draw(const RackState &s, VfdRenderer &vfd) {
 
     // ---- SCSI activity LED over the floppy drive: blinks while the bus is in use, slowly while
     //      reading (4 Hz) and fast while writing (10 Hz); a burst keeps it blinking for 300 ms
+    last_scsi_lit = scsi_led(s);
+    led(1746.5f, 179, 14, 8, 0xff2a1a, last_scsi_lit);
+
+    // ---- legends
+    int i = 0;
+    for (const PanelLegend &l : PANEL_LEGENDS) {
+        SDL_FRect d{ X(l.x), Y(l.y), l.w * K, l.h * K };
+        if (i < (int)legend_px.size()) { SDL_RenderCopy(R, legend_px[i], nullptr, &legend_dst[i]); i++; }
+        else SDL_RenderCopyF(R, legend[i++], nullptr, &d);
+    }
+    (void)BG;
+}
+
+// the SCSI LED's state at s.ticks (and its timing state brought up to date)
+bool RackUI::scsi_led(const RackState &s) {
     const uint32_t HOLD = 300, READ_PERIOD = 250, WRITE_PERIOD = 100;   // ms
     {
         if (!scsi_seen_init) { scsi_seen = s.scsi_activity; scsi_wseen = s.scsi_writes; scsi_seen_init = true; }
@@ -366,14 +421,48 @@ void RackUI::draw(const RackState &s, VfdRenderer &vfd) {
     const bool scsi_busy = scsi_hit && (uint32_t)(s.ticks - scsi_seen_t) < HOLD;
     const bool scsi_writing = scsi_busy && (uint32_t)(s.ticks - scsi_write_t) < HOLD;
     const uint32_t scsi_period = scsi_writing ? WRITE_PERIOD : READ_PERIOD;
-    const bool scsi_lit = scsi_busy && (uint32_t)(s.ticks - scsi_start_t) % scsi_period < scsi_period / 2;
-    led(1746.5f, 179, 14, 8, 0xff2a1a, scsi_lit);
+    return scsi_busy && (uint32_t)(s.ticks - scsi_start_t) % scsi_period < scsi_period / 2;
+}
 
-    // ---- legends
-    int i = 0;
-    for (const PanelLegend &l : PANEL_LEGENDS) {
-        SDL_FRect d{ X(l.x), Y(l.y), l.w * K, l.h * K };
-        SDL_RenderCopyF(R, legend[i++], nullptr, &d);
+// ------------------------------------------------------------------ what to redraw
+// The parts of the panel that look different in state b than in state a, as window-pixel
+// rectangles (with room for the glows): the plug-in editor redraws only those.
+void RackUI::changed_regions(const RackState &a, const RackState &b, std::vector<SDL_Rect> &out) {
+    auto add = [&](float x, float y, float w, float h) {
+        SDL_FRect r = rect(x, y, w, h);
+        const int x0 = (int)std::floor(r.x) - 2, y0 = (int)std::floor(r.y) - 2;
+        out.push_back({ x0, y0, (int)std::ceil(r.x + r.w) + 2 - x0, (int)std::ceil(r.y + r.h) + 2 - y0 });
+    };
+    const Panel &p = *a.panel, &q = *b.panel;
+    const bool blink_flip = ((a.ticks / 250) & 1) != ((b.ticks / 250) & 1);
+    // display: text, attributes, annunciators, bar graph, and the blink phase when something blinks
+    bool disp = memcmp(p.disp, q.disp, Panel::COLS) || memcmp(p.attr, q.attr, Panel::COLS) || memcmp(p.ind2, q.ind2, 16)
+                || memcmp(p.ind3, q.ind3, 16) || p.meter != q.meter || p.meter_a != q.meter_a;
+    if (!disp && blink_flip) {
+        for (int i = 0; i < 16 && !disp; i++) disp = q.ind2[i] % 3 == 2 || q.ind3[i] % 3 == 2;
+        for (int i = 0; i < Panel::COLS && !disp; i++) disp = (q.attr[i] & 4) != 0;
     }
-    (void)BG;
+    if (disp) add(664, 224, 627, 157);
+    // instrument LEDs
+    bool leds = memcmp(p.ind, q.ind, 16) != 0;
+    if (!leds && blink_flip) for (int i = 0; i < 16 && !leds; i++) leds = q.ind[i] % 3 == 2;
+    if (leds) add(738, 490, 500, 44);
+    // Audio Track LEDs, input LEDs and knob, power switch, sliders
+    const float lx[4] = { 454.5f, 579.5f, 454.5f, 579.5f }, ly[4] = { 512, 512, 600, 600 };
+    for (int i = 0; i < 4; i++) if (a.audio_led[i] != b.audio_led[i]) add(lx[i] - 26, ly[i] - 22, 52, 44);
+    const float sig = 0.063f, pk = 0.5f;
+    if ((a.in_left >= pk) != (b.in_left >= pk) || (a.in_right >= pk) != (b.in_right >= pk)
+        || (a.in_left >= sig) != (b.in_left >= sig) || (a.in_right >= sig) != (b.in_right >= sig)) add(258, 205, 120, 76);
+    if (a.input_level != b.input_level) add(IN_X - 30, IN_Y - 30, 60, 62);
+    if (a.power_held != b.power_held) add(232, 402, 73, 96);
+    if (a.volume != b.volume) add(VOL_X - 32, VOL_TOP - 30, 64, VOL_BOT - VOL_TOP + 62);
+    if (a.data != b.data) add(DATA_X - 32, DATA_TOP - 30, 64, DATA_BOT - DATA_TOP + 62);
+    // buttons
+    for (const Btn &bt : buttons) {
+        const bool ha = a.held && a.held[bt.idx & 63], hb = b.held && b.held[bt.idx & 63];
+        if (ha != hb) add(bt.x - 3, bt.y - 3, bt.w + 6, bt.h + 9);
+    }
+    // floppy drive, SCSI LED
+    if (a.disk != b.disk || a.drive_busy != b.drive_busy) add(1691, 211, 111, 403);
+    if (scsi_led(b) != last_scsi_lit) add(1720, 158, 54, 42);   // (as last drawn)
 }

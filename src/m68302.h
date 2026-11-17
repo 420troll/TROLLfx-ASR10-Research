@@ -104,6 +104,7 @@ private:
         std::deque<uint8_t> rxfifo;
         double rx_timer;
         int idle_count;
+        bool tx_wait;                // no Tx buffer ready: nothing to do until the CPU writes one
     } scc[3] = {};
     uint16_t spmode = 0, simask = 0, simode = 0;
     void scc_command(int ch, int op);

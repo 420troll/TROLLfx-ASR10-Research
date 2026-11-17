@@ -131,12 +131,14 @@ uint16_t M68302::read16(uint32_t a) {
 }
 void M68302::write8(uint32_t a, uint8_t v) {
     uint32_t off = a & 0xfff;
+    for (auto &s : scc) s.tx_wait = false;      // (a Tx buffer descriptor or a register may have changed)
     if (off < 0x800) { dpram[off] = v; return; }
     if (off & 1) reg_write16(off & ~1, v, 0x00ff);
     else reg_write16(off, v << 8, 0xff00);
 }
 void M68302::write16(uint32_t a, uint16_t v) {
     uint32_t off = a & 0xffe;
+    for (auto &s : scc) s.tx_wait = false;
     if (off < 0x800) { wr16(off, v); return; }
     reg_write16(off, v, 0xffff);
 }
@@ -348,13 +350,14 @@ bool M68302::scc_rx_ready(int n) const {
 void M68302::scc_tx_service(int n, int clocks) {
     Scc &s = scc[n];
     if (!(s.scm & 4)) return;     // transmitter disabled
+    if (s.tx_wait) return;        // (no buffer ready, and the CPU has written nothing since)
     static const int bitn[3] = { 13, 10, 8 };
     uint32_t bdbase = 0x400 + n * 0x100 + 0x40;
     if (s.tx_timer > 0) { s.tx_timer -= clocks; if (s.tx_timer > 0) return; }
     for (int guard = 0; guard < 8; guard++) {
         uint32_t bd = bdbase + s.txbd * 8;
         uint16_t st = rd16(bd);
-        if (!(st & 0x8000)) return;     // not ready
+        if (!(st & 0x8000)) { s.tx_wait = true; return; }     // not ready
         uint16_t len = rd16(bd + 2);
         uint32_t ptr = rd32(bd + 4) & 0xffffff;
         if (s.tx_bytepos < len) {
@@ -427,10 +430,10 @@ void M68302::scc_rx_service(int n, int clocks) {
     Scc &s = scc[n];
     if ((s.scm & 3) == 3) return;               // BISYNC: fed synchronously by scc_sync_rx
     static const int bitn[3] = { 13, 10, 8 };
-    uint32_t base = 0x400 + n * 0x100;
-    double bc = scc_byte_clocks(n);
     s.rx_timer -= clocks;
     if (s.rx_timer > 0) return;
+    uint32_t base = 0x400 + n * 0x100;
+    double bc = scc_byte_clocks(n);
     if (!(s.scm & 8)) { s.rxfifo.clear(); s.rx_timer = bc; return; }
     uint32_t bd = base + s.rxbd * 8;
     uint16_t st = rd16(bd);
