@@ -54,13 +54,15 @@ public:
         return (pa_ddr >> bit[n] & 1) && !(pa_dat >> bit[n] & 1);
     }     // left / right input peaks for the front panel LEDs (reset by the consumer)
 
-    // DI-10 Digital I/O option (S/PDIF: CS8412 receiver, CS8402 transmitter).
-    //  - in: REC SRC=DIGITAL. The source's word clock replaces the main board's frame clock on PB3 and
-    //    its samples go to the SCCs in place of the A/D's, at its own rate (44.1 or 48 kHz).
+    // DI-10 Digital I/O option (S/PDIF: CS8412-CP receiver, CS8402 transmitter).
+    //  - in: REC SRC=DIGITAL. The receiver's word clock (FSYNC) replaces the main board's frame clock on
+    //    PB3 and its samples go to the SCCs in place of the A/D's, at the source's rate. The CS8412
+    //    locks to 25-55 kHz; out of lock its VCO sits at its minimum and the data are zeros; on an error
+    //    it repeats the last good sample.
     //  - out: the main output mix (the data of the main DAC) at the system rate, when it is 44.1 kHz.
     bool di10 = false;
     void feed_digital(const float *lr, size_t frames, double rate);   // S/PDIF input (thread safe)
-    double digital_rate() const { return dig_rate; }
+    double digital_rate() const { return dig_locked ? dig_rate : 0; }   // 0 = the receiver is not locked
     bool digital_selected() const { return (op_pins & 0x2f) == 0; }   // DUART OP pins: REC SRC=DIGITAL
     std::vector<float> audio_dig;      // S/PDIF output, interleaved L/R at out_rate (when di10)
     float dig_peak[2] = { 0, 0 };      // S/PDIF input peaks (reset by the consumer)
@@ -161,6 +163,14 @@ private:
     std::deque<int16_t> dig_in;
     std::atomic<size_t> dig_count{0};
     double dig_rate = 48000, dig_acc = 0;
+    std::atomic<double> dig_src_rate{0};   // rate of the incoming stream (0 = none the CS8412 can lock to)
+    std::atomic<uint64_t> dig_fed{0};      // frames received so far
+    uint64_t dig_fed_seen = 0, dig_fed_cycle = 0;
+    bool dig_locked = false;
+    void update_lock();
+    // the receiver's FSYNC: the stream's rate when locked; out of lock the VCO is pulled to its minimum
+    // (below the 25 kHz lock range: taken as 25 kHz)
+    double dig_clock() const { return dig_locked ? dig_rate : 25000.0; }
     bool dig_lrclk = false;
     int16_t dig_last[2] = { 0, 0 };
     double dig_rs_pos = 0; float dig_rs_last[2] = { 0, 0 };   // (converting other device rates)
