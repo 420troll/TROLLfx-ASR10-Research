@@ -150,6 +150,14 @@ is fitted as soon as either is used, and the ASR-10 restarts (its OS looks for t
 - VST3: the plug-in follows the app. Its stereo input is also the S/PDIF input, and an extra output
   bus, **S/PDIF Out (DI-10)**, carries the digital output.
 
+## D/A converters
+
+The outputs go through a model of the machine's Philips TDA1541A converters (16-bit words with each
+chip's small bit-weight errors, no oversampling filter so each sample is held for a whole period) and
+of the analog section after them (I/V converter, low-pass filter, coupling capacitor), then are
+resampled to the computer's rate. Options › Display and sound › **D/A converters**: *TDA1541A (as the
+ASR-10)* (default) or *Ideal (perfect converter)*, which only resamples.
+
 ## VST3 plug-in
 
 1. Copy the whole `VST3\ASR10.vst3` folder to `C:\Program Files\Common Files\VST3` (Windows) or to

@@ -75,6 +75,9 @@ OPTION B - build it yourself on your Mac (sections 1 to 3).
    / outputs of the interface; the board is fitted when either is used. Sample > REC SRC=DIGITAL samples
    from it at 44.1 or 48 kHz; the digital output carries the Main mix when the effect runs at 44.1 kHz.
 
+   D/A converters (Options > Display and sound): TDA1541A as the ASR-10 (default: the converters and the
+   analog section after them) or Ideal (a perfect converter).
+
 5. The VST3 plug-in (instrument)
    - It appears as "ASR-10 Emulator" in any VST3 host (Cubase, Studio One, Reaper, Bitwig,
      Ableton Live 11+...). Logic does not use VST3.
