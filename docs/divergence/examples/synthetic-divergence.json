@@ -1,0 +1,154 @@
+{
+  "schema": "trollfx-es5510-divergence-report-v1",
+  "trace_pair": {
+    "left": {
+      "trace_id": "synthetic-ROM01-reference-fixture",
+      "implementation": "synthetic-reference-fixture",
+      "identity": null
+    },
+    "right": {
+      "trace_id": "synthetic-ROM01-candidate-fixture",
+      "implementation": "synthetic-candidate-fixture",
+      "identity": null
+    }
+  },
+  "alignment": {
+    "automatic_alignment": false,
+    "assumption": "frame 0 compared directly",
+    "left_timing": {
+      "sample_rate_hz": 44100,
+      "clock_hz": null,
+      "frame_basis": "synthetic DSP frame",
+      "clock_basis": "unknown",
+      "alignment_assumption": "frame 0 compared directly; no automatic offset applied"
+    },
+    "right_timing": {
+      "sample_rate_hz": 44100,
+      "clock_hz": null,
+      "frame_basis": "synthetic DSP frame",
+      "clock_basis": "unknown",
+      "alignment_assumption": "frame 0 compared directly; no automatic offset applied"
+    }
+  },
+  "identical_observations_compared": 1,
+  "unknown_comparisons": [],
+  "findings": [
+    {
+      "status": "confirmed_mismatch",
+      "category": "register_write_ordering",
+      "kind": "frame_offset",
+      "frame": 0,
+      "event_type": "register_write",
+      "identity": [
+        "register_write"
+      ],
+      "frame_offset": 1,
+      "left_frame": 0,
+      "right_frame": 1,
+      "supporting_entries": {
+        "left": {
+          "frame": 0,
+          "event_order": 1,
+          "instruction_index": 0,
+          "event_type": "register_write",
+          "register": 122,
+          "value": 100,
+          "source": "synthetic"
+        },
+        "right": {
+          "frame": 1,
+          "event_order": 1,
+          "instruction_index": 0,
+          "event_type": "register_write",
+          "register": 122,
+          "value": 100,
+          "source": "synthetic"
+        }
+      },
+      "reason": "same observed event/value appears at a different DSP frame; frame timestamps only"
+    }
+  ],
+  "timeline_around_first_divergence": [
+    {
+      "side": "left",
+      "frame": 0,
+      "event_order": 0,
+      "instruction_index": 0,
+      "event_type": "instruction",
+      "program_counter": 0,
+      "instruction_word": "synthetic-000"
+    },
+    {
+      "side": "right",
+      "frame": 0,
+      "event_order": 0,
+      "instruction_index": 0,
+      "event_type": "instruction",
+      "program_counter": 0,
+      "instruction_word": "synthetic-000"
+    },
+    {
+      "side": "left",
+      "frame": 0,
+      "event_order": 1,
+      "instruction_index": 0,
+      "event_type": "register_write",
+      "register": 122,
+      "value": 100,
+      "source": "synthetic"
+    },
+    {
+      "side": "right",
+      "frame": 1,
+      "event_order": 1,
+      "instruction_index": 0,
+      "event_type": "register_write",
+      "register": 122,
+      "value": 100,
+      "source": "synthetic"
+    }
+  ],
+  "earliest_confirmed_divergence": {
+    "status": "confirmed_mismatch",
+    "category": "register_write_ordering",
+    "kind": "frame_offset",
+    "frame": 0,
+    "event_type": "register_write",
+    "identity": [
+      "register_write"
+    ],
+    "frame_offset": 1,
+    "left_frame": 0,
+    "right_frame": 1,
+    "supporting_entries": {
+      "left": {
+        "frame": 0,
+        "event_order": 1,
+        "instruction_index": 0,
+        "event_type": "register_write",
+        "register": 122,
+        "value": 100,
+        "source": "synthetic"
+      },
+      "right": {
+        "frame": 1,
+        "event_order": 1,
+        "instruction_index": 0,
+        "event_type": "register_write",
+        "register": 122,
+        "value": 100,
+        "source": "synthetic"
+      }
+    },
+    "reason": "same observed event/value appears at a different DSP frame; frame timestamps only"
+  },
+  "supported_categories": [
+    "register_write_ordering"
+  ],
+  "classification": "divergence_observed",
+  "limitations": [
+    "No DSP arithmetic is inferred from absent fields.",
+    "Frame-level timestamps do not establish instruction-cycle timing.",
+    "No transformation is treated as a correction without independent execution and output validation."
+  ]
+}
