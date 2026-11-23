@@ -28,6 +28,34 @@ def private_ref(base: Path, rel: str) -> Path:
         raise ValueError("manifest payload path escapes its private directory")
     return p
 
+def extract_load_history(event_path: Path, run_frame: int):
+    """Return retained host GPR writes and the target HALT/load commit list."""
+    historical=[]; current=[]; target_history=None; target_commits=None; run_count=0
+    def decode(r):
+        kind={"GPR_COMMIT":"gpr","INSTR_COMMIT":"instr","BOTH_COMMIT":"both"}[r[5]]
+        fields=r[6:]; expected=3 if kind=="both" else 2
+        if len(fields)!=expected: raise ValueError("malformed private load commit event")
+        def payload(field,key):
+            k,sep,value=field.partition("=")
+            if not sep or k!=key or not value: raise ValueError("malformed private load commit field")
+            return value
+        return (kind,payload(fields[0],"index"),
+                payload(fields[1],"word" if kind in ("instr","both") else "value"),
+                payload(fields[2],"gpr") if kind=="both" else "0")
+    with event_path.open(newline="") as f:
+        for r in csv.reader(f):
+            if len(r)>5 and r[5]=="PIPELINE_CLEAR":
+                historical.extend(("seed_gpr",c[1],c[3] if c[0]=="both" else c[2],"0")
+                                  for c in current if c[0] in ("gpr","both"))
+                current=[]
+            elif len(r)>5 and r[5] in ("GPR_COMMIT","INSTR_COMMIT","BOTH_COMMIT"):
+                current.append(decode(r))
+            elif len(r)>5 and r[5]=="DSP_RUN" and r[2]==str(run_frame):
+                run_count+=1; target_history=list(historical); target_commits=list(current)
+    if run_count!=1 or target_history is None or target_commits is None:
+        raise ValueError("ordered event trace lacks a unique recorded RUN boundary")
+    return target_history,target_commits
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("manifest", type=Path, help="complete external factory-state manifest")
@@ -68,35 +96,18 @@ def main() -> int:
     # pipeline-clear event. CSV rows after the six fixed metadata columns carry
     # the private register/instruction write payloads.
     run_frame=int(cap["run_frame"])
-    commits=[]; current=[]; run_count=0
-    def payload(field: str, expected_key: str) -> str:
-        key,sep,value=field.partition("=")
-        if not sep or key != expected_key or not value:
-            raise SystemExit("malformed private load commit field")
-        return value
-    with event_path.open(newline="") as f:
-        for r in csv.reader(f):
-            if len(r)>5 and r[5]=="PIPELINE_CLEAR": current=[]
-            elif len(r)>5 and r[5] in ("GPR_COMMIT","INSTR_COMMIT","BOTH_COMMIT"):
-                kind={"GPR_COMMIT":"gpr","INSTR_COMMIT":"instr","BOTH_COMMIT":"both"}[r[5]]
-                fields=r[6:]; expected=3 if kind=="both" else 2
-                if len(fields)!=expected: raise SystemExit("malformed private load commit event")
-                address=payload(fields[0],"index")
-                value=payload(fields[1],"word" if kind in ("instr","both") else "value")
-                second=payload(fields[2],"gpr") if kind=="both" else "0"
-                current.append((kind,address,value,second))
-            elif len(r)>5 and r[5]=="DSP_RUN" and r[2]==str(run_frame):
-                run_count+=1; commits=list(current)
-    if run_count!=1: raise SystemExit("ordered event trace lacks a unique recorded RUN boundary")
+    try: history,commits=extract_load_history(event_path,run_frame)
+    except ValueError as e: raise SystemExit(str(e))
     gpr_count=sum(kind in ("gpr","both") for kind,*_ in commits)
     instr_count=sum(kind in ("instr","both") for kind,*_ in commits)
     if gpr_count!=342 or instr_count!=89:
         raise SystemExit("ordered HALT/load/RUN transaction does not contain the verified 342 GPR/SPR and 89 instruction commits")
     registers=[0]*256; registers[252]=0xffffff; registers[253]=0x800000; registers[254]=0x7fffff
     instructions=[0]*160
-    for kind,address,value,second in commits:
+    for kind,address,value,second in history+commits:
         aidx=int(address,16)
-        if kind=="gpr": registers[aidx]=int(value,16)
+        if kind=="seed_gpr": registers[aidx]=int(value,16)
+        elif kind=="gpr": registers[aidx]=int(value,16)
         elif kind=="instr": instructions[aidx]=int(value,16)
         else: registers[aidx]=int(second,16); instructions[aidx]=int(value,16)
     expected_program=payloads["program"].read_bytes()
@@ -109,7 +120,7 @@ def main() -> int:
         raise SystemExit(f"state gate failed before audio comparison: ordered commits disagree with final payloads at {gpr_mismatches} GPRs and {spr_mismatches} SPRs")
     load_commits=out/"private-load-commits.csv"
     with load_commits.open("w",newline="") as f:
-        w=csv.writer(f);w.writerow(("kind","address","value","second_value"));w.writerows(commits)
+        w=csv.writer(f);w.writerow(("kind","address","value","second_value"));w.writerows(history+commits)
     exe=out/"hall-replay"
     sources=[ROOT/"src/es5510.cpp",ROOT/"third_party/trollfx_mame_es5510/mame_es5510_standalone.cpp",
              ROOT/"tools/audio_validation/hall_replay.cpp"]
