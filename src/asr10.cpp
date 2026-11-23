@@ -361,7 +361,10 @@ void Asr10::io_write(PageType t, uint32_t a, uint32_t v, int sz) {
     }
     case P_OTTO:
         if (a & 0x1000) {
-            if (sz == 2 || (a & 1)) esp.host_w((a >> 1) & 0xff, v & 0xff);
+            if (sz == 2 || (a & 1)) {
+                esp.set_host_context(total_cycles, last_pc());
+                esp.host_w((a >> 1) & 0xff, v & 0xff);
+            }
             if (trace_io) fprintf(stderr, "ESP W %06x (%02x) = %02x pc=%06x\n", a, (a >> 1) & 0xff, v & 0xff, last_pc());
             return;
         }

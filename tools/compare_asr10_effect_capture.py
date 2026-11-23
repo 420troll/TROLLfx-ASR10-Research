@@ -45,11 +45,11 @@ def parse_host_log(path: Path) -> tuple[dict[int, tuple[int, int | None, str]], 
     instructions: dict[int, tuple[int, int | None, str]] = {}
     gprs: dict[int, int] = {}
     for line in path.read_text(errors="replace").splitlines():
-        m = re.search(r"ESPHOST (both|instr) ([0-9a-f]{2}) <- ([0-9a-f]{12})(?: / ([0-9a-f]{6}))?", line, re.I)
+        m = re.search(r"ESPHOST (?:event=\d+ cycles=\d+ frame=\d+ pc=[0-9a-f]{6,8} )?(both|instr) ([0-9a-f]{2}) <- ([0-9a-f]{12})(?: / ([0-9a-f]{6}))?", line, re.I)
         if m:
             index = int(m.group(2), 16)
             instructions[index] = (int(m.group(3), 16), int(m.group(4), 16) if m.group(4) else None, m.group(1).lower())
-        m = re.search(r"ESPHOST gpr ([0-9a-f]{2}) <- ([0-9a-f]{6})", line, re.I)
+        m = re.search(r"ESPHOST (?:event=\d+ cycles=\d+ frame=\d+ pc=[0-9a-f]{6,8} )?gpr ([0-9a-f]{2}) <- ([0-9a-f]{6})", line, re.I)
         if m:
             gprs[int(m.group(1), 16)] = int(m.group(2), 16)
     return instructions, gprs

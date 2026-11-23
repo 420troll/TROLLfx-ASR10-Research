@@ -68,6 +68,19 @@ def fixtures(directory: Path, paired_count=29, instruction_count=None, gap_bytes
 
 
 class EffectCaptureComparisonTests(unittest.TestCase):
+    def test_parses_timestamped_host_commits(self):
+        text = """ESPHOST event=10 cycles=123 frame=4 pc=001234 both 02 <- 0123456789ab / 00ffee
+ESPHOST event=11 cycles=124 frame=4 pc=001238 instr 03 <- fedcba987654
+ESPHOST event=12 cycles=125 frame=4 pc=00123c gpr 21 <- 123456
+"""
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "host.log"
+            path.write_text(text)
+            instructions, gprs = compare_capture.parse_host_log(path)
+        self.assertEqual(instructions[2], (0x0123456789ab, 0x00ffee, "both"))
+        self.assertEqual(instructions[3], (0xfedcba987654, None, "instr"))
+        self.assertEqual(gprs[0x21], 0x123456)
+
     def test_recovers_mixed_29_pair_31_instruction_layout(self):
         with tempfile.TemporaryDirectory() as td:
             paths = fixtures(Path(td))

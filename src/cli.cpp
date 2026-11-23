@@ -52,6 +52,7 @@ int main(int argc, char **argv) {
     bool trace_io = false, panel_log = false, fdc_log = false, trap_log = false, pc_hist = false;
     std::vector<std::pair<double, std::vector<uint8_t>>> midi;   // time, bytes
     std::vector<std::pair<double, std::pair<int,int>>> buttons;  // time, (code, down)
+    std::vector<std::pair<double, std::string>> parameter_marks;
     int ram_mb = 16;   // maximum memory expansion (2 MB = base unit)
     std::vector<std::pair<uint32_t, int>> trace_pcs;
     std::vector<uint32_t> breaks;
@@ -148,6 +149,9 @@ int main(int argc, char **argv) {
         } else if (a == "--button") {  // time:code:down
             double t; int c, d;
             if (sscanf(next().c_str(), "%lf:%d:%d", &t, &c, &d) == 3) buttons.push_back({t, {c, d}});
+        } else if (a == "--param-mark") { // time:label
+            std::string v = next(); size_t c = v.find(':');
+            if (c != std::string::npos) parameter_marks.push_back({atof(v.substr(0, c).c_str()), v.substr(c + 1)});
         }
     }
     Asr10 m;
@@ -227,7 +231,7 @@ int main(int argc, char **argv) {
     };
     m.midi_out = [](uint8_t b) { fprintf(stderr, "[MIDI OUT] %02x\n", b); };
     std::sort(midi.begin(), midi.end(), [](auto &x, auto &y) { return x.first < y.first; });
-    size_t mi = 0, bi = 0, ki = 0;
+    size_t mi = 0, bi = 0, ki = 0, pmi = 0;
     std::sort(keys.begin(), keys.end(), [](auto &x, auto &y) { return x.first < y.first; });
     const int64_t slice = 16000;  // 1 ms
     int64_t total = (int64_t)(seconds * m.cpu_clock);
@@ -241,6 +245,11 @@ int main(int argc, char **argv) {
             if (idx == 40 || idx == 41) m.audio_button[idx - 40] = buttons[bi].second.second;   // Audio Track A/B
             else m.panel.button(idx, buttons[bi].second.second);
             bi++;
+        }
+        while (pmi < parameter_marks.size() && parameter_marks[pmi].first <= now) {
+            fprintf(stderr, "PARAMMARK label=%s cycles=%llu frame=%llu\n", parameter_marks[pmi].second.c_str(),
+                    (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+            ++pmi;
         }
         for (auto &ins : inserts) if (ins.first >= 0 && ins.first <= now) {
             if (!ins.second.empty() && efe::is_single_file(ins.second)) {   // .efa/.efe: on a temporary floppy

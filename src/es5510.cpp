@@ -69,6 +69,8 @@ const ES5510::RamCtl ES5510::RAMCTL[8] = {
 ES5510::ES5510() : dram(DRAM_SIZE) { hostlog = getenv("ESP_HOSTLOG") != nullptr; reset(); }
 
 void ES5510::reset() {
+    host_cycles = host_event = frame_count = 0;
+    host_pc = 0;
     pc = 0;
     memset(gpr, 0, sizeof(gpr));
     memset(instr, 0, sizeof(instr));
@@ -175,14 +177,14 @@ void ES5510::host_w(int offset, uint8_t data) {
         }
         break;
     case 0xa0:
-        if (hostlog) fprintf(stderr, "ESPHOST gpr %02x <- %06x\n", data, gpr_latch & 0xffffff);
+        if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x gpr %02x <- %06x\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, gpr_latch & 0xffffff);
         write_reg(data, gpr_latch); break;
     case 0xc0:
-        if (hostlog) fprintf(stderr, "ESPHOST instr %02x <- %012llx\n", data, (unsigned long long)instr_latch);
+        if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x instr %02x <- %012llx\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, (unsigned long long)instr_latch);
         if (data < 0xa0) { instr[data] = instr_latch & 0xffffffffffffULL; decode(data); }
         break;
     case 0xe0:
-        if (hostlog) fprintf(stderr, "ESPHOST both %02x <- %012llx / %06x\n", data, (unsigned long long)instr_latch, gpr_latch & 0xffffff);
+        if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x both %02x <- %012llx / %06x\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, (unsigned long long)instr_latch, gpr_latch & 0xffffff);
         if (data < 0xa0) { instr[data] = instr_latch; decode(data); }
         write_reg(data, gpr_latch);
         break;
@@ -384,6 +386,7 @@ void ES5510::finish_dec(Dec &d) {
 }
 
 void ES5510::run_frame() {
+    ++frame_count;
     struct ServeRead { ES5510 *e; ~ServeRead() { if (e->read_pending >= 0) { e->gpr_latch = e->gpr[e->read_pending] & 0xffffff; e->read_pending = -1; } } } serve{ this };
     static const char *trace = getenv("ESP_TRACE");     // debug: "every,reg,reg,..." (hex GPR numbers)
     static long frames = 0;

@@ -14,6 +14,9 @@ public:
 
     uint8_t host_r(int offset);
     void    host_w(int offset, uint8_t data);
+    // Host CPU context for correlating parameter-driven ES5510 commits.
+    void set_host_context(uint64_t cycles, uint32_t pc) { host_cycles = cycles; host_pc = pc; }
+    uint64_t host_frame_count() const { return frame_count; }
 
     // serial ports: index 0..7 = 0L,0R,1L,1R,2L,2R,3L,3R
     int16_t ser_r(int i) const { return ser[i]; }
@@ -91,6 +94,8 @@ private:
     void decode(int i);
     void finish_dec(Dec &d);
     bool itrace = false, hostlog = false;   // debug (ESP_ITRACE / ESP_HOSTLOG environment variables)
+    uint64_t host_cycles = 0, host_event = 0, frame_count = 0;
+    uint32_t host_pc = 0;
     std::vector<int16_t> dram;
 
     int32_t dol_latch = 0, dil_latch = 0, gpr_latch = 0;
