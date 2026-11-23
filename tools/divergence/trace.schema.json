@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://420troll.github.io/TROLLfx-ASR10-Research/trollfx-es5510-execution-trace-v1.schema.json",
+  "title": "TROLLfx ES5510 canonical execution trace",
+  "type": "object",
+  "required": ["schema", "trace_id", "source", "timing", "coverage", "events"],
+  "properties": {
+    "schema": {"const": "trollfx-es5510-execution-trace-v1"},
+    "trace_id": {"type": "string", "minLength": 1},
+    "source": {"type": "object", "required": ["implementation"], "properties": {"implementation": {"type": "string"}, "identity": {"type": ["string", "null"]}}},
+    "timing": {"type": "object", "required": ["sample_rate_hz", "frame_basis"], "properties": {"sample_rate_hz": {"type": "integer", "minimum": 1}, "clock_hz": {"type": ["number", "null"]}, "frame_basis": {"type": "string"}, "clock_basis": {"type": "string"}, "alignment_assumption": {"type": "string"}}},
+    "coverage": {"type": "object", "properties": {"observed_event_types": {"type": "array", "items": {"type": "string"}}, "complete_event_types": {"type": "array", "items": {"type": "string"}}}},
+    "initial_state": {"type": ["object", "null"], "description": "Optional structured initial-state observations; absent keys remain unknown."},
+    "initialization_manifest": {"type": ["object", "string", "null"], "description": "Non-destructive reference/summary; private payloads are not embedded."},
+    "metadata": {"type": "object"},
+    "events": {"type": "array", "items": {"type": "object", "required": ["frame", "event_type"], "properties": {"frame": {"type": "integer", "minimum": 0}, "instruction_index": {"type": ["integer", "null"], "minimum": 0}, "cycle": {"type": ["integer", "null"], "minimum": 0}, "event_order": {"type": "integer", "minimum": 0}, "event_type": {"enum": ["instruction", "register_write", "special_write", "firmware_write", "ram_request", "ram_read", "ram_write", "pipeline_state", "serial_input", "serial_output", "serial_frame", "end", "state_transition", "alu_state", "mac_state", "arithmetic_state"]}, "program_counter": {"type": ["integer", "null"]}, "instruction_word": {"type": ["string", "integer", "null"]}, "register": {"type": ["integer", "null"]}, "value": {}, "source": {"type": ["string", "null"]}, "timing_phase": {"type": ["string", "null"], "description": "Use explicit before/after-consumer semantics only when capture provides them."}}, "additionalProperties": true}}
+  },
+  "additionalProperties": true
+}

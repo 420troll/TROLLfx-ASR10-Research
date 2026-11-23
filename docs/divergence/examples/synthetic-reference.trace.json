@@ -1,0 +1,51 @@
+{
+  "schema": "trollfx-es5510-execution-trace-v1",
+  "trace_id": "synthetic-ROM01-reference-fixture",
+  "source": {
+    "implementation": "synthetic-reference-fixture",
+    "identity": null
+  },
+  "timing": {
+    "sample_rate_hz": 44100,
+    "clock_hz": null,
+    "frame_basis": "synthetic DSP frame",
+    "clock_basis": "unknown",
+    "alignment_assumption": "frame 0 compared directly; no automatic offset applied"
+  },
+  "coverage": {
+    "complete_event_types": [
+      "instruction",
+      "register_write"
+    ],
+    "observed_event_types": [
+      "instruction",
+      "register_write"
+    ]
+  },
+  "initial_state": {
+    "fixture": "synthetic-only"
+  },
+  "initialization_manifest": null,
+  "metadata": {
+    "not_factory_data": true
+  },
+  "events": [
+    {
+      "frame": 0,
+      "event_order": 0,
+      "instruction_index": 0,
+      "event_type": "instruction",
+      "program_counter": 0,
+      "instruction_word": "synthetic-000"
+    },
+    {
+      "frame": 0,
+      "event_order": 1,
+      "instruction_index": 0,
+      "event_type": "register_write",
+      "register": 122,
+      "value": 100,
+      "source": "synthetic"
+    }
+  ]
+}
