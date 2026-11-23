@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <vector>
 #include <cstdio>
+#include <array>
 
 class ES5510 {
 public:
@@ -18,12 +19,14 @@ public:
     // Host CPU context for correlating parameter-driven ES5510 commits.
     void set_host_context(uint64_t cycles, uint32_t pc) { host_cycles = cycles; host_pc = pc; }
     uint64_t host_frame_count() const { return frame_count; }
+    // Research-only execution context for correlating ESP frame boundaries with the host.
+    void set_frame_context(uint64_t cycles, uint32_t pc) { host_cycles = cycles; host_pc = pc; }
 
     // serial ports: index 0..7 = 0L,0R,1L,1R,2L,2R,3L,3R
     int16_t ser_r(int i) const { return ser[i]; }
     void    ser_w(int i, int16_t v) { ser[i] = v; gpr[234 + (i ^ 1)] = (int32_t)((uint32_t)(int32_t)v << 8); }
 
-    void set_halt(bool h) { halt_asserted = h; }
+    void set_halt(bool h);
     bool halted() const { return state == HALTED; }
     uint8_t serial_ctl() const { return host_serial; }   // bits 2-5: SER0-3 are outputs
 
@@ -59,6 +62,15 @@ private:
     void ram_write_cycle(const Ram &r);
 
     bool halt_asserted = false;
+    bool trace_first_instruction = false;
+    bool trace_output_pending = false;
+    uint32_t frame_trace_limit = 1;
+    uint32_t frame_trace_remaining = 0;
+    uint32_t frame_trace_index = 0;
+    bool load_transaction_seen = false;
+    uint32_t load_instruction_commits = 0;
+    uint32_t load_gpr_commits = 0;
+    std::array<bool, 160> load_instruction_addresses{};
 public:
     // EPS-16 Plus: a host GPR read is served at the end of the next ESP frame (the sampling
     // loop polls a flag that the ESP program raises every other frame)
@@ -98,6 +110,7 @@ private:
     void finish_dec(Dec &d);
     bool itrace = false, hostlog = false, pipelog = false;   // optional diagnostic traces
     uint64_t host_cycles = 0, host_event = 0, frame_count = 0;
+    uint64_t ram_trace_event = 0;
     uint32_t host_pc = 0;
     double hostlog_time = 0.0;              // headless-runner timestamp, diagnostic only
     FILE *diagnostic_trace = nullptr;

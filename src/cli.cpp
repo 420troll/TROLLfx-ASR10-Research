@@ -242,6 +242,7 @@ int main(int argc, char **argv) {
     std::string last0, last1;
     int stable_display_slices = 0;
     std::set<int> rom_snapshots;
+    std::string last_rom_selection;
     for (int64_t t = 0; t < total; t += slice) {
         double now = t / m.cpu_clock;
         while (mi < midi.size() && midi[mi].first <= now) { for (auto b : midi[mi].second) m.midi_in(b); mi++; }
@@ -319,6 +320,17 @@ int main(int argc, char **argv) {
                 const char *digits = d0.c_str() + pos + marker.size();
                 char *end = nullptr;
                 long id = strtol(digits, &end, 10);
+                if (id > 0 && id <= 999) {
+                    std::string selection = d0.substr(pos);
+                    if (selection != last_rom_selection) {
+                        fprintf(stderr, "ESP_ROM_SELECT id=%02ld time=%.6f cycles=%llu frame=%llu dsp_rate_hz=%.3f otto_clock_hz=%.0f active_voices=%d host_output_rate_hz=%.0f display=%s\n",
+                                id, now, (unsigned long long)m.cycles(),
+                                (unsigned long long)m.esp.host_frame_count(),
+                                m.otto.sample_rate(m.otto_master()), m.otto_master(),
+                                m.otto.active_voices(), m.out_rate, selection.c_str());
+                        last_rom_selection = selection;
+                    }
+                }
                 if (id > 0 && id <= 999 && rom_snapshots.insert((int)id).second) {
                     char path[2048];
                     snprintf(path, sizeof(path), "%s/ROM-%02ld.esp", esp_rom_dir.c_str(), id);
@@ -327,8 +339,9 @@ int main(int argc, char **argv) {
                         fclose(existing);
                         fprintf(stderr, "ESP_ROM_CAPTURE_EXISTS id=%02ld time=%.6f display=%s path=%s\n", id, now, d0.c_str() + pos, path);
                     } else if (FILE *f = fopen(path, "wb")) {
-                        fprintf(stderr, "ESP_ROM_STATE id=%02ld time=%.6f frame=%llu dsp_rate_hz=%.3f\n", id, now,
-                                (unsigned long long)m.esp.host_frame_count(), m.otto.sample_rate(m.otto_master()));
+                        fprintf(stderr, "ESP_ROM_STATE id=%02ld time=%.6f frame=%llu dsp_rate_hz=%.3f cycles=%llu host_output_rate_hz=%.0f\n", id, now,
+                                (unsigned long long)m.esp.host_frame_count(), m.otto.sample_rate(m.otto_master()),
+                                (unsigned long long)m.cycles(), m.out_rate);
                         bool ok = m.esp.write_capture(f);
                         if (fclose(f) != 0) ok = false;
                         if (ok) fprintf(stderr, "ESP_ROM_CAPTURE id=%02ld time=%.6f display=%s path=%s\n", id, now, d0.c_str() + pos, path);
@@ -337,7 +350,7 @@ int main(int argc, char **argv) {
                         fprintf(stderr, "ESP_ROM_CAPTURE_ERROR id=%02ld time=%.6f cannot-open=%s\n", id, now, path);
                     }
                 }
-            }
+            } else if (pos == std::string::npos) last_rom_selection.clear();
         }
         if (d0 != last0 || d1 != last1) {
             fprintf(stderr, "[%7.3fs] |%s|\n           |%s|\n", now, d0.c_str(), d1.c_str());

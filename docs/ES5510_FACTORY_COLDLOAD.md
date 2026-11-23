@@ -1,5 +1,11 @@
 # ES5510 ROM-01 HALL cold-load evidence
 
+> **Updated continuation:** The exact OS 3.53 HALT → DRAM clear → 89-word upload → RUN sequence,
+> repeated HALL switching, clock-domain observations, and matching 256-frame traces are now recorded
+> in [ASR10_HALL_LOAD_BOUNDARY.md](ASR10_HALL_LOAD_BOUNDARY.md). The historical partial snapshot
+> summary below predates that work; the refreshed validator-compatible partial manifest is
+> `ES5510_FACTORY_COLDLOAD_PARTIAL_V1.json`. Factory replay remains unvalidated.
+
 ## Result
 
 The redacted [partial manifest](ES5510_FACTORY_COLDLOAD_PARTIAL_V1.json) records a verified OS 3.53 ROM-01 HALL REVERB selection and a post-selection ES5510 snapshot. It is **not** a cold-load image and the standalone adapter replay is blocked. It does not establish factory initialization accuracy.

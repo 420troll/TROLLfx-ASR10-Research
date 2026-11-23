@@ -31,7 +31,8 @@ def validate(path: Path) -> dict:
             _get(doc, field)
         if doc["initialization_basis"] != "partial_cold_load":
             raise ValueError("partial manifest initialization_basis must be partial_cold_load")
-        if doc["capture"]["capture_kind"] != "post_selection_runtime_snapshot":
+        if doc["capture"]["capture_kind"] not in (
+                "post_selection_runtime_snapshot", "ordered_os_event_capture"):
             raise ValueError("partial manifest capture_kind unsupported")
         if doc["replay_ready"] is not False:
             raise ValueError("partial evidence cannot be marked replay_ready")

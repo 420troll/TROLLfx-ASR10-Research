@@ -71,7 +71,17 @@ const ES5510::RamCtl ES5510::RAMCTL[8] = {
 ES5510::ES5510() : dram(DRAM_SIZE) {
     hostlog = getenv("ESP_HOSTLOG") != nullptr;
     pipelog = getenv("ESP_PIPELOG") != nullptr;
+    const char *frame_log = getenv("ESP_FRAMELOG");
+    if (frame_log) frame_trace_limit = (uint32_t)std::clamp(atoi(frame_log), 0, 4096);
     reset();
+}
+
+void ES5510::set_halt(bool h) {
+    if (pipelog && h != halt_asserted)
+        fprintf(stderr, "ESPPHASE kind=pa4_%s frame=%llu cycles=%llu host_pc=%06x\n",
+                h ? "halt_assert" : "run_release", (unsigned long long)frame_count,
+                (unsigned long long)host_cycles, host_pc);
+    halt_asserted = h;
 }
 
 void ES5510::reset() {
@@ -93,6 +103,10 @@ void ES5510::reset() {
     memsiz = 0xffffff; memmask = 0; memincrement = 0x1000000; memshift = 24;
     dlength = abase = bbase = dbase = 0; ccr = cmr = 0; dol[0] = dol[1] = 0; dol_count = 0;
     sync_spr();
+    trace_first_instruction = trace_output_pending = false;
+    frame_trace_remaining = frame_trace_index = 0;
+    load_transaction_seen = false; load_instruction_commits = load_gpr_commits = 0;
+    load_instruction_addresses.fill(false);
 }
 
 void ES5510::sync_spr() {
@@ -146,7 +160,10 @@ void ES5510::host_w(int offset, uint8_t data) {
     case 0x0f: {   // writing DADR HI starts the transfer; DADR is left-justified like the GPR offsets
         dadr_latch = (dadr_latch & 0x00ffff) | (data << 16);
         int a = (dadr_latch & memmask) >> memshift;
-        if (hostlog) fprintf(stderr, "ESPHOST ram %s ctl=%02x dadr=%06x -> word %05x dol=%04x t=%.6f\n", (ram_ctl & 0x80) ? "rd" : "wr", ram_ctl, dadr_latch, a, (dol_latch >> 8) & 0xffff, hostlog_time);
+        if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x ram %s ctl=%02x dadr=%06x -> word %05x dol=%04x t=%.6f\n",
+                             (unsigned long long)++host_event, (unsigned long long)host_cycles,
+                             (unsigned long long)frame_count, host_pc, (ram_ctl & 0x80) ? "rd" : "wr",
+                             ram_ctl, dadr_latch, a, (dol_latch >> 8) & 0xffff, hostlog_time);
         if (!(ram_ctl & 0x40)) { if (ram_ctl & 0x80) dil_latch = 0; }       // I/O space: nothing attached
         else if (ram_ctl & 0x80) dil_latch = (int32_t)((uint32_t)(uint16_t)dram_r(a) << 8);
         else dram_w(a, dol_latch >> 8);
@@ -159,24 +176,33 @@ void ES5510::host_w(int offset, uint8_t data) {
         if (host_control & 2) {
             if (state == HALTED) {
                 std::fill(dram.begin(), dram.end(), 0);
-                if (pipelog) fprintf(stderr, "ESPPHASE kind=host_dram_clear frame=%llu pc=%06x halted=1\n",
-                                     (unsigned long long)frame_count, host_pc);
+                if (pipelog) fprintf(stderr, "ESPPHASE kind=host_dram_clear frame=%llu cycles=%llu pc=%06x halted=1\n",
+                                     (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc);
             } else if (pipelog) {
-                fprintf(stderr, "ESPPHASE kind=host_dram_clear_ignored frame=%llu pc=%06x halted=0\n",
-                        (unsigned long long)frame_count, host_pc);
+                fprintf(stderr, "ESPPHASE kind=host_dram_clear_ignored frame=%llu cycles=%llu pc=%06x halted=0\n",
+                        (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc);
             }
             host_control &= ~2;
         }
         break;
     case 0x14: ram_ctl = data; break;
-    case 0x18: host_serial = data; break;
+    case 0x18:
+        host_serial = data;
+        if (pipelog) fprintf(stderr, "ESPPHASE kind=serial_config frame=%llu cycles=%llu pc=%06x value=%02x\n",
+                             (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, data);
+        break;
     case 0x1f:   // Halt Enable: immediate halt when HALT is asserted (pending pipeline work is lost)
         if (halt_asserted) {
+            if (pipelog) fprintf(stderr, "ESPPHASE kind=halt frame=%llu cycles=%llu pc=%06x host_control=%02x\n",
+                                 (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, host_control);
             state = HALTED; host_control &= ~0x04;
+            load_transaction_seen = false;
+            load_instruction_commits = load_gpr_commits = 0;
+            load_instruction_addresses.fill(false);
             mulacc.write_result = alu.write_result = false;
             ram = ram_p = ram_pp = Ram{}; dol_count = 0;
-            if (pipelog) fprintf(stderr, "ESPPHASE kind=host_halt_pipeline_reset frame=%llu pc=%06x alu_pending=0 mac_pending=0 ram_slots_cleared=3 dol_count=0\n",
-                                 (unsigned long long)frame_count, host_pc);
+            if (pipelog) fprintf(stderr, "ESPPHASE kind=host_halt_pipeline_reset frame=%llu cycles=%llu pc=%06x alu_pending=0 mac_pending=0 ram_slots_cleared=3 dol_count=0\n",
+                                 (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc);
         }
         break;
     case 0x80:
@@ -197,14 +223,36 @@ void ES5510::host_w(int offset, uint8_t data) {
         break;
     case 0xa0:
         if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x gpr %02x <- %06x t=%.6f\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, gpr_latch & 0xffffff, hostlog_time);
+        if (state == HALTED) ++load_gpr_commits;
         write_reg(data, gpr_latch); break;
     case 0xc0:
         if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x instr %02x <- %012llx t=%.6f\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, (unsigned long long)instr_latch, hostlog_time);
-        if (data < 0xa0) { instr[data] = instr_latch & 0xffffffffffffULL; decode(data); }
+        if (data < 0xa0) {
+            if (state == HALTED) {
+                if (!load_transaction_seen) {
+                    load_transaction_seen = true;
+                    if (pipelog) fprintf(stderr, "ESPPHASE kind=instruction_upload_start frame=%llu cycles=%llu pc=%06x address=%02x\n",
+                                         (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, data);
+                }
+                ++load_instruction_commits; load_instruction_addresses[data] = true;
+            }
+            instr[data] = instr_latch & 0xffffffffffffULL; decode(data);
+        }
         break;
     case 0xe0:
         if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x both %02x <- %012llx / %06x t=%.6f\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, (unsigned long long)instr_latch, gpr_latch & 0xffffff, hostlog_time);
-        if (data < 0xa0) { instr[data] = instr_latch; decode(data); }
+        if (data < 0xa0) {
+            if (state == HALTED) {
+                if (!load_transaction_seen) {
+                    load_transaction_seen = true;
+                    if (pipelog) fprintf(stderr, "ESPPHASE kind=instruction_upload_start frame=%llu cycles=%llu pc=%06x address=%02x\n",
+                                         (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, data);
+                }
+                ++load_instruction_commits; load_instruction_addresses[data] = true;
+            }
+            instr[data] = instr_latch; decode(data);
+        }
+        if (state == HALTED) ++load_gpr_commits;
         write_reg(data, gpr_latch);
         break;
     }
@@ -357,7 +405,13 @@ ESP_INLINE void ES5510::alu_writeback() {
 
 ESP_INLINE void ES5510::ram_write_cycle(const Ram &r) {
     if (r.cycle != READ) {
-        if (r.cycle == WRITE && !r.io) dram_w(r.address, dol[0]);
+        if (r.cycle == WRITE && !r.io) {
+            if (pipelog && frame_trace_remaining > 0)
+                fprintf(stderr, "ESPRAM event=%llu kind=write frame=%llu pc=%02x io=0 address=%08x data=%04x\n",
+                        (unsigned long long)++ram_trace_event, (unsigned long long)frame_count,
+                        pc, (unsigned)r.address, (unsigned)(uint16_t)dol[0]);
+            dram_w(r.address, dol[0]);
+        }
         dol[0] = dol[1];
         if (dol_count > 0) --dol_count;
     }
@@ -426,11 +480,33 @@ void ES5510::run_frame() {
     if (state == HALTED) {
         if (halt_asserted) { host_control &= ~0x04; return; }
         state = RUNNING; host_control |= 0x04; pc = 0;
-        if (pipelog) fprintf(stderr, "ESPPHASE kind=run_start frame=%llu pc=00 alu_pending=%u mac_pending=%u\n",
-                             (unsigned long long)frame_count, (unsigned)alu.write_result,
-                             (unsigned)mulacc.write_result);
+        trace_first_instruction = pipelog;
+        frame_trace_remaining = frame_trace_limit;
+        frame_trace_index = 0;
+        trace_output_pending = frame_trace_remaining > 0;
+        if (pipelog) {
+            uint32_t unique = 0; int end_index = -1;
+            for (int i = 0; i < 160; ++i) {
+                if (load_instruction_addresses[i]) ++unique;
+                if (end_index < 0 && ((instr[i] >> 12) & 0xf) == 0xf) end_index = i;
+            }
+            fprintf(stderr, "ESPPHASE kind=program_upload_summary frame=%llu cycles=%llu pc=%06x commits=%u unique_addresses=%u first_end=%d gpr_commits=%u\n",
+                    (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc,
+                    load_instruction_commits, unique, end_index, load_gpr_commits);
+            fprintf(stderr, "ESPPHASE kind=run_start frame=%llu cycles=%llu host_pc=%06x pc=00 alu_pending=%u mac_pending=%u host_serial=%02x memshift=%d memsiz=%06x memmask=%06x memincrement=%06x dlength=%06x abase=%06x bbase=%06x dbase=%06x sigreg=%06x\n",
+                    (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc,
+                    (unsigned)alu.write_result, (unsigned)mulacc.write_result, host_serial, memshift,
+                    memsiz & 0xffffff, memmask & 0xffffff, memincrement & 0xffffff, dlength & 0xffffff,
+                    abase & 0xffffff, bbase & 0xffffff, dbase & 0xffffff, sigreg & 0xffffff);
+        }
     }
     const uint64_t trace_frame = diagnostic_frame++;
+    if (pipelog && frame_trace_remaining > 0) {
+        fprintf(stderr, "ESPPFRAME kind=input index=%u frame=%llu cycles=%llu host_pc=%06x serial=%02x lanes=%04x,%04x,%04x,%04x,%04x,%04x,%04x,%04x\n",
+                frame_trace_index, (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, host_serial,
+                (uint16_t)ser[0], (uint16_t)ser[1], (uint16_t)ser[2], (uint16_t)ser[3],
+                (uint16_t)ser[4], (uint16_t)ser[5], (uint16_t)ser[6], (uint16_t)ser[7]);
+    }
     // Execute until END (bounded to the 160-instruction program store). One instruction cycle:
     // the RAM read issued two cycles ago lands in DIL; the previous instruction's multiplier
     // result is written; this instruction's multiplier operands are read; the previous
@@ -480,6 +556,12 @@ void ES5510::run_frame() {
     for (int i = 0; i < 160 + 2; i++) {
         const uint8_t trace_pc = pc;
         const Dec &d = dec[pc];
+        if (pipelog && trace_first_instruction) {
+            fprintf(stderr, "ESPPHASE kind=first_instruction frame=%llu cycles=%llu host_pc=%06x pc=%02x word=%012llx\n",
+                    (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc,
+                    pc, (unsigned long long)(instr[pc] & 0xffffffffffffULL));
+            trace_first_instruction = false;
+        }
         int32_t trace_before[0x104];
         if (diagnostic_trace) {
             for (int ri = 0; ri < 0x104; ++ri) trace_before[ri] = gpr[ri];
@@ -490,6 +572,10 @@ void ES5510::run_frame() {
         r2 = r1; r1 = r0;
         if (r2.cycle != WRITE) {
             dil = r2.io ? 0 : dram_r(r2.address);
+            if (pipelog && frame_trace_remaining > 0)
+                fprintf(stderr, "ESPRAM event=%llu kind=read frame=%llu pc=%02x io=%u address=%08x data=%04x\n",
+                        (unsigned long long)++ram_trace_event, (unsigned long long)frame_count,
+                        pc, (unsigned)r2.io, (unsigned)r2.address, (unsigned)(uint16_t)dil);
             gpr[244] = (int32_t)((uint32_t)(uint16_t)dil << 8);
             gpr[DIL_SRC] = (int32_t)((uint32_t)(uint16_t)dil << 8);
         }
@@ -584,6 +670,15 @@ void ES5510::run_frame() {
     }
 #undef ESP_WRITE_SPECIAL
     store();
+    if (pipelog && trace_output_pending) {
+        fprintf(stderr, "ESPPFRAME kind=output index=%u frame=%llu cycles=%llu host_pc=%06x serial=%02x lanes=%04x,%04x,%04x,%04x,%04x,%04x,%04x,%04x\n",
+                frame_trace_index, (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, host_serial,
+                (uint16_t)ser[0], (uint16_t)ser[1], (uint16_t)ser[2], (uint16_t)ser[3],
+                (uint16_t)ser[4], (uint16_t)ser[5], (uint16_t)ser[6], (uint16_t)ser[7]);
+        if (frame_trace_remaining > 0) --frame_trace_remaining;
+        ++frame_trace_index;
+        trace_output_pending = frame_trace_remaining > 0;
+    }
 }
 
 // ---------------------------------------------------------------- debug listing

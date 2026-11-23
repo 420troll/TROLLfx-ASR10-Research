@@ -80,6 +80,7 @@ Asr10::Asr10() {
     imp.porta_out = [this](uint16_t dat, uint16_t ddr) {
         pa_dat = dat; pa_ddr = ddr;
         bool run = !(ddr & 0x10) || (dat & 0x10);
+        esp.set_host_context(total_cycles, last_pc());
         esp.set_halt(!run);          // PA4 low asserts ESP HALT
         if (DBG(ASR_DBG_PA)) fprintf(stderr, "PA dat=%04x ddr=%04x t=%.4f\n", dat, ddr, total_cycles / cpu_clock);
     };
@@ -507,6 +508,10 @@ void Asr10::otto_frame() {
     input_frame(otto.sample_rate(otto_master()));
     double l = 0, r = 0;
     if (fx_enabled) {
+        // This is the host-side scheduler coordinate for the next ESP frame. The OTTO frame is
+        // generated inside an MC68302 execution slice, so cycles identify that scheduler boundary,
+        // not an instruction-exact timestamp within the slice.
+        esp.set_frame_context(total_cycles, last_pc());
         // OTTO serial channels feed the ESP serial inputs; ESP SER1 drives the main DAC
         static const char *tsine = getenv("ASR_TEST_SINE");   // debug: freq[:amp] sine into ESP input 1
         if (tsine) {

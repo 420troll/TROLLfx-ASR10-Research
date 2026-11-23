@@ -12,47 +12,58 @@
     "sample_rate_hz": 29761.895,
     "instruction_commits": 89,
     "paired_gpr_initializers": 86,
-    "capture_kind": "post_selection_runtime_snapshot"
+    "capture_kind": "ordered_os_event_capture",
+    "timeline": {
+      "nominal_cli_time_is_not_cpu_time": true,
+      "cpu_clock_hz": 16000000,
+      "stable_display_cpu_cycles": 418325634,
+      "pa4_halt_cpu_cycles": 420614232,
+      "host_halt_pipeline_reset_cpu_cycles": 420614232,
+      "host_dram_clear_cpu_cycles": 420614390,
+      "instruction_upload_start_cpu_cycles": 421228220,
+      "pa4_run_release_cpu_cycles": 421550288,
+      "first_run_cpu_cycles": 421550606,
+      "first_run_esp_frame": 855973,
+      "first_instruction_pc": 0,
+      "first_end_word": 88,
+      "instruction_commits": 89,
+      "unique_instruction_addresses": 89,
+      "halted_gpr_spr_commits": 342,
+      "dram_words_cleared": 1048576,
+      "host_serial": "0x48",
+      "host_output_rate_hz": 44100
+    }
   },
   "known": {
     "efe_instruction_commits_correlated": 89,
     "efe_paired_gpr_initializers_correlated": 86,
-    "snapshot_host_event_counts_through_selection": {
-      "gpr": 4240,
-      "instruction": 861,
-      "ram": 0
-    },
-    "host_io_event_count_through_selection": {
-      "R": 38423,
-      "W": 31547
-    },
-    "pipeline_phase_event_counts_through_selection": {
-      "host_dram_clear": 11,
-      "host_halt_pipeline_reset": 11,
-      "run_start": 7
-    },
-    "instruction_and_paired_gpr_values": "matched to private ROM-01 EFE source; values and bytes redacted",
-    "host_frame_count_semantics": "native ESP host-frame counter at snapshot; distinct from output WAV frame count",
-    "sample_rate_semantics": "native OTTO-reported ES5510 rate at snapshot",
-    "last_run_start_before_snapshot": "observed; DSP was in run phase after start, but exact ROM-01 loader window is unresolved",
-    "host_side_delay_ram_transactions": 0
+    "boot_program_matches_selected_hall_program": true,
+    "repeat_hall_instruction_and_gpr_spr_fingerprints_match": true,
+    "instruction_state_sha256": "ca2cab387d1bee51bccc9a97f2c5d26386b8b801ee9bf4ea406e80a7019e4f92",
+    "gpr_spr_transaction_sha256": "3ac3a2f01d9dfda8bc225ca16b27c872f102da76d0098974c40aa912d84936e0",
+    "repeated_fresh_boot_first_256_input_frames_equal": true,
+    "repeated_fresh_boot_first_256_output_frames_equal": true,
+    "first_256_input_lane_hash_stream_sha256": "36a9120c481d88beae6012cb1f399e2e262d48d0c48713d7b8b4c74d7726ff20",
+    "first_256_output_lane_hash_stream_sha256": "53173d6b89baef6f2eb7ca9cd0e57fe0cc596ee77eafffea378e09d3c47e7777",
+    "delay_ram_reads_first_256_frames": 17152,
+    "delay_ram_writes_first_256_frames": 5632,
+    "selector_raw_values": "74-84 select ROM-01 after ascending scan from 8; direct jump does not reproduce selection",
+    "clock_domains": "CPU cycles 16 MHz; ESP frame count increments per run_frame including HALT; host output 44.1 kHz",
+    "observed_esp_rates_hz": [29761.895, 44100],
+    "rate_changes_with_otto_voice_allocation": true,
+    "payload_values": "private; not embedded in manifest"
   },
   "unknown": [
-    "complete cold-load GPR and SPR state before ROM-01 selection",
-    "which GPR and SPR writes are OS baseline versus ROM-01 initialization",
-    "complete DRAM cold contents and delay-RAM initialization ordering",
-    "serial routing at the exact ROM-01 load boundary",
-    "DOL FIFO and pointer contents at the exact load boundary",
-    "in-flight ALU, MAC, and RAM pipeline state at the exact load boundary",
-    "frame ordering shared with the standalone adapter",
-    "physical ASR-10 audio equivalence"
+    "sample-exact standalone native executor replay against OpenASR factory frames",
+    "sample-exact MAME-derived executor replay against OpenASR factory frames",
+    "full CPU/audio scheduler event replay has not yet been validated",
+    "all internal pipeline fields are not serialized by the current resumable capture format",
+    "physical ASR-10 silicon timing and audio equivalence"
   ],
   "replay_ready": false,
   "replay_blockers": [
-    "capture is a post-selection runtime snapshot",
-    "no complete cold-load state image exists",
-    "no exact ROM-01 load transaction window was isolated",
-    "no shared deterministic input-frame boundary is available",
-    "no factory HALL versus standalone adapter output comparison has been run"
+    "ordered host capture and bounded frame data exist, but factory event-sourced replay adapter is not implemented",
+    "native/MAME comparison against captured factory serial frames has not been run",
+    "no physical ASR-10 or silicon-level conformance evidence"
   ]
 }

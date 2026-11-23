@@ -18,7 +18,7 @@
         "sample_rate_hz": {"type": ["number", "null"], "minimum": 8000, "maximum": 192000},
         "instruction_commits": {"const": 89},
         "paired_gpr_initializers": {"const": 86},
-        "capture_kind": {"const": "post_selection_runtime_snapshot"}
+        "capture_kind": {"enum": ["post_selection_runtime_snapshot", "ordered_os_event_capture"]}
       }
     },
     "known": {"type": "object"},
