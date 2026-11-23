@@ -41,7 +41,7 @@ static void write_wav(const char *path, const std::vector<float> &a, int rate) {
 
 int main(int argc, char **argv) {
     std::string rom_dir = "roms"; bool lo_set = false, hi_set = false;
-    std::string lo = "roms/asr_lo.bin", hi = "roms/asr_hi.bin", disk, wav, aux_wav;
+    std::string lo = "roms/asr_lo.bin", hi = "roms/asr_hi.bin", disk, wav, aux_wav, esp_dump;
     bool m_aux_flag[3] = { true, true, true };   // AUX1-3 mixed into the main outputs
     double seconds = 10;
     bool write_back = false;
@@ -97,6 +97,7 @@ int main(int argc, char **argv) {
         else if (a == "--trap-log") trap_log = true;
         else if (a == "--dump-ram") dump_ram = next();
         else if (a == "--esp-list") esp_list = true;
+        else if (a == "--esp-dump") esp_dump = next();
         else if (a == "--rack") rack_panel = true;
         else if (a == "--otto-dump") otto_dump = true;
         else if (a == "--dis") { dis_addr = strtoul(next().c_str(), 0, 16); dis_n = atoi(next().c_str()); }
@@ -315,6 +316,14 @@ int main(int argc, char **argv) {
         fprintf(stderr, "\n");
     }
     if (esp_list) m.esp.list_program(stderr);
+    if (!esp_dump.empty()) {
+        FILE *f = fopen(esp_dump.c_str(), "wb");
+        if (!f) { fprintf(stderr, "cannot open ESP capture %s\n", esp_dump.c_str()); return 1; }
+        bool ok = m.esp.write_capture(f);
+        if (fclose(f) != 0) ok = false;
+        if (!ok) { fprintf(stderr, "failed writing ESP capture %s\n", esp_dump.c_str()); return 1; }
+        fprintf(stderr, "ES5510 capture written: %s\n", esp_dump.c_str());
+    }
     if (otto_dump) m.otto.dump(stderr);
     if (const char *f = getenv("ASR_DUMP_HI")) {   // the 512 KB at $F80000 (OS code), through the CPU map
         FILE *o = fopen(f, "wb");

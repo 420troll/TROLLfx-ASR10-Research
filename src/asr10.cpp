@@ -48,7 +48,11 @@ Asr10::Asr10() {
     set_ram_mb(2);
     if (getenv("ASR_NOFX")) fx_enabled = false;
     if (const char *e = getenv("ASR_SLOT")) voice_slot_offset = atoi(e);
-    if (const char *e = getenv("ASR_ROUTE")) sscanf(e, "%d,%d,%d,%d,%x", &esp_route[0], &esp_route[1], &esp_route[2], &esp_route[3], &direct_mask);
+    if (const char *e = getenv("ASR_ROUTE")) {
+        unsigned direct = static_cast<unsigned>(direct_mask);
+        if (sscanf(e, "%d,%d,%d,%d,%x", &esp_route[0], &esp_route[1], &esp_route[2], &esp_route[3], &direct) == 5)
+            direct_mask = static_cast<int>(direct);
+    }
     imp.mem_read8 = [this](uint32_t a) { return (uint8_t)read(a, 1); };
     imp.mem_write8 = [this](uint32_t a, uint8_t v) { write(a, v, 1); };
     imp.irq_changed = [](int l) { m68k_set_irq(l); };

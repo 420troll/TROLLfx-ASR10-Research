@@ -187,6 +187,9 @@ cmake -S plugin -B build-vst && cmake --build build-vst # VST3 plug-in (download
 
 Technical notes (emulated hardware, protocols, tests), in Portuguese: [docs/TECHNICAL-pt.md](docs/TECHNICAL-pt.md).
 
+Private-asset capture tooling and the verified OS 3.53 ES5510 loader findings:
+[docs/ASR10_LIVE_LOADER_FINDINGS.md](docs/ASR10_LIVE_LOADER_FINDINGS.md).
+
 ## Credits and licences
 
 - This program is free software under the **GNU GPL v3** (`LICENSE`).

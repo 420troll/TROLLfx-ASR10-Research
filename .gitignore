@@ -15,3 +15,7 @@ scsi/*
 *.img
 *.iso
 *.bin
+*.efe
+*.esp
+*.capture
+research_local/

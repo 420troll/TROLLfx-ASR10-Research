@@ -566,3 +566,65 @@ void ES5510::list_program(FILE *f) {
     }
     fprintf(f, "dlength=%06x memsiz shift=%d abase=%06x bbase=%06x dbase=%06x sigreg=%06x halted=%d host_serial=%02x\n", dlength, memshift, abase, bbase, dbase, sigreg, state == HALTED, host_serial);
 }
+
+// T551CAP v1. The file is a research snapshot, not a complete resumable CPU
+// save state: it captures the full program, GPRs, special registers, host
+// latches/control, serial/MAC state and the entire external ESP DRAM.
+bool ES5510::write_capture(FILE *f) {
+    if (!f || dram.size() > UINT32_MAX) return false;
+    const uint32_t state_bytes = 74;
+    const uint32_t payload_bytes = 160u * 6u + 192u * 3u + 22u * 3u + state_bytes +
+        static_cast<uint32_t>(dram.size() * 2u);
+    auto bytes = [&](const uint8_t *p, size_t n) { return fwrite(p, 1, n, f) == n; };
+    auto u32le = [&](uint32_t v) {
+        const uint8_t b[4] = { uint8_t(v), uint8_t(v >> 8), uint8_t(v >> 16), uint8_t(v >> 24) };
+        return bytes(b, sizeof b);
+    };
+    auto u24be = [&](uint32_t v) {
+        const uint8_t b[3] = { uint8_t(v >> 16), uint8_t(v >> 8), uint8_t(v) };
+        return bytes(b, sizeof b);
+    };
+    auto u48be = [&](uint64_t v) {
+        const uint8_t b[6] = { uint8_t(v >> 40), uint8_t(v >> 32), uint8_t(v >> 24),
+                               uint8_t(v >> 16), uint8_t(v >> 8), uint8_t(v) };
+        return bytes(b, sizeof b);
+    };
+    const uint8_t magic[8] = { 'E','S','5','5','1','0','C',0 };
+    if (!bytes(magic, sizeof magic) || !u32le(1) || !u32le(44) || !u32le(160) ||
+        !u32le(192) || !u32le(22) || !u32le(static_cast<uint32_t>(dram.size())) ||
+        !u32le(1) || !u32le(state_bytes) || !u32le(payload_bytes)) return false;
+
+    // Program words follow the exact six-byte host latch order, most-significant first.
+    for (uint64_t word : instr) if (!u48be(word)) return false;
+    for (int i = 0; i < 192; ++i) if (!u24be(static_cast<uint32_t>(gpr[i]))) return false;
+    for (int i = 234; i < 256; ++i) if (!u24be(static_cast<uint32_t>(read_reg(static_cast<uint8_t>(i))))) return false;
+
+    const uint8_t control[7] = { host_control, host_serial, ram_ctl,
+        static_cast<uint8_t>(state == HALTED), static_cast<uint8_t>(halt_asserted), pc, refresh_pc };
+    const uint8_t memory_config[4] = { static_cast<uint8_t>(memshift), 0, 0, 0 };
+    if (!bytes(control, sizeof control) || !u32le(static_cast<uint32_t>(memsiz)) ||
+        !u32le(static_cast<uint32_t>(memmask)) || !u32le(static_cast<uint32_t>(memincrement)) ||
+        !u32le(dram_mask) || !bytes(memory_config, sizeof memory_config) ||
+        !u24be(static_cast<uint32_t>(gpr_latch)) ||
+        !u48be(instr_latch) || !u24be(dadr_latch) || !u24be(static_cast<uint32_t>(dol_latch)) ||
+        !u24be(static_cast<uint32_t>(dil_latch))) return false;
+    const uint32_t pending = static_cast<uint32_t>(read_pending);
+    if (!u32le(pending)) return false;
+    for (int16_t sample : ser) {
+        const uint16_t v = static_cast<uint16_t>(sample);
+        const uint8_t b[2] = { uint8_t(v), uint8_t(v >> 8) };
+        if (!bytes(b, sizeof b)) return false;
+    }
+    const uint16_t dil_value = static_cast<uint16_t>(dil);
+    const uint8_t dil_bytes[2] = { uint8_t(dil_value), uint8_t(dil_value >> 8) };
+    const uint8_t overflow = mac_overflow ? 1 : 0;
+    if (!bytes(dil_bytes, sizeof dil_bytes) || !u48be(static_cast<uint64_t>(machl)) ||
+        !bytes(&overflow, 1)) return false;
+
+    for (int16_t sample : dram) {
+        const uint16_t v = static_cast<uint16_t>(sample);
+        const uint8_t b[2] = { uint8_t(v), uint8_t(v >> 8) };
+        if (!bytes(b, sizeof b)) return false;
+    }
+    return fflush(f) == 0;
+}

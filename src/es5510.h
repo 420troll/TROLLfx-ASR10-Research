@@ -33,6 +33,8 @@ public:
     uint32_t dram_mask = DRAM_SIZE - 1;   // delay RAM addressing as in MAME
     bool log = false;
     void list_program(FILE *f);
+    // Offline lossless export; call only from the control/CLI thread.
+    bool write_capture(FILE *f);
 
 private:
     enum { RUNNING, HALTED } state = HALTED;
