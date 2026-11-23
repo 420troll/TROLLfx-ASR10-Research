@@ -13,7 +13,7 @@ python3 tools/audio_validation/replay_hall.py \
 
 ## Current evidence
 
-The replay extracts the exact ordered 89 instruction and 342 GPR/SPR commits from the private event log. Before starting either engine, it checks that those commits reproduce the 89-word program and the manifest's final register payloads. The available event log and state manifest agree on the program but disagree on final state at 16 GPRs and 7 SPRs. The runner therefore stops before audio comparison. This is the earliest verified blocker; native-versus-MAME and OS-reference comparisons have not been made from this event transaction.
+The replay extracts the exact ordered 89 instruction and 342 GPR/SPR commits from the private event log. It also retains GPR values established by prior halted firmware transactions, because HALT and pipeline reset do not clear the GPR file. With the full recorded host-write history, the GPR state matches the manifest. The remaining state gate reports six SPR mismatches and stops before audio comparison; native-versus-MAME and OS-reference comparisons have not been made from this event transaction.
 
 The event log also provides the subsequent 213 ordered firmware register updates and a continuous 90,000-frame serial stream beginning at ESP frame 855,973. The evidence identifies a 29,761.895 Hz ESP frame clock and separate 44,100 Hz host output rate. The runner checks frame continuity and only proceeds to comparison after the initial transaction passes state equality. The existing strict manifest gate remains unchanged; its valid full-state intake alone does not certify that a separately supplied ordered event trace corresponds to that state.
 

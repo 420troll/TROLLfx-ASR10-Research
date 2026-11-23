@@ -42,7 +42,8 @@ int main(int argc, char** argv) try {
     while(std::getline(commits,line)) {
         auto c=split(line); if(c.size()!=4) throw std::runtime_error("malformed load commit");
         unsigned a=std::stoul(c[1],nullptr,16); std::uint64_t v=std::stoull(c[2],nullptr,16);
-        if(c[0]=="gpr") { native_gpr(native,a,static_cast<std::uint32_t>(v)); mame.setRegister(static_cast<std::uint8_t>(a),static_cast<std::uint32_t>(v)); ++gprCommits; }
+        if(c[0]=="seed_gpr") { native_gpr(native,a,static_cast<std::uint32_t>(v)); mame.setRegister(static_cast<std::uint8_t>(a),static_cast<std::uint32_t>(v)); }
+        else if(c[0]=="gpr") { native_gpr(native,a,static_cast<std::uint32_t>(v)); mame.setRegister(static_cast<std::uint8_t>(a),static_cast<std::uint32_t>(v)); ++gprCommits; }
         else if(c[0]=="instr") { native_instr(native,a,v); if(!mame.writeInstruction(a,v)) throw std::runtime_error("bad instruction address"); ++instrCommits; }
         else if(c[0]=="both") { auto g=std::stoul(c[3],nullptr,16); native_both(native,a,v,g); if(!mame.writeInstruction(a,v)) throw std::runtime_error("bad instruction address"); mame.setRegister(static_cast<std::uint8_t>(a),g); ++gprCommits; ++instrCommits; }
         else throw std::runtime_error("unsupported load commit type");
