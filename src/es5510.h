@@ -39,6 +39,8 @@ public:
     void list_program(FILE *f);
     // Offline lossless export; call only from the control/CLI thread.
     bool write_capture(FILE *f);
+    // Optional test-only trace; null by default. Caller owns the FILE lifetime.
+    void set_diagnostic_trace(FILE *f) { diagnostic_trace = f; }
 
 private:
     enum { RUNNING, HALTED } state = HALTED;
@@ -98,6 +100,8 @@ private:
     uint64_t host_cycles = 0, host_event = 0, frame_count = 0;
     uint32_t host_pc = 0;
     double hostlog_time = 0.0;              // headless-runner timestamp, diagnostic only
+    FILE *diagnostic_trace = nullptr;
+    uint64_t diagnostic_frame = 0;
     std::vector<int16_t> dram;
 
     int32_t dol_latch = 0, dil_latch = 0, gpr_latch = 0;

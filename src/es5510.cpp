@@ -42,7 +42,9 @@ inline int32_t negate(int32_t v) { return ((v ^ 0x00ffffff) + 1) & 0x00ffffff; }
 inline int32_t asl(int32_t value, int shift, uint8_t &flags) {
     int32_t src24 = value & 0x00ffffff;
     bool carry = (src24 >> (24 - shift)) & 1;
-    int64_t shifted = (int64_t)sext24(src24) << shift;
+    // Multiplication expresses the intended two's-complement shift without
+    // invoking undefined behavior when src24 is negative.
+    int64_t shifted = (int64_t)sext24(src24) * (int64_t(1) << shift);
     bool overflow = (shifted > 0x007fffffLL) || (shifted < -0x00800000LL);
     int32_t result = overflow ? ((shifted < 0) ? 0x00800000 : 0x007fffff) : ((int32_t)shifted & 0x00ffffff);
     (void)carry;   // ASL2/ASL8: C unchanged (datasheet 3.3.3)
@@ -142,7 +144,7 @@ void ES5510::host_w(int offset, uint8_t data) {
         int a = (dadr_latch & memmask) >> memshift;
         if (hostlog) fprintf(stderr, "ESPHOST ram %s ctl=%02x dadr=%06x -> word %05x dol=%04x t=%.6f\n", (ram_ctl & 0x80) ? "rd" : "wr", ram_ctl, dadr_latch, a, (dol_latch >> 8) & 0xffff, hostlog_time);
         if (!(ram_ctl & 0x40)) { if (ram_ctl & 0x80) dil_latch = 0; }       // I/O space: nothing attached
-        else if (ram_ctl & 0x80) dil_latch = dram_r(a) << 8;
+        else if (ram_ctl & 0x80) dil_latch = (int32_t)((uint32_t)(uint16_t)dram_r(a) << 8);
         else dram_w(a, dol_latch >> 8);
         break;
     }
@@ -194,17 +196,17 @@ void ES5510::host_w(int offset, uint8_t data) {
 int32_t ES5510::read_reg(uint8_t reg) {
     if (reg < 0xc0) return gpr[reg];
     switch (reg) {
-    case 234: return ser[1] << 8;   // SER0R
-    case 235: return ser[0] << 8;   // SER0L
-    case 236: return ser[3] << 8;
-    case 237: return ser[2] << 8;
-    case 238: return ser[5] << 8;
-    case 239: return ser[4] << 8;
-    case 240: return ser[7] << 8;
-    case 241: return ser[6] << 8;
+    case 234: return (int32_t)((uint32_t)(uint16_t)ser[1] << 8);   // SER0R
+    case 235: return (int32_t)((uint32_t)(uint16_t)ser[0] << 8);   // SER0L
+    case 236: return (int32_t)((uint32_t)(uint16_t)ser[3] << 8);
+    case 237: return (int32_t)((uint32_t)(uint16_t)ser[2] << 8);
+    case 238: return (int32_t)((uint32_t)(uint16_t)ser[5] << 8);
+    case 239: return (int32_t)((uint32_t)(uint16_t)ser[4] << 8);
+    case 240: return (int32_t)((uint32_t)(uint16_t)ser[7] << 8);
+    case 241: return (int32_t)((uint32_t)(uint16_t)ser[6] << 8);
     case 242: return mac_overflow ? (machl < 0 ? 0x00000000 : 0x00ffffff) : (int32_t)(machl & 0x00ffffff);
     case 243: return mac_overflow ? (machl < 0 ? 0x00800000 : 0x007fffff) : (int32_t)((machl >> 24) & 0x00ffffff);
-    case 244: return dil << 8;
+    case 244: return (int32_t)((uint32_t)(uint16_t)dil << 8);
     case 245: return dlength;
     case 246: return abase;
     case 247: return bbase;
@@ -307,7 +309,9 @@ ESP_INLINE int32_t ES5510::alu_operation(uint8_t op, int32_t a, int32_t b, uint8
 ESP_INLINE void ES5510::mul_writeback() {
     if (!mulacc.write_result) return;
     mulacc.write_result = false;
-    mulacc.product = ((int64_t)sext24(mulacc.cValue) * (int64_t)sext24(mulacc.dValue)) << mulshift;
+    // A signed left shift of a negative MAC product is undefined in C++.
+    // The ES5510 scaling factor is a power of two and this product fits int64.
+    mulacc.product = ((int64_t)sext24(mulacc.cValue) * (int64_t)sext24(mulacc.dValue)) * (int64_t(1) << mulshift);
     mulacc.result = mulacc.accumulate ? mulacc.product + machl : mulacc.product;
     mac_overflow = (mulacc.result < -((int64_t)1 << 47) || mulacc.result >= ((int64_t)1 << 47));
     machl = mulacc.result;
@@ -406,6 +410,7 @@ void ES5510::run_frame() {
         if (halt_asserted) { host_control &= ~0x04; return; }
         state = RUNNING; host_control |= 0x04; pc = 0;
     }
+    const uint64_t trace_frame = diagnostic_frame++;
     // Execute until END (bounded to the 160-instruction program store). One instruction cycle:
     // the RAM read issued two cycles ago lands in DIL; the previous instruction's multiplier
     // result is written; this instruction's multiplier operands are read; the previous
@@ -445,7 +450,7 @@ void ES5510::run_frame() {
     // a result into a special register: the serial outputs inline (the common case), the others
     // through write_reg()
 #define ESP_WRITE_SPECIAL(r, v) do { const uint16_t r_ = (r); \
-        if (r_ >= 234 && r_ <= 241) { const int k_ = (r_ - 234) ^ 1; ser[k_] = (int16_t)((((v) & 0x00ffffff) >> 8) & 0xffff); gpr[r_] = ser[k_] << 8; } \
+        if (r_ >= 234 && r_ <= 241) { const int k_ = (r_ - 234) ^ 1; ser[k_] = (int16_t)((((v) & 0x00ffffff) >> 8) & 0xffff); gpr[r_] = (int32_t)((uint32_t)(uint16_t)ser[k_] << 8); } \
         else if (r_ == 242 || r_ == 243) { \
             if (r_ == 242) machl = sext48((machl & ((int64_t)0x00ffffff << 24)) | (int64_t)((v) & 0x00ffffff)); \
             else { machl = sext48((machl & (int64_t)0x00ffffff) | ((int64_t)((v) & 0x00ffffff) << 24)); mac_overflow = false; } \
@@ -453,12 +458,19 @@ void ES5510::run_frame() {
             gpr[243] = mac_overflow ? (machl < 0 ? 0x00800000 : 0x007fffff) : (int32_t)((machl >> 24) & 0x00ffffff); } \
         else write_reg((uint8_t)r_, (v)); } while (0)
     for (int i = 0; i < 160 + 2; i++) {
+        const uint8_t trace_pc = pc;
         const Dec &d = dec[pc];
+        int32_t trace_before[0x104];
+        if (diagnostic_trace) {
+            for (int ri = 0; ri < 0x104; ++ri) trace_before[ri] = gpr[ri];
+            fprintf(diagnostic_trace, "I,%llu,%02x,%012llx\n", (unsigned long long)trace_frame,
+                    pc, (unsigned long long)(instr[pc] & 0xffffffffffffULL));
+        }
         // the RAM pipeline: the read issued two cycles ago arrives in DIL
         r2 = r1; r1 = r0;
         if (r2.cycle != WRITE) {
             dil = r2.io ? 0 : dram_r(r2.address);
-            gpr[244] = (int32_t)((uint32_t)(int32_t)dil << 8);
+            gpr[244] = (int32_t)((uint32_t)(uint16_t)dil << 8);
             gpr[DIL_SRC] = (int32_t)((uint32_t)(uint16_t)dil << 8);
         }
         r0.cycle = (RamCycle)d.ram_cycle;
@@ -476,10 +488,17 @@ void ES5510::run_frame() {
         case A_TABLE_B: r0.address = (((bbase & memmask) + offset) & memmask) >> memshift; break;
         default: r0.address = offset & 0x00fffff0; break;
         }
+        if (diagnostic_trace) {
+            fprintf(diagnostic_trace, "RQ,%llu,%02x,%u,%u,%08x\n", (unsigned long long)trace_frame,
+                    pc, (unsigned)d.ram_cycle, (unsigned)d.ram_access, (unsigned)r0.address);
+            if (r2.cycle != WRITE) fprintf(diagnostic_trace, "RR,%llu,%02x,%u,%08x,%04x\n",
+                    (unsigned long long)trace_frame, pc, (unsigned)r2.io, (unsigned)r2.address,
+                    (unsigned)(uint16_t)dil);
+        }
         // the previous instruction's multiplier result
         if (mw) {
             mw = false;
-            const int64_t prod = ((int64_t)sext24(mc) * (int64_t)sext24(md)) << mulshift;
+            const int64_t prod = ((int64_t)sext24(mc) * (int64_t)sext24(md)) * (int64_t(1) << mulshift);
             const int64_t res = pm->acc ? prod + machl : prod;
             mac_overflow = (res < -((int64_t)1 << 47) || res >= ((int64_t)1 << 47));
             machl = res;
@@ -518,14 +537,29 @@ void ES5510::run_frame() {
         aw = !skip || d.op == 4;
         if (d.op == 0xf) {
             alu_operation_end();
+            if (diagnostic_trace && r1.cycle == WRITE && !r1.io && dol_count > 0)
+                fprintf(diagnostic_trace, "RW,%llu,%02x,%08x,%04x\n", (unsigned long long)trace_frame,
+                        pc, (unsigned)r1.address, (unsigned)(uint16_t)dol[0]);
             ram_write_cycle(r1);
             pc = 0;
             if (state == HALTED) { store(); drain_pipeline(); load(); }
+            if (diagnostic_trace) {
+                for (int ri = 0; ri < 0x104; ++ri) if (trace_before[ri] != gpr[ri])
+                    fprintf(diagnostic_trace, "W,%llu,%02x,%03x,%06x\n", (unsigned long long)trace_frame,
+                            trace_pc, ri, (unsigned)gpr[ri] & 0xffffff);
+                fprintf(diagnostic_trace, "END,%llu,%02x\n", (unsigned long long)trace_frame, trace_pc);
+            }
             break;                        // (END)
         }
         if (d.one_operand) ab = gpr[d.b1_src];
         else { aa = gpr[d.a_src]; ab = gpr[d.bReg]; }
+        if (diagnostic_trace && r1.cycle == WRITE && !r1.io && dol_count > 0)
+            fprintf(diagnostic_trace, "RW,%llu,%02x,%08x,%04x\n", (unsigned long long)trace_frame,
+                    pc, (unsigned)r1.address, (unsigned)(uint16_t)dol[0]);
         ram_write_cycle(r1);
+        if (diagnostic_trace) for (int ri = 0; ri < 0x104; ++ri) if (trace_before[ri] != gpr[ri])
+            fprintf(diagnostic_trace, "W,%llu,%02x,%03x,%06x\n", (unsigned long long)trace_frame,
+                    pc, ri, (unsigned)gpr[ri] & 0xffffff);
         if (++pc >= 160) pc = 0;
     }
 #undef ESP_WRITE_SPECIAL

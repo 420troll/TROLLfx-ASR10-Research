@@ -1,0 +1,503 @@
+{
+  "sample_rate_hz": 44100,
+  "frames_per_stimulus": 32768,
+  "comparison": "ASR-10 emulator ES5510 vs standalone TROLLfx MAME-derived adapter",
+  "summaries": {
+    "impulse": {
+      "pass": {
+        "frames": 32768,
+        "bit_exact": true,
+        "first_divergent_frame": null,
+        "max_abs_deviation": 0,
+        "rms_deviation": 0.0,
+        "best_alignment_lag_frames": 0,
+        "aligned_rms_error": 0.0,
+        "channels": {
+          "left": {
+            "reference_peak": 24000,
+            "candidate_peak": 24000,
+            "reference_rms": 132.58252147247765,
+            "candidate_rms": 132.58252147247765
+          },
+          "right": {
+            "reference_peak": 0,
+            "candidate_peak": 0,
+            "reference_rms": 0.0,
+            "candidate_rms": 0.0
+          }
+        },
+        "stereo_difference_reference_rms": 132.58252147247765,
+        "stereo_difference_candidate_rms": 132.58252147247765,
+        "reference_timing": {
+          "first_nonzero_frame": 4096,
+          "peak_frame": 4096
+        },
+        "candidate_timing": {
+          "first_nonzero_frame": 4096,
+          "peak_frame": 4096
+        },
+        "input_first_nonzero_frame": 4096,
+        "original_input_to_output_delay_frames": 0,
+        "mame_input_to_output_delay_frames": 0
+      },
+      "delay": {
+        "frames": 32768,
+        "bit_exact": true,
+        "first_divergent_frame": null,
+        "max_abs_deviation": 0,
+        "rms_deviation": 0.0,
+        "best_alignment_lag_frames": 0,
+        "aligned_rms_error": 0.0,
+        "channels": {
+          "left": {
+            "reference_peak": 24000,
+            "candidate_peak": 24000,
+            "reference_rms": 156.53359829448607,
+            "candidate_rms": 156.53359829448607
+          },
+          "right": {
+            "reference_peak": 0,
+            "candidate_peak": 0,
+            "reference_rms": 0.0,
+            "candidate_rms": 0.0
+          }
+        },
+        "stereo_difference_reference_rms": 156.53359829448607,
+        "stereo_difference_candidate_rms": 156.53359829448607,
+        "reference_timing": {
+          "first_nonzero_frame": 4096,
+          "peak_frame": 4096
+        },
+        "candidate_timing": {
+          "first_nonzero_frame": 4096,
+          "peak_frame": 4096
+        },
+        "input_first_nonzero_frame": 4096,
+        "original_input_to_output_delay_frames": 0,
+        "mame_input_to_output_delay_frames": 0,
+        "impulse_response_taps": {
+          "original": [
+            {
+              "frame": 4096,
+              "offset_from_input_frames": 0,
+              "left": 24000,
+              "right": 0
+            },
+            {
+              "frame": 15121,
+              "offset_from_input_frames": 11025,
+              "left": 13199,
+              "right": 0
+            },
+            {
+              "frame": 26146,
+              "offset_from_input_frames": 22050,
+              "left": 7259,
+              "right": 0
+            }
+          ],
+          "mame": [
+            {
+              "frame": 4096,
+              "offset_from_input_frames": 0,
+              "left": 24000,
+              "right": 0
+            },
+            {
+              "frame": 15121,
+              "offset_from_input_frames": 11025,
+              "left": 13199,
+              "right": 0
+            },
+            {
+              "frame": 26146,
+              "offset_from_input_frames": 22050,
+              "left": 7259,
+              "right": 0
+            }
+          ]
+        }
+      }
+    },
+    "sine": {
+      "pass": {
+        "frames": 32768,
+        "bit_exact": true,
+        "first_divergent_frame": null,
+        "max_abs_deviation": 0,
+        "rms_deviation": 0.0,
+        "best_alignment_lag_frames": 0,
+        "aligned_rms_error": 0.0,
+        "channels": {
+          "left": {
+            "reference_peak": 24000,
+            "candidate_peak": 24000,
+            "reference_rms": 16970.953391019393,
+            "candidate_rms": 16970.953391019393
+          },
+          "right": {
+            "reference_peak": 24000,
+            "candidate_peak": 24000,
+            "reference_rms": 16970.953391019393,
+            "candidate_rms": 16970.953391019393
+          }
+        },
+        "stereo_difference_reference_rms": 0.0,
+        "stereo_difference_candidate_rms": 0.0,
+        "reference_timing": {
+          "first_nonzero_frame": 1,
+          "peak_frame": 188
+        },
+        "candidate_timing": {
+          "first_nonzero_frame": 1,
+          "peak_frame": 188
+        },
+        "input_first_nonzero_frame": 1,
+        "original_input_to_output_delay_frames": 0,
+        "mame_input_to_output_delay_frames": 0
+      },
+      "delay": {
+        "frames": 32768,
+        "bit_exact": true,
+        "first_divergent_frame": null,
+        "max_abs_deviation": 0,
+        "rms_deviation": 0.0,
+        "best_alignment_lag_frames": 0,
+        "aligned_rms_error": 0.0,
+        "channels": {
+          "left": {
+            "reference_peak": 27391,
+            "candidate_peak": 27391,
+            "reference_rms": 17247.03849712806,
+            "candidate_rms": 17247.03849712806
+          },
+          "right": {
+            "reference_peak": 27391,
+            "candidate_peak": 27391,
+            "reference_rms": 17247.03849712806,
+            "candidate_rms": 17247.03849712806
+          }
+        },
+        "stereo_difference_reference_rms": 0.0,
+        "stereo_difference_candidate_rms": 0.0,
+        "reference_timing": {
+          "first_nonzero_frame": 1,
+          "peak_frame": 11493
+        },
+        "candidate_timing": {
+          "first_nonzero_frame": 1,
+          "peak_frame": 11493
+        },
+        "input_first_nonzero_frame": 1,
+        "original_input_to_output_delay_frames": 0,
+        "mame_input_to_output_delay_frames": 0,
+        "frequency_response_left_db": {
+          "original": [
+            {
+              "frequency_hz": 997,
+              "gain_db": -0.24591843181057488
+            }
+          ],
+          "mame": [
+            {
+              "frequency_hz": 997,
+              "gain_db": -0.24591843181057488
+            }
+          ]
+        }
+      }
+    },
+    "sweep": {
+      "pass": {
+        "frames": 32768,
+        "bit_exact": true,
+        "first_divergent_frame": null,
+        "max_abs_deviation": 0,
+        "rms_deviation": 0.0,
+        "best_alignment_lag_frames": 0,
+        "aligned_rms_error": 0.0,
+        "channels": {
+          "left": {
+            "reference_peak": 18000,
+            "candidate_peak": 18000,
+            "reference_rms": 12731.14473484543,
+            "candidate_rms": 12731.14473484543
+          },
+          "right": {
+            "reference_peak": 18000,
+            "candidate_peak": 18000,
+            "reference_rms": 12731.14473484543,
+            "candidate_rms": 12731.14473484543
+          }
+        },
+        "stereo_difference_reference_rms": 0.0,
+        "stereo_difference_candidate_rms": 0.0,
+        "reference_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 352
+        },
+        "candidate_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 352
+        },
+        "input_first_nonzero_frame": 0,
+        "original_input_to_output_delay_frames": 0,
+        "mame_input_to_output_delay_frames": 0
+      },
+      "delay": {
+        "frames": 32768,
+        "bit_exact": true,
+        "first_divergent_frame": null,
+        "max_abs_deviation": 0,
+        "rms_deviation": 0.0,
+        "best_alignment_lag_frames": 0,
+        "aligned_rms_error": 0.0,
+        "channels": {
+          "left": {
+            "reference_peak": 32768,
+            "candidate_peak": 32768,
+            "reference_rms": 14123.96532118847,
+            "candidate_rms": 14123.96532118847
+          },
+          "right": {
+            "reference_peak": 32768,
+            "candidate_peak": 32768,
+            "reference_rms": 14123.96532118847,
+            "candidate_rms": 14123.96532118847
+          }
+        },
+        "stereo_difference_reference_rms": 0.0,
+        "stereo_difference_candidate_rms": 0.0,
+        "reference_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 23056
+        },
+        "candidate_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 23056
+        },
+        "input_first_nonzero_frame": 0,
+        "original_input_to_output_delay_frames": 0,
+        "mame_input_to_output_delay_frames": 0,
+        "frequency_response_left_db": {
+          "original": [
+            {
+              "frequency_hz": 45.317889965389355,
+              "gain_db": 0.0
+            },
+            {
+              "frequency_hz": 103.4109510642948,
+              "gain_db": 0.0
+            },
+            {
+              "frequency_hz": 235.97358147497977,
+              "gain_db": 0.0498007356070607
+            },
+            {
+              "frequency_hz": 538.4684173294974,
+              "gain_db": -0.06862261202916639
+            },
+            {
+              "frequency_hz": 1228.7317700946828,
+              "gain_db": -0.12525613741942634
+            },
+            {
+              "frequency_hz": 2803.8445974746046,
+              "gain_db": 0.11594791661570716
+            },
+            {
+              "frequency_hz": 6398.096572518622,
+              "gain_db": 0.08309966984642339
+            },
+            {
+              "frequency_hz": 14599.824750681571,
+              "gain_db": 0.04050280673263681
+            }
+          ],
+          "mame": [
+            {
+              "frequency_hz": 45.317889965389355,
+              "gain_db": 0.0
+            },
+            {
+              "frequency_hz": 103.4109510642948,
+              "gain_db": 0.0
+            },
+            {
+              "frequency_hz": 235.97358147497977,
+              "gain_db": 0.0498007356070607
+            },
+            {
+              "frequency_hz": 538.4684173294974,
+              "gain_db": -0.06862261202916639
+            },
+            {
+              "frequency_hz": 1228.7317700946828,
+              "gain_db": -0.12525613741942634
+            },
+            {
+              "frequency_hz": 2803.8445974746046,
+              "gain_db": 0.11594791661570716
+            },
+            {
+              "frequency_hz": 6398.096572518622,
+              "gain_db": 0.08309966984642339
+            },
+            {
+              "frequency_hz": 14599.824750681571,
+              "gain_db": 0.04050280673263681
+            }
+          ]
+        }
+      }
+    },
+    "noise": {
+      "pass": {
+        "frames": 32768,
+        "bit_exact": true,
+        "first_divergent_frame": null,
+        "max_abs_deviation": 0,
+        "rms_deviation": 0.0,
+        "best_alignment_lag_frames": 0,
+        "aligned_rms_error": 0.0,
+        "channels": {
+          "left": {
+            "reference_peak": 16384,
+            "candidate_peak": 16384,
+            "reference_rms": 9453.454998244775,
+            "candidate_rms": 9453.454998244775
+          },
+          "right": {
+            "reference_peak": 16384,
+            "candidate_peak": 16384,
+            "reference_rms": 9473.252257480653,
+            "candidate_rms": 9473.252257480653
+          }
+        },
+        "stereo_difference_reference_rms": 13438.153253394785,
+        "stereo_difference_candidate_rms": 13438.153253394785,
+        "reference_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 17060
+        },
+        "candidate_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 17060
+        },
+        "input_first_nonzero_frame": 0,
+        "original_input_to_output_delay_frames": 0,
+        "mame_input_to_output_delay_frames": 0
+      },
+      "delay": {
+        "frames": 32768,
+        "bit_exact": true,
+        "first_divergent_frame": null,
+        "max_abs_deviation": 0,
+        "rms_deviation": 0.0,
+        "best_alignment_lag_frames": 0,
+        "aligned_rms_error": 0.0,
+        "channels": {
+          "left": {
+            "reference_peak": 29408,
+            "candidate_peak": 29408,
+            "reference_rms": 10490.190846195006,
+            "candidate_rms": 10490.190846195006
+          },
+          "right": {
+            "reference_peak": 29503,
+            "candidate_peak": 29503,
+            "reference_rms": 10512.21418546615,
+            "candidate_rms": 10512.21418546615
+          }
+        },
+        "stereo_difference_reference_rms": 14890.982205039138,
+        "stereo_difference_candidate_rms": 14890.982205039138,
+        "reference_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 25565
+        },
+        "candidate_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 25565
+        },
+        "input_first_nonzero_frame": 0,
+        "original_input_to_output_delay_frames": 0,
+        "mame_input_to_output_delay_frames": 0
+      }
+    },
+    "stereo_phase": {
+      "pass": {
+        "frames": 32768,
+        "bit_exact": true,
+        "first_divergent_frame": null,
+        "max_abs_deviation": 0,
+        "rms_deviation": 0.0,
+        "best_alignment_lag_frames": 0,
+        "aligned_rms_error": 0.0,
+        "channels": {
+          "left": {
+            "reference_peak": 22000,
+            "candidate_peak": 22000,
+            "reference_rms": 15556.098038887036,
+            "candidate_rms": 15556.098038887036
+          },
+          "right": {
+            "reference_peak": 22000,
+            "candidate_peak": 22000,
+            "reference_rms": 15556.591191382146,
+            "candidate_rms": 15556.591191382146
+          }
+        },
+        "stereo_difference_reference_rms": 21994.531045624994,
+        "stereo_difference_candidate_rms": 21994.531045624994,
+        "reference_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 0
+        },
+        "candidate_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 0
+        },
+        "input_first_nonzero_frame": 0,
+        "original_input_to_output_delay_frames": 0,
+        "mame_input_to_output_delay_frames": 0
+      },
+      "delay": {
+        "frames": 32768,
+        "bit_exact": true,
+        "first_divergent_frame": null,
+        "max_abs_deviation": 0,
+        "rms_deviation": 0.0,
+        "best_alignment_lag_frames": 0,
+        "aligned_rms_error": 0.0,
+        "channels": {
+          "left": {
+            "reference_peak": 25109,
+            "candidate_peak": 25109,
+            "reference_rms": 15807.755732156815,
+            "candidate_rms": 15807.755732156815
+          },
+          "right": {
+            "reference_peak": 25109,
+            "candidate_peak": 25109,
+            "reference_rms": 15810.515890992263,
+            "candidate_rms": 15810.515890992263
+          }
+        },
+        "stereo_difference_reference_rms": 22354.98080208026,
+        "stereo_difference_candidate_rms": 22354.98080208026,
+        "reference_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 11426
+        },
+        "candidate_timing": {
+          "first_nonzero_frame": 0,
+          "peak_frame": 11426
+        },
+        "input_first_nonzero_frame": 0,
+        "original_input_to_output_delay_frames": 0,
+        "mame_input_to_output_delay_frames": 0
+      }
+    }
+  }
+}
