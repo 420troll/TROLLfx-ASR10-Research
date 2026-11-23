@@ -29,6 +29,12 @@ locally from the fork and run with the private verified ASR-10 boot ROMs and OS
 injected a 440 Hz test sine into the selected DSP input, and saved the CLI host
 log, full ES5510 capture, and stereo WAV outside the repository.
 
+Rebuild only the headless CLI (no CMake, SDL app, VST, or MAME build):
+
+```sh
+tools/build_research_cli.sh
+```
+
 Example invocation (replace paths with private local paths):
 
 ```sh
@@ -132,6 +138,18 @@ python3 tools/compare_asr10_effect_capture.py \
 The tool checks the selected object name, capture bounds, contiguous active
 program, last host commits, unique source locations, paired GPR values, and
 the two observed source strides. It emits counts, hashes and offsets only.
+
+Validation on the native development build:
+
+- `python3 -m unittest discover -s tests -v` — 5 tests passed.
+- Strict capture-writer test compiled with `-Wall -Wextra -Wpedantic -Werror` — passed.
+- Individual `sh -n` checks of both shell scripts — passed.
+- `tools/run_private_effect_smokes.sh ...` — 44DDL+CHORUS (60 words) and
+  HALL REVERB (89 words) both passed selection, capture, WAV format and nonzero
+  audio checks; repeated output hashes matched the previous CLI renders.
+- The native headless CLI build succeeded. Existing warnings remain in
+  `asr10.cpp:447` and `m68302.cpp:214` for misleading indentation; no compiler
+  error was emitted.
 
 ## Loader and parameter-update path
 
