@@ -34,6 +34,7 @@ public:
     // Useful for bounded microprogram changes in a real-time host.
     void resetExecutionState() noexcept;
     bool loadProgram(const std::uint64_t* words, std::size_t count) noexcept;
+    bool writeInstruction(std::size_t address, std::uint64_t word) noexcept;
     bool setDramWord(std::uint32_t address, std::int16_t value) noexcept;
     void setRegister(std::uint8_t reg, std::uint32_t value) noexcept;
     std::uint32_t registerValue(std::uint8_t reg) const noexcept;

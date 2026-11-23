@@ -49,6 +49,12 @@ bool MameES5510::loadProgram(const std::uint64_t* words, std::size_t count) noex
     return true;
 }
 
+bool MameES5510::writeInstruction(std::size_t address, std::uint64_t word) noexcept {
+    if (address >= kInstructionCount) return false;
+    instructions_[address] = word & 0xffffffffffffULL;
+    return true;
+}
+
 bool MameES5510::setDramWord(std::uint32_t address, std::int16_t value) noexcept {
     if (dram_.size() != kDramWords || address >= kDramWords) return false;
     dram_[address] = value;
