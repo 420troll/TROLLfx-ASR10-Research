@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/asr10-os353-factory-parameter-catalog-v1.json",
+  "title": "ASR-10 OS 3.53 Factory Effect Parameter Catalog",
+  "type": "object",
+  "required": ["schema", "os_version", "effect_count_observed", "parameter_count_observed", "coverage_note", "effects"],
+  "properties": {
+    "schema": {"const": "asr10-os353-factory-parameter-catalog-v1"},
+    "os_version": {"const": "3.53"},
+    "effect_count_observed": {"const": 50},
+    "parameter_count_observed": {"type": "integer", "minimum": 0},
+    "coverage_note": {"type": "string"},
+    "effects": {
+      "type": "array", "minItems": 50, "maxItems": 50,
+      "items": {"type": "object", "required": ["id", "display_name", "parameter_enumeration_status", "parameters"],
+        "properties": {
+          "id": {"type": "integer", "minimum": 1, "maximum": 50},
+          "display_name": {"type": "string"},
+          "parameter_enumeration_status": {"enum": ["complete", "partial", "not_enumerated"]},
+          "parameters": {"type": "array", "items": {"type": "object", "required": ["name", "displayed_values_observed", "default", "range", "available_control", "dsp_mapping", "possible_influence"],
+            "properties": {
+              "name": {"type": "string"}, "scope": {"type": "string"}, "displayed_values_observed": {"type": "array", "items": {"type": "string"}},
+              "default": {}, "range": {"type": "object", "required": ["minimum", "maximum", "step"]}, "available_control": {"type": "boolean"},
+              "dsp_mapping": {"type": "object", "required": ["status", "address"], "properties": {"status": {"enum": ["experimentally_verified", "candidate", "unknown"]}, "address": {"type": ["string", "null"]}}},
+              "possible_influence": {"type": "object", "required": ["categories", "basis"]}
+            }, "additionalProperties": true}},
+          "unobserved_controls": {"type": ["string", "null"]}
+        }, "additionalProperties": true}
+    }
+  }, "additionalProperties": false
+}

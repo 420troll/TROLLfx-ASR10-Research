@@ -1,0 +1,481 @@
+{
+  "schema": "asr10-os353-factory-parameter-catalog-v1",
+  "os_version": "3.53",
+  "effect_count_observed": 50,
+  "parameter_count_observed": 2,
+  "coverage_note": "The 50 display names are catalogued. Only two controls have public, reversible mapping evidence. Other parameter names, displayed values, defaults, ranges, and mappings are unknown and intentionally omitted.",
+  "effects": [
+    {
+      "id": 1,
+      "display_name": "HALL REVERB",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 2,
+      "display_name": "44KHZ REVERB",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "partial",
+      "parameters": [
+        {
+          "name": "REVERB MIX BUS2",
+          "scope": "effect_specific",
+          "available_control": true,
+          "displayed_values_observed": [
+            "25",
+            "26"
+          ],
+          "default": null,
+          "range": {
+            "minimum": null,
+            "maximum": null,
+            "step": null
+          },
+          "dsp_mapping": {
+            "status": "experimentally_verified",
+            "register_type": "GPR",
+            "address": "0x7A",
+            "observed_raw_values": [
+              "0x350000",
+              "0x370000",
+              "0x350000",
+              "0x370000"
+            ],
+            "evidence": "Repeated Up/Down/Up with no-edit control; emulator host writes to GPR 0x7A followed the reversible display cycle. See redacted ROM-02 mapping report."
+          },
+          "possible_influence": {
+            "categories": [
+              "routing",
+              "wet_dry_mix"
+            ],
+            "basis": "parameter name only; DSP function not independently established"
+          }
+        }
+      ],
+      "unobserved_controls": "Additional controls not enumerated; complete count unknown"
+    },
+    {
+      "id": 3,
+      "display_name": "ROOM REVERB",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 4,
+      "display_name": "DUAL DELAYS",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 5,
+      "display_name": "44KHZ DELAYS",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 6,
+      "display_name": "CHORUS+REVRB",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 7,
+      "display_name": "PHASER+REVRB",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 8,
+      "display_name": "FLANGER+REV",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 9,
+      "display_name": "ROT.SPKR+REV",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 10,
+      "display_name": "CHOR+REV+DDL",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 11,
+      "display_name": "CMP+DIST+REV",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 12,
+      "display_name": "DIST+CHO+REV",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 13,
+      "display_name": "WAH+DIST+REV",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 14,
+      "display_name": "SMALL ROOM",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 15,
+      "display_name": "LARGE ROOM",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 16,
+      "display_name": "HALL REVERB2",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 17,
+      "display_name": "SMALL PLATE",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 18,
+      "display_name": "LARGE PLATE",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 19,
+      "display_name": "REVRSE REVRB",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 20,
+      "display_name": "REVRSE REVB2",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 21,
+      "display_name": "GATED REVERB",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 22,
+      "display_name": "NLIN REVRB 1",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 23,
+      "display_name": "NLIN REVRB 2",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 24,
+      "display_name": "NLIN REVRB 3",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 25,
+      "display_name": "MULTITAP DDL",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 26,
+      "display_name": "EQ+DELAY LFO",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 27,
+      "display_name": "VCF+DISTORT",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 28,
+      "display_name": "GUITAR AMP1",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 29,
+      "display_name": "GUITAR AMP2",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 30,
+      "display_name": "GUITAR AMP3",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 31,
+      "display_name": "SPKR CABINET",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 32,
+      "display_name": "TUNABLE SPKR",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 33,
+      "display_name": "EQ+CHOR+DDL",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 34,
+      "display_name": "EQ+VIBR+DDL",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 35,
+      "display_name": "EQ+FLNGR+DDL",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 36,
+      "display_name": "EQ+TREM+DDL",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 37,
+      "display_name": "PHASER+DDL",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 38,
+      "display_name": "8-VOICE CHOR",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 39,
+      "display_name": "PITCH SHIFT",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 40,
+      "display_name": "PITCH+DDL",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 41,
+      "display_name": "FAST PITCHSH",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 42,
+      "display_name": "EQ+CMPRESSOR",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 43,
+      "display_name": "EXPANDER",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 44,
+      "display_name": "KEYED EXPNDR",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 45,
+      "display_name": "INVRS EXPNDR",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 46,
+      "display_name": "DE-ESSER",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 47,
+      "display_name": "DUCKER",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 48,
+      "display_name": "RUMBLE FILTR",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    },
+    {
+      "id": 49,
+      "display_name": "PARAM EQ",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "partial",
+      "parameters": [
+        {
+          "name": "BASS GAIN",
+          "scope": "effect_specific",
+          "available_control": true,
+          "displayed_values_observed": [
+            "+3",
+            "+4",
+            "+3",
+            "+4"
+          ],
+          "default": null,
+          "range": {
+            "minimum": null,
+            "maximum": null,
+            "step": null
+          },
+          "dsp_mapping": {
+            "status": "experimentally_verified",
+            "register_type": "GPR",
+            "address": "0x56",
+            "observed_raw_values": [
+              "0x00B500",
+              "0x00CB00",
+              "0x00B500",
+              "0x00CB00"
+            ],
+            "evidence": "Repeated Up/Down/Up with no-edit control; emulator host writes to GPR 0x56 followed the display cycle. See ASR10_PARAMETER_MAPPING.md."
+          },
+          "possible_influence": {
+            "categories": [
+              "frequency_response",
+              "gain"
+            ],
+            "basis": "parameter name only; DSP function not independently established"
+          }
+        }
+      ],
+      "unobserved_controls": "Additional controls not enumerated; complete count unknown"
+    },
+    {
+      "id": 50,
+      "display_name": "VAN DER POL",
+      "name_source": "OS 3.53 running-display inventory; redacted public catalog",
+      "parameter_enumeration_status": "not_enumerated",
+      "parameters": [],
+      "unobserved_controls": null
+    }
+  ]
+}
