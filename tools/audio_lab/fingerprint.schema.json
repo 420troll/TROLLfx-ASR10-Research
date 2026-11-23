@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/ensonq/es5510-audio-fingerprint-1.0.json",
+  "title": "ES5510 Audio Fingerprint",
+  "type": "object",
+  "required": ["schema", "effect_id", "source_type", "provenance", "parameters", "measurement", "note"],
+  "properties": {
+    "schema": {"type": "string"},
+    "effect_id": {"type": "string", "minLength": 1},
+    "source_type": {"enum": ["reference_render", "emulator_prediction", "synthetic"]},
+    "provenance": {"type": "object", "description": "Record render source/build, selection evidence, sample rate, stimulus identity/hash and initialization manifest where applicable."},
+    "parameters": {"type": "object"},
+    "measurement": {"type": "object", "required": ["sample_rate_hz", "frames", "peak", "rms", "decay", "stereo", "frequency_response", "modulation_sidebands"]},
+    "note": {"type": "string"}
+  },
+  "additionalProperties": false
+}
