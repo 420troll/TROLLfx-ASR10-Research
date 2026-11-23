@@ -35,6 +35,8 @@ public:
     void list_program(FILE *f);
     // Offline lossless export; call only from the control/CLI thread.
     bool write_capture(FILE *f);
+    // Optional test-only trace; null by default. Caller owns the FILE lifetime.
+    void set_diagnostic_trace(FILE *f) { diagnostic_trace = f; }
 
 private:
     enum { RUNNING, HALTED } state = HALTED;
@@ -91,6 +93,8 @@ private:
     void decode(int i);
     void finish_dec(Dec &d);
     bool itrace = false, hostlog = false;   // debug (ESP_ITRACE / ESP_HOSTLOG environment variables)
+    FILE *diagnostic_trace = nullptr;
+    uint64_t diagnostic_frame = 0;
     std::vector<int16_t> dram;
 
     int32_t dol_latch = 0, dil_latch = 0, gpr_latch = 0;

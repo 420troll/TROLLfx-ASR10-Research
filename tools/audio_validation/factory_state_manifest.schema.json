@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://420troll.github.io/TROLLfx-ASR10-Research/es5510-factory-init-v1.schema.json",
+  "title": "TROLLfx ES5510 factory initialization manifest",
+  "description": "References private payload files by relative path and SHA-256; payloads are never embedded.",
+  "type": "object",
+  "required": ["schema", "initialization_basis", "provenance", "sample_rate_hz", "program", "gpr", "special_registers", "dram", "memory", "serial", "lifecycle", "pipeline"],
+  "properties": {
+    "schema": {"const": "trollfx-es5510-factory-init-v1"},
+    "initialization_basis": {"const": "cold_load"},
+    "provenance": {"type": "object", "required": ["effect_id", "effect_name", "os_version", "selection_evidence"]},
+    "sample_rate_hz": {"type": "integer", "minimum": 8000, "maximum": 192000},
+    "program": {"$ref": "#/$defs/payload", "properties": {"format": {"const": "es5510-six-byte-big-endian"}, "active_words": {"type": "integer", "minimum": 1, "maximum": 160}, "end_word": {"type": "integer", "minimum": 0}}},
+    "gpr": {"$ref": "#/$defs/payload", "properties": {"count": {"const": 192}}},
+    "special_registers": {"$ref": "#/$defs/payload", "properties": {"count": {"const": 22}}},
+    "dram": {"type": "object", "required": ["mode", "word_count"], "properties": {"mode": {"enum": ["zeroed", "image"]}, "word_count": {"type": "integer", "minimum": 0}, "path": {"type": "string"}, "sha256": {"$ref": "#/$defs/hash"}}},
+    "memory": {"type": "object", "required": ["memsiz", "memmask", "memincrement", "memshift", "dlength", "abase", "bbase", "dbase", "sigreg"]},
+    "serial": {"type": "object", "required": ["host_serial", "input_ports", "output_ports"]},
+    "lifecycle": {"type": "object", "required": ["halt_before_load", "run_after_load", "initialization_order"]},
+    "pipeline": {"type": "object", "required": ["status", "complete"], "properties": {"status": {"const": "reset_after_load"}, "complete": {"const": true}}}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "payload": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string"}, "sha256": {"$ref": "#/$defs/hash"}, "count": {"type": "integer", "minimum": 0}}}
+  }
+}

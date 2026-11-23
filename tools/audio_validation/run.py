@@ -74,6 +74,7 @@ def metrics(ref, got):
 def main():
     ap=argparse.ArgumentParser(description=__doc__); ap.add_argument('--out',type=pathlib.Path,default=pathlib.Path('/tmp/es5510-audio-validation'))
     ap.add_argument('--rate',type=int,default=44100); ap.add_argument('--frames',type=int,default=32768)
+    ap.add_argument('--trace', action='store_true', help='write one-frame internal/serial traces for each engine and algorithm')
     a=ap.parse_args(); a.out.mkdir(parents=True,exist_ok=True)
     exe=a.out/'es5510-audio-compare'
     sources=[ROOT/'src/es5510.cpp',ROOT/'third_party/trollfx_mame_es5510/mame_es5510_standalone.cpp',ROOT/'tools/audio_validation/compare.cpp']
@@ -88,7 +89,10 @@ def main():
         for algorithm in ('pass','delay'):
             outputs={}
             for mode in ('original','mame'):
-                p=a.out/f'{name}-{algorithm}-{mode}.csv'; subprocess.run([str(exe),mode,algorithm,str(inp),str(p)],check=True); outputs[mode]=read_outputs(p)
+                p=a.out/f'{name}-{algorithm}-{mode}.csv'
+                cmd=[str(exe),mode,algorithm,str(inp),str(p)]
+                if a.trace: cmd.append(str(a.out/f'{name}-{algorithm}-{mode}.trace.csv'))
+                subprocess.run(cmd,check=True); outputs[mode]=read_outputs(p)
             summary=metrics(outputs['original'],outputs['mame'])
             summary['input_first_nonzero_frame']=active_input
             for mode in ('original','mame'):

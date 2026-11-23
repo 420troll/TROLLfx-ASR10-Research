@@ -15,6 +15,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 #include <vector>
 
 namespace trollfx::esp {
@@ -40,6 +41,7 @@ public:
     std::uint8_t hostSerial() const noexcept { return hostSerial_; }
     std::uint64_t frames() const noexcept { return frames_; }
     std::uint64_t instructionsExecuted() const noexcept { return instructionsExecuted_; }
+    void setDiagnosticTrace(FILE* f) noexcept { diagnosticTrace_ = f; }
 
     // MAME esq_5505_5510_pump routing: input stereo pairs occupy serial ports
     // 0..2 and output is serial port 3. Sixteen-bit bus samples are used.
@@ -110,6 +112,7 @@ private:
     MacPipe macPipe_{};
     bool halted_ = true;
     std::uint64_t frames_ = 0, instructionsExecuted_ = 0;
+    FILE* diagnosticTrace_ = nullptr;
 };
 
 } // namespace trollfx::esp

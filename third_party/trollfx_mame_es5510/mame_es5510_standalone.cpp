@@ -224,6 +224,14 @@ void MameES5510::executeOneFrame() noexcept {
     halted_=false; // MAME pump's HALT pulse starts the program at PC 0 for a frame.
     for (std::size_t pc=0; pc<kInstructionCount; ++pc) {
         const std::uint64_t instr=instructions_[pc];
+        std::array<std::uint32_t, 192> traceBefore{};
+        std::array<std::uint32_t, 18> traceSprBefore{};
+        if (diagnosticTrace_) {
+            traceBefore = gpr_;
+            for (unsigned r = 234; r <= 251; ++r) traceSprBefore[r - 234] = readReg(static_cast<std::uint8_t>(r));
+            std::fprintf(diagnosticTrace_, "I,%llu,%02zx,%012llx\n", (unsigned long long)frames_, pc,
+                         (unsigned long long)(instr & 0xffffffffffffULL));
+        }
         ramPP_=ramP_; ramP_=ram_;
         if (ramPP_.cycle != RamWrite) dil_ = ramPP_.io ? 0 : dram_[static_cast<std::size_t>(ramPP_.address)&(kDramWords-1)];
         const std::uint8_t ramControl=static_cast<std::uint8_t>((instr>>3)&7u);
@@ -233,6 +241,13 @@ void MameES5510::executeOneFrame() noexcept {
                    ramControl==5?RamDump:RamRead;
         ram_.io=ramAccess==3;
         ram_.address=ramAddress(ramAccess,gpr_[pc]);
+        if (diagnosticTrace_) {
+            std::fprintf(diagnosticTrace_, "RQ,%llu,%02zx,%u,%u,%08x\n", (unsigned long long)frames_, pc,
+                         (unsigned)ram_.cycle, (unsigned)ramAccess, (unsigned)ram_.address);
+            if (ramPP_.cycle != RamWrite) std::fprintf(diagnosticTrace_, "RR,%llu,%02zx,%u,%08x,%04x\n",
+                         (unsigned long long)frames_, pc, (unsigned)ramPP_.io, (unsigned)ramPP_.address,
+                         (unsigned)(std::uint16_t)dil_);
+        }
 
         const Select select=kSelect[(instr>>8)&15u];
         const bool skippable=((instr>>7)&1u)!=0;
@@ -275,14 +290,33 @@ void MameES5510::executeOneFrame() noexcept {
             else { alu_.aValue=alu_.src==Reg?static_cast<std::int32_t>(readReg(alu_.aReg)):static_cast<std::int32_t>(static_cast<std::uint16_t>(dil_))<<8; alu_.bValue=static_cast<std::int32_t>(readReg(alu_.bReg)); }
         }
         if(ramP_.cycle!=RamRead) {
-            if(ramP_.cycle==RamWrite&&!ramP_.io&&dolCount_>0) dram_[static_cast<std::size_t>(ramP_.address)&(kDramWords-1)]=dol_[0];
+            if(ramP_.cycle==RamWrite&&!ramP_.io&&dolCount_>0) {
+                if (diagnosticTrace_) std::fprintf(diagnosticTrace_, "RW,%llu,%02zx,%08x,%04x\n",
+                    (unsigned long long)frames_, pc, (unsigned)ramP_.address, (unsigned)(std::uint16_t)dol_[0]);
+                dram_[static_cast<std::size_t>(ramP_.address)&(kDramWords-1)]=dol_[0];
+            }
             ejectDol();
+        }
+        if (diagnosticTrace_) {
+            for (unsigned r = 0; r < gpr_.size(); ++r) if (traceBefore[r] != gpr_[r])
+                std::fprintf(diagnosticTrace_, "W,%llu,%02zx,%03x,%06x\n", (unsigned long long)frames_, pc,
+                             r, gpr_[r] & 0xffffffu);
+            for (unsigned r = 234; r <= 251; ++r) {
+                const auto now = readReg(static_cast<std::uint8_t>(r));
+                if (traceSprBefore[r - 234] != now) std::fprintf(diagnosticTrace_, "W,%llu,%02zx,%03x,%06x\n",
+                    (unsigned long long)frames_, pc, r, now & 0xffffffu);
+            }
         }
         ++instructionsExecuted_;
         if(end) {
             const std::int64_t next=static_cast<std::int64_t>(dBase_)-memIncrement_;
             dBase_=next<0?dLength_:static_cast<std::uint32_t>(next);
-            halted_=true; break;
+            halted_=true;
+            if (diagnosticTrace_) {
+                std::fprintf(diagnosticTrace_, "W,%llu,%02zx,%03x,%06x\n", (unsigned long long)frames_, pc, 248, dBase_ & 0xffffffu);
+                std::fprintf(diagnosticTrace_, "END,%llu,%02zx\n", (unsigned long long)frames_, pc);
+            }
+            break;
         }
     }
     ++frames_;
