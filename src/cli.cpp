@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include <algorithm>
 extern "C" {
 #include "m68k.h"
@@ -41,7 +42,7 @@ static void write_wav(const char *path, const std::vector<float> &a, int rate) {
 
 int main(int argc, char **argv) {
     std::string rom_dir = "roms"; bool lo_set = false, hi_set = false;
-    std::string lo = "roms/asr_lo.bin", hi = "roms/asr_hi.bin", disk, wav, aux_wav, esp_dump;
+    std::string lo = "roms/asr_lo.bin", hi = "roms/asr_hi.bin", disk, wav, aux_wav, esp_dump, esp_rom_dir;
     bool m_aux_flag[3] = { true, true, true };   // AUX1-3 mixed into the main outputs
     double seconds = 10;
     bool write_back = false;
@@ -98,6 +99,7 @@ int main(int argc, char **argv) {
         else if (a == "--dump-ram") dump_ram = next();
         else if (a == "--esp-list") esp_list = true;
         else if (a == "--esp-dump") esp_dump = next();
+        else if (a == "--esp-snapshot-rom-dir") esp_rom_dir = next(); // snapshot each stable ROM display ID once
         else if (a == "--rack") rack_panel = true;
         else if (a == "--otto-dump") otto_dump = true;
         else if (a == "--dis") { dis_addr = strtoul(next().c_str(), 0, 16); dis_n = atoi(next().c_str()); }
@@ -232,6 +234,8 @@ int main(int argc, char **argv) {
     const int64_t slice = 16000;  // 1 ms
     int64_t total = (int64_t)(seconds * m.cpu_clock);
     std::string last0, last1;
+    int stable_display_slices = 0;
+    std::set<int> rom_snapshots;
     for (int64_t t = 0; t < total; t += slice) {
         double now = t / m.cpu_clock;
         while (mi < midi.size() && midi[mi].first <= now) { for (auto b : midi[mi].second) m.midi_in(b); mi++; }
@@ -286,6 +290,7 @@ int main(int argc, char **argv) {
         for (auto &pe : patchev) if (pe.first >= 0 && pe.first <= now) { m.set_patch_select(pe.second.first, pe.second.second != 0); pe.first = -1; }
         for (auto &a2 : analog_at) if (a2.first >= 0 && a2.first <= now) { m.analog[a2.second.first] = a2.second.second; a2.first = -1; }
         for (auto &r : raws) if (r.first >= 0 && r.first <= now) { m.duart.rx_byte(1, r.second.first); m.duart.rx_byte(1, r.second.second); r.first = -1; }
+        m.esp.set_hostlog_time(now);
         m.run(slice);
         std::string d0 = m.panel.text(), d1 = m.panel.attr_line(0), dc = m.panel.attr_line(1);
         for (int k = 0; k < Panel::COLS; k++) if (dc[k] != ' ') d1[k] = dc[k];
@@ -294,6 +299,33 @@ int main(int argc, char **argv) {
         { std::string at = "A:"; at += m.audio_led(0) ? 'Y' : '-'; at += m.audio_led(2) ? 'R' : '-';
           at += " B:"; at += m.audio_led(1) ? 'Y' : '-'; at += m.audio_led(3) ? 'R' : '-'; d1 += " {" + at + "}"; }
         d1 += " <" + m.panel.annunciators() + ">";
+        if (!esp_rom_dir.empty()) {
+            const std::string marker = "FX=ROM-";
+            size_t pos = d0.find(marker);
+            if (pos != std::string::npos && d0 == last0) ++stable_display_slices;
+            else stable_display_slices = 0;
+            if (pos != std::string::npos && stable_display_slices >= 100) {
+                const char *digits = d0.c_str() + pos + marker.size();
+                char *end = nullptr;
+                long id = strtol(digits, &end, 10);
+                if (id > 0 && id <= 999 && rom_snapshots.insert((int)id).second) {
+                    char path[2048];
+                    snprintf(path, sizeof(path), "%s/ROM-%02ld.esp", esp_rom_dir.c_str(), id);
+                    FILE *existing = fopen(path, "rb");
+                    if (existing) {
+                        fclose(existing);
+                        fprintf(stderr, "ESP_ROM_CAPTURE_EXISTS id=%02ld time=%.6f display=%s path=%s\n", id, now, d0.c_str() + pos, path);
+                    } else if (FILE *f = fopen(path, "wb")) {
+                        bool ok = m.esp.write_capture(f);
+                        if (fclose(f) != 0) ok = false;
+                        if (ok) fprintf(stderr, "ESP_ROM_CAPTURE id=%02ld time=%.6f display=%s path=%s\n", id, now, d0.c_str() + pos, path);
+                        else fprintf(stderr, "ESP_ROM_CAPTURE_ERROR id=%02ld time=%.6f path=%s\n", id, now, path);
+                    } else {
+                        fprintf(stderr, "ESP_ROM_CAPTURE_ERROR id=%02ld time=%.6f cannot-open=%s\n", id, now, path);
+                    }
+                }
+            }
+        }
         if (d0 != last0 || d1 != last1) {
             fprintf(stderr, "[%7.3fs] |%s|\n           |%s|\n", now, d0.c_str(), d1.c_str());
             last0 = d0; last1 = d1;
