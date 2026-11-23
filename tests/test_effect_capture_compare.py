@@ -9,7 +9,8 @@ compare_capture = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(compare_capture)
 
 
-def fixtures(directory: Path, paired_count=29, instruction_count=None, gap_bytes=3, suffix_bytes=80):
+def fixtures(directory: Path, paired_count=29, instruction_count=None, gap_bytes=3, suffix_bytes=80,
+             alias_instruction_index=None):
     if instruction_count is None:
         instruction_count = 60 - paired_count
     if paired_count + instruction_count != 60:
@@ -21,9 +22,10 @@ def fixtures(directory: Path, paired_count=29, instruction_count=None, gap_bytes
         paired_first_instruction + 9 * paired_count - 3 + gap_bytes
         if paired_count else fx_ucode + 11
     )
+    physical_instruction_count = instruction_count - (1 if alias_instruction_index is not None else 0)
     final_instruction = (
-        instruction_only_start + 6 * (instruction_count - 1)
-        if instruction_count else paired_first_instruction + 9 * (paired_count - 1)
+        instruction_only_start + 6 * (physical_instruction_count - 1)
+        if physical_instruction_count else paired_first_instruction + 9 * (paired_count - 1)
     )
     fx_size = final_instruction + 6 + suffix_bytes
     obj = bytearray(fx_size + 8)
@@ -36,14 +38,18 @@ def fixtures(directory: Path, paired_count=29, instruction_count=None, gap_bytes
     # Repeated words exercise source-offset resolution by host GPR and stride.
     words[40] = words[9]
     words[53] = words[19]
+    if alias_instruction_index is not None:
+        words[alias_instruction_index] = words[0]
     gprs = [0x300000 + i for i in range(paired_count)]
     for i, value in enumerate(gprs):
         pos = paired_start_gpr + i * 9
         obj[pos:pos + 3] = value.to_bytes(3, "big")
         obj[pos + 3:pos + 9] = words[i].to_bytes(6, "big")
     for i in range(paired_count, 60):
-        pos = instruction_only_start + (i - paired_count) * 6
-        obj[pos:pos + 6] = words[i].to_bytes(6, "big")
+        tail_index = i - paired_count - (1 if alias_instruction_index is not None and i > alias_instruction_index else 0)
+        pos = instruction_only_start + tail_index * 6
+        if i != alias_instruction_index:
+            obj[pos:pos + 6] = words[i].to_bytes(6, "big")
     # Match exact production capture v1 section layout; the rest is synthetic zero DRAM.
     instructions = b"".join(w.to_bytes(6, "big") for w in words + [0] * 100)
     gpr_state = bytes(192 * 3)
@@ -122,6 +128,20 @@ ESPHOST event=12 cycles=125 frame=4 pc=00123c gpr 21 <- 123456
         self.assertEqual(result["source_offsets"]["paired_records_count"], 0)
         self.assertEqual(result["source_offsets"]["instruction_only_count"], 60)
         self.assertEqual(result["source_offsets"]["instruction_only_stride_bytes"], 6)
+
+    def test_recovers_unique_instruction_alias_in_rom02_shape(self):
+        with tempfile.TemporaryDirectory() as td:
+            paths = fixtures(Path(td), paired_count=58, instruction_count=2,
+                             gap_bytes=3, suffix_bytes=42, alias_instruction_index=58)
+            result = compare_capture.compare(*paths, expected_name="PAIRTEST")
+        offsets = result["source_offsets"]
+        self.assertEqual(offsets["paired_records_count"], 58)
+        self.assertEqual(offsets["host_instruction_only_commits"], 2)
+        self.assertEqual(offsets["instruction_only_count"], 1)
+        self.assertEqual(offsets["source_instruction_alias_count"], 1)
+        self.assertEqual(offsets["source_instruction_aliases"],
+                         [{"active_index": 58, "source_active_index": 0}])
+        self.assertEqual(offsets["unclassified_bytes_before_instruction_only"], 3)
 
     def test_ambiguous_duplicate_program_fails_closed(self):
         with tempfile.TemporaryDirectory() as td:

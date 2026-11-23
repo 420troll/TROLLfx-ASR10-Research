@@ -23,6 +23,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CLI = ROOT / "build/research-cli/asr10-cli"
 DISPLAY_RE = re.compile(r"^\[\s*([0-9.]+)s\] \|FX=(.*?)\|$")
+HOST_META_RE = r"(?:event=\d+ cycles=\d+ frame=\d+ pc=[0-9a-fA-F]{6,8} )?"
 
 
 def sha256(path: Path) -> str:
@@ -193,7 +194,7 @@ def host_event_summary(log: Path, start_time: float | None = None, end_time: flo
     instruction_indices: set[int] = set()
     ram_lines = 0
     for line in log.read_text(errors="replace").splitlines():
-        m = re.match(r"ESPHOST (gpr|instr|both|ram)\b", line)
+        m = re.match(r"ESPHOST " + HOST_META_RE + r"(gpr|instr|both|ram)\b", line)
         if not m:
             continue
         tm = re.search(r"\bt=([0-9.]+)", line)
@@ -213,7 +214,7 @@ def host_event_summary(log: Path, start_time: float | None = None, end_time: flo
             counts["ram"] += 1
             ram_lines += 1
         if kind in ("gpr", "instr", "both"):
-            ix = re.search(r"ESPHOST (?:gpr|instr|both) ([0-9a-fA-F]{2}) <-", line)
+            ix = re.search(r"ESPHOST " + HOST_META_RE + r"(?:gpr|instr|both) ([0-9a-fA-F]{2}) <-", line)
             if ix:
                 index = int(ix.group(1), 16)
                 if kind in ("gpr", "both"):
@@ -312,7 +313,7 @@ def active_program_matches_host(log: Path, esp: Path, snap: dict, at_time: float
     words = [raw[44+i*6:44+(i+1)*6].hex() for i in range(nins)]
     active = snap["program"]["active_words_through_first_END"]
     last: dict[int,str] = {}
-    rx = re.compile(r"ESPHOST (?:instr|both) ([0-9a-fA-F]{2}) <- ([0-9a-fA-F]{12})(?:.*? t=([0-9.]+))?$")
+    rx = re.compile(r"ESPHOST " + HOST_META_RE + r"(?:instr|both) ([0-9a-fA-F]{2}) <- ([0-9a-fA-F]{12})(?:.*? t=([0-9.]+))?$")
     for line in log.read_text(errors="replace").splitlines():
         m = rx.search(line)
         if m:

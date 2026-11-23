@@ -1,5 +1,9 @@
 # EFE format decoder — milestone 3 evidence
 
+This records the milestone-3 dataset. Later ROM-01/ROM-02 validation and the
+runtime-inferred geometry parser are documented in
+[FACTORY_EFE_RECONSTRUCTION_V2.md](FACTORY_EFE_RECONSTRUCTION_V2.md).
+
 ## Scope and method
 
 This continuation starts at milestone 2 commit `9335bc6`. Analysis compared the
@@ -63,9 +67,9 @@ Runtime logs distinguish combined instruction/GPR writes, instruction-only
 writes, and GPR-only writes. The four captures include a large number of GPR-only
 host events, but those events span initialization and later runtime activity;
 they do not by themselves identify parameter-definition records. No parameter
-table grammar, labels, scaling curves, factory control mapping, or stable GPR
-initializer record has been proven. In particular, a capture's final GPR image
-is not treated as pristine file initialization.
+table grammar or generalized scaling curve has been proven. One reversible
+ROM-02 control-to-GPR mapping is documented in the later v2 report. A capture's
+final GPR image is not treated as pristine file initialization.
 
 ## Version differences and loader tracing
 
@@ -80,21 +84,22 @@ emulator, not the exact CPU loader instructions that read each source field.
 
 The other eight effects have no verified standalone-object/runtime correlation
 in this dataset. They remain available for private differential analysis but
-are not decoded by this parser. In particular, the layout must not be inferred
-for HALL REVERB or other effects solely from instruction count or a six-byte
+are not decoded by this milestone's parser. HALL REVERB and ROM-02 are handled
+by later source-to-runtime evidence documented in the v2 report; a layout must
+not be inferred for any effect solely from instruction count or a six-byte
 scan.
 
 ## Decoder and extraction tools
 
-`tools/efe_layout.py` and `tools/decode_efe_layout.py` implement only the
-runtime-proven segment boundaries. Record counts must be supplied from a
-verified host trace; the tool checks header bounds and that all declared
-segments fit before `FxSize`. Its JSON includes offsets, counts, lengths and
-segment hashes, never payload bytes. Example (keep output local/private):
+`tools/efe_layout.py` and `tools/decode_efe_layout.py` validate segment
+geometry supplied from a verified host trace. Start offsets and record counts
+must come from a source-to-runtime comparison; prefix, gap and suffix lengths
+are then calculated from `FxUcode` and `FxSize`. Example (keep output local):
 
 ```sh
 python3 tools/decode_efe_layout.py /private/effect.payload.bin \
-  --paired 29 --instruction-only 31
+  --paired-start 813 --paired 86 --instruction-start 1590 \
+  --instruction-only 3
 ```
 
 `tools/compare_asr10_effect_capture.py` is the source/capture/log correlation
@@ -110,8 +115,8 @@ failure cases.
    host writes before claiming their layout.
 2. Trace the exact OS loader reads and `$801e` service with an address-resolved
    disassembly or execution trace.
-3. Capture controlled GUI parameter edits with timestamped before/after host
-   commits to identify definition records and GPR mapping.
+3. Extend the ROM-02 reversible parameter evidence to additional controls and
+   determine which GPR-only updates are effect state versus OS/runtime activity.
 4. Repeat extraction and runtime correlation on another OS version to establish
    version deltas.
 5. Establish file checksum and relocation semantics from loader verification

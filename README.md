@@ -190,6 +190,10 @@ Technical notes (emulated hardware, protocols, tests), in Portuguese: [docs/TECH
 Private-asset capture tooling and the verified OS 3.53 ES5510 loader findings:
 [docs/ASR10_LIVE_LOADER_FINDINGS.md](docs/ASR10_LIVE_LOADER_FINDINGS.md).
 
+Factory ROM EFE source layouts, partial initialization evidence, and a
+controlled ROM-02 parameter mapping:
+[docs/FACTORY_EFE_RECONSTRUCTION_V2.md](docs/FACTORY_EFE_RECONSTRUCTION_V2.md).
+
 ## Credits and licences
 
 - This program is free software under the **GNU GPL v3** (`LICENSE`).

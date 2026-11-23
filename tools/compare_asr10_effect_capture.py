@@ -113,50 +113,65 @@ def compare(object_path: Path, capture_path: Path, host_log_path: Path, expected
         raise ValueError("host commits do not form one paired run followed by one instruction-only run")
     paired_count = modes.count("both")
     instruction_only_count = active_count - paired_count
-    paths: dict[int, tuple[int, tuple[int, ...]]] = {
-        pos: (1, (pos,)) for pos in source_candidates[0]
-    }
+    # Transaction payload widths are defined by the host protocol: one 3-byte
+    # GPR initializer and one 6-byte instruction, or an instruction alone.
+    # Segment starts, gaps, and suffixes are inferred from matching source
+    # candidates instead of being fixed to a single EFE template.
+    paired_stride = 3 + 6
+    instruction_stride = 6
+    source_paths: list[tuple[tuple[int, ...], tuple[int, ...]]] = [
+        ((pos,), ()) for pos in source_candidates[0]
+    ]
     for i in range(1, active_count):
-        next_paths: dict[int, tuple[int, tuple[int, ...]]] = {}
+        next_paths: list[tuple[tuple[int, ...], tuple[int, ...]]] = []
         mode = modes[i]
-        previous_mode = modes[i - 1]
-        stride = 9 if mode == "both" else 6
         for pos in source_candidates[i]:
-            parents = [prev for prev in paths if (
-                pos == prev + stride if mode == previous_mode else
-                mode == "instr" and previous_mode == "both" and pos >= prev + 6
-            )]
-            count = sum(paths[prev][0] for prev in parents)
-            if count:
-                # Keep at most two representative paths; only uniqueness matters.
-                parent = parents[0]
-                next_paths[pos] = (min(count, 2), paths[parent][1] + (pos,))
-        paths = next_paths
-        if not paths:
-            raise ValueError("capture matches the EFE, but no source layout satisfies host records and strides")
-    path_count = sum(count for count, _ in paths.values())
-    if path_count != 1:
+            for offsets, aliases in source_paths:
+                previous_source_index = next((j for j in range(len(offsets) - 1, -1, -1) if j not in aliases), None)
+                if previous_source_index is None:
+                    continue
+                prior = offsets[previous_source_index]
+                if mode == "both":
+                    valid, alias = pos == prior + paired_stride, False
+                else:
+                    alias = pos in offsets
+                    has_tail_record = any(j >= paired_count and j not in aliases for j in range(i))
+                    if has_tail_record:
+                        valid = alias or pos == prior + instruction_stride
+                    else:
+                        valid = alias or pos >= prior + instruction_stride
+                if valid:
+                    candidate = (offsets + (pos,), aliases + ((i,) if alias else ()))
+                    if candidate not in next_paths:
+                        next_paths.append(candidate)
+        source_paths = next_paths
+        if not source_paths:
+            raise ValueError("capture matches the EFE, but no source layout satisfies the observed host records")
+        if len(source_paths) > 4096:
+            raise ValueError("capture matches the EFE, but candidate source layouts are excessively ambiguous")
+    if len(source_paths) != 1:
         raise ValueError("capture matches the EFE, but source offsets remain ambiguous")
-    offsets = next(path for count, path in paths.values() if count)
+    offsets, alias_indices = source_paths[0]
 
     paired_values_match = all(
         modes[i] != "both" or source[off - 3:off] == host_instructions[i][1].to_bytes(3, "big")
         for i, off in enumerate(offsets)
     )
     instruction_only_commits_match = all(modes[i] == "instr" for i in range(paired_count, active_count))
-    paired_layout = all(offsets[i] == offsets[0] + 9 * i for i in range(paired_count))
+    paired_layout = all(offsets[i] == offsets[0] + paired_stride * i for i in range(paired_count))
+    instruction_only_offsets = [offsets[i] for i in range(paired_count, active_count) if i not in alias_indices]
     instruction_only_layout = all(
-        offsets[i] == offsets[paired_count] + 6 * (i - paired_count)
-        for i in range(paired_count, active_count)
-    ) if paired_count < active_count else True
+        instruction_only_offsets[i] == instruction_only_offsets[0] + instruction_stride * i
+        for i in range(len(instruction_only_offsets))
+    ) if instruction_only_offsets else True
     if not (paired_values_match and instruction_only_commits_match and paired_layout and instruction_only_layout):
         raise ValueError("capture matches the EFE, but the paired/instruction-only layout did not validate")
 
     segment_start = offsets[0] - 3 if paired_count else offsets[0]
     paired_end = offsets[paired_count - 1] + 6 if paired_count else segment_start
-    instruction_only_start = offsets[paired_count] if paired_count < active_count else paired_end
-    gap_bytes = max(0, instruction_only_start - paired_end) if paired_count and instruction_only_count else 0
-    code_end = offsets[-1] + 6
+    instruction_only_start = instruction_only_offsets[0] if instruction_only_offsets else None
+    gap_bytes = max(0, instruction_only_start - paired_end) if paired_count and instruction_only_start is not None else 0
+    code_end = max(instruction_only_offsets or list(offsets)) + instruction_stride
     return {
         "effect_name": name,
         "source_object": object_path.name,
@@ -174,10 +189,16 @@ def compare(object_path: Path, capture_path: Path, host_log_path: Path, expected
         "source_offsets": {
             "paired_records_start_gpr": segment_start if paired_count else None,
             "paired_records_count": paired_count,
-            "paired_records_stride_bytes": 9 if paired_count else None,
+            "paired_records_stride_bytes": paired_stride if paired_count else None,
             "instruction_only_start": instruction_only_start,
-            "instruction_only_count": instruction_only_count,
-            "instruction_only_stride_bytes": 6,
+            "instruction_only_count": len(instruction_only_offsets),
+            "host_instruction_only_commits": instruction_only_count,
+            "instruction_only_stride_bytes": instruction_stride if instruction_only_offsets else None,
+            "source_instruction_alias_count": len(alias_indices),
+            "source_instruction_aliases": [
+                {"active_index": i, "source_active_index": offsets.index(offsets[i])}
+                for i in alias_indices
+            ],
             "first_live_instruction": offsets[0],
             "last_live_instruction_end_exclusive": code_end,
             "unclassified_prefix_bytes_from_FxUcode": segment_start - fx_ucode,

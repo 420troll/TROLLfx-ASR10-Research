@@ -48,7 +48,10 @@ class RomEffectCaptureTests(unittest.TestCase):
     def test_host_log_counts_initialization_and_commit_targets(self):
         with tempfile.TemporaryDirectory() as td:
             p = Path(td) / "host.log"
-            p.write_text("ESPHOST gpr f4 <- 0000ff\nESPHOST both 00 <- ffffffffffff / ffffff\nESPHOST instr 01 <- 000000000000\nESPHOST ram wr ctl=00 dadr=000000 -> word 00000 dol=0000\n")
+            p.write_text("ESPHOST event=1 cycles=1 frame=1 pc=fff97792 gpr f4 <- 0000ff t=1.000000\n"
+                         "ESPHOST event=2 cycles=2 frame=1 pc=fff97792 both 00 <- ffffffffffff / ffffff t=1.000000\n"
+                         "ESPHOST event=3 cycles=3 frame=1 pc=fff97792 instr 01 <- 000000000000 t=1.000000\n"
+                         "ESPHOST event=4 cycles=4 frame=1 pc=fff97792 ram wr ctl=00 dadr=000000 -> word 00000 dol=0000 t=1.000000\n")
             summary = capture.host_event_summary(p)
         self.assertEqual(summary["event_counts"], {"gpr": 1, "instruction": 1, "combined": 1, "ram": 1})
         self.assertEqual(summary["unique_gpr_commit_indices"], 2)
@@ -63,9 +66,9 @@ class RomEffectCaptureTests(unittest.TestCase):
             esp = d/"state.esp"
             esp.write_bytes(b"ES5510C\0" + struct.pack("<9I", 1, 44, 160, 192, 22, 1, 1, 74, len(body)) + body)
             log = d/"host.log"
-            log.write_text("ESPHOST both 00 <- 000000000000 / 000000 t=4.000000\n"
-                           "ESPHOST instr 01 <- 00000000f000 t=4.000000\n"
-                           "ESPHOST instr 00 <- 0123456789ab t=5.000000\n")
+            log.write_text("ESPHOST event=1 cycles=1 frame=1 pc=fff97792 both 00 <- 000000000000 / 000000 t=4.000000\n"
+                           "ESPHOST event=2 cycles=2 frame=1 pc=fff97792 instr 01 <- 00000000f000 t=4.000000\n"
+                           "ESPHOST event=3 cycles=3 frame=1 pc=fff97792 instr 00 <- 0123456789ab t=5.000000\n")
             snap = {"program": {"active_words_through_first_END": 2}}
             self.assertTrue(capture.active_program_matches_host(log, esp, snap, 4.5)["verified"])
             result = capture.active_program_matches_host(log, esp, snap, 5.5)

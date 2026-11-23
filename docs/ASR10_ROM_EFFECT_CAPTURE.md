@@ -82,11 +82,12 @@ Do not commit the inventory/status JSON, captures, source logs, or renders.
 
 The known built-in HALL REVERB reference is reproducible in the existing
 private smoke script (89 instructions through END index 88, nonzero stereo
-render). A first full-range inventory run observed IDs 1–50. An isolated
-selection test exposed the stateful-control issue above; that naive capture
-pass was stopped, and failed or misselected attempts are not presented as
-successful catalog results. The stable-display snapshot path is the corrected
-capture mechanism and must pass the full run before claiming completion.
+render). The corrected stable-display snapshot run completed all 50 observed
+IDs; its redacted qualification and repeatability details are in
+[ASR10_ROM_EFFECT_CAPTURE_STATUS.md](ASR10_ROM_EFFECT_CAPTURE_STATUS.md). The
+effect source layouts for ROM-01 and ROM-02 were subsequently correlated
+against exported EFE objects in
+[FACTORY_EFE_RECONSTRUCTION_V2.md](FACTORY_EFE_RECONSTRUCTION_V2.md).
 
 The CLI prints the actual ROM label, while program capture records the active
 ES5510 state and the host log records commits. This is emulator evidence under

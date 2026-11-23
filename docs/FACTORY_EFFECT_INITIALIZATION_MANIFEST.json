@@ -1,0 +1,86 @@
+{
+  "schema": "asr10-factory-effect-initialization-evidence-v1",
+  "status": "partial-observation; not a cold-start replay recipe",
+  "firmware_context": {
+    "os": "ASR-10 OS 3.53",
+    "source": "native emulator; ROM/EFE bytes and captures remain private",
+    "factory_accuracy_claimed": false
+  },
+  "capture_coverage": {
+    "instruction_slots": 160,
+    "gpr_slots": 192,
+    "spr_slots": 22,
+    "selected_control_and_latch_state_bytes": 74,
+    "dram_words": 1048576,
+    "capture_timing": "after effect selection and DSP processing",
+    "in_flight_instruction_ram_and_alu_pipelines": "not captured",
+    "resumable_cpu_state": false
+  },
+  "effects": {
+    "ROM-01 HALL REVERB": {
+      "active_instructions_through_first_end": 89,
+      "first_end_index": 88,
+      "source_correlated_instruction_commits": "89/89",
+      "source_correlated_gpr_initializers": "86/86",
+      "paired_records": 86,
+      "instruction_only_records": 3,
+      "instruction_aliases": 0,
+      "unclassified_prefix_bytes": 11,
+      "unclassified_mixed_gap_bytes": 3,
+      "unclassified_suffix_bytes": 50,
+      "standalone_export_loadback": "validated",
+      "effect_specific_gpr_only_initialization": "unknown"
+    },
+    "ROM-02 44KHZ REVERB": {
+      "active_instructions_through_first_end": 60,
+      "first_end_index": 59,
+      "source_correlated_instruction_commits": "60/60",
+      "source_correlated_gpr_initializers": "58/58",
+      "paired_records": 58,
+      "instruction_only_records": 1,
+      "host_instruction_only_commits": 2,
+      "instruction_aliases": [
+        {"active_index": 58, "source_active_index": 0}
+      ],
+      "unclassified_prefix_bytes": 11,
+      "unclassified_mixed_gap_bytes": 3,
+      "unclassified_suffix_bytes": 42,
+      "standalone_export_loadback": "not independently validated",
+      "effect_specific_gpr_only_initialization": "unknown"
+    }
+  },
+  "observed_host_write_classes": {
+    "paired_gpr_instruction_commits": "source-correlated counts above",
+    "gpr_only_commits": "present; OS/runtime versus effect initialization unresolved",
+    "special_register_targets": [
+      "SER0R", "SER0L", "SER1R", "SER1L", "SER2R", "SER2L", "SER3R", "SER3L",
+      "DIL", "DLENGTH", "DBASE", "SIGREG"
+    ],
+    "instruction_only_commits": "source-correlated counts above",
+    "host_side_delay_ram_transactions_in_selected_setup_logs": 0
+  },
+  "state_requirements": {
+    "gpr": "source-paired initializers known; remaining initialization order and values unknown",
+    "spr": "post-run snapshots captured; complete cold-start values and required subset unknown",
+    "serial_routing": "host writes observed; exact factory routing sequence unknown",
+    "delay_ram": "post-run DRAM snapshots contain nonzero words; cold-start contents and DSP fill sequence unknown",
+    "pipeline": "in-flight instruction, RAM, and ALU state unknown",
+    "frame_boundary_order": "unknown",
+    "agent_5_loader": "not present in inspected branches; loader implementation unavailable"
+  },
+  "parameter_mapping": {
+    "effect": "ROM-02 44KHZ REVERB",
+    "visible_parameter": "REVERB MIX BUS2",
+    "displayed_reversible_cycle": ["25", "26", "25", "26"],
+    "changed_es5510_gpr": "0x7a",
+    "factory_initializer_values_private": true,
+    "parameter_update_values": ["0x350000", "0x370000", "0x350000", "0x370000"],
+    "control_window_host_commits": 0,
+    "mapping_confidence": "repeated reversible emulator evidence; one adjacent one-time GPR change remains unassigned"
+  },
+  "limitations": [
+    "Emulator captures are post-selection runtime snapshots, not cold-start states.",
+    "No physical ASR-10 comparison was made.",
+    "No complete factory initialization sequence or factory accuracy claim is established."
+  ]
+}
