@@ -77,40 +77,75 @@ def compare(object_path: Path, capture_path: Path, host_log_path: Path, expected
     if host_matches != active_count:
         raise ValueError(f"host instruction commits match only {host_matches}/{active_count} active words")
 
-    offsets: list[int] = []
-    unique_source_words = True
+    modes: list[str] = []
+    source_candidates: list[list[int]] = []
+    source_words_unique = True
     candidate = source[fx_ucode:fx_size]
-    for word in words:
-        found = candidate.find(word)
-        if found < 0 or candidate.find(word, found + 1) >= 0:
-            unique_source_words = False
-            offsets.append(-1)
-        else:
-            offsets.append(fx_ucode + found)
-    if not unique_source_words:
-        raise ValueError("captured instruction words are not uniquely located in the EFE object")
+    for i, word in enumerate(words):
+        event = host_instructions.get(i)
+        if event is None or event[2] not in ("both", "instr"):
+            raise ValueError(f"active host instruction {i} has no supported instruction commit")
+        modes.append(event[2])
+        positions: list[int] = []
+        start = 0
+        while True:
+            found = candidate.find(word, start)
+            if found < 0:
+                break
+            if positions or start > 0:
+                source_words_unique = False
+            absolute = fx_ucode + found
+            if event[2] == "both" and event[1] is not None and absolute >= fx_ucode + 3:
+                source_gpr = int.from_bytes(source[absolute - 3:absolute], "big")
+                if source_gpr == event[1]:
+                    positions.append(absolute)
+            elif event[2] == "instr":
+                positions.append(absolute)
+            start = found + 1
+        if not positions:
+            raise ValueError(f"instruction {i} has no source occurrence consistent with its host commit")
+        source_candidates.append(positions)
 
-    paired_count = 0
-    paired_values_match = True
-    while paired_count < active_count:
-        event = host_instructions.get(paired_count)
-        if event is None or event[2] != "both" or event[1] is None:
-            break
-        source_gpr_offset = offsets[paired_count] - 3
-        source_gpr = int.from_bytes(source[source_gpr_offset:source_gpr_offset + 3], "big") if source_gpr_offset >= 0 else -1
-        if source_gpr != event[1]:
-            paired_values_match = False
-            break
-        paired_count += 1
+    # A source layout is one paired run followed by one instruction-only run.
+    # Requiring each run's observed stride lets the host GPR values disambiguate
+    # repeated instruction words without guessing an occurrence.
+    if "both" in modes and modes != ["both"] * modes.count("both") + ["instr"] * modes.count("instr"):
+        raise ValueError("host commits do not form one paired run followed by one instruction-only run")
+    paired_count = modes.count("both")
     instruction_only_count = active_count - paired_count
-    instruction_only_commits_match = all(
-        host_instructions.get(i, (None, None, ""))[2] == "instr"
-        for i in range(paired_count, active_count)
+    paths: dict[int, tuple[int, tuple[int, ...]]] = {
+        pos: (1, (pos,)) for pos in source_candidates[0]
+    }
+    for i in range(1, active_count):
+        next_paths: dict[int, tuple[int, tuple[int, ...]]] = {}
+        mode = modes[i]
+        previous_mode = modes[i - 1]
+        stride = 9 if mode == "both" else 6
+        for pos in source_candidates[i]:
+            parents = [prev for prev in paths if (
+                pos == prev + stride if mode == previous_mode else
+                mode == "instr" and previous_mode == "both" and pos >= prev + 6
+            )]
+            count = sum(paths[prev][0] for prev in parents)
+            if count:
+                # Keep at most two representative paths; only uniqueness matters.
+                parent = parents[0]
+                next_paths[pos] = (min(count, 2), paths[parent][1] + (pos,))
+        paths = next_paths
+        if not paths:
+            raise ValueError("capture matches the EFE, but no source layout satisfies host records and strides")
+    path_count = sum(count for count, _ in paths.values())
+    if path_count != 1:
+        raise ValueError("capture matches the EFE, but source offsets remain ambiguous")
+    offsets = next(path for count, path in paths.values() if count)
+
+    paired_values_match = all(
+        modes[i] != "both" or source[off - 3:off] == host_instructions[i][1].to_bytes(3, "big")
+        for i, off in enumerate(offsets)
     )
-    paired_layout = paired_count > 0 and all(
-        offsets[i] == offsets[0] + 9 * i for i in range(paired_count)
-    )
-    instruction_only_layout = instruction_only_count >= 0 and all(
+    instruction_only_commits_match = all(modes[i] == "instr" for i in range(paired_count, active_count))
+    paired_layout = all(offsets[i] == offsets[0] + 9 * i for i in range(paired_count))
+    instruction_only_layout = all(
         offsets[i] == offsets[paired_count] + 6 * (i - paired_count)
         for i in range(paired_count, active_count)
     ) if paired_count < active_count else True
@@ -120,6 +155,7 @@ def compare(object_path: Path, capture_path: Path, host_log_path: Path, expected
     segment_start = offsets[0] - 3 if paired_count else offsets[0]
     paired_end = offsets[paired_count - 1] + 6 if paired_count else segment_start
     instruction_only_start = offsets[paired_count] if paired_count < active_count else paired_end
+    gap_bytes = max(0, instruction_only_start - paired_end) if paired_count and instruction_only_count else 0
     code_end = offsets[-1] + 6
     return {
         "effect_name": name,
@@ -133,18 +169,19 @@ def compare(object_path: Path, capture_path: Path, host_log_path: Path, expected
         "capture_program_sha256": hashlib.sha256(code).hexdigest(),
         "capture_gpr_snapshot_sha256": hashlib.sha256(gpr_state).hexdigest(),
         "host_instruction_commits_exact_match": host_matches,
-        "source_instruction_words_unique": unique_source_words,
+        "source_instruction_words_unique": source_words_unique,
+        "source_instruction_locations_resolved_by_layout": True,
         "source_offsets": {
-            "paired_records_start_gpr": segment_start,
+            "paired_records_start_gpr": segment_start if paired_count else None,
             "paired_records_count": paired_count,
-            "paired_records_stride_bytes": 9,
+            "paired_records_stride_bytes": 9 if paired_count else None,
             "instruction_only_start": instruction_only_start,
             "instruction_only_count": instruction_only_count,
             "instruction_only_stride_bytes": 6,
             "first_live_instruction": offsets[0],
             "last_live_instruction_end_exclusive": code_end,
             "unclassified_prefix_bytes_from_FxUcode": segment_start - fx_ucode,
-            "unclassified_bytes_before_instruction_only": instruction_only_start - paired_end,
+            "unclassified_bytes_before_instruction_only": gap_bytes,
             "unclassified_suffix_bytes_to_FxSize": fx_size - code_end,
         },
         "host_commit_gpr_bytes_match_source_for_paired_records": paired_values_match,
