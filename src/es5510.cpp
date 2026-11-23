@@ -140,7 +140,7 @@ void ES5510::host_w(int offset, uint8_t data) {
     case 0x0f: {   // writing DADR HI starts the transfer; DADR is left-justified like the GPR offsets
         dadr_latch = (dadr_latch & 0x00ffff) | (data << 16);
         int a = (dadr_latch & memmask) >> memshift;
-        if (hostlog) fprintf(stderr, "ESPHOST ram %s ctl=%02x dadr=%06x -> word %05x dol=%04x\n", (ram_ctl & 0x80) ? "rd" : "wr", ram_ctl, dadr_latch, a, (dol_latch >> 8) & 0xffff);
+        if (hostlog) fprintf(stderr, "ESPHOST ram %s ctl=%02x dadr=%06x -> word %05x dol=%04x t=%.6f\n", (ram_ctl & 0x80) ? "rd" : "wr", ram_ctl, dadr_latch, a, (dol_latch >> 8) & 0xffff, hostlog_time);
         if (!(ram_ctl & 0x40)) { if (ram_ctl & 0x80) dil_latch = 0; }       // I/O space: nothing attached
         else if (ram_ctl & 0x80) dil_latch = dram_r(a) << 8;
         else dram_w(a, dol_latch >> 8);
@@ -177,14 +177,14 @@ void ES5510::host_w(int offset, uint8_t data) {
         }
         break;
     case 0xa0:
-        if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x gpr %02x <- %06x\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, gpr_latch & 0xffffff);
+        if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x gpr %02x <- %06x t=%.6f\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, gpr_latch & 0xffffff, hostlog_time);
         write_reg(data, gpr_latch); break;
     case 0xc0:
-        if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x instr %02x <- %012llx\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, (unsigned long long)instr_latch);
+        if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x instr %02x <- %012llx t=%.6f\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, (unsigned long long)instr_latch, hostlog_time);
         if (data < 0xa0) { instr[data] = instr_latch & 0xffffffffffffULL; decode(data); }
         break;
     case 0xe0:
-        if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x both %02x <- %012llx / %06x\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, (unsigned long long)instr_latch, gpr_latch & 0xffffff);
+        if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x both %02x <- %012llx / %06x t=%.6f\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, (unsigned long long)instr_latch, gpr_latch & 0xffffff, hostlog_time);
         if (data < 0xa0) { instr[data] = instr_latch; decode(data); }
         write_reg(data, gpr_latch);
         break;

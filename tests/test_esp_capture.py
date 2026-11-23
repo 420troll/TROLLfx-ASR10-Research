@@ -10,13 +10,16 @@ esp_capture = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(esp_capture)
 
 
-def fixture(end_at=59):
+def fixture(end_at=59, special_values=None):
     ins = [bytearray(6) for _ in range(160)]
     end_word = 0x00000000F000
     ins[end_at][:] = end_word.to_bytes(6, "big")
     program = b"".join(ins)
     gprs = bytes(192 * 3)
-    specials = bytes(22 * 3)
+    if special_values is None:
+        specials = bytes(22 * 3)
+    else:
+        specials = b"".join(int(x).to_bytes(3, "big") for x in special_values)
     state = bytearray(74)
     struct.pack_into("<I", state, 7, 0xFF)
     struct.pack_into("<I", state, 11, 0xFFFF00)
@@ -40,6 +43,20 @@ class ES5510CaptureTests(unittest.TestCase):
         self.assertEqual(summary["program"]["END_indices"], [59])
         self.assertEqual(summary["runtime"]["memory_configuration"]["memshift"], 0)
         self.assertEqual(summary["runtime"]["dram_nonzero_words"], 1)
+        self.assertIn("DBASE", summary["runtime"]["special_registers"])
+        self.assertEqual(summary["runtime"]["delay_configuration"]["DLENGTH"], 0)
+        self.assertIn("dadr_latch", summary["runtime"]["latches"])
+        self.assertEqual(len(summary["runtime"]["serial_samples"]), 8)
+
+    def test_named_delay_and_signal_registers_are_exposed(self):
+        values = list(range(22))
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td) / "named.esp"
+            p.write_bytes(fixture(special_values=values))
+            summary = esp_capture.read_capture(p)
+        self.assertEqual(summary["runtime"]["delay_configuration"],
+                         {"DLENGTH": 11, "ABASE": 12, "BBASE": 13, "DBASE": 14})
+        self.assertEqual(summary["runtime"]["signal_configuration"], {"SIGREG": 15, "CCR": 16, "CMR": 17})
 
     def test_truncated_capture_rejected(self):
         with tempfile.TemporaryDirectory() as td:

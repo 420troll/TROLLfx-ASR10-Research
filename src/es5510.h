@@ -11,6 +11,7 @@ public:
     static constexpr uint32_t DRAM_SIZE = 1 << 20;   // 16-bit words (ASR-10 has 256KB = 128K words, wraps)
     ES5510();
     void reset();
+    void set_hostlog_time(double seconds) { hostlog_time = seconds; }
 
     uint8_t host_r(int offset);
     void    host_w(int offset, uint8_t data);
@@ -96,6 +97,7 @@ private:
     bool itrace = false, hostlog = false;   // debug (ESP_ITRACE / ESP_HOSTLOG environment variables)
     uint64_t host_cycles = 0, host_event = 0, frame_count = 0;
     uint32_t host_pc = 0;
+    double hostlog_time = 0.0;              // headless-runner timestamp, diagnostic only
     std::vector<int16_t> dram;
 
     int32_t dol_latch = 0, dil_latch = 0, gpr_latch = 0;
