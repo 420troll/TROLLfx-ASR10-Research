@@ -400,7 +400,7 @@ def capture_sweep(args) -> int:
     if not raw_values or raw_values[-1] != args.raw_last:
         raw_values.append(args.raw_last)
     t = args.start
-    command = ["--panel-log", "--button", "15:7:1", "--button", "15.2:7:0",
+    command = ["--panel-log", "--trace-esp-io", "--button", "15:7:1", "--button", "15.2:7:0",
                "--esp-snapshot-rom-dir", str(snap_dir), "--wav", str(out/"selector-sweep.wav")]
     for raw_value in raw_values:
         command += ["--analog-at", f"{t:.3f}:5:{raw_value}"]

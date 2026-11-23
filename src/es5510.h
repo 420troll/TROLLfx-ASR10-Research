@@ -96,7 +96,7 @@ private:
     Dec dec[160];
     void decode(int i);
     void finish_dec(Dec &d);
-    bool itrace = false, hostlog = false;   // debug (ESP_ITRACE / ESP_HOSTLOG environment variables)
+    bool itrace = false, hostlog = false, pipelog = false;   // optional diagnostic traces
     uint64_t host_cycles = 0, host_event = 0, frame_count = 0;
     uint32_t host_pc = 0;
     double hostlog_time = 0.0;              // headless-runner timestamp, diagnostic only

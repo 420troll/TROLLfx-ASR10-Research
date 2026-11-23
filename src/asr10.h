@@ -114,6 +114,8 @@ public:
     int32_t chan_peak[6] = {};
 
     bool trace_io = false;
+    bool trace_esp_io = false;
+    uint64_t esp_io_event = 0;
     bool trace_unknown = true;
     uint32_t last_pc() const;
     // the 68000's word and long reads: RAM pages at once (inline), everything else through read()

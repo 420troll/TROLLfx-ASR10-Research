@@ -331,7 +331,12 @@ uint32_t Asr10::io_read(PageType t, uint32_t a, int sz) {
     case P_OTTO: {
         // CS2: FC2000 OTTO, FC3000 ESP; 8-bit devices on D7-D0 (odd addresses)
         if (a & 0x1000) {
-            uint8_t v = esp.host_r((a >> 1) & 0xff);
+            const uint8_t port = (a >> 1) & 0xff;
+            esp.set_host_context(total_cycles, last_pc());
+            uint8_t v = esp.host_r(port);
+            if (trace_esp_io) fprintf(stderr, "ESPIO event=%llu direction=R cycles=%llu frame=%llu t=%.6f port=%02x value=%02x pc=%06x\n",
+                (unsigned long long)++esp_io_event, (unsigned long long)total_cycles,
+                (unsigned long long)esp.host_frame_count(), total_cycles / cpu_clock, port, v, last_pc());
             if (trace_io) fprintf(stderr, "ESP R %06x (%02x) = %02x pc=%06x\n", a, (a >> 1) & 0xff, v, last_pc());
             return sz == 1 ? ((a & 1) ? v : 0xff) : (0xff00 | v);
         }
@@ -362,8 +367,13 @@ void Asr10::io_write(PageType t, uint32_t a, uint32_t v, int sz) {
     case P_OTTO:
         if (a & 0x1000) {
             if (sz == 2 || (a & 1)) {
+                const uint8_t port = (a >> 1) & 0xff;
                 esp.set_host_context(total_cycles, last_pc());
-                esp.host_w((a >> 1) & 0xff, v & 0xff);
+                if (trace_esp_io) fprintf(stderr, "ESPIO event=%llu direction=W cycles=%llu frame=%llu t=%.6f port=%02x value=%02x pc=%06x\n",
+                    (unsigned long long)++esp_io_event, (unsigned long long)total_cycles,
+                    (unsigned long long)esp.host_frame_count(), total_cycles / cpu_clock, port,
+                    v & 0xff, last_pc());
+                esp.host_w(port, v & 0xff);
             }
             if (trace_io) fprintf(stderr, "ESP W %06x (%02x) = %02x pc=%06x\n", a, (a >> 1) & 0xff, v & 0xff, last_pc());
             return;

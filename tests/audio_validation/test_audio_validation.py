@@ -78,4 +78,52 @@ class AudioValidationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'runtime snapshots are not accepted'):
                 fm.validate(manifest)
 
+    def test_partial_factory_manifest_is_valid_but_replay_gate_refuses(self):
+        from importlib.util import spec_from_file_location, module_from_spec
+        validator=SCRIPT.parent/'factory_manifest.py'
+        modspec=spec_from_file_location('factory_manifest_partial', validator)
+        fm=module_from_spec(modspec); modspec.loader.exec_module(fm)
+        doc={
+            'schema':fm.PARTIAL_SCHEMA,'initialization_basis':'partial_cold_load',
+            'provenance':{'effect_id':'ROM-01','effect_name':'HALL REVERB','os_version':'ASR-10 OS 3.53'},
+            'capture':{'selection_time_s':26.114,'host_frame_count':849885,'sample_rate_hz':29761.895,
+                       'instruction_commits':89,'paired_gpr_initializers':86,
+                       'capture_kind':'post_selection_runtime_snapshot'},
+            'known':{},'unknown':['cold state unknown'],'replay_ready':False,
+            'replay_blockers':['not a cold-load image']}
+        with tempfile.TemporaryDirectory() as td:
+            path=pathlib.Path(td)/'partial.json'; path.write_text(json.dumps(doc))
+            result=fm.validate(path)
+            self.assertTrue(result['valid']); self.assertFalse(result['replay_ready'])
+            self.assertEqual(result['state_payload_disclosed'],False)
+            blocked=subprocess.run(['python3',str(validator),str(path),'--require-replay-ready'],capture_output=True)
+            repeat=subprocess.run(['python3',str(validator),str(path),'--require-replay-ready'],capture_output=True)
+            self.assertEqual(blocked.returncode,2)
+            self.assertEqual(blocked.stdout,repeat.stdout)
+
+    def test_factory_trace_extractor_bounds_and_redacts(self):
+        from importlib.util import spec_from_file_location, module_from_spec
+        tool=SCRIPT.parents[2]/'tools'/'factory_coldload_trace.py'
+        modspec=spec_from_file_location('factory_coldload_trace', tool)
+        mod=module_from_spec(modspec); modspec.loader.exec_module(mod)
+        with tempfile.TemporaryDirectory() as td:
+            trace=pathlib.Path(td)/'trace.log'
+            trace.write_text('\n'.join([
+                'ESPHOST event=1 cycles=1 frame=20 pc=fff00000 gpr 11 <- abcdef t=0.9',
+                'ESPIO event=2 direction=W cycles=1 frame=21 t=0.9 port=12 value=fe pc=fff00000',
+                'ESPPHASE kind=run_start frame=22 pc=00',
+                'ESP_ROM_STATE id=01 time=1.000000 frame=25 dsp_rate_hz=29761.895',
+                'ESPHOST event=3 cycles=2 frame=26 pc=fff00000 gpr 12 <- 123456 t=1.1',
+                'ESPPHASE kind=run_start frame=26 pc=00',
+                'ESP_ROM_CAPTURE id=01 time=1.000000 display=FX=ROM-01 HALL REVERB path=private.esp',
+            ]))
+            result,ledger=mod.extract(trace,1)
+            self.assertEqual(result['manifest']['capture']['host_frame_count'],25)
+            self.assertEqual(result['manifest']['known']['snapshot_host_event_counts_through_selection'],
+                             {'gpr':1,'instruction':0,'ram':0})
+            self.assertEqual(result['manifest']['known']['host_io_event_count_through_selection'],{'R':0,'W':1})
+            self.assertEqual(result['manifest']['known']['pipeline_phase_event_counts'],{'run_start':1})
+            self.assertNotIn('abcdef',json.dumps(result['manifest']))
+            self.assertEqual(len(ledger),2)
+
 if __name__ == '__main__': unittest.main()

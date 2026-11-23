@@ -1,0 +1,58 @@
+{
+  "schema": "trollfx-es5510-factory-init-partial-v1",
+  "initialization_basis": "partial_cold_load",
+  "provenance": {
+    "effect_id": "ROM-01",
+    "effect_name": "HALL REVERB",
+    "os_version": "ASR-10 OS 3.53"
+  },
+  "capture": {
+    "selection_time_s": 26.114,
+    "host_frame_count": 849885,
+    "sample_rate_hz": 29761.895,
+    "instruction_commits": 89,
+    "paired_gpr_initializers": 86,
+    "capture_kind": "post_selection_runtime_snapshot"
+  },
+  "known": {
+    "efe_instruction_commits_correlated": 89,
+    "efe_paired_gpr_initializers_correlated": 86,
+    "snapshot_host_event_counts_through_selection": {
+      "gpr": 4240,
+      "instruction": 861,
+      "ram": 0
+    },
+    "host_io_event_count_through_selection": {
+      "R": 38423,
+      "W": 31547
+    },
+    "pipeline_phase_event_counts_through_selection": {
+      "host_dram_clear": 11,
+      "host_halt_pipeline_reset": 11,
+      "run_start": 7
+    },
+    "instruction_and_paired_gpr_values": "matched to private ROM-01 EFE source; values and bytes redacted",
+    "host_frame_count_semantics": "native ESP host-frame counter at snapshot; distinct from output WAV frame count",
+    "sample_rate_semantics": "native OTTO-reported ES5510 rate at snapshot",
+    "last_run_start_before_snapshot": "observed; DSP was in run phase after start, but exact ROM-01 loader window is unresolved",
+    "host_side_delay_ram_transactions": 0
+  },
+  "unknown": [
+    "complete cold-load GPR and SPR state before ROM-01 selection",
+    "which GPR and SPR writes are OS baseline versus ROM-01 initialization",
+    "complete DRAM cold contents and delay-RAM initialization ordering",
+    "serial routing at the exact ROM-01 load boundary",
+    "DOL FIFO and pointer contents at the exact load boundary",
+    "in-flight ALU, MAC, and RAM pipeline state at the exact load boundary",
+    "frame ordering shared with the standalone adapter",
+    "physical ASR-10 audio equivalence"
+  ],
+  "replay_ready": false,
+  "replay_blockers": [
+    "capture is a post-selection runtime snapshot",
+    "no complete cold-load state image exists",
+    "no exact ROM-01 load transaction window was isolated",
+    "no shared deterministic input-frame boundary is available",
+    "no factory HALL versus standalone adapter output comparison has been run"
+  ]
+}

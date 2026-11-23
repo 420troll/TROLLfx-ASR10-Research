@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
     std::vector<std::pair<int,int>> analog_init;
     std::vector<std::pair<double,std::pair<int,int>>> patchev;
     std::vector<std::pair<double, std::pair<int,int>>> analog_at;
-    bool trace_io = false, panel_log = false, fdc_log = false, trap_log = false, pc_hist = false;
+    bool trace_io = false, trace_esp_io = false, panel_log = false, fdc_log = false, trap_log = false, pc_hist = false;
     std::vector<std::pair<double, std::vector<uint8_t>>> midi;   // time, bytes
     std::vector<std::pair<double, std::pair<int,int>>> buttons;  // time, (code, down)
     std::vector<std::pair<double, std::string>> parameter_marks;
@@ -87,6 +87,7 @@ int main(int argc, char **argv) {
         else if (a == "--dac") dac_ideal = next() == "ideal";   // tda1541a (default) | ideal
         else if (a == "--ram") ram_mb = atoi(next().c_str());
         else if (a == "--trace-io") trace_io = true;
+        else if (a == "--trace-esp-io") trace_esp_io = true;
         else if (a == "--write-back") write_back = true;
         else if (a == "--scsi-dir") scsi_dirs.push_back(next());
         else if (a == "--scsi") scsi_specs.push_back(next());     // id:path[:cd]
@@ -164,6 +165,7 @@ int main(int argc, char **argv) {
     if (!rom_ok) { fprintf(stderr, "cannot load ROM %s / %s\n", lo.c_str(), hi.c_str()); return 1; }
     if (!disk.empty() && !m.fdc.load(disk)) { fprintf(stderr, "cannot load disk %s\n", disk.c_str()); return 1; }
     m.trace_io = trace_io;
+    m.trace_esp_io = trace_esp_io;
     m.panel.log = panel_log;
     m.panel.rack = rack_panel;
     m.fdc.log = fdc_log;
@@ -325,6 +327,8 @@ int main(int argc, char **argv) {
                         fclose(existing);
                         fprintf(stderr, "ESP_ROM_CAPTURE_EXISTS id=%02ld time=%.6f display=%s path=%s\n", id, now, d0.c_str() + pos, path);
                     } else if (FILE *f = fopen(path, "wb")) {
+                        fprintf(stderr, "ESP_ROM_STATE id=%02ld time=%.6f frame=%llu dsp_rate_hz=%.3f\n", id, now,
+                                (unsigned long long)m.esp.host_frame_count(), m.otto.sample_rate(m.otto_master()));
                         bool ok = m.esp.write_capture(f);
                         if (fclose(f) != 0) ok = false;
                         if (ok) fprintf(stderr, "ESP_ROM_CAPTURE id=%02ld time=%.6f display=%s path=%s\n", id, now, d0.c_str() + pos, path);

@@ -41,10 +41,16 @@ def capture_sections(path: Path) -> tuple[bytes, bytes, bytes, int]:
     return instructions[:(ends[0] + 1) * 6], gprs, dram, ends[0] + 1
 
 
-def parse_host_log(path: Path) -> tuple[dict[int, tuple[int, int | None, str]], dict[int, int]]:
+def parse_host_log(path: Path, at_time: float | None = None, before_line: int | None = None) -> tuple[dict[int, tuple[int, int | None, str]], dict[int, int]]:
     instructions: dict[int, tuple[int, int | None, str]] = {}
     gprs: dict[int, int] = {}
-    for line in path.read_text(errors="replace").splitlines():
+    for line_number, line in enumerate(path.read_text(errors="replace").splitlines(), 1):
+        if before_line is not None and line_number >= before_line:
+            break
+        if at_time is not None:
+            timestamp = re.search(r"\bt=([0-9.]+)", line)
+            if timestamp and float(timestamp.group(1)) > at_time + 1e-9:
+                continue
         m = re.search(r"ESPHOST (?:event=\d+ cycles=\d+ frame=\d+ pc=[0-9a-f]{6,8} )?(both|instr) ([0-9a-f]{2}) <- ([0-9a-f]{12})(?: / ([0-9a-f]{6}))?", line, re.I)
         if m:
             index = int(m.group(2), 16)
@@ -55,7 +61,9 @@ def parse_host_log(path: Path) -> tuple[dict[int, tuple[int, int | None, str]], 
     return instructions, gprs
 
 
-def compare(object_path: Path, capture_path: Path, host_log_path: Path, expected_name: str | None = None) -> dict:
+def compare(object_path: Path, capture_path: Path, host_log_path: Path,
+            expected_name: str | None = None, at_time: float | None = None,
+            before_line: int | None = None) -> dict:
     source = object_path.read_bytes()
     if len(source) < 46:
         raise ValueError("EFE object is shorter than its fixed header")
@@ -71,7 +79,7 @@ def compare(object_path: Path, capture_path: Path, host_log_path: Path, expected
         raise ValueError("expected effect name is absent from the host log")
 
     code, gpr_state, _dram, active_count = capture_sections(capture_path)
-    host_instructions, _host_gprs = parse_host_log(host_log_path)
+    host_instructions, _host_gprs = parse_host_log(host_log_path, at_time, before_line)
     words = [code[i:i + 6] for i in range(0, len(code), 6)]
     host_matches = sum(host_instructions.get(i, (None, None, ""))[0] == int.from_bytes(word, "big") for i, word in enumerate(words))
     if host_matches != active_count:
@@ -218,9 +226,19 @@ def main() -> int:
     p.add_argument("capture", type=Path)
     p.add_argument("host_log", type=Path)
     p.add_argument("--expected-name")
+    p.add_argument("--at-time", type=float, help="use only timestamped host writes at or before this emulator time")
+    p.add_argument("--snapshot-id", type=int, help="cut writes at the ESP_ROM_STATE marker for this effect ID")
     args = p.parse_args()
     try:
-        print(json.dumps(compare(args.effect_object, args.capture, args.host_log, args.expected_name), indent=2))
+        before_line = None
+        if args.snapshot_id is not None:
+            marker = re.compile(rf"^ESP_ROM_STATE id={args.snapshot_id:02d} ")
+            with args.host_log.open(errors="replace") as f:
+                before_line = next((n for n, line in enumerate(f, 1) if marker.search(line)), None)
+            if before_line is None:
+                raise ValueError(f"no ESP_ROM_STATE marker for effect {args.snapshot_id:02d}")
+        print(json.dumps(compare(args.effect_object, args.capture, args.host_log, args.expected_name,
+                                 args.at_time, before_line), indent=2))
     except (OSError, ValueError) as exc:
         p.error(str(exc))
     return 0

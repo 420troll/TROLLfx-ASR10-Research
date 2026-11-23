@@ -68,7 +68,11 @@ const ES5510::RamCtl ES5510::RAMCTL[8] = {
     { READ, A_TABLE_B }, { DUMP, A_DELAY }, { READ, A_IO }, { WRITE, A_IO },
 };
 
-ES5510::ES5510() : dram(DRAM_SIZE) { hostlog = getenv("ESP_HOSTLOG") != nullptr; reset(); }
+ES5510::ES5510() : dram(DRAM_SIZE) {
+    hostlog = getenv("ESP_HOSTLOG") != nullptr;
+    pipelog = getenv("ESP_PIPELOG") != nullptr;
+    reset();
+}
 
 void ES5510::reset() {
     host_cycles = host_event = frame_count = 0;
@@ -153,14 +157,27 @@ void ES5510::host_w(int offset, uint8_t data) {
     case 0x12:
         host_control = (host_control & 0x4) | (data & 0x3);
         if (host_control & 2) {
-            if (state == HALTED) std::fill(dram.begin(), dram.end(), 0);
+            if (state == HALTED) {
+                std::fill(dram.begin(), dram.end(), 0);
+                if (pipelog) fprintf(stderr, "ESPPHASE kind=host_dram_clear frame=%llu pc=%06x halted=1\n",
+                                     (unsigned long long)frame_count, host_pc);
+            } else if (pipelog) {
+                fprintf(stderr, "ESPPHASE kind=host_dram_clear_ignored frame=%llu pc=%06x halted=0\n",
+                        (unsigned long long)frame_count, host_pc);
+            }
             host_control &= ~2;
         }
         break;
     case 0x14: ram_ctl = data; break;
     case 0x18: host_serial = data; break;
     case 0x1f:   // Halt Enable: immediate halt when HALT is asserted (pending pipeline work is lost)
-        if (halt_asserted) { state = HALTED; host_control &= ~0x04; mulacc.write_result = alu.write_result = false; ram = ram_p = ram_pp = Ram{}; dol_count = 0; }
+        if (halt_asserted) {
+            state = HALTED; host_control &= ~0x04;
+            mulacc.write_result = alu.write_result = false;
+            ram = ram_p = ram_pp = Ram{}; dol_count = 0;
+            if (pipelog) fprintf(stderr, "ESPPHASE kind=host_halt_pipeline_reset frame=%llu pc=%06x alu_pending=0 mac_pending=0 ram_slots_cleared=3 dol_count=0\n",
+                                 (unsigned long long)frame_count, host_pc);
+        }
         break;
     case 0x80:
         if (data < 0xa0) instr_latch = instr[data];
@@ -409,6 +426,9 @@ void ES5510::run_frame() {
     if (state == HALTED) {
         if (halt_asserted) { host_control &= ~0x04; return; }
         state = RUNNING; host_control |= 0x04; pc = 0;
+        if (pipelog) fprintf(stderr, "ESPPHASE kind=run_start frame=%llu pc=00 alu_pending=%u mac_pending=%u\n",
+                             (unsigned long long)frame_count, (unsigned)alu.write_result,
+                             (unsigned)mulacc.write_result);
     }
     const uint64_t trace_frame = diagnostic_frame++;
     // Execute until END (bounded to the 160-instruction program store). One instruction cycle:

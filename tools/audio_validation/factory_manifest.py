@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 
 SCHEMA = "trollfx-es5510-factory-init-v1"
+PARTIAL_SCHEMA = "trollfx-es5510-factory-init-partial-v1"
 
 def _get(doc, path):
     cur = doc
@@ -21,6 +22,27 @@ def _get(doc, path):
 
 def validate(path: Path) -> dict:
     doc = json.loads(path.read_text())
+    if doc.get("schema") == PARTIAL_SCHEMA:
+        required = ("provenance.effect_id", "provenance.effect_name", "provenance.os_version",
+                    "capture.selection_time_s", "capture.host_frame_count", "capture.sample_rate_hz",
+                    "capture.instruction_commits", "capture.paired_gpr_initializers",
+                    "capture.capture_kind", "known", "unknown", "replay_ready")
+        for field in required:
+            _get(doc, field)
+        if doc["initialization_basis"] != "partial_cold_load":
+            raise ValueError("partial manifest initialization_basis must be partial_cold_load")
+        if doc["capture"]["capture_kind"] != "post_selection_runtime_snapshot":
+            raise ValueError("partial manifest capture_kind unsupported")
+        if doc["replay_ready"] is not False:
+            raise ValueError("partial evidence cannot be marked replay_ready")
+        if doc["capture"]["instruction_commits"] != 89 or doc["capture"]["paired_gpr_initializers"] != 86:
+            raise ValueError("ROM-01 HALL correlation counts do not match the verified evidence")
+        return {"valid": True, "replay_ready": False, "errors": [],
+                "replay_blockers": list(doc.get("replay_blockers", [])),
+                "effect_id": doc["provenance"]["effect_id"],
+                "active_words": doc["capture"]["instruction_commits"],
+                "sample_rate_hz": doc["capture"]["sample_rate_hz"],
+                "state_payload_disclosed": False}
     if doc.get("schema") != SCHEMA:
         raise ValueError("unsupported schema")
     if doc.get("initialization_basis") != "cold_load":
@@ -82,14 +104,20 @@ def validate(path: Path) -> dict:
             word = int.from_bytes(data[int(doc["program"]["end_word"]) * 6:(int(doc["program"]["end_word"]) + 1) * 6], "big")
             if ((word >> 12) & 0xf) != 0xf: errors.append("program.end_word does not contain END")
         if sec == "dram" and len(data) != int(dram["word_count"]) * 2: errors.append("dram image byte length mismatch")
-    return {"valid": not errors, "errors": errors, "effect_id": doc["provenance"]["effect_id"],
+    return {"valid": not errors, "replay_ready": not errors, "errors": errors, "effect_id": doc["provenance"]["effect_id"],
             "active_words": doc["program"]["active_words"], "sample_rate_hz": doc["sample_rate_hz"],
             "state_payload_disclosed": False}
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__); ap.add_argument("manifest", type=Path); args = ap.parse_args()
+    ap = argparse.ArgumentParser(description=__doc__); ap.add_argument("manifest", type=Path)
+    ap.add_argument("--require-replay-ready", action="store_true",
+                    help="return status 2 unless the manifest is complete and replay-ready")
+    args = ap.parse_args()
     try:
-        result = validate(args.manifest); print(json.dumps(result, indent=2)); return 0 if result["valid"] else 1
+        result = validate(args.manifest); print(json.dumps(result, indent=2))
+        if not result["valid"]: return 1
+        if args.require_replay_ready and not result["replay_ready"]: return 2
+        return 0
     except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
         print(json.dumps({"valid": False, "errors": [str(exc)], "state_payload_disclosed": False}, indent=2)); return 1
 

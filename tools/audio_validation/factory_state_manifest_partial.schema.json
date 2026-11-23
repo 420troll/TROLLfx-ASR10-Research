@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://420troll.github.io/TROLLfx-ASR10-Research/es5510-factory-init-partial-v1.schema.json",
+  "title": "TROLLfx partial ES5510 factory initialization evidence",
+  "description": "Redacted evidence; valid for provenance review but explicitly not replay-ready.",
+  "type": "object",
+  "required": ["schema", "initialization_basis", "provenance", "capture", "known", "unknown", "replay_ready", "replay_blockers"],
+  "properties": {
+    "schema": {"const": "trollfx-es5510-factory-init-partial-v1"},
+    "initialization_basis": {"const": "partial_cold_load"},
+    "provenance": {"type": "object", "required": ["effect_id", "effect_name", "os_version"]},
+    "capture": {
+      "type": "object",
+      "required": ["selection_time_s", "host_frame_count", "sample_rate_hz", "instruction_commits", "paired_gpr_initializers", "capture_kind"],
+      "properties": {
+        "selection_time_s": {"type": "number", "minimum": 0},
+        "host_frame_count": {"type": ["integer", "null"], "minimum": 0},
+        "sample_rate_hz": {"type": ["number", "null"], "minimum": 8000, "maximum": 192000},
+        "instruction_commits": {"const": 89},
+        "paired_gpr_initializers": {"const": 86},
+        "capture_kind": {"const": "post_selection_runtime_snapshot"}
+      }
+    },
+    "known": {"type": "object"},
+    "unknown": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "replay_ready": {"const": false},
+    "replay_blockers": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+  }
+}

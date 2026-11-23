@@ -87,6 +87,27 @@ ESPHOST event=12 cycles=125 frame=4 pc=00123c gpr 21 <- 123456
         self.assertEqual(instructions[3], (0xfedcba987654, None, "instr"))
         self.assertEqual(gprs[0x21], 0x123456)
 
+    def test_host_log_can_be_cut_at_snapshot_time(self):
+        text = """ESPHOST event=1 cycles=1 frame=1 pc=fff97792 instr 00 <- 123456789abc t=1.000000
+ESPHOST event=2 cycles=2 frame=2 pc=fff97792 instr 00 <- 00000000f000 t=2.000000
+"""
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "host.log"
+            path.write_text(text)
+            before, _ = compare_capture.parse_host_log(path, at_time=1.5)
+            after, _ = compare_capture.parse_host_log(path, at_time=2.5)
+        self.assertEqual(before[0][0], 0x123456789abc)
+        self.assertEqual(after[0][0], 0x00000000f000)
+
+    def test_host_log_can_be_cut_at_exact_snapshot_line(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "host.log"
+            path.write_text("ESPHOST instr 00 <- 000000000001 t=1.000000\n"
+                            "ESP_ROM_STATE id=01 time=1.000000 frame=4 dsp_rate_hz=29761.895\n"
+                            "ESPHOST instr 00 <- 000000000002 t=1.000000\n")
+            instructions, _ = compare_capture.parse_host_log(path, before_line=2)
+        self.assertEqual(instructions[0][0], 1)
+
     def test_recovers_mixed_29_pair_31_instruction_layout(self):
         with tempfile.TemporaryDirectory() as td:
             paths = fixtures(Path(td))
