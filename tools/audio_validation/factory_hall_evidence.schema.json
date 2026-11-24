@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TROLLfx factory HALL comparison evidence sidecar",
+  "type": "object",
+  "required": ["evidence"],
+  "properties": {
+    "evidence": {
+      "type": "object",
+      "required": ["input_sha256", "state", "pipeline", "firmware", "clock", "routing", "alignment", "boundary"],
+      "properties": {
+        "input_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+        "state": {"type": "object", "required": ["program_sha256", "gpr_sha256", "spr_sha256", "dram_sha256", "memory_configuration"]},
+        "pipeline": {"type": "object", "required": ["reset_acknowledged", "alu_pending", "mac_pending", "ram_slots_cleared", "dol_count"]},
+        "firmware": {"type": "object", "required": ["ordered_event_sha256", "execution_event_sequence", "execution_event_count", "host_event_count", "io_event_count", "last_frame_inclusive", "instruction_commits", "gpr_spr_commit_count"]},
+        "clock": {"type": "object", "required": ["dsp_rate_hz", "host_rate_hz"]},
+        "routing": {"type": "object", "required": ["host_serial", "serial_route", "direct_mask"]},
+        "alignment": {"type": "object", "required": ["absolute_start_frame", "sample_zero_is_frame", "input_lanes", "output_lanes"]},
+        "boundary": {"type": "object", "required": ["run_frame", "snapshot_frame", "first_instruction_frame", "first_instruction_pc", "snapshot_before_first_instruction"]},
+        "host_mapping_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+        "host_window_frames": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}
