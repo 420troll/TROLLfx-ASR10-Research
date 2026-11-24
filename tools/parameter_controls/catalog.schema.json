@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://420troll.github.io/TROLLfx-ASR10-Research/es5510-factory-parameter-catalog-v0.1.schema.json",
+  "title": "TROLLfx ES5510 factory parameter catalog v0.1",
+  "type": "object",
+  "required": ["schema", "os_version", "effects", "runtime_update_activity", "adapter_v0_1"],
+  "properties": {
+    "schema": {"const": "trollfx-es5510-factory-parameter-catalog-v0.1"},
+    "os_version": {"const": "3.53"},
+    "effects": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["id", "factory_name", "program_identity", "clock", "parameters", "unresolved_controls"],
+        "properties": {
+          "id": {"enum": ["ROM-01", "ROM-02"]},
+          "factory_name": {"type": "string"},
+          "program_identity": {"type": "object"},
+          "clock": {"type": "object"},
+          "parameters": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "object",
+              "required": ["id", "ui_label", "display", "verified_points", "update", "efe_parameter_record_offset", "firmware_parameter_cpu_address", "confidence", "factory_os_live_adjustment", "experimental_runtime_live_safety"],
+              "properties": {
+                "id": {"enum": ["reverb_mix_bus1", "reverb_mix_bus2"]},
+                "ui_label": {"type": "string"},
+                "display": {
+                  "type": "object",
+                  "required": ["format", "units", "full_range", "step", "fresh_boot_selection_value", "factory_default"],
+                  "properties": {
+                    "format": {"type": "string"},
+                    "units": {"type": ["string", "null"]},
+                    "full_range": {"type": ["object", "null"]},
+                    "step": {"type": ["integer", "number", "null"]},
+                    "fresh_boot_selection_value": {"type": "integer"},
+                    "factory_default": {"type": ["integer", "string", "null"]}
+                  }
+                },
+                "verified_points": {"type": "array", "minItems": 2, "items": {"type": "object"}},
+                "update": {"type": "object"},
+                "efe_parameter_record_offset": {"type": ["integer", "null"]},
+                "firmware_parameter_cpu_address": {"type": ["string", "null"]},
+                "confidence": {"type": "string"},
+                "factory_os_live_adjustment": {"type": "string"},
+                "experimental_runtime_live_safety": {"type": "string"}
+              },
+              "additionalProperties": true
+            }
+          },
+          "unresolved_controls": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "runtime_update_activity": {"type": "object"},
+    "adapter_v0_1": {"type": "object"}
+  },
+  "additionalProperties": true
+}

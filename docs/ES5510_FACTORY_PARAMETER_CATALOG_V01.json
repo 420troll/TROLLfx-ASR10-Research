@@ -1,0 +1,186 @@
+{
+  "schema": "trollfx-es5510-factory-parameter-catalog-v0.1",
+  "os_version": "3.53",
+  "evidence_scope": "OS 3.53 native emulator UI edits correlated with ES5510 host writes; raw captures and EFE payloads remain private",
+  "effects": [
+    {
+      "id": "ROM-01",
+      "factory_name": "HALL REVERB",
+      "program_identity": {
+        "active_words": 89,
+        "end_word": 88,
+        "efe_sha256": "862e54de6a3bb2708674d94d95247e947be51df764ca5c9bd2bf9f4218ad8a15",
+        "ordered_instruction_fingerprint_sha256": "ca2cab387d1bee51bccc9a97f2c5d26386b8b801ee9bf4ea406e80a7019e4f92",
+        "source_correspondence": "89/89 instruction commits and 86/86 paired GPR initializers previously correlated to the private ROM-01 EFE"
+      },
+      "clock": {
+        "factory_dsp_rate_hz": 29761.89453125,
+        "host_output_rate_hz": 44100,
+        "evidence": "fresh ROM-01 factory load and clock-switch captures"
+      },
+      "parameters": [
+        {
+          "id": "reverb_mix_bus1",
+          "ui_label": "REVERB MIX BUS1",
+          "display": {
+            "format": "integer",
+            "units": null,
+            "full_range": null,
+            "step": null,
+            "fresh_boot_selection_value": 28,
+            "factory_default": null,
+            "default_note": "28 was displayed after fresh boot and ROM-01 selection in independent captures; a clean factory-reset disk was not tested, so this is not asserted as the stored factory default."
+          },
+          "verified_points": [
+            {"display_value": 28, "gpr": "0x7C", "raw24": "0x3D0000"},
+            {"display_value": 29, "gpr": "0x7C", "raw24": "0x3F0000"}
+          ],
+          "update": {
+            "host_writer_pc": "0xFFF97792",
+            "observed_commit_order": ["GPR 0x7C = mapped value", "GPR 0x7D = 0x7FFF00 unchanged companion"],
+            "observed_identical_pair_count_per_one_step_action": 2,
+            "observed_duplicate_pair_frame_gaps": [176, 151],
+            "update_service_identity": "unknown; ROM-01 service path not statically resolved",
+            "observed_transient": "First Up included edit-associated intermediate writes on GPR 0x7C before the final value; the exact algorithm and general ramp law are unknown."
+          },
+          "efe_parameter_record_offset": null,
+          "firmware_parameter_cpu_address": null,
+          "confidence": "reversible Up/Down/Up mapping with matched no-edit capture",
+          "factory_os_live_adjustment": "verified for display values 28 and 29",
+          "experimental_runtime_live_safety": "unverified; V0.1 adapter schedules a direct next-frame value and does not reproduce the observed repeated update cadence or transient writes",
+          "factory_vs_extension": "factory evidence for these two points only; no extension values"
+        },
+        {
+          "id": "reverb_mix_bus2",
+          "ui_label": "REVERB MIX BUS2",
+          "display": {
+            "format": "integer",
+            "units": null,
+            "full_range": null,
+            "step": null,
+            "fresh_boot_selection_value": 28,
+            "factory_default": null,
+            "default_note": "28 was displayed after fresh boot and ROM-01 selection in independent captures; a clean factory-reset disk was not tested, so this is not asserted as the stored factory default."
+          },
+          "verified_points": [
+            {"display_value": 28, "gpr": "0x7A", "raw24": "0x3D0000"},
+            {"display_value": 29, "gpr": "0x7A", "raw24": "0x3F0000"}
+          ],
+          "update": {
+            "host_writer_pc": "0xFFF97792",
+            "observed_commit_order": ["GPR 0x7A = mapped value", "GPR 0x7B = 0x7FFF00 unchanged companion"],
+            "observed_identical_pair_count_per_settled_one_step_action": 1,
+            "update_service_identity": "unknown; ROM-01 service path not statically resolved",
+            "observed_transient": "The first Up had a broad edit-associated GPR rewrite; later reversible Down and Up windows each contained only the ordered 0x7A/0x7B pair. Other one-time writes remain unassigned."
+          },
+          "efe_parameter_record_offset": null,
+          "firmware_parameter_cpu_address": null,
+          "confidence": "reversible Up/Down/Up mapping with matched no-edit capture",
+          "factory_os_live_adjustment": "verified for display values 28 and 29",
+          "experimental_runtime_live_safety": "unverified; V0.1 adapter schedules a direct next-frame value and does not reproduce possible firmware smoothing or DSP-state settling",
+          "factory_vs_extension": "factory evidence for these two points only; no extension values"
+        }
+      ],
+      "unresolved_controls": ["All remaining parameter labels, ranges, units, defaults, and register mappings are unknown."]
+    },
+    {
+      "id": "ROM-02",
+      "factory_name": "44KHZ REVERB",
+      "program_identity": {
+        "active_words": 60,
+        "end_word": 59,
+        "active_program_sha256": "12119e86d4d232ab7d7ab4278e9c9dbed9db19a6b6eb352bfb29441181da4486",
+        "efe_sha256": "21562a079f5e1bf3d14cfeebfd9a7ef1afc0e5cb0edff788e4308d3552186f75",
+        "source_correspondence": "60/60 active instruction matches and 58/58 paired GPR initializers correlated to the private ROM-02 EFE; one instruction-address alias is documented in the ROM-02 loader report"
+      },
+      "clock": {
+        "factory_dsp_rate_hz": 44100,
+        "host_output_rate_hz": 44100,
+        "evidence": "fresh ROM-02 factory load and replay/provenance captures"
+      },
+      "parameters": [
+        {
+          "id": "reverb_mix_bus1",
+          "ui_label": "REVERB MIX BUS1",
+          "display": {
+            "format": "integer",
+            "units": null,
+            "full_range": null,
+            "step": null,
+            "fresh_boot_selection_value": 25,
+            "factory_default": null,
+            "default_note": "25 was displayed after fresh boot and ROM-02 selection in independent captures; a clean factory-reset disk was not tested, so this is not asserted as the stored factory default."
+          },
+          "verified_points": [
+            {"display_value": 25, "gpr": "0x7C", "raw24": "0x350000"},
+            {"display_value": 26, "gpr": "0x7C", "raw24": "0x370000"}
+          ],
+          "update": {
+            "host_writer_pc": "0xFFF97792",
+            "observed_commit_order": ["GPR 0x7C = mapped value", "GPR 0x7D = 0x7FFF00 unchanged companion"],
+            "observed_identical_pair_count_per_one_step_action": 2,
+            "observed_duplicate_pair_frame_gaps": [456, 418],
+            "update_service_identity": "unknown; ROM-02 service path not statically resolved",
+            "observed_transient": "First Up included repeated intermediate writes on GPR 0x7C; a one-time GPR 0x6D change did not repeat on Down/Up and is unassigned."
+          },
+          "efe_parameter_record_offset": null,
+          "firmware_parameter_cpu_address": null,
+          "confidence": "reversible Up/Down/Up mapping with matched no-edit capture",
+          "factory_os_live_adjustment": "verified for display values 25 and 26",
+          "experimental_runtime_live_safety": "unverified; V0.1 adapter schedules a direct next-frame value and does not reproduce the observed repeated update cadence or transient writes",
+          "factory_vs_extension": "factory evidence for these two points only; no extension values"
+        },
+        {
+          "id": "reverb_mix_bus2",
+          "ui_label": "REVERB MIX BUS2",
+          "display": {
+            "format": "integer",
+            "units": null,
+            "full_range": null,
+            "step": null,
+            "fresh_boot_selection_value": 25,
+            "factory_default": null,
+            "default_note": "25 was displayed after fresh boot and ROM-02 selection in independent captures; a clean factory-reset disk was not tested, so this is not asserted as the stored factory default."
+          },
+          "verified_points": [
+            {"display_value": 25, "gpr": "0x7A", "raw24": "0x350000"},
+            {"display_value": 26, "gpr": "0x7A", "raw24": "0x370000"}
+          ],
+          "update": {
+            "host_writer_pc": "0xFFF97792",
+            "observed_commit_order": ["GPR 0x7A = mapped value", "GPR 0x7B = 0x7FFF00 unchanged companion"],
+            "observed_identical_pair_count_per_settled_one_step_action": 1,
+            "update_service_identity": "unknown; ROM-02 service path not statically resolved",
+            "observed_transient": "The first Up included a broad edit-associated GPR rewrite; later reversible Down and Up windows changed only GPR 0x7A, followed by an unchanged 0x7B commit. A one-time GPR 0x6D change is unassigned."
+          },
+          "efe_parameter_record_offset": null,
+          "firmware_parameter_cpu_address": null,
+          "confidence": "repeated reversible mapping and matched no-edit control; prior ROM-02 capture also measured output change",
+          "factory_os_live_adjustment": "verified for display values 25 and 26",
+          "experimental_runtime_live_safety": "unverified; V0.1 adapter schedules a direct next-frame value and does not reproduce possible firmware smoothing or DSP-state settling",
+          "factory_vs_extension": "factory evidence for these two points only; no extension values"
+        }
+      ],
+      "unresolved_controls": ["All remaining parameter labels, ranges, units, defaults, and register mappings are unknown."]
+    }
+  ],
+  "runtime_update_activity": {
+    "rom02_post_run_gpr_events_observed": 202,
+    "gprs_not_to_assume_are_parameters": {
+      "0x7F": "recurring post-RUN writes; not changed by controlled BUS1/BUS2 edit windows; meaning unknown",
+      "0x7C": "verified as BUS1 destination only when the UI edit and reversible before/after sequence are correlated; other recurring writes remain unclassified",
+      "0x7D": "unchanged 0x7FFF00 companion observed after BUS1 GPR 0x7C writes; semantic role unknown"
+    },
+    "other_unassigned_observations": {
+      "0x6D": "changed during the first ROM-02 Up edit transaction but did not follow its reversible cycle; not assigned",
+      "0x7B": "unchanged 0x7FFF00 companion observed after BUS2 GPR 0x7A writes; semantic role unknown"
+    }
+  },
+  "adapter_v0_1": {
+    "header": "include/trollfx/es5510_factory_parameter_control_v01.hpp",
+    "integration_target": "trollfx::es5510::FactoryRuntime::setRegister(index, value24, absolute_dsp_frame)",
+    "allowed_values": "only the verified display values listed above; unsupported values are rejected",
+    "write_policy": "one changed GPR state write at the caller's absolute DSP frame; repeated identical commits and unchanged companion GPR reassertions are not emitted",
+    "smoothing": "not implemented; observed factory-OS transient/update cadence must not be represented as a proven formula"
+  }
+}
