@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include "trollfx/es5510_factory_registry.hpp"
 
 namespace trollfx::es5510 {
 
@@ -60,6 +61,8 @@ public:
     // Loads only a validated private RUN checkpoint package. Program bytes alone
     // are insufficient: this call requires complete live state and reset evidence.
     bool loadEffect(const EffectPackage& package, RateMode mode = RateMode::Experimental48000);
+    // Generic path: descriptor fields must originate from a locally validated package.
+    bool loadEffect(const ValidatedEffectPackage& package, RateMode mode = RateMode::Experimental48000);
     bool reset();
     bool setProcessingRate(RateMode mode);
 
@@ -67,11 +70,12 @@ public:
     // the DSP frame whose zero-based absolute index is scheduled_frame. Calls
     // must be made between audio blocks; events before the next unprocessed frame fail.
     bool setRegister(std::uint8_t index, std::uint32_t value, std::uint64_t scheduled_frame);
+    bool setParameter(const EffectDescriptor& descriptor, const std::string& parameter_id,
+                      std::int32_t display_value, std::uint64_t scheduled_frame);
 
-    // Interleaved stereo float PCM, [-1,+1] nominal. Input is routed to SER2 L/R
-    // (native serial lanes 4/5); SER1 L/R (lanes 2/3) is returned. The effect's
-    // captured routing metadata must identify this supported route. Host sample
-    // rate is explicit. DSP rate conversion is outside ES5510::run_frame().
+    // Interleaved stereo float PCM, [-1,+1] nominal. Input/output serial lanes
+    // are selected by the validated effect descriptor. Host sample rate is
+    // explicit; rate conversion is outside ES5510::run_frame().
     bool processStereo(const float* input_interleaved, float* output_interleaved,
                        std::size_t frames, double host_rate_hz);
 

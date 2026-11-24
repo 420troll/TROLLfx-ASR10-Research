@@ -11,10 +11,8 @@ namespace trollfx::es5510 {
 namespace {
 constexpr std::size_t kEventCapacity = 256;
 constexpr std::size_t kResampleHistory = 32;
-constexpr std::uint8_t kSer2Left = 4;
-constexpr std::uint8_t kSer2Right = 5;
-constexpr std::uint8_t kSer1Left = 2;
-constexpr std::uint8_t kSer1Right = 3;
+constexpr std::uint8_t kDefaultInputPort = 2;
+constexpr std::uint8_t kDefaultOutputPort = 1;
 
 std::uint32_t expected_words(EffectId id) {
     switch (id) {
@@ -59,6 +57,8 @@ struct FactoryRuntime::Impl {
 
     ES5510 dsp;
     EffectPackage package;
+    EffectDescriptor descriptor;
+    bool generic = false;
     RuntimeStatus status;
     RateMode mode = RateMode::Experimental48000;
     double dsp_rate = 48000.0;
@@ -79,6 +79,11 @@ struct FactoryRuntime::Impl {
     bool loaded = false;
     const char* message = "not loaded";
 
+    std::uint8_t input_left() const noexcept { return static_cast<std::uint8_t>(descriptor.routing.input_port * 2); }
+    std::uint8_t input_right() const noexcept { return static_cast<std::uint8_t>(descriptor.routing.input_port * 2 + 1); }
+    std::uint8_t output_left() const noexcept { return static_cast<std::uint8_t>(descriptor.routing.output_port * 2); }
+    std::uint8_t output_right() const noexcept { return static_cast<std::uint8_t>(descriptor.routing.output_port * 2 + 1); }
+
     void set_error(StatusCode code, const char* text) noexcept {
         status.code = code;
         message = text;
@@ -96,12 +101,26 @@ struct FactoryRuntime::Impl {
         history_count = history_next = 0;
         previous_input_left = previous_input_right = 0;
         have_previous_input = false;
-        const Point initial{0.0, from_serial(dsp.ser_r(kSer1Left)), from_serial(dsp.ser_r(kSer1Right))};
+        const Point initial{0.0, from_serial(dsp.ser_r(output_left())), from_serial(dsp.ser_r(output_right()))};
         history[0] = initial;
         history_count = 1;
         history_next = 1;
         status.processed_dsp_frames = 0;
         status.scheduled_writes_applied = 0;
+    }
+
+    void install_firmware_schedule() noexcept {
+        if (!generic) return;
+        event_count = 0; event_order = 0;
+        for (const auto& e : descriptor.firmware_event_schedule) {
+            Event event{e.relative_dsp_frame, event_order++, e.gpr, e.value24};
+            std::size_t pos=event_count;
+            while(pos && (events[pos-1].frame>event.frame ||
+                  (events[pos-1].frame==event.frame && events[pos-1].order>event.order))) {
+                events[pos]=events[pos-1]; --pos;
+            }
+            events[pos]=event; ++event_count;
+        }
     }
 
     bool open_checkpoint() {
@@ -112,6 +131,10 @@ struct FactoryRuntime::Impl {
         if (!ok) { set_error(StatusCode::CaptureRejected, "invalid or incomplete ES5510 checkpoint"); return false; }
         if (dsp.active_program_words() != package.active_program_words) {
             set_error(StatusCode::PackageRejected, "checkpoint active program length does not match package");
+            return false;
+        }
+        if (generic && dsp.serial_ctl() != descriptor.routing.host_serial_mode) {
+            set_error(StatusCode::PackageRejected, "checkpoint serial mode does not match package routing");
             return false;
         }
         return true;
@@ -153,10 +176,10 @@ struct FactoryRuntime::Impl {
             --event_count;
             ++applied_writes;
         }
-        dsp.ser_w(kSer2Left, left);
-        dsp.ser_w(kSer2Right, right);
+        dsp.ser_w(input_left(), left);
+        dsp.ser_w(input_right(), right);
         dsp.run_frame();
-        add_point(time, dsp.ser_r(kSer1Left), dsp.ser_r(kSer1Right));
+        add_point(time, dsp.ser_r(output_left()), dsp.ser_r(output_right()));
         ++dsp_frames;
     }
 };
@@ -181,6 +204,14 @@ bool FactoryRuntime::loadEffect(const EffectPackage& p, RateMode mode) {
         return false;
     }
     s.package = p;
+    s.generic = false;
+    s.descriptor = {};
+    s.descriptor.slot = static_cast<EffectSlot>(p.effect);
+    s.descriptor.factory_name = p.effect == EffectId::Rom01Hall ? "ROM-01 HALL REVERB" : "ROM-02 44KHZ REVERB";
+    s.descriptor.active_program_words = p.active_program_words;
+    s.descriptor.factory_reference_rate_hz = p.factory_processing_rate_hz;
+    s.descriptor.routing.input_port = kDefaultInputPort;
+    s.descriptor.routing.output_port = kDefaultOutputPort;
     s.loaded = false;
     if (!s.open_checkpoint()) return false;
     s.loaded = true;
@@ -197,11 +228,52 @@ bool FactoryRuntime::loadEffect(const EffectPackage& p, RateMode mode) {
     return true;
 }
 
+bool FactoryRuntime::loadEffect(const ValidatedEffectPackage& p, RateMode mode) {
+    auto& s = *impl_;
+    const auto& d = p.descriptor;
+    if (!p.validation_receipt_valid || !p.initialization_state_valid || !p.program_identity_valid ||
+        !p.pipeline_reset_valid || !p.routing_valid || d.slot < 1 || d.slot > 50 ||
+        d.factory_name.empty() || d.active_program_words == 0 || d.active_program_words > 160 ||
+        d.end_word + 1 != d.active_program_words || d.run_checkpoint_path.empty() ||
+        !std::isfinite(d.factory_reference_rate_hz) || d.factory_reference_rate_hz < 8000.0 ||
+        d.factory_reference_rate_hz > 192000.0 || d.routing.input_port > 3 || d.routing.output_port > 3 ||
+        !d.routing.stereo || d.firmware_event_schedule.size() > kEventCapacity) {
+        s.set_error(StatusCode::PackageRejected, "validated effect descriptor is incomplete or out of bounds"); return false;
+    }
+    s.package = {};
+    s.package.checkpoint_path = d.run_checkpoint_path;
+    s.package.active_program_words = d.active_program_words;
+    s.package.factory_processing_rate_hz = d.factory_reference_rate_hz;
+    s.descriptor = d;
+    s.generic = true;
+    s.loaded = false;
+    if (!s.open_checkpoint()) return false;
+    // Install the descriptor's deterministic firmware post-RUN writes at frame zero.
+    s.event_count = 0; s.event_order = 0; s.dsp_frames = 0;
+    for (const auto& e : d.firmware_event_schedule) {
+        if (e.gpr >= 0xc0 || e.value24 > 0xffffffu || (s.event_count && e.relative_dsp_frame < s.events[s.event_count-1].frame)) {
+            s.set_error(StatusCode::PackageRejected, "firmware event schedule is invalid"); return false;
+        }
+        s.events[s.event_count++] = {e.relative_dsp_frame, s.event_order++, e.gpr, e.value24};
+    }
+    s.loaded = true; s.mode = mode;
+    s.dsp_rate = mode == RateMode::Experimental48000 ? 48000.0 : d.factory_reference_rate_hz;
+    s.clear_stream_state();
+    s.status.effect = static_cast<EffectId>(d.slot); s.status.active_program_words = d.active_program_words;
+    s.status.rate_mode = mode; s.status.processing_rate_hz = s.dsp_rate;
+    s.status.algorithmic_latency_host_frames = static_cast<std::uint32_t>(std::ceil(48000.0 / s.dsp_rate) + 1.0);
+    s.status.code = StatusCode::Ready; s.message = s.status.message = "ready";
+    // clear_stream_state resets the frame timeline; restore validated firmware writes.
+    s.install_firmware_schedule();
+    return true;
+}
+
 bool FactoryRuntime::reset() {
     auto& s = *impl_;
     if (!s.loaded) { s.set_error(StatusCode::Empty, "no effect is loaded"); return false; }
     if (!s.open_checkpoint()) { s.loaded = false; return false; }
     s.clear_stream_state();
+    s.install_firmware_schedule();
     s.status.code = StatusCode::Ready;
     s.message = s.status.message = "reset to validated RUN checkpoint";
     return true;
@@ -240,6 +312,17 @@ bool FactoryRuntime::setRegister(std::uint8_t index, std::uint32_t value, std::u
     s.status.code = StatusCode::Ready;
     s.message = s.status.message = "register event scheduled";
     return true;
+}
+
+bool FactoryRuntime::setParameter(const EffectDescriptor& d, const std::string& id,
+                                  std::int32_t value, std::uint64_t frame) {
+    if (!impl_->loaded || d.slot != impl_->descriptor.slot) { impl_->set_error(StatusCode::PackageRejected, "parameter descriptor does not match loaded effect"); return false; }
+    for (const auto& p : d.parameters) if (p.id == id) {
+        for (const auto& point : p.verified_points) if (point.display_value == value)
+            return setRegister(point.gpr, point.value24, frame);
+        impl_->set_error(StatusCode::InvalidArgument, "parameter value is not a verified catalog point"); return false;
+    }
+    impl_->set_error(StatusCode::InvalidArgument, "parameter is not defined for this effect"); return false;
 }
 
 bool FactoryRuntime::processStereo(const float* input, float* output, std::size_t frames, double host_rate) {

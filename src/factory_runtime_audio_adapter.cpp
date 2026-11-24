@@ -132,6 +132,34 @@ size_t FactoryRuntimeProcessor::memory_bytes() const noexcept {
     return ES5510::DRAM_SIZE*sizeof(std::int16_t)+128u*1024u;
 }
 
+void RegistryFactoryRuntimeProcessor::prepare(Effect effect, uint32_t dsp_rate) {
+    const auto index=static_cast<unsigned>(effect);
+    if(index>=50) throw std::invalid_argument("factory effect selection must be in slot range 1..50");
+    const auto* package=registry_.find(static_cast<trollfx::es5510::EffectSlot>(index+1));
+    if(!package) throw std::runtime_error("selected factory effect package is not installed");
+    const auto mode=dsp_rate==48000 ? trollfx::es5510::RateMode::Experimental48000
+                                    : trollfx::es5510::RateMode::FactoryReference;
+    if(dsp_rate!=48000 && std::abs(package->descriptor.factory_reference_rate_hz-dsp_rate)>0.5)
+        throw std::invalid_argument("requested DSP rate does not match installed factory reference rate");
+    if(!runtime_.loadEffect(*package,mode))
+        throw std::runtime_error(std::string("native ES5510 package load failed: ")+runtime_.getStatus().message);
+    prepared_=true;
+}
+
+void RegistryFactoryRuntimeProcessor::process(const float* input,float* output,size_t frames) noexcept {
+    if(!prepared_ || !output || (!input && frames) || !runtime_.processStereo(input,output,frames,48000.0)) {
+        if(output) std::fill(output,output+frames*2,0.0f);
+    }
+}
+
+uint32_t RegistryFactoryRuntimeProcessor::latency_frames() const noexcept {
+    return prepared_ ? runtime_.getStatus().algorithmic_latency_host_frames : 0;
+}
+
+size_t RegistryFactoryRuntimeProcessor::memory_bytes() const noexcept {
+    return ES5510::DRAM_SIZE*sizeof(std::int16_t)+128u*1024u;
+}
+
 EncodeStatus FactoryRuntimeProcessor::set_bus_parameter(Effect effect,Parameter parameter,int display_value) {
     if (!prepared_ || effect != active_effect_) return EncodeStatus::RuntimeRejected;
     return trollfx::es5510::factory_parameters_v01::schedule(

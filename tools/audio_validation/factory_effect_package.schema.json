@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://420troll.github.io/TROLLfx-ASR10-Research/es5510-factory-effect-package-v1.schema.json",
+  "title": "TROLLfx validated ASR-10 factory effect package descriptor",
+  "description": "Metadata wrapper around a Codex 1 factory initialization manifest and user-local RUN checkpoint. Binary payloads remain external.",
+  "type": "object",
+  "required": ["schema", "effect", "program", "factory_reference_rate_hz", "routing", "initialization", "firmware_event_schedule", "parameters"],
+  "properties": {
+    "schema": {"const": "trollfx-es5510-factory-effect-package-v1"},
+    "effect": {
+      "type": "object",
+      "required": ["slot", "factory_name"],
+      "properties": {
+        "slot": {"type": "integer", "minimum": 1, "maximum": 50},
+        "factory_name": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "program": {
+      "type": "object",
+      "required": ["sha256", "active_words", "end_word"],
+      "properties": {
+        "sha256": {"$ref": "#/$defs/hash"},
+        "active_words": {"type": "integer", "minimum": 1, "maximum": 160},
+        "end_word": {"type": "integer", "minimum": 0, "maximum": 159}
+      },
+      "additionalProperties": false
+    },
+    "factory_reference_rate_hz": {"type": "number", "minimum": 8000, "maximum": 192000},
+    "routing": {
+      "type": "object",
+      "required": ["host_serial_mode", "input_port", "output_port", "stereo"],
+      "properties": {
+        "host_serial_mode": {"type": "integer", "minimum": 0, "maximum": 255},
+        "input_port": {"type": "integer", "minimum": 0, "maximum": 3},
+        "output_port": {"type": "integer", "minimum": 0, "maximum": 3},
+        "stereo": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "initialization": {
+      "type": "object",
+      "required": ["manifest", "run_checkpoint"],
+      "properties": {
+        "manifest": {"$ref": "#/$defs/file_ref"},
+        "run_checkpoint": {"$ref": "#/$defs/file_ref"},
+        "pipeline_reset_acknowledged": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "firmware_event_schedule": {
+      "type": "object",
+      "required": ["frame_origin", "event_count"],
+      "properties": {
+        "frame_origin": {"const": "run_checkpoint_zero"},
+        "event_count": {"type": "integer", "minimum": 0, "maximum": 256},
+        "file": {"$ref": "#/$defs/file_ref"}
+      },
+      "additionalProperties": false
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "ui_label", "verified_points"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "ui_label": {"type": "string", "minLength": 1},
+          "verified_points": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["display_value", "gpr", "value24"],
+              "properties": {
+                "display_value": {"type": "integer"},
+                "gpr": {"type": "integer", "minimum": 0, "maximum": 191},
+                "value24": {"type": "integer", "minimum": 0, "maximum": 16777215}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "file_ref": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/hash"}},
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
