@@ -3,12 +3,12 @@
   "product": "TROLLfx - VST - ASR10 FX Collection",
   "version": "1.0.0",
   "release_channel": "experimental",
-  "release_state": "candidate",
-  "playable": false,
+  "release_state": "playable",
+  "playable": true,
   "playable_marker_required": "INTEGRATION_STATUS",
-  "built_utc": "2026-11-24T21:19:18.373566+00:00",
-  "source_commit": "6ca4ba6fc26e4b0afebcb1053e7697c03db6738c",
-  "source_inputs_sha256": "37ee1adf61cb255117d0f88a56311c5230154c636a5b0924559548ab1cc2d53e",
+  "built_utc": "2026-11-24T22:00:43.414014+00:00",
+  "source_commit": "de708d210a9546cea25a8f62a38c4113fba665b0",
+  "source_inputs_sha256": "b8c3481cfa9c244df303b11f67e823aeb2025220e60041ae09f2d135c43df363",
   "sdk": {
     "path": "/mnt/c/Users/Gamer/research/AkaiForceSDK",
     "origin": "https://github.com/420troll/AkaiForceSDK.git",
@@ -25,19 +25,21 @@
     "compiled_sources": [
       "ASR10FXCollection.cpp",
       "ES5510DSPBackend.cpp",
+      "ES5510FactoryPackageProvider.cpp",
       "es5510_factory_runtime.cpp",
       "es5510.cpp"
     ],
     "provider_api": "IValidatedFactoryPackageProvider",
-    "production_provider": "not included; missing packages fail closed",
-    "native_backend_and_plugin_wrapper_audio_tests": "PASS",
-    "packaged_binary_bound_audio_test": "NOT_RUN",
-    "playable_release_gate": "NOT_MET"
+    "production_provider": "local trusted-import index; missing or invalid packages fail closed",
+    "binary_bound_native_vst_test": "PASS",
+    "binary_test_report_sha256": "6d175b7c844d34370bddba08ed2697e54a4ded8762f04b86e0fd0ea082a09268",
+    "packaged_binary_bound_audio_test": "PASS",
+    "playable_release_gate": "MET"
   },
   "targets": {
     "native": {
       "host": "x86_64",
-      "binary_sha256": "70fb9f4f8831d8cb3393022a0078b503fdbd3e373a2ccf95af253e1fe77bc904",
+      "binary_sha256": "179f7dabe145e8d65ef1eed70aa98ce380de3d905bb94ecd2b211ff859abcef5",
       "host_sim_parameter_dump": "PASS"
     },
     "arm32": {
@@ -66,8 +68,8 @@
     }
   },
   "binaries": {
-    "arm32_sha256": "73c6a912fe9d9be8712fb579f90a74dd0a3c88c2b0a3675fbc19e273291d5ed0",
-    "arm64_sha256": "5e5310f013f21c80ac27e2c0947d709ad9c1707d9d9b88033f40e744a5200d19"
+    "arm32_sha256": "225aacdcd3a0a200f5851af924f0128b20f1ff6b4e8c354df343e804fe0d9de5",
+    "arm64_sha256": "e340cffbe07be006d901053edfc8947ea34a51b9023ea9fb66bb81c87715835b"
   },
   "build_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
   "package_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
@@ -81,5 +83,59 @@
     "project": "GPL-3.0-only",
     "sdk_framework": "MIT",
     "proprietary_factory_payloads_included": false
-  }
+  },
+  "playable_marker": "INTEGRATION_STATUS",
+  "verified_slots": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50
+  ],
+  "verification_report_sha256": "6d175b7c844d34370bddba08ed2697e54a4ded8762f04b86e0fd0ea082a09268"
 }
