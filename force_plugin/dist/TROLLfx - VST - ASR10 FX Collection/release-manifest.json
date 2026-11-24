@@ -6,9 +6,9 @@
   "release_state": "candidate",
   "playable": false,
   "playable_marker_required": "INTEGRATION_STATUS",
-  "built_utc": "2026-11-24T20:26:40.135546+00:00",
-  "source_commit": "def0e87a3291f7cef770ad3b5fbb23c2e244e8fc",
-  "source_inputs_sha256": "48a72ef811b311ffe714961288ee9e6f8f00efe825ba5b0553d158c48104cfd2",
+  "built_utc": "2026-11-24T20:46:36.092177+00:00",
+  "source_commit": "1c765a63f84e7f38e124be8e5ec7c45686992b11",
+  "source_inputs_sha256": "6413ac014bf0df304f09027fffc9a45c2bc90af77274279c17eb76815c4cfcda",
   "sdk": {
     "path": "/mnt/c/Users/Gamer/research/AkaiForceSDK",
     "origin": "https://github.com/420troll/AkaiForceSDK.git",
@@ -20,10 +20,24 @@
     "version": "0.17.1",
     "paths": {}
   },
+  "engine": {
+    "implementation": "native ES5510 + FactoryRuntime + validated package adapter",
+    "compiled_sources": [
+      "ASR10FXCollection.cpp",
+      "ES5510DSPBackend.cpp",
+      "es5510_factory_runtime.cpp",
+      "es5510.cpp"
+    ],
+    "provider_api": "IValidatedFactoryPackageProvider",
+    "production_provider": "not included; missing packages fail closed",
+    "native_backend_and_plugin_wrapper_audio_tests": "PASS",
+    "packaged_binary_bound_audio_test": "NOT_RUN",
+    "playable_release_gate": "NOT_MET"
+  },
   "targets": {
     "native": {
       "host": "x86_64",
-      "binary_sha256": "fbee669dc3f4fc748e7bac2170465076b3e0fc347ae297416535e7853542b902",
+      "binary_sha256": "37daaef264e58d7ff3f1600d8620936e10ef8554a03df802819c079300806ed6",
       "host_sim_parameter_dump": "PASS"
     },
     "arm32": {
@@ -34,7 +48,8 @@
         "ld-linux-armhf.so.3",
         "libc.so.6",
         "libdl.so.2",
-        "libm.so.6"
+        "libm.so.6",
+        "libpthread.so.0"
       ],
       "max_glibc": "2.27"
     },
@@ -51,8 +66,8 @@
     }
   },
   "binaries": {
-    "arm32_sha256": "875029ce404d79111880f42e1480e4b824bb967b63a8b15ef9c716d88b8b859d",
-    "arm64_sha256": "9d8730701a71aa111e1ab32b31f982cc243ba6e8b2c7d521d044671852c7bc1e"
+    "arm32_sha256": "7857d0f47981f3bcb09b54f1fbc5aa0e9bd726772dbf011d3f09fbb2da1e2f72",
+    "arm64_sha256": "b30afc7a0a422a1b2807a0c31751c7580835d1a168e1879de20334e736b8ae04"
   },
   "build_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
   "package_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
