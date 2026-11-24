@@ -168,7 +168,8 @@ void DacOut::reset() {
     n = 0; t_next = 0;
 }
 
-void DacOut::push(const float *x, bool aux, double in_rate, double out_rate, std::vector<float> &main, std::vector<float> &aux_out) {
+void DacOut::push(const float *x, bool aux, double in_rate, double out_rate, std::vector<float> &main, std::vector<float> &aux_out,
+                  std::vector<double> *output_source_positions) {
     if (!tabs_made) make_tables();
     if (in_rate <= 0 || out_rate <= 0) return;
     if (in_rate > 8 * out_rate) {
@@ -180,6 +181,7 @@ void DacOut::push(const float *x, bool aux, double in_rate, double out_rate, std
         const double step = in_rate / out_rate;
         while (t_next <= (double)n) {
             main.push_back(x[0]); main.push_back(x[1]);
+            if (output_source_positions) output_source_positions->push_back(t_next);
             if (aux) for (int c = 2; c < CH; c++) aux_out.push_back(x[c]);
             t_next += step;
         }
@@ -230,6 +232,7 @@ void DacOut::push(const float *x, bool aux, double in_rate, double out_rate, std
             for (int c = 0; c < nch; c++) { float v = a * (hp_y[c] + y[c] - hp_x[c]); hp_x[c] = y[c]; hp_y[c] = v; y[c] = v; }
         }
         main.push_back(y[0]); main.push_back(y[1]);
+        if (output_source_positions) output_source_positions->push_back(t_next);
         if (aux) for (int c = 2; c < CH; c++) aux_out.push_back(y[c]);
         t_next += step;
     }

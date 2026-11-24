@@ -72,7 +72,10 @@ ES5510::ES5510() : dram(DRAM_SIZE) {
     hostlog = getenv("ESP_HOSTLOG") != nullptr;
     pipelog = getenv("ESP_PIPELOG") != nullptr;
     const char *frame_log = getenv("ESP_FRAMELOG");
-    if (frame_log) frame_trace_limit = (uint32_t)std::clamp(atoi(frame_log), 0, 4096);
+    if (frame_log) frame_trace_limit = (uint32_t)std::clamp(atoll(frame_log), 0LL, 32768LL);
+    if (const char *start = getenv("ESP_FRAMELOG_START_FRAME")) frame_trace_start_frame = strtoull(start, nullptr, 10);
+    if (const char *frame = getenv("ESP_RUN_SNAPSHOT_FRAME")) run_snapshot_frame = strtoull(frame, nullptr, 10);
+    if (const char *dir = getenv("ESP_RUN_SNAPSHOT_DIR")) run_snapshot_dir = dir;
     reset();
 }
 
@@ -480,10 +483,11 @@ void ES5510::run_frame() {
     if (state == HALTED) {
         if (halt_asserted) { host_control &= ~0x04; return; }
         state = RUNNING; host_control |= 0x04; pc = 0;
-        trace_first_instruction = pipelog;
-        frame_trace_remaining = frame_trace_limit;
+        const bool selected_run = frame_trace_start_frame == 0 || frame_count == frame_trace_start_frame;
+        trace_first_instruction = pipelog && selected_run;
+        frame_trace_remaining = selected_run ? frame_trace_limit : 0;
         frame_trace_index = 0;
-        trace_output_pending = frame_trace_remaining > 0;
+        trace_output_pending = selected_run && frame_trace_remaining > 0;
         if (pipelog) {
             uint32_t unique = 0; int end_index = -1;
             for (int i = 0; i < 160; ++i) {
@@ -498,6 +502,18 @@ void ES5510::run_frame() {
                     (unsigned)alu.write_result, (unsigned)mulacc.write_result, host_serial, memshift,
                     memsiz & 0xffffff, memmask & 0xffffff, memincrement & 0xffffff, dlength & 0xffffff,
                     abase & 0xffffff, bbase & 0xffffff, dbase & 0xffffff, sigreg & 0xffffff);
+        }
+        if (run_snapshot_frame != 0 && frame_count == run_snapshot_frame && !run_snapshot_dir.empty()) {
+            char path[4096];
+            snprintf(path, sizeof(path), "%s/run-frame-%llu.esp", run_snapshot_dir.c_str(),
+                     (unsigned long long)frame_count);
+            FILE *capture = fopen(path, "wb");
+            const bool ok = capture && write_capture(capture);
+            if (capture) fclose(capture);
+            if (pipelog)
+                fprintf(stderr, "ESPPHASE kind=run_snapshot frame=%llu cycles=%llu host_pc=%06x pc=%02x ok=%u path=%s\n",
+                        (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, pc,
+                        (unsigned)ok, path);
         }
     }
     const uint64_t trace_frame = diagnostic_frame++;

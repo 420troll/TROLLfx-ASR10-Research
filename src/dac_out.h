@@ -30,7 +30,8 @@ public:
     Model get_model() const { return model; }
     // one frame from the machine: x[0..7] with 1.0 = 16-bit full scale; `aux` = also make the
     // expander channels. Output frames go to main (L/R) and aux (6 channels) at out_rate.
-    void push(const float *x, bool aux, double in_rate, double out_rate, std::vector<float> &main, std::vector<float> &aux_out);
+    void push(const float *x, bool aux, double in_rate, double out_rate, std::vector<float> &main, std::vector<float> &aux_out,
+              std::vector<double> *output_source_positions = nullptr);
     void reset();
 
 private:
