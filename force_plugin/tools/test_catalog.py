@@ -32,7 +32,7 @@ assert "kFactoryControls" in src and "set_verified_parameter" in src
 assert "parameter_discovery_v02.hpp" in provider_src
 assert "append_verified_parameters(d)" in provider_src
 assert "backend_.request_effect" in src and "backend_.process" in src
-assert "saveExtraState" in src and "loadExtraState" in src
+assert "not a factory default/reset" in src
 assert "visibleWhen" in (ROOT / "ui.json").read_text()
 editor_controls = ui["pages"][2]["controls"]
 assert [x["param"] for x in editor_controls] == [

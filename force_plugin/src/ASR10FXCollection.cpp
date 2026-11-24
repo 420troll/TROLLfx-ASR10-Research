@@ -8,9 +8,7 @@
 
 #include <algorithm>
 #include <array>
-#include <atomic>
 #include <cstdint>
-#include <cstring>
 #include <iterator>
 #include <string>
 #include <vector>
@@ -110,7 +108,8 @@ std::vector<std::string> parameterChoices(
     supported = parameter && parameter->verified_points.size() == 2;
     if (!supported) return {"UNVERIFIED"};
     std::vector<std::string> choices;
-    choices.reserve(parameter->verified_points.size());
+    choices.reserve(parameter->verified_points.size() + 1);
+    choices.emplace_back("UNCHANGED");
     for (const auto& point : parameter->verified_points) {
         choices.push_back(point.display_text.empty() ? std::to_string(point.display_value)
                                                      : point.display_text);
@@ -192,27 +191,6 @@ public:
             }
             return true;
         }
-        if (index >= 8 && index < 24) {
-            const auto spec_index = static_cast<std::size_t>(index - 8);
-            const auto& control = kFactoryControls[spec_index];
-            if (!provider_ || !provider_->package_for_slot(control.slot)) {
-                out = "PACKAGE REQUIRED";
-                return true;
-            }
-            if (findParameter(provider_, control.slot, control.id) == nullptr) {
-                out = "UNVERIFIED";
-                return true;
-            }
-            if (index >= 12) {
-                const auto control_index = static_cast<std::size_t>(index - 12);
-                if (!control_supported_[control_index]) { out = "UNVERIFIED"; return true; }
-                if ((edited_v2_mask_.load(std::memory_order_relaxed) & (1u << control_index)) == 0) {
-                    out = "UNCHANGED";
-                    return true;
-                }
-            }
-            return false;
-        }
         if (index != Fx) return false;
         const int slot_index = std::clamp(static_cast<int>(plain), 0, 49);
         const auto slot = static_cast<std::uint8_t>(slot_index + 1);
@@ -263,32 +241,18 @@ private:
             if (i >= kLegacyControlCount && !control_supported_[i - kLegacyControlCount]) continue;
             const int selected_point = choiceAt(*this, control.parameter_index);
             if (selected_point == applied_control_values_[i]) continue;
+            if (i >= kLegacyControlCount && selected_point == 0) {
+                applied_control_values_[i] = 0; // explicit no-write choice; not a factory default/reset
+                continue;
+            }
+            const int catalog_point = i >= kLegacyControlCount ? selected_point - 1 : selected_point;
             const auto* definition = findParameter(provider_, active, control.id);
-            if (!definition || selected_point < 0 ||
-                static_cast<std::size_t>(selected_point) >= definition->verified_points.size()) continue;
-            const auto display_value = definition->verified_points[static_cast<std::size_t>(selected_point)].display_value;
+            if (!definition || catalog_point < 0 ||
+                static_cast<std::size_t>(catalog_point) >= definition->verified_points.size()) continue;
+            const auto display_value = definition->verified_points[static_cast<std::size_t>(catalog_point)].display_value;
             if (backend_.set_verified_parameter(active, control.id, display_value))
                 applied_control_values_[i] = selected_point;
         }
-    }
-
-    void parameterChanged(int index, float) override {
-        if (index >= 12 && index < 24)
-            edited_v2_mask_.fetch_or(static_cast<std::uint16_t>(1u << (index - 12)),
-                                     std::memory_order_relaxed);
-    }
-
-    void saveExtraState(std::vector<std::uint8_t>& out) override {
-        const auto mask = edited_v2_mask_.load(std::memory_order_relaxed);
-        out = {'T', 'F', 'P', '2', static_cast<std::uint8_t>(mask & 0xff),
-               static_cast<std::uint8_t>(mask >> 8)};
-    }
-
-    void loadExtraState(const std::uint8_t* data, std::size_t size) override {
-        if (!data || size != 6 || std::memcmp(data, "TFP2", 4) != 0) return;
-        const auto mask = static_cast<std::uint16_t>(data[4]) |
-                          static_cast<std::uint16_t>(data[5] << 8);
-        edited_v2_mask_.store(static_cast<std::uint16_t>(mask & 0x0fff), std::memory_order_relaxed);
     }
 
     const IValidatedFactoryPackageProvider* provider_ = nullptr;
@@ -296,7 +260,6 @@ private:
     std::uint8_t applied_slot_ = 0; // audio thread only
     std::array<int, sizeof(kFactoryControls) / sizeof(kFactoryControls[0])> applied_control_values_{};
     std::array<bool, kV2ControlCount> control_supported_{};
-    std::atomic<std::uint16_t> edited_v2_mask_{0};
 };
 
 #ifndef TROLLFX_FORCE_PLUGIN_TEST
