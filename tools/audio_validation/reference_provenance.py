@@ -124,15 +124,20 @@ def verify_provenance(path: Path, check_inputs: bool = True, check_source: bool 
                 if sha256_file(file_path) != entry["sha256"]:
                     errors.append(f"input hash mismatch: {file_path}")
     source = data.get("source", {})
-    if check_source and source.get("root") and source.get("working_tree_sha256"):
+    if check_source and source.get("root") and source.get("files") is not None:
         root = Path(source["root"])
         if root.is_dir():
-            try:
-                now = source_fingerprint(root)
-                if now["working_tree_sha256"] != source["working_tree_sha256"]:
-                    errors.append("working source tree hash mismatch")
-            except (OSError, subprocess.CalledProcessError) as exc:
-                errors.append(f"source tree could not be verified: {exc}")
+            for entry in source["files"]:
+                relative = entry["path"]
+                try:
+                    content = subprocess.check_output(
+                        ["git", "-C", str(root), "show", f"{source['commit']}:{relative}"]
+                    )
+                except subprocess.CalledProcessError:
+                    errors.append(f"missing source file at captured commit: {relative}")
+                    continue
+                if len(content) != entry["size_bytes"] or hashlib.sha256(content).hexdigest() != entry["sha256"]:
+                    errors.append(f"source file hash mismatch at captured commit: {relative}")
     output_root = Path(data["output_root"])
     for relative, expected in data.get("output_artifacts", {}).items():
         artifact = output_root / relative
