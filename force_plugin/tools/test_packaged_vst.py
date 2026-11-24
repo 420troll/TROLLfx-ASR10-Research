@@ -60,7 +60,7 @@ def main():
             raw=render.read_bytes();output_hash.update(slot.to_bytes(1,'little'));output_hash.update(raw)
             samples=struct.iter_unpack('<f',raw)
             non_silent+=sum(1 for (v,) in samples if v!=0.0)
-            slot_results.append({'slot':slot,'status':'PASS','frames':8192,'rms_left':metrics['rms_l'],'rms_right':metrics['rms_r'],'peak':metrics['peak'],'switch_latency_frames':metrics['transition_frames'],'clock_verified_after_run':slot not in prep_clock_gaps})
+            slot_results.append({'slot':slot,'status':'PASS','frames':8192,'rms_left':metrics['rms_l'],'rms_right':metrics['rms_r'],'peak':metrics['peak'],'switch_completion_frames':metrics['transition_frames'],'clock_verified_after_run':slot not in prep_clock_gaps})
         empty=work/'empty-assets';empty.mkdir()
         missing=run([harness,plugin,empty,stimulus,work/'missing-renders','missing'],env=env,check=False)
         if missing.returncode or 'MISSING_PASS' not in missing.stdout:raise RuntimeError('packaged VST missing-package silence test failed:\n'+missing.stdout+'\n'+missing.stderr)
@@ -76,7 +76,9 @@ def main():
           'asset_index_sha256':index_hash,'asset_collection_slots':audit_result['eligible_slots'],'verified_slots':list(range(1,51)),
           'processed_dsp_frames':50*8192,'non_silent_output_frames':non_silent,'callback_allocations':0,
           'passed_tests':['factory_processing','effect_switching','no_mock_fallback','initialization_validation','stereo_routing','missing_package_silence','state_roundtrip','sdk_host_simulator'],
-          'slot_results':slot_results,'sdk_host_simulator':{'result':'PASS','wav_sha256':sha(wav)},
+          'slot_results':slot_results,'switch_contract':{'fade_out_frames_at_48k':240,'fade_in_frames_at_48k':240,
+            'measured_selection_to_ready_frames_are_including_worker_preparation':True},
+          'sdk_host_simulator':{'result':'PASS','wav_sha256':sha(wav)},
           'clock_evidence_gaps':prep_clock_gaps}
     a.report.write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps({'result':'PASS','binary_bound_native_vst':True,'slots':50,'missing_package_silence':'PASS',

@@ -65,6 +65,11 @@ allocation count, then invokes the SDK host simulator. The generated
 and lists per-slot results. A playable package marker is written only after
 that full binary-bound gate and SDK package validation pass.
 
+At 48 kHz the switching ramp uses 240 frames (5 ms) for fade-out and another
+240 frames for fade-in. Package preparation runs on a worker thread between
+the ramps; measured selection-to-ready time also includes that work and host
+callback block granularity, so it can exceed 10 ms.
+
 This verifies the native binary built from the same source and binds the
 results to the corresponding ARMv7 binary hash; it does not execute ARMv7 code
 on a Force. Physical-device compatibility, touch/Q-Link interaction, storage
