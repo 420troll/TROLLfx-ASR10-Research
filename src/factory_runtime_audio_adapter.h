@@ -45,4 +45,20 @@ private:
     bool process_error_ = false;
 };
 
+// Registry-backed adapter for slots 1..50. The host Effect value is the
+// zero-based selection index (0..49); it reuses AudioHost's muted prepare path.
+class RegistryFactoryRuntimeProcessor final : public IProcessor {
+public:
+    explicit RegistryFactoryRuntimeProcessor(const trollfx::es5510::EffectRegistry& registry)
+        : registry_(registry) {}
+    void prepare(Effect effect, uint32_t dsp_rate) override;
+    void process(const float*, float*, size_t) noexcept override;
+    uint32_t latency_frames() const noexcept override;
+    size_t memory_bytes() const noexcept override;
+private:
+    const trollfx::es5510::EffectRegistry& registry_;
+    trollfx::es5510::FactoryRuntime runtime_;
+    bool prepared_ = false;
+};
+
 } // namespace trollfx::audio

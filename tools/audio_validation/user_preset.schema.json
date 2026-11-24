@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://420troll.github.io/TROLLfx-ASR10-Research/es5510-user-preset-v1.schema.json",
+  "title": "TROLLfx ES5510 user preset",
+  "description": "A portable list of display values bound to a factory effect slot. Contains no factory binary or initialization state.",
+  "type": "object",
+  "required": ["schema", "name", "effect_slot", "parameters"],
+  "properties": {
+    "schema": {"const": "trollfx-es5510-user-preset-v1"},
+    "name": {"type": "string", "minLength": 1, "maxLength": 80},
+    "effect_slot": {"type": "integer", "minimum": 1, "maximum": 50},
+    "parameters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["parameter_id", "display_value"],
+        "properties": {"parameter_id": {"type": "string", "minLength": 1}, "display_value": {"type": "integer"}},
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

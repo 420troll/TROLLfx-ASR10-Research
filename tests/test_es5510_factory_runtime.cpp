@@ -56,6 +56,22 @@ static EffectPackage package(EffectId id, const std::string& path) {
     return {id, path, 60, 44100.0, true, true, true};
 }
 
+static ValidatedEffectPackage generic_package(std::uint8_t slot, unsigned words, const std::string& path) {
+    ValidatedEffectPackage p;
+    p.validation_receipt_valid = p.initialization_state_valid = p.program_identity_valid =
+        p.pipeline_reset_valid = p.routing_valid = true;
+    auto& d=p.descriptor;
+    d.slot=slot; d.factory_name="synthetic-slot"; d.active_program_words=words;
+    d.end_word=words-1; d.program_sha256=std::string(64,'a');
+    d.factory_reference_rate_hz=32000.0 + slot;
+    d.routing.host_serial_mode=0x48; d.routing.input_port=2; d.routing.output_port=1;
+    d.run_checkpoint_path=path; d.run_checkpoint_sha256=std::string(64,'b');
+    d.firmware_event_schedule.push_back({0,0x20,0x123456});
+    VerifiedParameterDefinition parameter; parameter.id="test"; parameter.ui_label="Test";
+    parameter.verified_points.push_back({7,0x21,0x654321}); d.parameters.push_back(parameter);
+    return p;
+}
+
 static std::vector<float> render(FactoryRuntime& fx, const std::vector<float>& input,
                                  const std::vector<std::size_t>& blocks, double rate=48000.0) {
     std::vector<float> output(input.size(), 0.0f);
@@ -76,6 +92,8 @@ static std::vector<float> render(FactoryRuntime& fx, const std::vector<float>& i
 int main() {
     const auto hall_path = make_checkpoint(89);
     const auto rom02_path = make_checkpoint(60);
+    const auto short_path = make_checkpoint(3);
+    const auto long_path = make_checkpoint(160);
     {
         FactoryRuntime fx;
         auto bad=package(EffectId::Rom01Hall,hall_path); bad.pipeline_reset_acknowledged=false;
@@ -163,7 +181,29 @@ int main() {
             assert(fx.getStatus().processed_dsp_frames==static_cast<std::uint64_t>(std::floor(n*44100.0/48000.0 + 1e-9)));
         }
     }
+    {
+        EffectRegistry registry;
+        auto short_package=generic_package(17,3,short_path);
+        auto long_package=generic_package(50,160,long_path);
+        assert(registry.register_validated(short_package));
+        assert(registry.register_validated(long_package));
+        assert(registry.size()==2 && registry.find(50));
+        FactoryRuntime fx;
+        assert(fx.loadEffect(*registry.find(17),RateMode::FactoryReference));
+        assert(fx.getStatus().active_program_words==3);
+        assert(fx.setParameter(short_package.descriptor,"test",7,0));
+        assert(!fx.setParameter(short_package.descriptor,"test",8,0));
+        std::array<float,4> in{},out{};
+        assert(fx.processStereo(in.data(),out.data(),2,32000.0));
+        assert(fx.getStatus().scheduled_writes_applied==2); // firmware init + parameter
+        assert(fx.loadEffect(*registry.find(50)));
+        assert(fx.getStatus().active_program_words==160);
+        auto invalid=generic_package(16,60,rom02_path); invalid.descriptor.routing.input_port=4;
+        assert(!registry.register_validated(invalid));
+    }
     std::filesystem::remove(hall_path);
     std::filesystem::remove(rom02_path);
+    std::filesystem::remove(short_path);
+    std::filesystem::remove(long_path);
     std::puts("ES5510 runtime synthetic tests: PASS");
 }
