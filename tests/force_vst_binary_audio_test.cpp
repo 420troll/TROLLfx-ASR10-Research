@@ -15,6 +15,7 @@
 #include <stdexcept>
 #include <string>
 #include <thread>
+#include <utility>
 #include <vector>
 
 static thread_local bool in_audio=false;
@@ -26,11 +27,12 @@ void operator delete(void*p,std::size_t)noexcept{std::free(p);}void operator del
 
 namespace {
 constexpr int kRate=48000,kMaxBlock=256,kStatusParam=5,kEffectParam=0;
-struct ParameterProbe { unsigned slot; int index; const char* expected; };
+struct ParameterProbe { unsigned slot; int index; const char* lower; const char* upper; };
 constexpr ParameterProbe kVerifiedParameters[] = {
- {1,12,"41"},{1,13,"32"},{3,14,"65"},{3,15,"51"},{3,16,"10"},
- {4,17,"351"},{6,18,"25"},{7,19,"21"},{28,20,"+13"},
- {41,21,"-10"},{42,22,"5/1"},{49,23,"101"}
+ {1,12,"40","41"},{1,13,"31","32"},{3,14,"64","65"},
+ {3,15,"50","51"},{3,16,"9","10"},{4,17,"350","351"},
+ {6,18,"24","25"},{7,19,"20","21"},{28,20,"+12","+13"},
+ {41,21,"-11","-10"},{42,22,"4/1","5/1"},{49,23,"100","101"}
 };
 struct Host{double rate=kRate;int block=kMaxBlock;AEffect* effect=nullptr;} host;
 VstIntPtr host_callback(AEffect*,VstInt32 op,VstInt32,VstIntPtr,void*,float){
@@ -77,16 +79,20 @@ int main(int argc,char**argv)try{
   transition_frames+=elapsed;
   if(slot==1){plugin.set(8,1.0f);plugin.set(9,1.0f);if(plugin.get(8)<0.999f||plugin.get(9)<0.999f)throw std::runtime_error("HALL BUS parameter values did not round-trip");}
   if(slot==2){plugin.set(10,1.0f);plugin.set(11,1.0f);if(plugin.get(10)<0.999f||plugin.get(11)<0.999f)throw std::runtime_error("ROM-02 BUS parameter values did not round-trip");}
-  for(const auto& probe:kVerifiedParameters)if(probe.slot==slot)plugin.set(probe.index,1.0f);
+  for(const auto& probe:kVerifiedParameters)if(probe.slot==slot){
+   for(const auto& point:std::array<std::pair<float,const char*>,2>{{{0.5f,probe.lower},{1.0f,probe.upper}}}){
+    plugin.set(probe.index,point.first);process_frames(plugin,stimulus,256,cursor,nullptr,nullptr);
+    if(plugin.display(probe.index)!=point.second)throw std::runtime_error("verified parameter point mismatch at slot "+std::to_string(slot)+" parameter "+std::to_string(probe.index));
+   }
+  }
   BlockResult render;process_frames(plugin,stimulus,8192,cursor,nullptr,&render);
   double energy_l=0,energy_r=0;float peak=0;for(std::size_t i=0;i<render.output.size();i+=2){auto l=render.output[i],r=render.output[i+1];energy_l+=double(l)*l;energy_r+=double(r)*r;peak=std::max(peak,std::max(std::abs(l),std::abs(r)));}
   double rms_l=std::sqrt(energy_l/8192),rms_r=std::sqrt(energy_r/8192);
   const std::string out=std::string(argv[4])+"/slot-"+(slot<10?"0":"")+std::to_string(slot)+".f32";save_raw(out,render.output);
   std::cout<<"SLOT "<<slot<<" READY frames=8192 rms_l="<<rms_l<<" rms_r="<<rms_r<<" peak="<<peak<<" transition_frames="<<elapsed<<" status="<<plugin.plain_status()<<"\n";
   if(rms_l<=0.0||rms_r<=0.0)throw std::runtime_error("selected package produced no stereo wet output at slot "+std::to_string(slot));
-  for(const auto& probe:kVerifiedParameters)if(probe.slot==slot&&
-     (plugin.get(probe.index)<0.999f||plugin.display(probe.index)!=probe.expected))
-      throw std::runtime_error("verified control display/write point mismatch at slot "+std::to_string(slot)+" parameter "+std::to_string(probe.index));
+  for(const auto& probe:kVerifiedParameters)if(probe.slot==slot&&plugin.get(probe.index)<0.999f)
+      throw std::runtime_error("verified control upper point did not persist at slot "+std::to_string(slot)+" parameter "+std::to_string(probe.index));
  }
  // Bind wet/dry, gain, and bypass behavior to this same shared object.
  std::size_t elapsed=0;if(!wait_ready(plugin,1,stimulus,cursor,elapsed))throw std::runtime_error("cannot return to HALL for host-control checks");
