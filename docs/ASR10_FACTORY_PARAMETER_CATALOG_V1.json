@@ -2,10 +2,10 @@
   "schema": "trollfx-asr10-factory-parameter-catalog-v1",
   "catalog_evidence": {
     "documented_ranges": "ASR-10 Musician's Manual Section 6, Effect Parameters; ranges are documentation, not emulator measurements",
-    "live_register_mappings": "Only explicit verified_runtime_parameters entries are live-trace verified",
+    "live_register_mappings": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only.",
     "factory_defaults": "No clean factory-reset defaults claimed",
     "display_order": "Order of parameter descriptions in the manual; UI cursor ordering still requires emulator confirmation",
-    "curve_policy": "No undocumented interpolation or conversion curves are generated"
+    "curve_policy": "No interpolation, full range, factory default, or smoothing law is inferred."
   },
   "shared_documented_controls": [
     {
@@ -908,7 +908,7 @@
         }
       ],
       "parameter_count_documented": 9,
-      "runtime_parameter_status": "two parameters have two reversible OS-verified display points each; all other controls remain unavailable in the native parameter API",
+      "runtime_parameter_status": "4 controls have direct two-point OS mapping evidence; other controls remain unavailable",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
@@ -916,48 +916,190 @@
         {
           "id": "reverb_mix_bus1",
           "display_name": "REVERB MIX BUS1",
+          "manual_label": "REVERB MIX BUS1",
+          "display_order": 1,
+          "units": "display steps",
+          "display_format": "integer",
           "verified_display_points": [
             {
-              "value": 28,
+              "display_value": 28,
+              "display_text": "28",
+              "ordered_writes": [
+                {
+                  "gpr": "0x7C",
+                  "raw24": "0x3D0000"
+                }
+              ],
               "gpr": "0x7C",
               "raw24": "0x3D0000"
             },
             {
-              "value": 29,
+              "display_value": 29,
+              "display_text": "29",
+              "ordered_writes": [
+                {
+                  "gpr": "0x7C",
+                  "raw24": "0x3F0000"
+                }
+              ],
               "gpr": "0x7C",
               "raw24": "0x3F0000"
             }
           ],
-          "observed_fresh_boot_selection_value": 28,
           "factory_default": null,
-          "conversion": "Only the two observed points are supported; no interpolation or extended values.",
-          "trace_evidence": "Existing reversible OS 3.53 Up/Down/Up host-write captures; companion and repeated service writes remain undocumented.",
-          "runtime_status": "Functional in native runtime for listed points; runtime cadence does not emulate the OS update transient."
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
         },
         {
           "id": "reverb_mix_bus2",
           "display_name": "REVERB MIX BUS2",
+          "manual_label": "REVERB MIX BUS2",
+          "display_order": 2,
+          "units": "display steps",
+          "display_format": "integer",
           "verified_display_points": [
             {
-              "value": 28,
+              "display_value": 28,
+              "display_text": "28",
+              "ordered_writes": [
+                {
+                  "gpr": "0x7A",
+                  "raw24": "0x3D0000"
+                }
+              ],
               "gpr": "0x7A",
               "raw24": "0x3D0000"
             },
             {
-              "value": 29,
+              "display_value": 29,
+              "display_text": "29",
+              "ordered_writes": [
+                {
+                  "gpr": "0x7A",
+                  "raw24": "0x3F0000"
+                }
+              ],
               "gpr": "0x7A",
               "raw24": "0x3F0000"
             }
           ],
-          "observed_fresh_boot_selection_value": 28,
           "factory_default": null,
-          "conversion": "Only the two observed points are supported; no interpolation or extended values.",
-          "trace_evidence": "Existing reversible OS 3.53 Up/Down/Up host-write captures; companion and repeated service writes remain undocumented.",
-          "runtime_status": "Functional in native runtime for listed points; runtime cadence does not emulate the OS update transient."
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        },
+        {
+          "id": "decay_time",
+          "display_name": "DECAY TIME",
+          "manual_label": "DECAY TIME",
+          "display_order": 4,
+          "units": "display steps",
+          "display_format": "integer",
+          "verified_display_points": [
+            {
+              "display_value": 40,
+              "display_text": "40",
+              "ordered_writes": [
+                {
+                  "gpr": "0x03",
+                  "raw24": "0x340000"
+                },
+                {
+                  "gpr": "0x04",
+                  "raw24": "0xCC0000"
+                },
+                {
+                  "gpr": "0x05",
+                  "raw24": "0x6ADFFF"
+                },
+                {
+                  "gpr": "0x5B",
+                  "raw24": "0x080034"
+                },
+                {
+                  "gpr": "0x6E",
+                  "raw24": "0x340000"
+                }
+              ]
+            },
+            {
+              "display_value": 41,
+              "display_text": "41",
+              "ordered_writes": [
+                {
+                  "gpr": "0x03",
+                  "raw24": "0x350000"
+                },
+                {
+                  "gpr": "0x04",
+                  "raw24": "0xCB0000"
+                },
+                {
+                  "gpr": "0x05",
+                  "raw24": "0x6A0DFF"
+                },
+                {
+                  "gpr": "0x5B",
+                  "raw24": "0x080035"
+                },
+                {
+                  "gpr": "0x6E",
+                  "raw24": "0x350000"
+                }
+              ]
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        },
+        {
+          "id": "hi_freq_damping",
+          "display_name": "HI FREQ DAMPING",
+          "manual_label": "HI FREQ DAMPING",
+          "display_order": 7,
+          "units": "display steps",
+          "display_format": "integer",
+          "verified_display_points": [
+            {
+              "display_value": 31,
+              "display_text": "31",
+              "ordered_writes": [
+                {
+                  "gpr": "0x6C",
+                  "raw24": "0x57FFFF"
+                },
+                {
+                  "gpr": "0x6D",
+                  "raw24": "0x280000"
+                }
+              ]
+            },
+            {
+              "display_value": 32,
+              "display_text": "32",
+              "ordered_writes": [
+                {
+                  "gpr": "0x6C",
+                  "raw24": "0x56FFFF"
+                },
+                {
+                  "gpr": "0x6D",
+                  "raw24": "0x290000"
+                }
+              ]
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
         }
       ],
-      "verified_runtime_parameter_count": 2,
-      "verified_display_point_count": 4
+      "verified_runtime_parameter_count": 4,
+      "verified_display_point_count": 8
     },
     {
       "slot": 2,
@@ -1081,7 +1223,7 @@
         }
       ],
       "parameter_count_documented": 9,
-      "runtime_parameter_status": "two parameters have two reversible OS-verified display points each; all other controls remain unavailable in the native parameter API",
+      "runtime_parameter_status": "2 controls have direct two-point OS mapping evidence; other controls remain unavailable",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
@@ -1089,44 +1231,78 @@
         {
           "id": "reverb_mix_bus1",
           "display_name": "REVERB MIX BUS1",
+          "manual_label": "REVERB MIX BUS1",
+          "display_order": 1,
+          "units": "display steps",
+          "display_format": "integer",
           "verified_display_points": [
             {
-              "value": 25,
+              "display_value": 25,
+              "display_text": "25",
+              "ordered_writes": [
+                {
+                  "gpr": "0x7C",
+                  "raw24": "0x350000"
+                }
+              ],
               "gpr": "0x7C",
               "raw24": "0x350000"
             },
             {
-              "value": 26,
+              "display_value": 26,
+              "display_text": "26",
+              "ordered_writes": [
+                {
+                  "gpr": "0x7C",
+                  "raw24": "0x370000"
+                }
+              ],
               "gpr": "0x7C",
               "raw24": "0x370000"
             }
           ],
-          "observed_fresh_boot_selection_value": 25,
           "factory_default": null,
-          "conversion": "Only the two observed points are supported; no interpolation or extended values.",
-          "trace_evidence": "Existing reversible OS 3.53 Up/Down/Up host-write captures; companion and repeated service writes remain undocumented.",
-          "runtime_status": "Functional in native runtime for listed points; runtime cadence does not emulate the OS update transient."
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
         },
         {
           "id": "reverb_mix_bus2",
           "display_name": "REVERB MIX BUS2",
+          "manual_label": "REVERB MIX BUS2",
+          "display_order": 2,
+          "units": "display steps",
+          "display_format": "integer",
           "verified_display_points": [
             {
-              "value": 25,
+              "display_value": 25,
+              "display_text": "25",
+              "ordered_writes": [
+                {
+                  "gpr": "0x7A",
+                  "raw24": "0x350000"
+                }
+              ],
               "gpr": "0x7A",
               "raw24": "0x350000"
             },
             {
-              "value": 26,
+              "display_value": 26,
+              "display_text": "26",
+              "ordered_writes": [
+                {
+                  "gpr": "0x7A",
+                  "raw24": "0x370000"
+                }
+              ],
               "gpr": "0x7A",
               "raw24": "0x370000"
             }
           ],
-          "observed_fresh_boot_selection_value": 25,
           "factory_default": null,
-          "conversion": "Only the two observed points are supported; no interpolation or extended values.",
-          "trace_evidence": "Existing reversible OS 3.53 Up/Down/Up host-write captures; companion and repeated service writes remain undocumented.",
-          "runtime_status": "Functional in native runtime for listed points; runtime cadence does not emulate the OS update transient."
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
         }
       ],
       "verified_runtime_parameter_count": 2,
@@ -1254,12 +1430,168 @@
         }
       ],
       "parameter_count_documented": 9,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "3 controls have direct two-point OS mapping evidence; other controls remain unavailable",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
-      "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_runtime_parameter_count": 3,
+      "verified_display_point_count": 6,
+      "verified_runtime_parameters": [
+        {
+          "id": "decay_time",
+          "display_name": "DECAY TIME",
+          "manual_label": "DECAY TIME",
+          "display_order": 4,
+          "units": "display steps",
+          "display_format": "integer",
+          "verified_display_points": [
+            {
+              "display_value": 64,
+              "display_text": "64",
+              "ordered_writes": [
+                {
+                  "gpr": "0x6E",
+                  "raw24": "0x520000"
+                }
+              ],
+              "gpr": "0x6E",
+              "raw24": "0x520000"
+            },
+            {
+              "display_value": 65,
+              "display_text": "65",
+              "ordered_writes": [
+                {
+                  "gpr": "0x6E",
+                  "raw24": "0x530000"
+                }
+              ],
+              "gpr": "0x6E",
+              "raw24": "0x530000"
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        },
+        {
+          "id": "diffusion",
+          "display_name": "DIFFUSION",
+          "manual_label": "DIFFUSION",
+          "display_order": 6,
+          "units": "display steps",
+          "display_format": "integer",
+          "verified_display_points": [
+            {
+              "display_value": 50,
+              "display_text": "50",
+              "ordered_writes": [
+                {
+                  "gpr": "0x07",
+                  "raw24": "0x400000"
+                },
+                {
+                  "gpr": "0x09",
+                  "raw24": "0xC00000"
+                },
+                {
+                  "gpr": "0x0A",
+                  "raw24": "0x5FFFFF"
+                },
+                {
+                  "gpr": "0x0B",
+                  "raw24": "0x330000"
+                },
+                {
+                  "gpr": "0x0C",
+                  "raw24": "0xCD0000"
+                },
+                {
+                  "gpr": "0x12",
+                  "raw24": "0x6BADFF"
+                }
+              ]
+            },
+            {
+              "display_value": 51,
+              "display_text": "51",
+              "ordered_writes": [
+                {
+                  "gpr": "0x07",
+                  "raw24": "0x410000"
+                },
+                {
+                  "gpr": "0x09",
+                  "raw24": "0xBF0000"
+                },
+                {
+                  "gpr": "0x0A",
+                  "raw24": "0x5EFDFF"
+                },
+                {
+                  "gpr": "0x0B",
+                  "raw24": "0x33CC00"
+                },
+                {
+                  "gpr": "0x0C",
+                  "raw24": "0xCC3400"
+                },
+                {
+                  "gpr": "0x12",
+                  "raw24": "0x6B0A2A"
+                }
+              ]
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        },
+        {
+          "id": "hi_freq_damping",
+          "display_name": "HI FREQ DAMPING",
+          "manual_label": "HI FREQ DAMPING",
+          "display_order": 7,
+          "units": "display steps",
+          "display_format": "integer",
+          "verified_display_points": [
+            {
+              "display_value": 9,
+              "display_text": "9",
+              "ordered_writes": [
+                {
+                  "gpr": "0x6C",
+                  "raw24": "0x73FFFF"
+                },
+                {
+                  "gpr": "0x6D",
+                  "raw24": "0x0C0000"
+                }
+              ]
+            },
+            {
+              "display_value": 10,
+              "display_text": "10",
+              "ordered_writes": [
+                {
+                  "gpr": "0x6C",
+                  "raw24": "0x72FFFF"
+                },
+                {
+                  "gpr": "0x6D",
+                  "raw24": "0x0D0000"
+                }
+              ]
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        }
+      ]
     },
     {
       "slot": 4,
@@ -1324,12 +1656,52 @@
         }
       ],
       "parameter_count_documented": 4,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "1 controls have direct two-point OS mapping evidence; other controls remain unavailable",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
-      "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_runtime_parameter_count": 1,
+      "verified_display_point_count": 2,
+      "verified_runtime_parameters": [
+        {
+          "id": "delay_time_l",
+          "display_name": "BS1 TIME L",
+          "manual_label": "DELAY TIME",
+          "display_order": 3,
+          "units": "display steps",
+          "display_format": "integer",
+          "verified_display_points": [
+            {
+              "display_value": 350,
+              "display_text": "350",
+              "ordered_writes": [
+                {
+                  "gpr": "0x0B",
+                  "raw24": "0x290500"
+                }
+              ],
+              "gpr": "0x0B",
+              "raw24": "0x290500"
+            },
+            {
+              "display_value": 351,
+              "display_text": "351",
+              "ordered_writes": [
+                {
+                  "gpr": "0x0B",
+                  "raw24": "0x292300"
+                }
+              ],
+              "gpr": "0x0B",
+              "raw24": "0x292300"
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        }
+      ]
     },
     {
       "slot": 5,
@@ -1394,12 +1766,13 @@
         }
       ],
       "parameter_count_documented": 4,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 6,
@@ -1510,14 +1883,66 @@
         }
       ],
       "parameter_count_documented": 8,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "1 controls have direct two-point OS mapping evidence; other controls remain unavailable",
       "manual_cross_references": [
         "HALL REVERB"
       ],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
-      "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_runtime_parameter_count": 1,
+      "verified_display_point_count": 2,
+      "verified_runtime_parameters": [
+        {
+          "id": "chorus_rate",
+          "display_name": "CHORUS RATE",
+          "manual_label": "CHORUS RATE",
+          "display_order": 11,
+          "units": "display steps",
+          "display_format": "integer",
+          "verified_display_points": [
+            {
+              "display_value": 24,
+              "display_text": "24",
+              "ordered_writes": [
+                {
+                  "gpr": "0x90",
+                  "raw24": "0x0007F7"
+                },
+                {
+                  "gpr": "0x91",
+                  "raw24": "0x000C91"
+                },
+                {
+                  "gpr": "0x92",
+                  "raw24": "0x000B11"
+                }
+              ]
+            },
+            {
+              "display_value": 25,
+              "display_text": "25",
+              "ordered_writes": [
+                {
+                  "gpr": "0x90",
+                  "raw24": "0x000836"
+                },
+                {
+                  "gpr": "0x91",
+                  "raw24": "0x000CF5"
+                },
+                {
+                  "gpr": "0x92",
+                  "raw24": "0x000B69"
+                }
+              ]
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        }
+      ]
     },
     {
       "slot": 7,
@@ -1628,14 +2053,54 @@
         }
       ],
       "parameter_count_documented": 8,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "1 controls have direct two-point OS mapping evidence; other controls remain unavailable",
       "manual_cross_references": [
         "HALL REVERB"
       ],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
-      "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_runtime_parameter_count": 1,
+      "verified_display_point_count": 2,
+      "verified_runtime_parameters": [
+        {
+          "id": "phase_rate",
+          "display_name": "PHASE RATE",
+          "manual_label": "PHASE RATE",
+          "display_order": 12,
+          "units": "display steps",
+          "display_format": "integer",
+          "verified_display_points": [
+            {
+              "display_value": 20,
+              "display_text": "20",
+              "ordered_writes": [
+                {
+                  "gpr": "0x8E",
+                  "raw24": "0x0003D7"
+                }
+              ],
+              "gpr": "0x8E",
+              "raw24": "0x0003D7"
+            },
+            {
+              "display_value": 21,
+              "display_text": "21",
+              "ordered_writes": [
+                {
+                  "gpr": "0x8E",
+                  "raw24": "0x00049C"
+                }
+              ],
+              "gpr": "0x8E",
+              "raw24": "0x00049C"
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        }
+      ]
     },
     {
       "slot": 8,
@@ -1746,14 +2211,15 @@
         }
       ],
       "parameter_count_documented": 8,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [
         "HALL REVERB"
       ],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 9,
@@ -1890,14 +2356,15 @@
         }
       ],
       "parameter_count_documented": 10,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [
         "H"
       ],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 10,
@@ -1956,14 +2423,15 @@
         }
       ],
       "parameter_count_documented": 4,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [
         "C"
       ],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 11,
@@ -2061,14 +2529,15 @@
         }
       ],
       "parameter_count_documented": 7,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [
         "HALL REVERB"
       ],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 12,
@@ -2179,7 +2648,7 @@
         }
       ],
       "parameter_count_documented": 8,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [
         "CHORUS+REVERB",
         "HALL REVERB"
@@ -2187,7 +2656,8 @@
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 13,
@@ -2246,7 +2716,7 @@
         }
       ],
       "parameter_count_documented": 4,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [
         "CMP+DIST+REV",
         "HALL REVERB"
@@ -2254,7 +2724,8 @@
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 14,
@@ -2534,12 +3005,13 @@
         }
       ],
       "parameter_count_documented": 21,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 15,
@@ -2819,12 +3291,13 @@
         }
       ],
       "parameter_count_documented": 21,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 16,
@@ -3104,12 +3577,13 @@
         }
       ],
       "parameter_count_documented": 21,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 17,
@@ -3272,12 +3746,13 @@
         }
       ],
       "parameter_count_documented": 12,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 18,
@@ -3440,12 +3915,13 @@
         }
       ],
       "parameter_count_documented": 12,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 19,
@@ -3595,12 +4071,13 @@
         }
       ],
       "parameter_count_documented": 11,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 20,
@@ -3737,12 +4214,13 @@
         }
       ],
       "parameter_count_documented": 10,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 21,
@@ -3944,12 +4422,13 @@
         }
       ],
       "parameter_count_documented": 15,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 22,
@@ -4164,12 +4643,13 @@
         }
       ],
       "parameter_count_documented": 16,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 23,
@@ -4384,12 +4864,13 @@
         }
       ],
       "parameter_count_documented": 16,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 24,
@@ -4604,12 +5085,13 @@
         }
       ],
       "parameter_count_documented": 16,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 25,
@@ -4694,12 +5176,13 @@
         }
       ],
       "parameter_count_documented": 6,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 26,
@@ -4914,12 +5397,13 @@
         }
       ],
       "parameter_count_documented": 16,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 27,
@@ -5095,12 +5579,13 @@
         }
       ],
       "parameter_count_documented": 13,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 28,
@@ -5367,12 +5852,52 @@
         }
       ],
       "parameter_count_documented": 20,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "1 controls have direct two-point OS mapping evidence; other controls remain unavailable",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
-      "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_runtime_parameter_count": 1,
+      "verified_display_point_count": 2,
+      "verified_runtime_parameters": [
+        {
+          "id": "preamp_gain",
+          "display_name": "PREAMP GAIN",
+          "manual_label": "PREAMP GAIN",
+          "display_order": 3,
+          "units": "dB display",
+          "display_format": "signed integer",
+          "verified_display_points": [
+            {
+              "display_value": 12,
+              "display_text": "+12",
+              "ordered_writes": [
+                {
+                  "gpr": "0x70",
+                  "raw24": "0x020100"
+                }
+              ],
+              "gpr": "0x70",
+              "raw24": "0x020100"
+            },
+            {
+              "display_value": 13,
+              "display_text": "+13",
+              "ordered_writes": [
+                {
+                  "gpr": "0x70",
+                  "raw24": "0x023F00"
+                }
+              ],
+              "gpr": "0x70",
+              "raw24": "0x023F00"
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        }
+      ]
     },
     {
       "slot": 29,
@@ -5639,12 +6164,13 @@
         }
       ],
       "parameter_count_documented": 20,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 30,
@@ -5911,12 +6437,13 @@
         }
       ],
       "parameter_count_documented": 20,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 31,
@@ -5949,12 +6476,13 @@
         }
       ],
       "parameter_count_documented": 2,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 32,
@@ -6039,12 +6567,13 @@
         }
       ],
       "parameter_count_documented": 6,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 33,
@@ -6259,12 +6788,13 @@
         }
       ],
       "parameter_count_documented": 16,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 34,
@@ -6479,12 +7009,13 @@
         }
       ],
       "parameter_count_documented": 16,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 35,
@@ -6738,12 +7269,13 @@
         }
       ],
       "parameter_count_documented": 19,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 36,
@@ -6984,12 +7516,13 @@
         }
       ],
       "parameter_count_documented": 18,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 37,
@@ -7139,12 +7672,13 @@
         }
       ],
       "parameter_count_documented": 11,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 38,
@@ -7255,12 +7789,13 @@
         }
       ],
       "parameter_count_documented": 8,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 39,
@@ -7423,12 +7958,13 @@
         }
       ],
       "parameter_count_documented": 12,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 40,
@@ -7617,12 +8153,13 @@
         }
       ],
       "parameter_count_documented": 14,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 41,
@@ -7746,12 +8283,52 @@
         }
       ],
       "parameter_count_documented": 9,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "1 controls have direct two-point OS mapping evidence; other controls remain unavailable",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
-      "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_runtime_parameter_count": 1,
+      "verified_display_point_count": 2,
+      "verified_runtime_parameters": [
+        {
+          "id": "voice1_fine",
+          "display_name": "VOICE1 FINE",
+          "manual_label": "VOICE1 FINE",
+          "display_order": 3,
+          "units": "display steps",
+          "display_format": "signed integer",
+          "verified_display_points": [
+            {
+              "display_value": -11,
+              "display_text": "-11",
+              "ordered_writes": [
+                {
+                  "gpr": "0x60",
+                  "raw24": "0xFF36EA"
+                }
+              ],
+              "gpr": "0x60",
+              "raw24": "0xFF36EA"
+            },
+            {
+              "display_value": -10,
+              "display_text": "-10",
+              "ordered_writes": [
+                {
+                  "gpr": "0x60",
+                  "raw24": "0xFF4547"
+                }
+              ],
+              "gpr": "0x60",
+              "raw24": "0xFF4547"
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        }
+      ]
     },
     {
       "slot": 42,
@@ -7940,12 +8517,52 @@
         }
       ],
       "parameter_count_documented": 14,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "1 controls have direct two-point OS mapping evidence; other controls remain unavailable",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
-      "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_runtime_parameter_count": 1,
+      "verified_display_point_count": 2,
+      "verified_runtime_parameters": [
+        {
+          "id": "comp_ratio",
+          "display_name": "COMP RATIO",
+          "manual_label": "COMP RATIO",
+          "display_order": 2,
+          "units": "ratio",
+          "display_format": "N/1",
+          "verified_display_points": [
+            {
+              "display_value": 4,
+              "display_text": "4/1",
+              "ordered_writes": [
+                {
+                  "gpr": "0x8B",
+                  "raw24": "0x1FFFFF"
+                }
+              ],
+              "gpr": "0x8B",
+              "raw24": "0x1FFFFF"
+            },
+            {
+              "display_value": 5,
+              "display_text": "5/1",
+              "ordered_writes": [
+                {
+                  "gpr": "0x8B",
+                  "raw24": "0x199999"
+                }
+              ],
+              "gpr": "0x8B",
+              "raw24": "0x199999"
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        }
+      ]
     },
     {
       "slot": 43,
@@ -8121,12 +8738,13 @@
         }
       ],
       "parameter_count_documented": 13,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 44,
@@ -8315,12 +8933,13 @@
         }
       ],
       "parameter_count_documented": 14,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 45,
@@ -8483,12 +9102,13 @@
         }
       ],
       "parameter_count_documented": 12,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 46,
@@ -8716,12 +9336,13 @@
         }
       ],
       "parameter_count_documented": 17,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 47,
@@ -8962,12 +9583,13 @@
         }
       ],
       "parameter_count_documented": 18,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 48,
@@ -9026,12 +9648,13 @@
         }
       ],
       "parameter_count_documented": 4,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     },
     {
       "slot": 49,
@@ -9155,12 +9778,56 @@
         }
       ],
       "parameter_count_documented": 9,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "1 controls have direct two-point OS mapping evidence; other controls remain unavailable",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
-      "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_runtime_parameter_count": 1,
+      "verified_display_point_count": 2,
+      "verified_runtime_parameters": [
+        {
+          "id": "bass_fc",
+          "display_name": "BASS FC",
+          "manual_label": "BASS FC",
+          "display_order": 1,
+          "units": "Hz display",
+          "display_format": "integer",
+          "verified_display_points": [
+            {
+              "display_value": 100,
+              "display_text": "100",
+              "ordered_writes": [
+                {
+                  "gpr": "0x57",
+                  "raw24": "0x7D5E06"
+                },
+                {
+                  "gpr": "0x58",
+                  "raw24": "0x82A1FA"
+                }
+              ]
+            },
+            {
+              "display_value": 101,
+              "display_text": "101",
+              "ordered_writes": [
+                {
+                  "gpr": "0x57",
+                  "raw24": "0x7D574A"
+                },
+                {
+                  "gpr": "0x58",
+                  "raw24": "0x82A8B6"
+                }
+              ]
+            }
+          ],
+          "factory_default": null,
+          "conversion": "Only the listed observed display points are supported; no interpolation or extended values.",
+          "trace_evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only. Repeated/no-edit baselines used to exclude unrelated recurring GPR writes.",
+          "runtime_status": "Functional through FactoryRuntime.setParameter using atomic ordered writes; transient OS write cadence is not emulated."
+        }
+      ]
     },
     {
       "slot": 50,
@@ -9219,12 +9886,15 @@
         }
       ],
       "parameter_count_documented": 4,
-      "runtime_parameter_status": "no verified GPR mapping in this catalog",
+      "runtime_parameter_status": "no direct OS-to-GPR mapping verified",
       "manual_cross_references": [],
       "modulation_controls": "See catalog-level shared controls; manual says the final eight controls apply to most effects.",
       "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
       "verified_runtime_parameter_count": 0,
-      "verified_display_point_count": 0
+      "verified_display_point_count": 0,
+      "verified_runtime_parameters": []
     }
-  ]
+  ],
+  "verified_control_count": 16,
+  "verified_display_point_count": 32
 }

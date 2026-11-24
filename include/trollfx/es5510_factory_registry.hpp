@@ -26,6 +26,9 @@ struct ScheduledGprWrite {
 
 struct ParameterPoint {
     std::int32_t display_value = 0;
+    // Optional literal LCD formatting for discrete values such as "+12" or
+    // "4/1". display_value remains the stable numeric runtime API value.
+    std::string display_text;
     std::uint8_t gpr = 0;
     std::uint32_t value24 = 0;
     struct RegisterWrite { std::uint8_t gpr = 0; std::uint32_t value24 = 0; };
@@ -39,6 +42,8 @@ struct VerifiedParameterDefinition {
     std::string ui_label;
     std::uint16_t display_order = 0;
     std::string units;
+    std::string display_format;
+    std::string evidence;
     bool documented_numeric_range_valid = false;
     std::int32_t documented_minimum = 0;
     std::int32_t documented_maximum = 0;

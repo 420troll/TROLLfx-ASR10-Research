@@ -52,9 +52,20 @@ int main(int argc, char **argv) {
     std::vector<std::pair<double,std::pair<int,int>>> patchev;
     std::vector<std::pair<double, std::pair<int,int>>> analog_at;
     bool trace_io = false, trace_esp_io = false, panel_log = false, fdc_log = false, trap_log = false, pc_hist = false;
+    bool log_rom_select = false;
     std::vector<std::pair<double, std::vector<uint8_t>>> midi;   // time, bytes
     std::vector<std::pair<double, std::pair<int,int>>> buttons;  // time, (code, down)
     std::vector<std::pair<double, std::string>> parameter_marks;
+    struct PanelAction {
+        enum class Kind { TapOnChange, TapOnDisplay, MarkOnDisplay, WalkRight, SearchRight, ProbeControl } kind;
+        double after = 0.0, timeout = 0.0, pressed_at = 0.0, phase_time = 0.0;
+        std::string needle, id, target, last_match, before_display, control_baseline;
+        int code = 0, revert_code = 11, match_stable = 0, change_stable = 0, remaining_steps = 0, step_index = 0;
+        int repetitions = 0, iteration = 0, phase = 0;
+        bool down_sent = false, started = false, done = false, probe_key_released = false;
+    };
+    std::vector<PanelAction> panel_actions;
+    bool panel_action_failed = false;
     int ram_mb = 16;   // maximum memory expansion (2 MB = base unit)
     std::vector<std::pair<uint32_t, int>> trace_pcs;
     std::vector<uint32_t> breaks;
@@ -97,6 +108,7 @@ int main(int argc, char **argv) {
         else if (a == "--analog-at") { double t; int ch, v; if (sscanf(next().c_str(), "%lf:%d:%d", &t, &ch, &v) == 3 && ch >= 0 && ch < 8) analog_at.push_back({t, {ch, v}}); }
         else if (a == "--analog") { int ch, v; if (sscanf(next().c_str(), "%d:%d", &ch, &v) == 2 && ch >= 0 && ch < 8) analog_init.push_back({ch, v}); }
         else if (a == "--panel-log") panel_log = true;
+        else if (a == "--log-rom-select") log_rom_select = true;
         else if (a == "--fdc-log") fdc_log = true;
         else if (a == "--trap-log") trap_log = true;
         else if (a == "--dump-ram") dump_ram = next();
@@ -156,6 +168,39 @@ int main(int argc, char **argv) {
         } else if (a == "--param-mark") { // time:label
             std::string v = next(); size_t c = v.find(':');
             if (c != std::string::npos) parameter_marks.push_back({atof(v.substr(0, c).c_str()), v.substr(c + 1)});
+        } else if (a == "--panel-tap-on-change" || a == "--panel-tap-on-display" || a == "--panel-mark-on-display" || a == "--panel-walk-right" || a == "--panel-search-right" || a == "--panel-probe-control") {
+            const bool tap = a == "--panel-tap-on-change" || a == "--panel-tap-on-display";
+            const bool walk = a == "--panel-walk-right";
+            const bool search = a == "--panel-search-right";
+            const bool probe = a == "--panel-probe-control";
+            std::stringstream fields(next()); std::vector<std::string> part; std::string field;
+            while (std::getline(fields, field, ',')) part.push_back(field);
+            const size_t expected = probe ? (part.size() == 6 ? 6 : 5) : (tap || walk) ? 5 : search ? 6 : 4;
+            if (part.size() != expected) { fprintf(stderr, "invalid %s field count\n", a.c_str()); return 2; }
+            PanelAction action; action.kind = a == "--panel-tap-on-change" ? PanelAction::Kind::TapOnChange :
+                a == "--panel-tap-on-display" ? PanelAction::Kind::TapOnDisplay :
+                a == "--panel-walk-right" ? PanelAction::Kind::WalkRight :
+                search ? PanelAction::Kind::SearchRight :
+                probe ? PanelAction::Kind::ProbeControl : PanelAction::Kind::MarkOnDisplay;
+            action.after = atof(part[0].c_str()); action.timeout = atof(part[1].c_str());
+            if (action.after < 0.0 || action.timeout <= 0.0) { fprintf(stderr, "invalid %s time\n", a.c_str()); return 2; }
+            if (tap) {
+                action.code = atoi(part[2].c_str()); action.needle = part[3]; action.id = part[4];
+                if (action.code < 0 || action.code > 41) { fprintf(stderr, "invalid panel button code\n"); return 2; }
+            } else if (walk) {
+                action.remaining_steps = atoi(part[2].c_str()); action.needle = part[3]; action.id = part[4];
+                if (action.remaining_steps < 1 || action.remaining_steps > 256) { fprintf(stderr, "invalid panel walk count\n"); return 2; }
+            } else if (search) {
+                action.remaining_steps = atoi(part[2].c_str()); action.needle = part[3]; action.target = part[4]; action.id = part[5];
+                if (action.remaining_steps < 1 || action.remaining_steps > 256 || action.target.empty()) { fprintf(stderr, "invalid panel search target/count\n"); return 2; }
+            } else if (probe) {
+                action.repetitions = atoi(part[2].c_str()); action.needle = part[3]; action.id = part[4];
+                if (action.repetitions < 0 || action.repetitions > 4) { fprintf(stderr, "invalid panel probe repetitions\n"); return 2; }
+                if (part.size() == 6) action.revert_code = atoi(part[5].c_str());
+                if (action.revert_code < 0 || action.revert_code > 41) { fprintf(stderr, "invalid panel probe revert button\n"); return 2; }
+            } else { action.needle = part[2]; action.id = part[3]; }
+            if (action.needle.empty() || action.id.empty()) { fprintf(stderr, "empty panel condition/action id\n"); return 2; }
+            panel_actions.push_back(std::move(action));
         }
     }
     Asr10 m;
@@ -330,13 +375,223 @@ int main(int argc, char **argv) {
             experiment_capture_armed_id = -1;
         }
         std::string d0 = m.panel.text(), d1 = m.panel.attr_line(0), dc = m.panel.attr_line(1);
+        for (auto &action : panel_actions) {
+            if (action.done || now < action.after) continue;
+            if (now > action.after + action.timeout) {
+                fprintf(stderr, "PANEL_ACTION_TIMEOUT id=%s kind=%s expected=%s observed=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                        action.id.c_str(), action.kind == PanelAction::Kind::MarkOnDisplay ? "mark" :
+                        action.kind == PanelAction::Kind::WalkRight ? "walk-right" :
+                        action.kind == PanelAction::Kind::SearchRight ? "search-right" :
+                        action.kind == PanelAction::Kind::ProbeControl ? "probe" : "tap",
+                        action.needle.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
+                        (unsigned long long)m.esp.host_frame_count());
+                action.done = true; panel_action_failed = true; continue;
+            }
+            if (action.kind == PanelAction::Kind::WalkRight || action.kind == PanelAction::Kind::SearchRight) {
+                if (!action.started) {
+                    const bool matches = d0.find(action.needle) != std::string::npos;
+                    if (matches && d0 == action.last_match) ++action.match_stable;
+                    else { action.match_stable = matches ? 1 : 0; action.last_match = matches ? d0 : std::string(); }
+                    if (action.match_stable < 20) continue;
+                    action.started = true;
+                    action.control_baseline = d0;
+                    fprintf(stderr, "PANEL_WALK_BEGIN id=%s count=%d display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.remaining_steps, d0.c_str(), now,
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                    if (action.kind == PanelAction::Kind::SearchRight && d0.find(action.target) != std::string::npos) {
+                        fprintf(stderr, "PANEL_SEARCH_FOUND id=%s target=%s display=\"%.22s\" steps=0 time=%.6f cycles=%llu frame=%llu\n",
+                                action.id.c_str(), action.target.c_str(), d0.c_str(), now,
+                                (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                        action.done = true;
+                        continue;
+                    }
+                }
+                if (!action.down_sent) {
+                    action.before_display = d0;
+                    action.down_sent = true;
+                    action.change_stable = 0;
+                    m.panel.button(17, true);
+                    fprintf(stderr, "PANEL_WALK_STEP_BEGIN id=%s step=%d display=\"%.22s\" time=%.6f\n",
+                            action.id.c_str(), action.step_index + 1, d0.c_str(), now);
+                } else {
+                    if (d0 != action.before_display) ++action.change_stable;
+                    else action.change_stable = 0;
+                    if (action.change_stable >= 20) {
+                        m.panel.button(17, false);
+                        ++action.step_index;
+                        --action.remaining_steps;
+                        fprintf(stderr, "PANEL_WALK_STEP_DONE id=%s step=%d before=\"%.22s\" after=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                                action.id.c_str(), action.step_index, action.before_display.c_str(), d0.c_str(), now,
+                                (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                        action.down_sent = false;
+                        if (action.kind == PanelAction::Kind::SearchRight && d0.find(action.target) != std::string::npos) {
+                            fprintf(stderr, "PANEL_SEARCH_FOUND id=%s target=%s display=\"%.22s\" steps=%d time=%.6f cycles=%llu frame=%llu\n",
+                                    action.id.c_str(), action.target.c_str(), d0.c_str(), action.step_index, now,
+                                    (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                            action.done = true;
+                        } else if (action.kind == PanelAction::Kind::SearchRight &&
+                                   (action.remaining_steps == 0 || d0 == action.control_baseline)) {
+                            fprintf(stderr, "PANEL_SEARCH_NOT_FOUND id=%s target=%s final=\"%.22s\" steps=%d\n",
+                                    action.id.c_str(), action.target.c_str(), d0.c_str(), action.step_index);
+                            action.done = true; panel_action_failed = true;
+                        } else if (action.kind == PanelAction::Kind::WalkRight && action.remaining_steps == 0) action.done = true;
+                    }
+                }
+                continue;
+            }
+            if (action.kind == PanelAction::Kind::ProbeControl) {
+                if (action.phase == 0) {
+                    const bool matches = d0.find(action.needle) != std::string::npos;
+                    if (matches && d0 == action.last_match) ++action.match_stable;
+                    else { action.match_stable = matches ? 1 : 0; action.last_match = matches ? d0 : std::string(); }
+                    if (action.match_stable < 20) continue;
+                    action.before_display = d0;
+                    action.control_baseline = d0;
+                    action.phase_time = now;
+                    action.phase = 1;
+                    fprintf(stderr, "PANEL_PROBE_FOUND id=%s display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
+                            (unsigned long long)m.esp.host_frame_count());
+                    fprintf(stderr, "PANEL_PROBE_IDLE_BEGIN id=%s display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
+                            (unsigned long long)m.esp.host_frame_count());
+                } else if (action.phase == 1) {
+                    if (d0 != action.before_display) {
+                        fprintf(stderr, "PANEL_PROBE_IDLE_UNSTABLE id=%s before=\"%.22s\" after=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                                action.id.c_str(), action.before_display.c_str(), d0.c_str(), now,
+                                (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                        action.done = true; panel_action_failed = true; continue;
+                    }
+                    if (now - action.phase_time < 0.5) continue;
+                    fprintf(stderr, "PANEL_PROBE_IDLE_END id=%s display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
+                            (unsigned long long)m.esp.host_frame_count());
+                    if (action.repetitions == 0) { action.done = true; continue; }
+                    action.iteration = 1;
+                    action.phase = 2;
+                } else if (action.phase == 2) {
+                    action.before_display = d0;
+                    action.change_stable = 0;
+                    action.phase = 3;
+                    action.phase_time = now;
+                    m.panel.button(10, true); // Up
+                    fprintf(stderr, "PANEL_PROBE_UP_BEGIN id=%s iteration=%d display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.iteration, d0.c_str(), now,
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                } else if (action.phase == 3) {
+                    // Panel value controls autorepeat quickly. Release after the
+                    // first emulated slice so this is a single press, then wait
+                    // for the complete display update without holding the key.
+                    if (!action.probe_key_released) {
+                        m.panel.button(10, false);
+                        action.probe_key_released = true;
+                    }
+                    if (d0 != action.before_display) ++action.change_stable;
+                    else action.change_stable = 0;
+                    if (action.change_stable < 20) continue;
+                    action.last_match = d0;
+                    action.phase_time = now;
+                    action.phase = 4;
+                    fprintf(stderr, "PANEL_PROBE_UP_DISPLAY id=%s iteration=%d before=\"%.22s\" after=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.iteration, action.before_display.c_str(), d0.c_str(), now,
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                } else if (action.phase == 4) {
+                    if (d0 != action.last_match) {
+                        fprintf(stderr, "PANEL_PROBE_UP_UNSTABLE id=%s iteration=%d display=\"%.22s\"\n",
+                                action.id.c_str(), action.iteration, d0.c_str());
+                        action.done = true; panel_action_failed = true; continue;
+                    }
+                    if (now - action.phase_time < 0.25) continue;
+                    action.before_display = d0;
+                    action.change_stable = 0;
+                    action.phase = 5;
+                    action.phase_time = now;
+                    action.probe_key_released = false;
+                    m.panel.button(action.revert_code, true);
+                    fprintf(stderr, "PANEL_PROBE_REVERT_BEGIN id=%s button=%d iteration=%d display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.revert_code, action.iteration, d0.c_str(), now,
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                    fprintf(stderr, "PANEL_PROBE_DOWN_BEGIN id=%s iteration=%d display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.iteration, d0.c_str(), now,
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                } else if (action.phase == 5) {
+                    if (!action.probe_key_released) {
+                        m.panel.button(action.revert_code, false);
+                        action.probe_key_released = true;
+                    }
+                    if (d0 != action.before_display) ++action.change_stable;
+                    else action.change_stable = 0;
+                    if (action.change_stable < 20) continue;
+                    action.last_match = d0;
+                    action.phase_time = now;
+                    action.phase = 6;
+                    fprintf(stderr, "PANEL_PROBE_DOWN_DISPLAY id=%s iteration=%d before=\"%.22s\" after=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.iteration, action.before_display.c_str(), d0.c_str(), now,
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                } else if (action.phase == 6) {
+                    if (d0 != action.last_match) {
+                        fprintf(stderr, "PANEL_PROBE_DOWN_UNSTABLE id=%s iteration=%d display=\"%.22s\"\n",
+                                action.id.c_str(), action.iteration, d0.c_str());
+                        action.done = true; panel_action_failed = true; continue;
+                    }
+                    if (now - action.phase_time < 0.25) continue;
+                    const bool restored = d0 == action.control_baseline;
+                    fprintf(stderr, "PANEL_PROBE_RESTORE id=%s iteration=%d display=\"%.22s\" baseline=\"%.22s\" exact=%d time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.iteration, d0.c_str(), action.control_baseline.c_str(),
+                            restored ? 1 : 0, now, (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                    if (!restored) { action.done = true; panel_action_failed = true; continue; }
+                    if (action.iteration >= action.repetitions) { action.done = true; continue; }
+                    ++action.iteration;
+                    action.phase = 2;
+                    action.probe_key_released = false;
+                }
+                continue;
+            }
+            if (!action.down_sent) {
+                const bool matches = d0.find(action.needle) != std::string::npos;
+                if (matches && d0 == action.last_match) ++action.match_stable;
+                else { action.match_stable = matches ? 1 : 0; action.last_match = matches ? d0 : std::string(); }
+                if (action.match_stable < 20) continue;
+                if (action.kind == PanelAction::Kind::MarkOnDisplay) {
+                    fprintf(stderr, "PANEL_STATE id=%s display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
+                            (unsigned long long)m.esp.host_frame_count());
+                    fprintf(stderr, "PARAMMARK label=%s cycles=%llu frame=%llu display=\"%.22s\"\n",
+                            action.id.c_str(), (unsigned long long)m.cycles(),
+                            (unsigned long long)m.esp.host_frame_count(), d0.c_str());
+                    action.done = true;
+                } else {
+                    action.before_display = d0;
+                    action.down_sent = true;
+                    action.pressed_at = now;
+                    action.change_stable = 0;
+                    m.panel.button(action.code, true);
+                    fprintf(stderr, "PANEL_TAP_BEGIN id=%s button=%d before=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.code, d0.c_str(), now,
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                }
+            } else {
+                if (d0 != action.before_display) ++action.change_stable;
+                else action.change_stable = 0;
+                if (action.change_stable >= 20 ||
+                    (action.kind == PanelAction::Kind::TapOnDisplay && now - action.pressed_at >= 0.2)) {
+                    m.panel.button(action.code, false);
+                    fprintf(stderr, "PANEL_TAP_DONE id=%s button=%d before=\"%.22s\" after=\"%.22s\" release_reason=%s time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.code, action.before_display.c_str(), d0.c_str(),
+                            action.change_stable >= 20 ? "display_changed" : "minimum_key_hold",
+                            now,
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                    action.done = true;
+                }
+            }
+        }
         for (int k = 0; k < Panel::COLS; k++) if (dc[k] != ' ') d1[k] = dc[k];
         std::string inds; for (int i = 0; i < 16; i++) inds += " *B"[m.panel.ind[i] % 3];
         d1 += " [" + inds + "]";
         { std::string at = "A:"; at += m.audio_led(0) ? 'Y' : '-'; at += m.audio_led(2) ? 'R' : '-';
           at += " B:"; at += m.audio_led(1) ? 'Y' : '-'; at += m.audio_led(3) ? 'R' : '-'; d1 += " {" + at + "}"; }
         d1 += " <" + m.panel.annunciators() + ">";
-        if (!esp_rom_dir.empty() || !experiment_capture_ids.empty()) {
+        if (!esp_rom_dir.empty() || !experiment_capture_ids.empty() || log_rom_select) {
             const std::string marker = "FX=ROM-";
             size_t pos = d0.find(marker);
             if (pos != std::string::npos && d0 == last0) ++stable_display_slices;
@@ -392,6 +647,7 @@ int main(int argc, char **argv) {
     }
     fprintf(stderr, "end pc=%06x\n", m.last_pc());
     fprintf(stderr, "FINAL |%s|\n", m.panel.text().c_str());
+    for (const auto &action : panel_actions) if (!action.done) panel_action_failed = true;
     if (pc_hist) {
         std::vector<std::pair<uint64_t,uint32_t>> v; for (auto &x : hist) v.push_back({x.second, x.first});
         std::sort(v.rbegin(), v.rend());
@@ -442,5 +698,5 @@ int main(int argc, char **argv) {
         }
         write_wav(aux_wav.c_str(), st, (int)m.out_rate);
     }
-    return 0;
+    return panel_action_failed ? 2 : 0;
 }

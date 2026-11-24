@@ -3,12 +3,13 @@
 
 The ASR-10 manual is supplied by the operator and is not copied into this repo.
 Parameter names/ranges are transcribed metadata; live register mappings are
-kept separate and only the existing four HALL/44KHZ BUS points are inserted.
+kept in the separate, evidence-bounded V2 mapping table.
 """
 import argparse
 import json
 import re
 from pathlib import Path
+from verified_mapping_catalog import apply_verified_mappings
 
 ROM = re.compile(r"^ROM-(\d{2})\s+(.+?)\s*$", re.M)
 RANGE = re.compile(r"^\s*([A-Z0-9][A-Z0-9 /+()\-.,&']*?)\s+Ranges?:\s*(.*?)\s*$", re.I)
@@ -107,6 +108,8 @@ def main():
     ap.add_argument("--manual-text", required=True, type=Path)
     ap.add_argument("--inventory", required=True, type=Path)
     ap.add_argument("--output", required=True, type=Path)
+    ap.add_argument("--verified-mappings", type=Path,
+                    default=Path(__file__).resolve().parents[2] / "docs/ASR10_FACTORY_PARAMETER_MAPPINGS_V02.json")
     args = ap.parse_args()
     text = args.manual_text.read_text(errors="replace")
     start = text.find("ROM-01  HALL REVERB")
@@ -174,33 +177,7 @@ def main():
             "identity_note": "Factory slot/name from the existing private-asset-derived public inventory; no program payload included.",
         })
 
-    # Previously verified, reversible UI-to-GPR points. Do not infer a curve
-    # between the two observations.
-    verified = {
-        1: {"reverb_mix_bus1": ("REVERB MIX BUS1", 0x7c, [(28, 0x3d0000), (29, 0x3f0000)]),
-            "reverb_mix_bus2": ("REVERB MIX BUS2", 0x7a, [(28, 0x3d0000), (29, 0x3f0000)])},
-        2: {"reverb_mix_bus1": ("REVERB MIX BUS1", 0x7c, [(25, 0x350000), (26, 0x370000)]),
-            "reverb_mix_bus2": ("REVERB MIX BUS2", 0x7a, [(25, 0x350000), (26, 0x370000)])},
-    }
-    for effect in effects:
-        for pid, (label, gpr, points) in verified.get(effect["slot"], {}).items():
-            effect["verified_runtime_parameters"] = effect.get("verified_runtime_parameters", [])
-            effect["verified_runtime_parameters"].append({
-                "id": pid, "display_name": label, "verified_display_points": [
-                    {"value": v, "gpr": f"0x{gpr:02X}", "raw24": f"0x{raw:06X}"}
-                    for v, raw in points
-                ],
-                "observed_fresh_boot_selection_value": points[0][0],
-                "factory_default": None,
-                "conversion": "Only the two observed points are supported; no interpolation or extended values.",
-                "trace_evidence": "Existing reversible OS 3.53 Up/Down/Up host-write captures; companion and repeated service writes remain undocumented.",
-                "runtime_status": "Functional in native runtime for listed points; runtime cadence does not emulate the OS update transient.",
-            })
-            effect["runtime_parameter_status"] = "two parameters have two reversible OS-verified display points each; all other controls remain unavailable in the native parameter API"
-        effect["verified_runtime_parameter_count"] = len(effect.get("verified_runtime_parameters", []))
-        effect["verified_display_point_count"] = sum(len(p["verified_display_points"]) for p in effect.get("verified_runtime_parameters", []))
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps({
+    catalog = {
         "schema": "trollfx-asr10-factory-parameter-catalog-v1",
         "catalog_evidence": {
             "documented_ranges": "ASR-10 Musician's Manual Section 6, Effect Parameters; ranges are documentation, not emulator measurements",
@@ -222,7 +199,10 @@ def main():
             if sum(any(x["display_name"] == name for x in e["parameters"]) for e in effects) > 1
         },
         "effects": effects,
-    }, indent=2) + "\n")
+    }
+    apply_verified_mappings(catalog, args.verified_mappings)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(catalog, indent=2) + "\n")
 
 
 if __name__ == "__main__":

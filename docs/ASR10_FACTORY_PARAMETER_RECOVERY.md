@@ -6,18 +6,18 @@ This branch adds an evidence-tiered catalog for the 50 original factory slots, a
 
 The catalog contains 594 effect/parameter entries with a printed range or the common `VAR` control (544 algorithm-specific entries plus 50 `VAR` entries), representing 206 distinct displayed labels. The manual's shared modulation controls are recorded separately. These are documentation-derived controls and ranges; the manual's ordering is not presented as verified LCD cursor order. The catalog records cross-references for inherited parameter groups rather than fabricating extra mappings.
 
-Only four parameter IDs have live OS-to-GPR mappings: `REVERB MIX BUS1` and `REVERB MIX BUS2` in ROM-01 HALL, and the same two controls in ROM-02 44KHZ REVERB. Each has two observed display points, for eight verified points total. These four controls remain functional through the native runtime. No other factory control is currently writable through this evidence-bounded parameter API.
+V2 adds display-driven OS navigation and twelve newly verified controls. The current evidence-bounded catalog has 16 controls with two directly observed display points each across 10 factory slots. The detailed list, private probe locations, runtime interface, and limits are in [ES5510_AUTOMATED_PARAMETER_DISCOVERY_V2.md](ES5510_AUTOMATED_PARAMETER_DISCOVERY_V2.md). Two ROM-12 controls were probed but rejected because their host writes did not repeat and reverse to stable values.
 
-The standalone catalog is [ASR10_FACTORY_PARAMETER_CATALOG_V1.json](ASR10_FACTORY_PARAMETER_CATALOG_V1.json), validated by [catalog.schema.json](../tools/parameter_controls/catalog_v1.schema.json). It contains names, slot labels, documented ranges, shared control references, and the four live-mapped controls. It contains no ROM bytes, programs, checkpoints, raw traces, or local asset paths.
+The standalone catalog is [ASR10_FACTORY_PARAMETER_CATALOG_V1.json](ASR10_FACTORY_PARAMETER_CATALOG_V1.json), validated by [catalog.schema.json](../tools/parameter_controls/catalog_v1.schema.json). It contains names, slot labels, documented ranges, shared control references, and the 16 currently mapped controls. The separate [V2 mapping table](ASR10_FACTORY_PARAMETER_MAPPINGS_V02.json) stores exact observed display strings and ordered GPR writes. These files contain no ROM bytes, programs, checkpoints, raw traces, or local asset paths.
 
 ## Evidence levels
 
 - **Documented:** parameter labels, ranges, units embedded in range text, reverb/delay shared groups, and shared modulation controls are transcribed from Section 6 and the modulation-control description in Section 5 of the [ASR-10 Musician's Manual](https://datassette.s3.us-west-004.backblazeb2.com/manuais/ensoniq_eq_musicians_manual.pdf).
-- **Live OS verified:** the four BUS mix mappings above were observed in reversible OS 3.53 Up/Down/Up host-write captures with no-edit comparisons. ROM-01 points are display 28/29 to GPR 0x7C/0x7A values 0x3D0000/0x3F0000. ROM-02 points are display 25/26 to GPR 0x7C/0x7A values 0x350000/0x370000.
-- **Native runtime functional:** those four mapped controls can be scheduled in the native runtime at exact observed points. The adapter does not recreate firmware's repeated update cadence, transient writes, or unverified companion writes.
-- **Unresolved:** factory defaults, clean-reset display defaults, exhaustive LCD cursor order, exact value curves, and parameter destinations for the remaining 48 effects. The catalog does not interpolate between measured points.
+- **Live OS verified:** 16 controls now have two reversible display-to-GPR points. The V2 report separates cyclic/background writes and records unsuccessful candidates.
+- **Native runtime functional:** the V2 descriptor helper installs those exact points, including ordered multi-GPR groups; runtime tests schedule every mapped parameter. The API does not recreate firmware's repeated update cadence or intermediate writes.
+- **Unresolved:** factory defaults, clean-reset display defaults, exhaustive LCD cursor order, exact value curves, and most controls in the 50-slot library. Forty slots have no directly mapped control yet; additional controls in the ten mapped slots also remain unverified. The catalog does not interpolate between measured points.
 
-`VAR` is documented as selecting one of four editable variations. Its OS display encoding and register effects have not been live traced here. Several manual entries refer to a previously described effect family; those references are included in `manual_cross_references`. A referenced family is not evidence that its every control is visible or has identical encoding in each related ROM slot.
+`VAR` is documented as selecting one of four editable variations. The probes reported VAR=1; the other variations and their register effects have not been traced. Several manual entries refer to a previously described effect family; those references are included in `manual_cross_references`. A referenced family is not evidence that its every control is visible or has identical encoding in each related ROM slot.
 
 ## Repeating a controlled OS parameter probe
 
@@ -56,7 +56,7 @@ python3 tools/parameter_controls/run_os_parameter_probe.py \
 
 For a report that contains raw 24-bit register values, add `--include-values` and keep the report private. Recipes should include a matched no-edit control run, before/after markers around settled edits, Down reversal, and a repeated Up. Host-write differences alone do not prove that a register belongs to the edited control; screen values and effect selection identity must also be checked from the capture. Periodic firmware writes remain unassigned unless a controlled comparison proves otherwise.
 
-The analyzer in `tools/parameter_host_diff.py` continues to provide a redacted-by-default marker-window report. The runner and its recipe validator are covered by synthetic tests; this branch did not launch another broad emulator sweep.
+The analyzer in `tools/parameter_host_diff.py` continues to provide a redacted-by-default marker-window report. V2 adds `run_display_driven_probe.py`, which observes the actual 22-character LCD and selects the menu route on OS state rather than a fixed navigation recipe. It waits until the selector sweep ends before opening the parameter page and pulses Up/Down/Cancel to avoid OS key repeat. V2 did not repeat the 50-effect capture sweep.
 
 ## Runtime/API change
 
@@ -86,10 +86,10 @@ They validate 50 catalog slots, the known names for the first three slots, evide
 | Manual-derived effect/control entries | 594 |
 | Distinct display labels in those entries | 206 |
 | Additional common modulation controls documented | 8 |
-| Parameters with reversible live OS-to-GPR evidence | 4 |
-| Verified display-to-GPR points | 8 |
-| Parameters functional in the native runtime | 4 |
+| Parameters with reversible live OS-to-GPR evidence | 16 |
+| Verified display-to-GPR points | 32 |
+| Parameters functional in the native runtime | 16 |
 | Parameters with proven general conversion curves | 0 |
-| Multi-register factory parameter mappings proven | 0 |
+| Multi-register factory parameter mappings proven | 6 |
 
-The runtime supports ordered multi-register groups, but no factory multi-register control has been claimed without live evidence. The next high-value work is to run controlled traces for representative reverb, delay, modulation, dynamics, pitch, and EQ controls, then attach only verified mappings to descriptors.
+The current 16 controls cover reverb, delay, chorus, phaser, guitar amp, pitch, dynamics, and EQ. Six mappings contain multiple ordered GPR writes. Two tested ROM-12 distortion controls remain unassigned because of non-repeatable or cyclic raw GPR activity. Remaining work is to extend coverage while preserving direct screen/transition evidence, then test runtime audio response with control-specific stimuli and longer windows for slow effects.
