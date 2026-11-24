@@ -28,11 +28,21 @@ struct ParameterPoint {
     std::int32_t display_value = 0;
     std::uint8_t gpr = 0;
     std::uint32_t value24 = 0;
+    struct RegisterWrite { std::uint8_t gpr = 0; std::uint32_t value24 = 0; };
+    // When populated, this ordered group replaces the legacy single GPR point.
+    // It is scheduled atomically at one frame; no partial queue insert is allowed.
+    std::vector<RegisterWrite> ordered_writes;
 };
 
 struct VerifiedParameterDefinition {
     std::string id;
     std::string ui_label;
+    std::uint16_t display_order = 0;
+    std::string units;
+    bool documented_numeric_range_valid = false;
+    std::int32_t documented_minimum = 0;
+    std::int32_t documented_maximum = 0;
+    std::string range_evidence;
     std::vector<ParameterPoint> verified_points;
 };
 
@@ -103,9 +113,18 @@ public:
         for (const auto& parameter : d.parameters) {
             if (parameter.id.empty() || parameter.verified_points.empty())
                 return fail("verified parameter definition has no identifier or points");
-            for (const auto& point : parameter.verified_points)
-                if (point.gpr >= 0xc0 || point.value24 > 0x00ffffffu)
+            if (parameter.documented_numeric_range_valid &&
+                (parameter.documented_minimum > parameter.documented_maximum || parameter.range_evidence.empty()))
+                return fail("documented parameter range is malformed or lacks evidence metadata");
+            for (const auto& point : parameter.verified_points) {
+                if (point.ordered_writes.empty() && (point.gpr >= 0xc0 || point.value24 > 0x00ffffffu))
                     return fail("parameter point is outside the 24-bit GPR domain");
+                if (point.ordered_writes.size() > 16)
+                    return fail("parameter write group exceeds bounded size");
+                for (const auto& write : point.ordered_writes)
+                    if (write.gpr >= 0xc0 || write.value24 > 0x00ffffffu)
+                        return fail("parameter write group is outside the 24-bit GPR domain");
+            }
         }
         if (find(d.slot)) return fail("effect slot is already registered");
         packages_.push_back(std::move(package));

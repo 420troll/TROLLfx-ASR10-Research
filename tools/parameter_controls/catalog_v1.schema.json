@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Evidence-tiered ASR-10 factory parameter catalog v1",
+  "type": "object",
+  "required": ["schema", "catalog_evidence", "shared_documented_controls", "shared_parameter_index", "effects"],
+  "properties": {
+    "schema": {"const": "trollfx-asr10-factory-parameter-catalog-v1"},
+    "catalog_evidence": {"type": "object"},
+    "shared_documented_controls": {"type": "array"},
+    "shared_parameter_index": {"type": "object"},
+    "effects": {
+      "type": "array", "minItems": 50, "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": ["slot", "id", "factory_name", "parameters", "runtime_parameter_status", "manual_cross_references"],
+        "properties": {
+          "slot": {"type": "integer", "minimum": 1, "maximum": 50},
+          "id": {"type": "string"},
+          "factory_name": {"type": "string"},
+          "parameters": {"type": "array"},
+          "verified_runtime_parameters": {"type": "array"},
+          "manual_cross_references": {"type": "array", "items": {"type": "string"}},
+          "runtime_parameter_status": {"type": "string"}
+        }
+      }
+    }
+  }
+}

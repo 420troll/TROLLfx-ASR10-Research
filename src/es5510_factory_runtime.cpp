@@ -318,8 +318,37 @@ bool FactoryRuntime::setParameter(const EffectDescriptor& d, const std::string& 
                                   std::int32_t value, std::uint64_t frame) {
     if (!impl_->loaded || d.slot != impl_->descriptor.slot) { impl_->set_error(StatusCode::PackageRejected, "parameter descriptor does not match loaded effect"); return false; }
     for (const auto& p : d.parameters) if (p.id == id) {
-        for (const auto& point : p.verified_points) if (point.display_value == value)
-            return setRegister(point.gpr, point.value24, frame);
+        for (const auto& point : p.verified_points) if (point.display_value == value) {
+            if (point.ordered_writes.empty())
+                return setRegister(point.gpr, point.value24, frame);
+            auto& s = *impl_;
+            if (frame < s.dsp_frames) { s.set_error(StatusCode::EventInPast, "parameter event is in the past"); return false; }
+            if (point.ordered_writes.size() > s.events.size() - s.event_count) {
+                s.set_error(StatusCode::EventQueueFull, "fixed register event queue cannot fit the complete parameter write group");
+                return false;
+            }
+            // Validate the whole group before modifying the fixed queue.
+            for (const auto& write : point.ordered_writes) {
+                if (write.gpr >= 0xc0 || write.value24 > 0x00ffffffu) {
+                    s.set_error(StatusCode::InvalidArgument, "parameter write group contains an invalid GPR value");
+                    return false;
+                }
+            }
+            for (const auto& write : point.ordered_writes) {
+                Impl::Event event{frame, s.event_order++, write.gpr, write.value24};
+                std::size_t pos = s.event_count;
+                while (pos && (s.events[pos - 1].frame > event.frame ||
+                       (s.events[pos - 1].frame == event.frame && s.events[pos - 1].order > event.order))) {
+                    s.events[pos] = s.events[pos - 1];
+                    --pos;
+                }
+                s.events[pos] = event;
+                ++s.event_count;
+            }
+            s.status.code = StatusCode::Ready;
+            s.message = s.status.message = "ordered parameter write group scheduled";
+            return true;
+        }
         impl_->set_error(StatusCode::InvalidArgument, "parameter value is not a verified catalog point"); return false;
     }
     impl_->set_error(StatusCode::InvalidArgument, "parameter is not defined for this effect"); return false;
