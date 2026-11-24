@@ -22,10 +22,7 @@ KNOWN = {
     1: {"name": "HALL REVERB", "words": 89, "program": "34eec2eb04319c0d167a4110608e1e99f2aa13d8b7908f79852c2be3c0aefd4c"},
     2: {"name": "44KHZ REVERB", "words": 60, "program": "12119e86d4d232ab7d7ab4278e9c9dbed9db19a6b6eb352bfb29441181da4486"},
 }
-QUARANTINE = {
-    2: "collection slot 02 active program conflicts with independent ROM-02 replay",
-    3: "collection slot 03 display identity is ambiguous against independent ROM-02 replay",
-}
+QUARANTINE = {}
 EVENT = re.compile(r"^ESPHOST event=(\d+) cycles=(\d+) frame=(\d+) pc=([0-9a-fA-F]+) (gpr|instr|both|ram)\b")
 
 def sha(path: Path) -> str:
@@ -35,13 +32,16 @@ def sha(path: Path) -> str:
     return h.hexdigest()
 
 def package_eligibility(slot: int, name: str, words: int, program_sha: str,
-                        run_frame: int, checkpoint_frame: int) -> tuple[bool, str | None]:
+                        run_frame: int, checkpoint_frame: int,
+                        source_correlated: bool = False) -> tuple[bool, str | None]:
     reason = QUARANTINE.get(slot)
     profile = KNOWN.get(slot)
     if profile and (name != profile["name"] or words != profile["words"] or program_sha != profile["program"]):
         reason = "independent replay identity conflict"
     if checkpoint_frame != run_frame:
         reason = reason or "checkpoint is after RUN; omitted pipeline slots cannot be reconstructed as a RUN-boundary state"
+    if not source_correlated:
+        reason = reason or "OS selector to uploaded RUN program correlation is not verified"
     return reason is None, reason
 
 def validate_one(package_file: Path, quarantined: dict[int,str]) -> dict:
@@ -73,10 +73,15 @@ def validate_one(package_file: Path, quarantined: dict[int,str]) -> dict:
     evidence = doc.get("run_boundary_phase_evidence", {})
     phases = evidence.get("events", [])
     expected = ["pa4_halt_assert", "halt", "host_halt_pipeline_reset", "host_dram_clear",
-                "instruction_upload_start", "pa4_run_release", "program_upload_summary", "run_start", "first_instruction"]
+                "instruction_upload_start", "pa4_run_release", "program_upload_summary", "run_start",
+                "run_snapshot", "first_instruction"]
     if not evidence.get("ordered") or [x.get("kind") for x in phases] != expected:
         raise ValueError("HALT/reset/clear/upload/RUN phase chain mismatch")
     run_frame = next(x["frame"] for x in phases if x["kind"] == "run_start")
+    lines = [int(x["line"]) for x in phases]
+    if lines != sorted(lines): raise ValueError("RUN boundary phases are not in observed log order")
+    if not doc.get("run_boundary_source_correlation", {}).get("verified"):
+        raise ValueError("selected-slot to uploaded-program source correlation is absent")
     snap_frame = int(doc["run_frame"])
     if snap_frame < run_frame: raise ValueError("checkpoint predates RUN")
     count = 0; last_event = -1; last_cycle = -1; last_frame = -1
@@ -90,10 +95,30 @@ def validate_one(package_file: Path, quarantined: dict[int,str]) -> dict:
         count += 1
     if count != int(doc["firmware_transaction_count"]): raise ValueError("firmware history count mismatch")
 
-    # The package snapshot is later than RUN. Its historical writes are already
-    # in this snapshot; no pre-checkpoint event may be replayed as a future write.
+    # Only writes observed after this first-instruction checkpoint are replayed.
+    schedule_doc = doc.get("firmware_schedule", {})
+    schedule_path = (base / schedule_doc.get("path", "")).resolve(strict=True)
+    if doc.get("files", {}).get(schedule_path.name) != sha(schedule_path): raise ValueError("firmware schedule hash mismatch")
+    import csv
+    with schedule_path.open(newline="") as stream:
+        reader=csv.DictReader(stream)
+        if reader.fieldnames != ["relative_dsp_frame","event_id","cpu_cycles","gpr","value24"]:
+            raise ValueError("firmware schedule schema mismatch")
+        scheduled=[]; prev_frame=-1; prev_event=-1
+        for item in reader:
+            frame=int(item["relative_dsp_frame"]); event=int(item["event_id"])
+            gpr=int(item["gpr"],16); value=int(item["value24"],16)
+            if frame < prev_frame or frame >= int(schedule_doc.get("window_frames",0)) or event <= prev_event or gpr >= 0xc0 or value > 0xffffff:
+                raise ValueError("firmware schedule is malformed or outside its capture window")
+            scheduled.append({"relative_dsp_frame":frame,"event_id":event,"gpr":gpr,"value24":value})
+            prev_frame,prev_event=frame,event
+    if len(scheduled) != int(schedule_doc.get("count",-1)): raise ValueError("firmware schedule count mismatch")
+    if len(scheduled) > 1024: raise ValueError("required firmware schedule exceeds the runtime's bounded 1024-event queue")
+    corr=doc["run_boundary_source_correlation"]
+    if int(corr.get("slot",-1)) != slot or int(corr.get("run_frame",-1)) != run_frame or corr.get("program_sha256") != doc["active_program_sha256"]:
+        raise ValueError("slot selection, RUN frame, and active program source correlation disagree")
     eligible, reason = package_eligibility(slot, doc["display_name"], doc["active_program_words"],
-                                            doc["active_program_sha256"], run_frame, snap_frame)
+                                            doc["active_program_sha256"], run_frame, snap_frame, True)
     if reason: quarantined[slot] = reason
     desc = None
     if eligible:
@@ -107,16 +132,14 @@ def validate_one(package_file: Path, quarantined: dict[int,str]) -> dict:
             "package_manifest_path": str(package_file.resolve()),
             "initialization_manifest_path": str(package_file.resolve()),
             "run_checkpoint_path": str(checkpoint), "run_checkpoint_sha256": sha(checkpoint),
-            # The entire supplied event log ends at the later checkpoint. These
-            # writes are present in checkpoint state; the future schedule is empty.
-            "firmware_event_schedule_path": "", "firmware_event_schedule_sha256": "",
-            "firmware_event_schedule": [], "parameters": [],
+            "firmware_event_schedule_path": str(schedule_path), "firmware_event_schedule_sha256": sha(schedule_path),
+            "firmware_event_schedule": scheduled, "parameters": [],
         }
     return {"slot": slot, "name": doc["display_name"], "capture_state_valid": True,
             "registry_eligible": eligible, "quarantine_reason": reason,
             "run_start_frame": run_frame, "checkpoint_frame": snap_frame,
             "checkpoint_is_at_run_boundary": snap_frame == run_frame,
-            "historical_transactions_validated": count, "future_schedule_count": 0,
+            "historical_transactions_validated": count, "future_schedule_count": len(scheduled),
             "descriptor": desc}
 
 def main():

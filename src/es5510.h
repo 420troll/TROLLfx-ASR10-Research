@@ -32,7 +32,13 @@ public:
     bool halted() const { return state == HALTED; }
     void arm_experiment_run_capture(uint32_t active_words) {
         experiment_capture_words = active_words;
-        experiment_capture_armed = active_words != 0;
+        experiment_capture_armed = true;
+    }
+    bool take_experiment_run_capture_complete(uint64_t &frame) {
+        const bool complete = experiment_run_capture_complete;
+        if (complete) frame = experiment_run_capture_complete_frame;
+        experiment_run_capture_complete = false;
+        return complete;
     }
     bool take_experiment_run_start() {
         const bool pending = experiment_run_start_pending;
@@ -90,6 +96,8 @@ private:
     bool experiment_capture_mode = false;
     bool experiment_capture_saw_halt = false;
     bool experiment_run_start_pending = false;
+    bool experiment_run_capture_complete = false;
+    uint64_t experiment_run_capture_complete_frame = 0;
     bool load_transaction_seen = false;
     uint32_t load_instruction_commits = 0;
     uint32_t load_gpr_commits = 0;

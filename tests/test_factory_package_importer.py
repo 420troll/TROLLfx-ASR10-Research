@@ -12,13 +12,15 @@ spec.loader.exec_module(importer)
 class FactoryPackageImporterTests(unittest.TestCase):
     def test_only_known_identity_and_true_run_boundary_can_be_eligible(self):
         hall = importer.KNOWN[1]
-        self.assertEqual(importer.package_eligibility(1, hall["name"], hall["words"], hall["program"], 10, 10),
+        self.assertEqual(importer.package_eligibility(1, hall["name"], hall["words"], hall["program"], 10, 10, True),
                          (True, None))
-        self.assertFalse(importer.package_eligibility(1, hall["name"], hall["words"], hall["program"], 10, 11)[0])
+        self.assertFalse(importer.package_eligibility(1, hall["name"], hall["words"], hall["program"], 10, 11, True)[0])
 
-    def test_collection_slots_02_and_03_are_quarantined(self):
-        self.assertFalse(importer.package_eligibility(2, "44KHZ REVERB", 89, "0" * 64, 10, 10)[0])
-        self.assertFalse(importer.package_eligibility(3, "ROOM REVERB", 60, "1" * 64, 10, 10)[0])
+    def test_selector_correlation_is_required_to_accept_slots_02_and_03(self):
+        rom02=importer.KNOWN[2]
+        self.assertFalse(importer.package_eligibility(2, rom02["name"], rom02["words"], rom02["program"], 10, 10)[0])
+        self.assertEqual(importer.package_eligibility(2, rom02["name"], rom02["words"], rom02["program"], 10, 10, True), (True,None))
+        self.assertFalse(importer.package_eligibility(3, "ROOM REVERB", 89, "1" * 64, 10, 10)[0])
 
     def test_known_hall_identity_rejects_wrong_program_geometry(self):
         hall = importer.KNOWN[1]
