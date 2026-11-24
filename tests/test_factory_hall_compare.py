@@ -18,6 +18,7 @@ spec.loader.exec_module(compare)
 
 def valid_evidence():
     return {
+        "effect": {"id": "ROM-01", "name": "HALL REVERB"},
         "input_sha256": "input",
         "state": {"program_sha256": "program", "gpr_sha256": "gpr", "spr_sha256": "spr",
                   "dram_sha256": "dram", "memory_configuration": {"mask": 1}},
@@ -44,6 +45,19 @@ def samples(n):
 
 
 class FactoryHallCompareTests(unittest.TestCase):
+    def test_rom02_uses_measured_rate_and_requires_matching_factory_identity(self):
+        ref_evidence = valid_evidence()
+        ref_evidence["effect"] = {"id": "ROM-02", "name": "44KHZ REVERB"}
+        ref_evidence["clock"]["dsp_rate_hz"] = 32000.0
+        candidate_evidence = json.loads(json.dumps(ref_evidence))
+        ref = {"engine": "os353", "evidence": ref_evidence, "samples": samples(256)}
+        candidate = {"engine": "native", "evidence": candidate_evidence, "samples": samples(256)}
+        self.assertTrue(compare.compare_datasets(ref, candidate)["eligible"])
+        candidate_evidence["effect"]["id"] = "ROM-01"
+        report = compare.compare_datasets(ref, candidate)
+        self.assertFalse(report["eligible"])
+        self.assertFalse(report["gates"]["effect.id"]["equal"])
+
     def test_synthetic_exact_native_candidate_runs_requested_windows(self):
         ref = {"engine": "os353", "evidence": valid_evidence(), "samples": samples(32768)}
         candidate = {"engine": "native", "evidence": valid_evidence(), "samples": samples(32768)}
@@ -95,8 +109,8 @@ class FactoryHallCompareTests(unittest.TestCase):
             ev = Path(td) / "evidence.json"; ev.write_text(json.dumps({"evidence": evidence}))
             input_path = Path(td) / "input.csv"
             input_path.write_text("frame,in_ser2l,in_ser2r\n500,0,0\n501,1,-1\n")
-            native = compare.load_candidate(path, "native", ev, "engine-csv", input_path)
-            mame = compare.load_candidate(path, "mame", ev, "engine-csv", input_path)
+            native = compare.load_candidate(path, "native", ev, "engine-csv", input_path, 1)
+            mame = compare.load_candidate(path, "mame", ev, "engine-csv", input_path, 1)
         self.assertEqual(native["samples"][0]["left"], 10)
         self.assertEqual(mame["samples"][0]["left"], 11)
         self.assertEqual(native["samples"][1]["absolute_frame"], 501)
@@ -106,7 +120,8 @@ class FactoryHallCompareTests(unittest.TestCase):
             root = Path(td)
             input_rows = [{"index": 0, "absolute_frame": 500, "left": 9, "right": -9}]
             evidence = valid_evidence(); evidence["input_sha256"] = compare.input_sample_digest(input_rows)
-            candidate = {"schema": compare.SCHEMA, "engine": "native", "dsp_serial_samples": samples(1),
+            candidate = {"schema": compare.SCHEMA, "engine": "native", "effect": evidence["effect"],
+                         "sample_domain": "es5510_serial", "dsp_serial_samples": samples(1),
                          "input_samples": input_rows}
             path, sidecar = root / "candidate.json", root / "evidence.json"
             path.write_text(json.dumps(candidate)); sidecar.write_text(json.dumps({"evidence": evidence}))
@@ -138,7 +153,7 @@ class FactoryHallCompareTests(unittest.TestCase):
                                 "firmware_events_sha256": event_evidence["ordered_event_sha256"]},
                      "dsp_rate_hz": compare.DSP_RATE, "host_rate_hz": 44100,
                      "dsp_serial_samples": samples(1), "input_samples": [{"index": 0, "left": 1, "right": -1}],
-                     "metadata": {"absolute_start_frame": 500,
+                     "metadata": {"effect": {"id": "ROM-01", "name": "HALL REVERB"}, "absolute_start_frame": 500,
                                                                          "frame_count": 1,
                                  "firmware_load": {"ordered_event_sha256": event_evidence["ordered_event_sha256"],
                                                    "instruction_commits": 89,
@@ -154,10 +169,12 @@ class FactoryHallCompareTests(unittest.TestCase):
                      "runtime": {"dram_sha256": "dram", "memory_configuration": {"mask": 1},
                                  "control": {"host_serial": 72}},
                      "program": {"active_program_sha256": "program"}}
-            meta = {"schema": "trollfx-es5510-hall-reference-capture-v2", "initial_state": state,
+            meta = {"schema": "trollfx-es5510-hall-reference-capture-v2",
+                    "effect": {"id": "ROM-01", "name": "HALL REVERB"}, "initial_state": state,
                     "firmware_load": {"instruction_commits": 89, "gpr_spr_commit_count": 342,
                                       "ordered_event_sha256": event_evidence["ordered_event_sha256"]},
-                    "clock": {"serial_route": "-1,-1,1,-1", "direct_mask": "00",
+                    "clock": {"dsp_rate_hz": compare.DSP_RATE,
+                              "serial_route": "-1,-1,1,-1", "direct_mask": "00",
                               "host_output_rate_hz": "44100.000"},
                     "timeline": [{"kind": "run_start", "frame": "500"},
                                  {"kind": "run_snapshot", "frame": "500", "log_sequence": 2},

@@ -19,10 +19,9 @@ from pathlib import Path
 
 from hall_replay_verify import compare_samples
 
-DSP_RATE = 29761.89453125
-HOST_RATE = 44100
 WINDOWS = (256, 4096, 32768)
 SCHEMA = "trollfx-es5510-factory-candidate-v1"
+DSP_RATE = 29761.89453125  # Observed ROM-01 HALL rate; compatibility only, never a ROM-02 assumption.
 
 
 def _require(obj: dict, path: str):
@@ -93,10 +92,20 @@ def input_sample_digest(samples: list[dict]) -> str:
 def os_reference(trace_path: Path, metadata_path: Path) -> dict:
     trace = json.loads(trace_path.read_text())
     meta = json.loads(metadata_path.read_text())
-    if trace.get("schema") != "trollfx-es5510-hall-replay-v1":
+    if trace.get("schema") not in ("trollfx-es5510-hall-replay-v1", "trollfx-es5510-factory-replay-v1"):
         raise ValueError("unsupported OS trace schema")
-    if meta.get("schema") != "trollfx-es5510-hall-reference-capture-v2":
+    if meta.get("schema") not in ("trollfx-es5510-hall-reference-capture-v2", "trollfx-es5510-factory-reference-capture-v1"):
         raise ValueError("unsupported OS capture metadata schema")
+    effect = _require(meta, "effect")
+    if isinstance(effect, str):
+        if effect == "ROM-01 HALL REVERB":
+            effect = {"id": "ROM-01", "name": "HALL REVERB"}
+        else:
+            raise ValueError("legacy effect label cannot identify an unsupported factory effect")
+    if not isinstance(effect, dict) or not effect.get("id") or not effect.get("name"):
+        raise ValueError("factory effect identity must include id and name")
+    if trace.get("metadata", {}).get("effect", effect) != effect:
+        raise ValueError("OS trace factory effect identity disagrees with capture metadata")
     state = _require(meta, "initial_state")
     reset = _require(state, "pipeline.reset_event")
     timeline_rows = _require(meta, "timeline")
@@ -119,10 +128,11 @@ def os_reference(trace_path: Path, metadata_path: Path) -> dict:
     if not route or len(route.split(",")) != 4:
         raise ValueError("OS serial routing evidence incomplete")
     rate = float(trace.get("dsp_rate_hz", 0))
-    if not math.isclose(rate, DSP_RATE, abs_tol=1e-8):
-        raise ValueError("OS DSP clock is not the observed HALL rate")
-    if int(trace.get("host_rate_hz", 0)) != HOST_RATE or int(float(clock.get("host_output_rate_hz", 0))) != HOST_RATE:
-        raise ValueError("OS host clock evidence must identify 44100 Hz output")
+    host_rate = int(trace.get("host_rate_hz", 0))
+    if not math.isfinite(rate) or rate <= 0 or not math.isclose(rate, float(clock.get("dsp_rate_hz", 0)), abs_tol=1e-8):
+        raise ValueError("OS DSP clock is missing or inconsistent with measured clock evidence")
+    if host_rate <= 0 or int(float(clock.get("host_output_rate_hz", 0))) != host_rate:
+        raise ValueError("OS host clock evidence is missing or inconsistent")
     if trace.get("replay", {}).get("initial_state_sha256") != state.get("capture_sha256"):
         raise ValueError("OS trace initial-state digest disagrees with RUN snapshot metadata")
     for path in ("capture_sha256", "program.active_program_sha256", "register_hashes.gpr_sha256",
@@ -193,7 +203,8 @@ def os_reference(trace_path: Path, metadata_path: Path) -> dict:
                      "last_frame_inclusive": int(_require(window_firmware, "execution_event_sequence.last_frame_inclusive")),
                      "instruction_commits": int(_require(firmware, "instruction_commits")),
                      "gpr_spr_commit_count": int(_require(firmware, "gpr_spr_commit_count"))},
-        "clock": {"dsp_rate_hz": rate, "host_rate_hz": int(_require(trace, "host_rate_hz"))},
+        "effect": effect,
+        "clock": {"dsp_rate_hz": rate, "host_rate_hz": host_rate},
         "routing": {"host_serial": int(_require(runtime, "control.host_serial")),
                     "serial_route": route, "direct_mask": clock.get("direct_mask")},
         "alignment": {"absolute_start_frame": start, "sample_zero_is_frame": start,
@@ -219,7 +230,8 @@ def os_reference(trace_path: Path, metadata_path: Path) -> dict:
 
 
 def load_candidate(path: Path, kind: str, evidence_path: Path,
-                   fmt: str = "json", input_path: Path | None = None) -> dict:
+                   fmt: str = "json", input_path: Path | None = None,
+                   output_serial_port: int | None = None) -> dict:
     evidence_doc = json.loads(evidence_path.read_text())
     evidence = evidence_doc.get("evidence", evidence_doc)
     if fmt == "json":
@@ -228,11 +240,17 @@ def load_candidate(path: Path, kind: str, evidence_path: Path,
             raise ValueError(f"candidate JSON schema must be {SCHEMA}")
         if doc.get("engine") != kind:
             raise ValueError("candidate engine does not match requested native/mame adapter")
+        if doc.get("sample_domain") != "es5510_serial" or doc.get("output_domain") == "host_pcm":
+            raise ValueError("candidate DSP samples must identify the separate es5510_serial domain")
+        if doc.get("effect") != evidence.get("effect"):
+            raise ValueError("candidate factory effect identity does not match evidence")
         samples = doc.get("dsp_serial_samples")
         inputs = doc.get("input_samples")
     else:
         if input_path is None:
             raise ValueError("--candidate-input replay_io CSV is required for engine-csv adapter")
+        if output_serial_port not in (0, 1, 2, 3):
+            raise ValueError("engine-csv adapter requires an explicit output serial port 0..3")
         samples = []
         last = None
         with path.open(newline="") as f:
@@ -241,9 +259,9 @@ def load_candidate(path: Path, kind: str, evidence_path: Path,
                 if last is not None and frame != last + 1:
                     raise ValueError("candidate engine CSV has a frame gap or duplicate")
                 last = frame
-                # Replay V2/V4 engine comparison CSV stores all four ports. HALL
-                # factory output is SER1 L/R, independent of engine family.
-                prefix = f"{kind}1"
+                # Replay V2/V4 engine comparison CSV stores all four ports;
+                # factory routing evidence chooses the output port explicitly.
+                prefix = f"{kind}{output_serial_port}"
                 samples.append({"index": len(samples), "absolute_frame": frame,
                                 "left": int(row[prefix + "l"]), "right": int(row[prefix + "r"])})
         inputs = []
@@ -278,7 +296,7 @@ def load_candidate(path: Path, kind: str, evidence_path: Path,
 
 
 EVIDENCE_PATHS = (
-    "input_sha256", "state.program_sha256", "state.gpr_sha256", "state.spr_sha256",
+    "effect.id", "effect.name", "input_sha256", "state.program_sha256", "state.gpr_sha256", "state.spr_sha256",
     "state.dram_sha256", "state.memory_configuration", "pipeline.reset_acknowledged",
     "pipeline.alu_pending", "pipeline.mac_pending", "pipeline.ram_slots_cleared", "pipeline.dol_count",
     "firmware.ordered_event_sha256", "firmware.execution_event_sequence", "firmware.execution_event_count",
@@ -333,8 +351,8 @@ def compare_datasets(reference: dict, candidate: dict, event_diagnostics: dict |
     if (pipe.get("reset_acknowledged") is not True or pipe.get("alu_pending") != 0 or
             pipe.get("mac_pending") != 0 or pipe.get("ram_slots_cleared") != 3 or pipe.get("dol_count") != 0):
         gates["pipeline.known_reset_state"] = {"equal": False, "reason": "known reset/empty pipeline evidence required"}
-    if candidate["evidence"].get("clock", {}).get("dsp_rate_hz") != DSP_RATE:
-        gates["clock.observed_hall_rate"] = {"equal": False, "reason": "29,761.89453125 Hz required"}
+    if not isinstance(candidate["evidence"].get("clock", {}).get("dsp_rate_hz"), (int, float)):
+        gates["clock.measured_rate"] = {"equal": False, "reason": "measured candidate DSP rate required"}
     eligible = all(g.get("equal") is True for g in gates.values())
     windows = {}
     for n in WINDOWS:
@@ -374,14 +392,17 @@ def compare_wavs_gated(reference_wav: Path, candidate_wav: Path, reference: dict
         return {"status": "not_run", "reason": "DSP evidence gates failed"}
     if not candidate["evidence"].get("host_mapping_sha256") or candidate["evidence"]["host_mapping_sha256"] != reference["evidence"]["host_mapping_sha256"]:
         return {"status": "not_run", "reason": "identical per-frame host source-time mapping evidence required"}
-    def read(path):
+    def read(path, expected_rate):
         with wave.open(str(path), "rb") as w:
-            if w.getnchannels() != 2 or w.getsampwidth() != 2 or w.getframerate() != HOST_RATE:
-                raise ValueError("host WAVs must both be stereo PCM16 at 44100 Hz")
+            if w.getnchannels() != 2 or w.getsampwidth() != 2:
+                raise ValueError("host WAVs must be stereo PCM16")
+            if w.getframerate() != expected_rate:
+                raise ValueError("host WAV rate does not match its separately measured host output clock")
             data = w.readframes(w.getnframes())
         vals = struct.unpack("<" + "h" * (len(data)//2), data)
         return [{"index": i, "left": vals[i*2], "right": vals[i*2+1]} for i in range(len(vals)//2)]
-    left, right = read(reference_wav), read(candidate_wav)
+    left = read(reference_wav, reference["evidence"]["clock"]["host_rate_hz"])
+    right = read(candidate_wav, candidate["evidence"]["clock"]["host_rate_hz"])
     expected_n = reference["evidence"]["host_window_frames"]
     if len(left) != expected_n or len(right) != expected_n or len(right) != int(candidate["evidence"].get("host_window_frames", -1)):
         return {"status": "not_run", "reason": "host WAV frame counts do not match the verified mapped window"}
@@ -400,6 +421,8 @@ def main() -> int:
                    help="replay_io CSV for legacy engine-csv adapter; JSON adapters carry input_samples")
     p.add_argument("--engine", choices=("native", "mame"), required=True)
     p.add_argument("--candidate-format", choices=("json", "engine-csv"), default="json")
+    p.add_argument("--output-serial-port", type=int, choices=(0, 1, 2, 3),
+                   help="required for engine-csv; port selected from verified factory routing evidence")
     p.add_argument("--os-wav", type=Path)
     p.add_argument("--candidate-wav", type=Path)
     p.add_argument("--candidate-host-map", type=Path)
@@ -416,8 +439,10 @@ def main() -> int:
     ref = os_reference(a.os_trace, a.os_metadata)
     if a.candidate_format == "json" and a.candidate_input:
         p.error("candidate JSON must carry its own input_samples")
+    if a.candidate_format == "engine-csv" and a.output_serial_port is None:
+        p.error("--output-serial-port is required for engine-csv")
     candidate = load_candidate(a.candidate, a.engine, a.candidate_evidence,
-                               a.candidate_format, a.candidate_input)
+                               a.candidate_format, a.candidate_input, a.output_serial_port)
     event_evidence = measure_event_trace(a.candidate_events,
                                          int(candidate["evidence"]["alignment"]["absolute_start_frame"]),
                                          int(candidate["evidence"]["alignment"]["absolute_start_frame"]) +

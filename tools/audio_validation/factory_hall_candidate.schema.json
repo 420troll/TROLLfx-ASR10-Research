@@ -1,12 +1,30 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "TROLLfx factory HALL candidate output adapter",
+  "title": "TROLLfx factory ES5510 serial candidate output adapter",
   "type": "object",
-  "required": ["schema", "engine", "input_samples", "dsp_serial_samples"],
+  "required": ["schema", "engine", "effect", "sample_domain", "input_samples", "dsp_serial_samples"],
   "properties": {
     "schema": {"const": "trollfx-es5510-factory-candidate-v1"},
     "engine": {"enum": ["native", "mame"]},
+    "effect": {"type": "object", "required": ["id", "name"],
+               "properties": {"id": {"type": "string"}, "name": {"type": "string"}},
+               "additionalProperties": false},
+    "sample_domain": {"const": "es5510_serial"},
     "dsp_serial_samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["index", "absolute_frame", "left", "right"],
+        "properties": {
+          "index": {"type": "integer", "minimum": 0},
+          "absolute_frame": {"type": "integer", "minimum": 0},
+          "left": {"type": "integer", "minimum": -32768, "maximum": 32767},
+          "right": {"type": "integer", "minimum": -32768, "maximum": 32767}
+        },
+        "additionalProperties": true
+      }
+    },
+    "input_samples": {
       "type": "array",
       "items": {
         "type": "object",
@@ -21,19 +39,5 @@
       }
     }
   },
-    "input_samples": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["index", "absolute_frame", "left", "right"],
-        "properties": {
-          "index": {"type": "integer", "minimum": 0},
-          "absolute_frame": {"type": "integer", "minimum": 0},
-          "left": {"type": "integer", "minimum": -32768, "maximum": 32767},
-          "right": {"type": "integer", "minimum": -32768, "maximum": 32767}
-        },
-        "additionalProperties": true
-      }
-    },
   "additionalProperties": true
 }
