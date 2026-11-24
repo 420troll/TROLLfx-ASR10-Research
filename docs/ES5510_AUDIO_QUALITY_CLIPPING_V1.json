@@ -1,0 +1,1683 @@
+{
+  "effects": [
+    {
+      "name": "HALL REVERB",
+      "slot": 1,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759948730469,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.529998779297,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.375427246094,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "44KHZ REVERB",
+      "slot": 2,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.799957275391,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.583923339844,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.364440917969,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "ROOM REVERB",
+      "slot": 3,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.799957275391,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.537902832031,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.376068115234,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "DUAL DELAYS",
+      "slot": 4,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759948730469,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.646850585938,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.457183837891,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "44KHZ DELAYS",
+      "slot": 5,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759948730469,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.627868652344,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.493865966797,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "CHORUS+REVRB",
+      "slot": 6,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759918212891,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.527465820312,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.367004394531,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "PHASER+REVRB",
+      "slot": 7,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759948730469,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.531494140625,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.368743896484,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "FLANGER+REV",
+      "slot": 8,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759918212891,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.527008056641,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.366668701172,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "ROT.SPKR+REV",
+      "slot": 9,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759857177734,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.518646240234,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.358367919922,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "CHOR+REV+DDL",
+      "slot": 10,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759948730469,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.532165527344,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.376373291016,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "CMP+DIST+REV",
+      "slot": 11,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759735107422,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.515350341797,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.372283935547,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "DIST+CHO+REV",
+      "slot": 12,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.392669677734,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.542053222656,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.291687011719,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "WAH+DIST+REV",
+      "slot": 13,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759735107422,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.535797119141,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.388122558594,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "SMALL ROOM",
+      "slot": 14,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759948730469,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.878448486328,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.5361328125,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "LARGE ROOM",
+      "slot": 15,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759948730469,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.647918701172,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.429870605469,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "HALL REVERB2",
+      "slot": 16,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.70654296875,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.621826171875,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.363586425781,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "SMALL PLATE",
+      "slot": 17,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.742156982422,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.818664550781,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.528625488281,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "LARGE PLATE",
+      "slot": 18,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.742156982422,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.972686767578,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.443023681641,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "REVRSE REVRB",
+      "slot": 19,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759948730469,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.973388671875,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.491027832031,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "REVRSE REVB2",
+      "slot": 20,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759948730469,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.449920654297,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.349884033203,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "GATED REVERB",
+      "slot": 21,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.742156982422,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.599639892578,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.572845458984,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "NLIN REVRB 1",
+      "slot": 22,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759918212891,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.899047851562,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.432739257812,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "NLIN REVRB 2",
+      "slot": 23,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.742156982422,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.997161865234,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.443756103516,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "NLIN REVRB 3",
+      "slot": 24,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.742126464844,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.856140136719,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.549468994141,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "MULTITAP DDL",
+      "slot": 25,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759948730469,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.590850830078,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.654144287109,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "EQ+DELAY LFO",
+      "slot": 26,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.742156982422,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.918670654297,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.572784423828,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "VCF+DISTORT",
+      "slot": 27,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.305694580078,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.585357666016,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.414001464844,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "GUITAR AMP1",
+      "slot": 28,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.374053955078,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.848480224609,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.29541015625,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "GUITAR AMP2",
+      "slot": 29,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.231536865234,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.999938964844,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.515899658203,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "GUITAR AMP3",
+      "slot": 30,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.629333496094,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.785125732422,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.999938964844,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "SPKR CABINET",
+      "slot": 31,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.185729980469,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 4324,
+          "peak_float": 0.999969482422,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.3974609375,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "TUNABLE SPKR",
+      "slot": 32,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.305755615234,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.573059082031,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.372161865234,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "EQ+CHOR+DDL",
+      "slot": 33,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.562957763672,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.668090820312,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.604675292969,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "EQ+VIBR+DDL",
+      "slot": 34,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.370758056641,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.575561523438,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.348327636719,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "EQ+FLNGR+DDL",
+      "slot": 35,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.258331298828,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.510009765625,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.457672119141,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "EQ+TREM+DDL",
+      "slot": 36,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.999938964844,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.897491455078,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.758728027344,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "PHASER+DDL",
+      "slot": 37,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.961456298828,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.695343017578,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 21,
+          "peak_float": 0.999969482422,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "8-VOICE CHOR",
+      "slot": 38,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.2998046875,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.56787109375,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.469543457031,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "PITCH SHIFT",
+      "slot": 39,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.534301757812,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.449768066406,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.349090576172,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "PITCH+DDL",
+      "slot": 40,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.326538085938,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.760314941406,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.488586425781,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "FAST PITCHSH",
+      "slot": 41,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759063720703,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.565368652344,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.623779296875,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "EQ+CMPRESSOR",
+      "slot": 42,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.147766113281,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.309417724609,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.352966308594,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "EXPANDER",
+      "slot": 43,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.760131835938,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.453948974609,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.352996826172,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "KEYED EXPNDR",
+      "slot": 44,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.787231445312,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.613830566406,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.506561279297,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "INVRS EXPNDR",
+      "slot": 45,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.999938964844,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.487182617188,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.646301269531,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "DE-ESSER",
+      "slot": 46,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.252868652344,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.880889892578,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.552398681641,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "DUCKER",
+      "slot": 47,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.585296630859,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.272918701172,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.410400390625,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "RUMBLE FILTR",
+      "slot": 48,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.40966796875,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.287384033203,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.489654541016,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "PARAM EQ",
+      "slot": 49,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.694610595703,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.553802490234,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.516967773438,
+          "wav_clamped_samples": 0
+        }
+      ]
+    },
+    {
+      "name": "VAN DER POL",
+      "slot": 50,
+      "stimuli": [
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "impulse",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.759979248047,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "sustained",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.449920654297,
+          "wav_clamped_samples": 0
+        },
+        {
+          "finite_samples": 32768,
+          "float_overrange_samples": 0,
+          "frames": 16384,
+          "kind": "transient",
+          "near_full_scale_pcm16_threshold_samples": 0,
+          "peak_float": 0.349884033203,
+          "wav_clamped_samples": 0
+        }
+      ]
+    }
+  ],
+  "float_overrange_definition": "abs(float_output) > 1.0 before PCM16 WAV conversion",
+  "host_rate_hz": 48000,
+  "original_os_emulator_selector_audio": {
+    "31": {
+      "channels": 2,
+      "frames": 22050,
+      "full_scale_samples": 0,
+      "near_full_scale_samples": 0,
+      "peak_pcm16": 19105,
+      "rate_hz": 44100
+    },
+    "37": {
+      "channels": 2,
+      "frames": 22050,
+      "full_scale_samples": 0,
+      "near_full_scale_samples": 0,
+      "peak_pcm16": 22167,
+      "rate_hz": 44100
+    }
+  },
+  "reference_comparison_note": "These captured selector WAVs use their capture-session audio; they are not matched to the generated harness stimuli.",
+  "schema": "trollfx-audio-quality-clipping-summary-v1",
+  "threshold_definition": "abs(float_output) >= 0.999969482422; this is near-full-scale, not itself clipping",
+  "totals": {
+    "float_overrange_samples": 0,
+    "near_full_scale_pcm16_threshold_samples": 4345,
+    "wav_clamped_samples": 0
+  },
+  "wav_clamped_definition": "number of float samples clipped to [-1,+1] by the WAV converter"
+}

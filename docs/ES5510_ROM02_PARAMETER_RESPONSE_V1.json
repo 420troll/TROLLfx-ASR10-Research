@@ -1,0 +1,981 @@
+{
+  "comparisons": [
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 177123,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "factory-44100",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        177123,
+        177579
+      ],
+      "rate_hz": 44100,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "left",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 177123,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "factory-44100",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        177123,
+        177579
+      ],
+      "rate_hz": 44100,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "left",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 177123,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "factory-44100",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        177123,
+        177579
+      ],
+      "rate_hz": 44100,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "left",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 177123,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "factory-44100",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        177123,
+        177579
+      ],
+      "rate_hz": 44100,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "right",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 177123,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "factory-44100",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        177123,
+        177579
+      ],
+      "rate_hz": 44100,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "right",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 177123,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "factory-44100",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        177123,
+        177579
+      ],
+      "rate_hz": 44100,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "right",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 177123,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "factory-44100",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        177123,
+        177579
+      ],
+      "rate_hz": 44100,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "stereo",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 177123,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "factory-44100",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        177123,
+        177579
+      ],
+      "rate_hz": 44100,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "stereo",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 177123,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "factory-44100",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        177123,
+        177579
+      ],
+      "rate_hz": 44100,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "stereo",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 4328,
+      "early_rms_difference": 4.66156e-05,
+      "edit_frame": 177123,
+      "frames": 16384,
+      "late_rms_difference": 1.74779e-05,
+      "left_rms_difference": 3.15101e-05,
+      "mode": "factory-44100",
+      "peak_difference": 0.00164795,
+      "primary_write_frames": [
+        177123
+      ],
+      "rate_hz": 44100,
+      "register": "0x7a",
+      "right_rms_difference": 2.6502e-05,
+      "rms_difference": 2.91139e-05,
+      "route": "left",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 31198,
+      "early_rms_difference": 0.000316812,
+      "edit_frame": 177123,
+      "frames": 16384,
+      "late_rms_difference": 0.000461398,
+      "left_rms_difference": 0.000456715,
+      "mode": "factory-44100",
+      "peak_difference": 0.0017395,
+      "primary_write_frames": [
+        177123
+      ],
+      "rate_hz": 44100,
+      "register": "0x7a",
+      "right_rms_difference": 0.000357341,
+      "rms_difference": 0.000410049,
+      "route": "left",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 32060,
+      "early_rms_difference": 0.00123192,
+      "edit_frame": 177123,
+      "frames": 16384,
+      "late_rms_difference": 0.0023968,
+      "left_rms_difference": 0.00223476,
+      "mode": "factory-44100",
+      "peak_difference": 0.00500488,
+      "primary_write_frames": [
+        177123
+      ],
+      "rate_hz": 44100,
+      "register": "0x7a",
+      "right_rms_difference": 0.00182226,
+      "rms_difference": 0.00203897,
+      "route": "left",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 4166,
+      "early_rms_difference": 4.28132e-05,
+      "edit_frame": 177123,
+      "frames": 16384,
+      "late_rms_difference": 1.68958e-05,
+      "left_rms_difference": 2.90382e-05,
+      "mode": "factory-44100",
+      "peak_difference": 0.00149536,
+      "primary_write_frames": [
+        177123
+      ],
+      "rate_hz": 44100,
+      "register": "0x7a",
+      "right_rms_difference": 2.46265e-05,
+      "rms_difference": 2.69228e-05,
+      "route": "right",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 31199,
+      "early_rms_difference": 0.000327094,
+      "edit_frame": 177123,
+      "frames": 16384,
+      "late_rms_difference": 0.000458637,
+      "left_rms_difference": 0.000463208,
+      "mode": "factory-44100",
+      "peak_difference": 0.00201416,
+      "primary_write_frames": [
+        177123
+      ],
+      "rate_hz": 44100,
+      "register": "0x7a",
+      "right_rms_difference": 0.000362863,
+      "rms_difference": 0.000416071,
+      "route": "right",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 31946,
+      "early_rms_difference": 0.00119284,
+      "edit_frame": 177123,
+      "frames": 16384,
+      "late_rms_difference": 0.0011626,
+      "left_rms_difference": 0.00114612,
+      "mode": "factory-44100",
+      "peak_difference": 0.00335693,
+      "primary_write_frames": [
+        177123
+      ],
+      "rate_hz": 44100,
+      "register": "0x7a",
+      "right_rms_difference": 0.00127185,
+      "rms_difference": 0.00121062,
+      "route": "right",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 6488,
+      "early_rms_difference": 8.92909e-05,
+      "edit_frame": 177123,
+      "frames": 16384,
+      "late_rms_difference": 2.60695e-05,
+      "left_rms_difference": 5.85161e-05,
+      "mode": "factory-44100",
+      "peak_difference": 0.00314331,
+      "primary_write_frames": [
+        177123
+      ],
+      "rate_hz": 44100,
+      "register": "0x7a",
+      "right_rms_difference": 4.92748e-05,
+      "rms_difference": 5.40932e-05,
+      "route": "stereo",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 31426,
+      "early_rms_difference": 0.000449717,
+      "edit_frame": 177123,
+      "frames": 16384,
+      "late_rms_difference": 0.000644096,
+      "left_rms_difference": 0.000645538,
+      "mode": "factory-44100",
+      "peak_difference": 0.00247192,
+      "primary_write_frames": [
+        177123
+      ],
+      "rate_hz": 44100,
+      "register": "0x7a",
+      "right_rms_difference": 0.000506028,
+      "rms_difference": 0.000579993,
+      "route": "stereo",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 32090,
+      "early_rms_difference": 0.00172714,
+      "edit_frame": 177123,
+      "frames": 16384,
+      "late_rms_difference": 0.00266265,
+      "left_rms_difference": 0.00250757,
+      "mode": "factory-44100",
+      "peak_difference": 0.00695801,
+      "primary_write_frames": [
+        177123
+      ],
+      "rate_hz": 44100,
+      "register": "0x7a",
+      "right_rms_difference": 0.00222332,
+      "rms_difference": 0.00236971,
+      "route": "stereo",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 192787,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "experimental-48000",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        192787,
+        193243
+      ],
+      "rate_hz": 48000,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "left",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 192787,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "experimental-48000",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        192787,
+        193243
+      ],
+      "rate_hz": 48000,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "left",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 192787,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "experimental-48000",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        192787,
+        193243
+      ],
+      "rate_hz": 48000,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "left",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 192787,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "experimental-48000",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        192787,
+        193243
+      ],
+      "rate_hz": 48000,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "right",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 192787,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "experimental-48000",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        192787,
+        193243
+      ],
+      "rate_hz": 48000,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "right",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 192787,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "experimental-48000",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        192787,
+        193243
+      ],
+      "rate_hz": 48000,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "right",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 192787,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "experimental-48000",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        192787,
+        193243
+      ],
+      "rate_hz": 48000,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "stereo",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 192787,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "experimental-48000",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        192787,
+        193243
+      ],
+      "rate_hz": 48000,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "stereo",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7d=0x7fff00",
+      "control": "BUS1",
+      "deterministic_repeat": true,
+      "different_samples": 0,
+      "early_rms_difference": 0,
+      "edit_frame": 192787,
+      "frames": 262144,
+      "late_rms_difference": 0,
+      "left_rms_difference": 0,
+      "mode": "experimental-48000",
+      "peak_difference": 0,
+      "primary_write_frames": [
+        192787,
+        193243
+      ],
+      "rate_hz": 48000,
+      "register": "0x7c",
+      "right_rms_difference": 0,
+      "rms_difference": 0,
+      "route": "stereo",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 4352,
+      "early_rms_difference": 4.67252e-05,
+      "edit_frame": 192787,
+      "frames": 16384,
+      "late_rms_difference": 1.75104e-05,
+      "left_rms_difference": 3.15101e-05,
+      "mode": "experimental-48000",
+      "peak_difference": 0.00164795,
+      "primary_write_frames": [
+        192787
+      ],
+      "rate_hz": 48000,
+      "register": "0x7a",
+      "right_rms_difference": 2.66091e-05,
+      "rms_difference": 2.91627e-05,
+      "route": "left",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 31175,
+      "early_rms_difference": 0.000317156,
+      "edit_frame": 192787,
+      "frames": 16384,
+      "late_rms_difference": 0.00046161,
+      "left_rms_difference": 0.000457129,
+      "mode": "experimental-48000",
+      "peak_difference": 0.00180054,
+      "primary_write_frames": [
+        192787
+      ],
+      "rate_hz": 48000,
+      "register": "0x7a",
+      "right_rms_difference": 0.00035757,
+      "rms_difference": 0.00041038,
+      "route": "left",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 32079,
+      "early_rms_difference": 0.00141746,
+      "edit_frame": 192787,
+      "frames": 16384,
+      "late_rms_difference": 0.00217656,
+      "left_rms_difference": 0.00207658,
+      "mode": "experimental-48000",
+      "peak_difference": 0.00469971,
+      "primary_write_frames": [
+        192787
+      ],
+      "rate_hz": 48000,
+      "register": "0x7a",
+      "right_rms_difference": 0.00169992,
+      "rms_difference": 0.00189762,
+      "route": "left",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 4135,
+      "early_rms_difference": 4.28862e-05,
+      "edit_frame": 192787,
+      "frames": 16384,
+      "late_rms_difference": 1.63938e-05,
+      "left_rms_difference": 2.90861e-05,
+      "mode": "experimental-48000",
+      "peak_difference": 0.00149536,
+      "primary_write_frames": [
+        192787
+      ],
+      "rate_hz": 48000,
+      "register": "0x7a",
+      "right_rms_difference": 2.43841e-05,
+      "rms_difference": 2.68382e-05,
+      "route": "right",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 31181,
+      "early_rms_difference": 0.000327065,
+      "edit_frame": 192787,
+      "frames": 16384,
+      "late_rms_difference": 0.000459598,
+      "left_rms_difference": 0.000463349,
+      "mode": "experimental-48000",
+      "peak_difference": 0.00195312,
+      "primary_write_frames": [
+        192787
+      ],
+      "rate_hz": 48000,
+      "register": "0x7a",
+      "right_rms_difference": 0.000362827,
+      "rms_difference": 0.000416134,
+      "route": "right",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 32005,
+      "early_rms_difference": 0.00106406,
+      "edit_frame": 192787,
+      "frames": 16384,
+      "late_rms_difference": 0.00169211,
+      "left_rms_difference": 0.00145261,
+      "mode": "experimental-48000",
+      "peak_difference": 0.00354004,
+      "primary_write_frames": [
+        192787
+      ],
+      "rate_hz": 48000,
+      "register": "0x7a",
+      "right_rms_difference": 0.00156118,
+      "rms_difference": 0.00150787,
+      "route": "right",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 6445,
+      "early_rms_difference": 8.90403e-05,
+      "edit_frame": 192787,
+      "frames": 16384,
+      "late_rms_difference": 2.57669e-05,
+      "left_rms_difference": 5.83994e-05,
+      "mode": "experimental-48000",
+      "peak_difference": 0.00314331,
+      "primary_write_frames": [
+        192787
+      ],
+      "rate_hz": 48000,
+      "register": "0x7a",
+      "right_rms_difference": 4.90743e-05,
+      "rms_difference": 5.39387e-05,
+      "route": "stereo",
+      "signal": "impulse",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 31417,
+      "early_rms_difference": 0.000449203,
+      "edit_frame": 192787,
+      "frames": 16384,
+      "late_rms_difference": 0.000644215,
+      "left_rms_difference": 0.000645993,
+      "mode": "experimental-48000",
+      "peak_difference": 0.00253296,
+      "primary_write_frames": [
+        192787
+      ],
+      "rate_hz": 48000,
+      "register": "0x7a",
+      "right_rms_difference": 0.000505573,
+      "rms_difference": 0.000580048,
+      "route": "stereo",
+      "signal": "noise",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    },
+    {
+      "companion_register": "0x7b=0x7fff00",
+      "control": "BUS2",
+      "deterministic_repeat": true,
+      "different_samples": 32046,
+      "early_rms_difference": 0.00176568,
+      "edit_frame": 192787,
+      "frames": 16384,
+      "late_rms_difference": 0.00275464,
+      "left_rms_difference": 0.00252653,
+      "mode": "experimental-48000",
+      "peak_difference": 0.00717163,
+      "primary_write_frames": [
+        192787
+      ],
+      "rate_hz": 48000,
+      "register": "0x7a",
+      "right_rms_difference": 0.00230219,
+      "rms_difference": 0.00241696,
+      "route": "stereo",
+      "signal": "sustained",
+      "writes": [
+        "0x350000",
+        "0x370000"
+      ]
+    }
+  ],
+  "schedule": {
+    "bus1_first_write_frame": 492,
+    "bus1_last_value": "0x350000",
+    "bus1_last_write_frame": 17075,
+    "bus1_write_count": 33,
+    "bus2_first_write_frame": 501,
+    "bus2_last_value": "0x350000",
+    "bus2_last_write_frame": 501,
+    "bus2_write_count": 1,
+    "events": 202,
+    "experimental_48000_edit_frame": 192787,
+    "factory_edit_frame": 177123,
+    "os_edit_offset_seconds": 4.01639,
+    "warmup_signal": "sustained stereo"
+  },
+  "validated_reference": {
+    "active_program_words": 60,
+    "factory_reference_rate_hz": 44100.0,
+    "processing_rate_hz": 48000.0,
+    "run_frame": 905028,
+    "serial_route": "SER2 stereo input -> SER1 stereo output",
+    "two_boot_checkpoint_match": true
+  }
+}

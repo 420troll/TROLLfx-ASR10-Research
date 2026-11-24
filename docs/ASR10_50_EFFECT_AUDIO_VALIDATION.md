@@ -47,7 +47,8 @@ reference pass uses the profile's factory processing rate and original captured
 SER2 input frames, then compares SER1 output after the runtime's reported
 two-frame latency.
 
-Per stimulus, the JSON reports peak, RMS, clipped and finite sample counts,
+Per stimulus, the JSON reports peak, RMS, near-full-scale threshold, true
+floating-point overrange, WAV-converter clamp, and finite sample counts,
 stereo difference RMS, relative gain, silence, DSP frame count, callback
 allocations, total and worst-block processing times, and real-time factor.
 Reference comparisons report timing offset, per-channel and aggregate RMS
@@ -77,7 +78,16 @@ a collection package whose checkpoint state differs.
 On the capture host, the 150 renders ran at 7.4× to 23.9× real time, with a
 median of 12.0×. Package load time ranged from 2.1 to 3.7 ms. The largest
 measured 256-frame processing block took 1.57 ms at a 48 kHz host rate.
-Aggregate output included 4,345 samples at the PCM16 clipping threshold.
+The rerun separated the historical 4,345 near-full-scale threshold count from
+actual overrange: 4,345 float samples were at or above 32767/32768, zero
+samples exceeded the floating-point range [-1,+1], and zero samples were
+clamped by PCM16 WAV conversion. All 50 effects remained finite. See
+[`ES5510_AUDIO_QUALITY_CLIPPING_V1.json`](ES5510_AUDIO_QUALITY_CLIPPING_V1.json)
+for per-effect and per-stimulus counts. This shows the earlier label
+“clipping threshold” described proximity to PCM16 full scale, not actual
+clipping. Available OS-emulator selector captures for slots 31 and 37 also
+remain below full scale, but their capture stimuli are not matched to the
+generated harness inputs and are not a direct comparison.
 The process peak resident set was about 89.7 MiB; this is a whole-process
 high-water measurement, not a per-effect allocation figure. These desktop
 measurements do not predict Force ARMv7 timing.

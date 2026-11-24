@@ -64,13 +64,13 @@ void make_input(const std::string&kind,std::size_t n,double rate,std::vector<flo
   else {rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;float a=float(int32_t(rng))/2147483648.0f;rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;float b=float(int32_t(rng))/2147483648.0f;float env=(i%2048<256)?0.35f:0.025f;in[2*i]=a*env;in[2*i+1]=b*env;}
  }
 }
-struct Stats{double peak=0,rms=0,stereo_diff=0,relative_gain=0,elapsed=0,worst_block=0;std::uint64_t clipped=0,finite=0,frames=0,allocs=0;bool valid=false,silent=true,processing_error=false;};
+struct Stats{double peak=0,rms=0,stereo_diff=0,relative_gain=0,elapsed=0,worst_block=0;std::uint64_t near_full_scale=0,float_overrange=0,finite=0,frames=0,allocs=0;bool valid=false,silent=true,processing_error=false;};
 Stats render(FactoryRuntime&rt,const std::vector<float>&input,std::vector<float>&out,double host_rate){
  const std::size_t frames=input.size()/2;out.assign(input.size(),0);Stats s;double in_energy=0,energy=0,diff=0;constexpr std::size_t B=256;
  auto t0=std::chrono::steady_clock::now();
  for(std::size_t offset=0;offset<frames;offset+=B){auto n=std::min(B,frames-offset);auto start=std::chrono::steady_clock::now();auto before=g_allocations.load();g_track_alloc=true;bool ok=rt.processStereo(input.data()+2*offset,out.data()+2*offset,n,host_rate);g_track_alloc=false;s.allocs+=g_allocations.load()-before;if(!ok){s.processing_error=true;break;}double dt=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();s.worst_block=std::max(s.worst_block,dt);}
  s.elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-t0).count();s.frames=rt.getStatus().processed_dsp_frames;
- for(std::size_t i=0;i<frames;++i){float l=out[2*i],r=out[2*i+1];const bool fl=std::isfinite(l),fr=std::isfinite(r);s.finite+=fl+fr;if(!fl||!fr)continue;double al=std::abs(l),ar=std::abs(r);s.peak=std::max({s.peak,al,ar});s.clipped+=(al>=0.999969)+(ar>=0.999969);energy+=double(l)*l+double(r)*r;diff+=double(l-r)*(l-r);in_energy+=double(input[2*i])*input[2*i]+double(input[2*i+1])*input[2*i+1];}
+ for(std::size_t i=0;i<frames;++i){float l=out[2*i],r=out[2*i+1];const bool fl=std::isfinite(l),fr=std::isfinite(r);s.finite+=fl+fr;if(!fl||!fr)continue;double al=std::abs(l),ar=std::abs(r);s.peak=std::max({s.peak,al,ar});s.near_full_scale+=(al>=32767.0/32768.0)+(ar>=32767.0/32768.0);s.float_overrange+=(al>1.0)+(ar>1.0);energy+=double(l)*l+double(r)*r;diff+=double(l-r)*(l-r);in_energy+=double(input[2*i])*input[2*i]+double(input[2*i+1])*input[2*i+1];}
  s.rms=std::sqrt(energy/(2*frames));s.stereo_diff=std::sqrt(diff/frames);s.relative_gain=in_energy>0?s.rms/std::sqrt(in_energy/(2*frames)):0;s.valid=s.finite==2*frames&&s.allocs==0;s.silent=s.rms<1e-12;return s;
 }
 std::uint64_t peak_rss_kib(){rusage u{};return getrusage(RUSAGE_SELF,&u)==0?static_cast<std::uint64_t>(u.ru_maxrss):0;}
@@ -126,7 +126,7 @@ int main(int argc,char**argv){
     std::string wav=outdir+"/slot-"+(d.slot<10?std::string("0"):std::string())+std::to_string(unsigned(d.slot))+"-"+kinds[k]+".wav";
     bool wav_ok=write_wav(wav,output,static_cast<unsigned>(std::lround(host_rate)));all_finite&=s.valid;
     if(k)report<<",";
-    report<<"{\"kind\":\""<<kinds[k]<<"\",\"frames\":"<<count<<",\"dsp_frames\":"<<s.frames<<",\"wav\":\""<<json_escape(wav)<<"\",\"wav_written\":"<<(wav_ok?"true":"false")<<",\"processing_error\":"<<(s.processing_error?"true":"false")<<",\"peak\":"<<s.peak<<",\"rms\":"<<s.rms<<",\"clipped_samples\":"<<s.clipped<<",\"finite_samples\":"<<s.finite<<",\"stereo_difference_rms\":"<<s.stereo_diff<<",\"relative_gain\":"<<s.relative_gain<<",\"silent\":"<<(s.silent?"true":"false")<<",\"audio_seconds\":"<<(double(count)/host_rate)<<",\"process_seconds\":"<<s.elapsed<<",\"worst_block_seconds\":"<<s.worst_block<<",\"realtime_factor\":"<<(s.elapsed>0?(double(count)/host_rate)/s.elapsed:0)<<",\"callback_allocations\":"<<s.allocs<<"}";
+    report<<"{\"kind\":\""<<kinds[k]<<"\",\"frames\":"<<count<<",\"dsp_frames\":"<<s.frames<<",\"wav\":\""<<json_escape(wav)<<"\",\"wav_written\":"<<(wav_ok?"true":"false")<<",\"processing_error\":"<<(s.processing_error?"true":"false")<<",\"peak\":"<<s.peak<<",\"rms\":"<<s.rms<<",\"near_full_scale_pcm16_threshold_samples\":"<<s.near_full_scale<<",\"float_overrange_samples\":"<<s.float_overrange<<",\"wav_clamped_samples\":"<<s.float_overrange<<",\"finite_samples\":"<<s.finite<<",\"stereo_difference_rms\":"<<s.stereo_diff<<",\"relative_gain\":"<<s.relative_gain<<",\"silent\":"<<(s.silent?"true":"false")<<",\"audio_seconds\":"<<(double(count)/host_rate)<<",\"process_seconds\":"<<s.elapsed<<",\"worst_block_seconds\":"<<s.worst_block<<",\"realtime_factor\":"<<(s.elapsed>0?(double(count)/host_rate)/s.elapsed:0)<<",\"callback_allocations\":"<<s.allocs<<"}";
    }if(all_finite)++finite_effects;
   }
   auto comparison=compare_reference(*registered,p);
