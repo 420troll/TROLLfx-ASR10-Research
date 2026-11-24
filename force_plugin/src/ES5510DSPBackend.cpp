@@ -69,6 +69,21 @@ void ES5510DSPBackend::set_mix(float wet, float in_db, float out_db, bool bypass
     bypass_.store(bypass, std::memory_order_relaxed);
 }
 
+trollfx::es5510::factory_parameters_v01::EncodeStatus
+ES5510DSPBackend::set_verified_bus(
+    trollfx::es5510::factory_parameters_v01::FactoryEffect effect,
+    trollfx::es5510::factory_parameters_v01::Parameter parameter,
+    int display_value) noexcept {
+    using namespace trollfx::es5510::factory_parameters_v01;
+    const auto expected_slot = static_cast<std::uint8_t>(effect);
+    if (active_slot_.load(std::memory_order_acquire) != expected_slot ||
+        status_.load(std::memory_order_acquire) != ES5510BackendStatus::Ready)
+        return EncodeStatus::RuntimeRejected;
+    auto& runtime = runtime_[active_index_.load(std::memory_order_acquire)];
+    const auto frame = runtime.getStatus().processed_dsp_frames;
+    return schedule(runtime, effect, parameter, display_value, frame);
+}
+
 void ES5510DSPBackend::worker_loop() noexcept {
     while (!stop_worker_.load(std::memory_order_acquire)) {
         const auto generation=request_generation_.load(std::memory_order_acquire);

@@ -1,70 +1,51 @@
 {
   "kit": {
-    "theme": "amber",
-    "accent": "ffdb8b3d"
+    "theme": "cyan",
+    "accent": "ff00d4d8"
+  },
+  "style": {
+    "background": "ff15191c",
+    "accent": "ff00d4d8",
+    "text": "fff4f8fa",
+    "muted": "ff85949a"
   },
   "pages": [
     {
       "name": "BROWSE",
       "controls": [
-        {
-          "widget": "text",
-          "text": "50 OS 3.53 EFFECTS / EXPERIMENTAL 48 kHz"
-        },
-        {
-          "param": "FX Slot",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        {
-          "param": "Load Status",
-          "widget": "slider",
-          "overlay": "menu"
-        }
+        {"widget": "text", "text": "TROLLfx / ASR-10 FACTORY FX"},
+        {"widget": "text", "text": "50 FACTORY SLOTS / AVAILABILITY TAGGED"},
+        "empty", "empty", "empty", "empty", "empty", "empty",
+        {"param": "Host Bypass", "widget": "switch"}, "empty", "empty", "empty",
+        "Wet / Dry", "Input Gain", "Output Gain",
+        {"param": "FX Slot", "widget": "slider", "overlay": "menu"}
       ]
     },
     {
-      "name": "HOST",
+      "name": "MIX",
       "controls": [
-        {
-          "widget": "text",
-          "text": "HOST CONTROLS / NOT FACTORY PARAMETERS"
-        },
-        {
-          "param": "Wet / Dry",
-          "widget": "fader"
-        },
-        {
-          "param": "Input Gain",
-          "widget": "knob"
-        },
-        {
-          "param": "Output Gain",
-          "widget": "knob"
-        },
-        {
-          "param": "Host Bypass",
-          "widget": "switch"
-        }
+        {"widget": "text", "text": "STEREO / NATIVE ES5510 / EXPERIMENTAL 48 kHz"},
+        {"widget": "text", "text": "HOST MIX CONTROLS"},
+        "empty", "empty", "empty", "empty", "empty", "empty",
+        {"param": "Host Bypass", "widget": "switch"},
+        "empty", "empty", "empty",
+        {"param": "Wet / Dry", "widget": "fader"},
+        {"param": "Input Gain", "widget": "knob"},
+        {"param": "Output Gain", "widget": "knob"},
+        {"param": "FX Slot", "widget": "slider", "overlay": "menu"}
       ]
     },
     {
-      "name": "REVERB",
+      "name": "EDIT",
       "controls": [
-        {
-          "widget": "text",
-          "text": "VERIFIED BUS VALUES / ROM-01 OR ROM-02"
-        },
-        {
-          "param": "Reverb BUS1",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        {
-          "param": "Reverb BUS2",
-          "widget": "slider",
-          "overlay": "menu"
-        }
+        {"widget": "text", "text": "VERIFIED FACTORY BUS PARAMETERS"},
+        {"widget": "text", "text": "UNVERIFIED CONTROLS NOT EXPOSED"},
+        "empty", "empty", "empty", "empty", "empty", "empty",
+        "empty", "empty", "empty", "empty",
+        {"param": "HALL BUS1", "widget": "switch", "visibleWhen": {"param": "FX Slot", "index": 0}},
+        {"param": "HALL BUS2", "widget": "switch", "visibleWhen": {"param": "FX Slot", "index": 0}},
+        {"param": "ROM02 BUS1", "widget": "switch", "visibleWhen": {"param": "FX Slot", "index": 1}},
+        {"param": "ROM02 BUS2", "widget": "switch", "visibleWhen": {"param": "FX Slot", "index": 1}}
       ]
     }
   ]

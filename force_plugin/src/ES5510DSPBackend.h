@@ -2,6 +2,7 @@
 #pragma once
 
 #include "trollfx/es5510_factory_runtime.hpp"
+#include "trollfx/es5510_factory_parameter_control_v01.hpp"
 #include <array>
 #include <atomic>
 #include <cstddef>
@@ -35,6 +36,10 @@ public:
     void request_effect(std::uint8_t slot) noexcept;
     void set_mix(float wet, float input_gain_db, float output_gain_db,
                  bool bypass) noexcept;
+    trollfx::es5510::factory_parameters_v01::EncodeStatus set_verified_bus(
+        trollfx::es5510::factory_parameters_v01::FactoryEffect effect,
+        trollfx::es5510::factory_parameters_v01::Parameter parameter,
+        int display_value) noexcept;
     void process(const float* const* inputs, float* const* outputs,
                  std::size_t frames) noexcept;
     ES5510BackendStatus status() const noexcept { return status_.load(std::memory_order_acquire); }
