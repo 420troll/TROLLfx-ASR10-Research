@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trollfx.invalid/schema/es5510-hall-reference-trace-v2.json",
+  "title": "Private ES5510 HALL reference trace",
+  "description": "One numeric OS 3.53 reference window. Sample values and all referenced artifacts must remain private.",
+  "type": "object",
+  "required": ["schema", "trace_id", "replay", "dsp_rate_hz", "host_rate_hz", "dsp_serial_samples", "input_samples", "metadata"],
+  "properties": {
+    "schema": {"const": "trollfx-es5510-hall-replay-v1"},
+    "trace_id": {"type": "string", "minLength": 1},
+    "replay": {
+      "type": "object",
+      "required": ["input_sha256", "initial_state_sha256", "firmware_events_sha256", "alignment"],
+      "properties": {
+        "input_sha256": {"$ref": "#/$defs/sha256"},
+        "initial_state_sha256": {"$ref": "#/$defs/sha256"},
+        "firmware_events_sha256": {"$ref": "#/$defs/sha256"},
+        "alignment": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "dsp_rate_hz": {"const": 29761.89453125},
+    "host_rate_hz": {"const": 44100},
+    "dsp_serial_samples": {"$ref": "#/$defs/samples"},
+    "input_samples": {"$ref": "#/$defs/samples"},
+    "metadata": {
+      "type": "object",
+      "required": ["absolute_start_frame", "frame_count", "initial_state", "firmware_load", "stimulus", "host_output"],
+      "properties": {
+        "absolute_start_frame": {"type": "integer", "minimum": 0},
+        "frame_count": {"enum": [256, 4096, 32768]},
+        "initial_state": {"type": "object"},
+        "firmware_load": {"type": "object"},
+        "stimulus": {"type": "object"},
+        "host_output": {"type": "object"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sample": {
+      "type": "object",
+      "required": ["index", "left", "right"],
+      "properties": {
+        "index": {"type": "integer", "minimum": 0},
+        "left": {"type": "integer", "minimum": -32768, "maximum": 32767},
+        "right": {"type": "integer", "minimum": -32768, "maximum": 32767}
+      },
+      "additionalProperties": false
+    },
+    "samples": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/sample"}
+    }
+  },
+  "additionalProperties": false
+}

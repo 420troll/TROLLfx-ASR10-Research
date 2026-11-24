@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstdio>
 #include <array>
+#include <string>
 
 class ES5510 {
 public:
@@ -67,6 +68,9 @@ private:
     uint32_t frame_trace_limit = 1;
     uint32_t frame_trace_remaining = 0;
     uint32_t frame_trace_index = 0;
+    uint64_t frame_trace_start_frame = 0;
+    uint64_t run_snapshot_frame = 0;
+    std::string run_snapshot_dir;
     bool load_transaction_seen = false;
     uint32_t load_instruction_commits = 0;
     uint32_t load_gpr_commits = 0;

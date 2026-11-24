@@ -26,6 +26,41 @@ extern "C" {
 
 Asr10 *g_machine = nullptr;
 
+namespace {
+struct HostPcmTrace {
+    FILE *file = nullptr;
+    uint64_t first_frame = 0, frame_count = 0;
+    HostPcmTrace() {
+        const char *path = getenv("ASR_HOST_PCM_TRACE");
+        if (!path || !*path) return;
+        if (const char *v = getenv("ASR_HOST_PCM_START_FRAME")) first_frame = strtoull(v, nullptr, 10);
+        if (const char *v = getenv("ASR_HOST_PCM_FRAMES")) frame_count = strtoull(v, nullptr, 10);
+        if (!first_frame || !frame_count) { fprintf(stderr, "ASR_HOST_PCM error=window_required\n"); return; }
+        file = fopen(path, "wb");
+        if (!file) { fprintf(stderr, "ASR_HOST_PCM error=open_failed\n"); return; }
+        fprintf(file, "host_frame_index,source_dsp_frame_position,emission_dsp_frame,dsp_rate_hz,host_rate_hz,left_pcm16,right_pcm16\n");
+    }
+    ~HostPcmTrace() { if (file) fclose(file); }
+    static int16_t pcm16(float x) {
+        int v = (int)(x * 32767.0f); // same conversion as cli.cpp write_wav
+        if (v > 32767) v = 32767;
+        if (v < -32768) v = -32768;
+        return (int16_t)v;
+    }
+    void write(uint64_t host_index, double source_position, uint64_t emission_frame,
+               double dsp_rate, double host_rate, float l, float r) {
+        if (!file) return;
+        // DacOut source position is zero-origin; ES5510 frame_count labels the first input frame 1.
+        const double source_dsp_frame = source_position + 1.0;
+        if (source_dsp_frame < (double)first_frame || source_dsp_frame >= (double)(first_frame + frame_count)) return;
+        fprintf(file, "%llu,%.12f,%llu,%.9f,%.3f,%d,%d\n", (unsigned long long)host_index,
+                source_dsp_frame, (unsigned long long)emission_frame, dsp_rate, host_rate,
+                (int)pcm16(l), (int)pcm16(r));
+    }
+};
+HostPcmTrace &host_pcm_trace() { static HostPcmTrace trace; return trace; }
+}
+
 // --------------------------------------------------------------- Musashi glue
 extern "C" {
 unsigned int m68k_read_memory_8(unsigned int a) { return g_machine->read(a, 1); }
@@ -543,7 +578,32 @@ void Asr10::otto_frame() {
     const bool sep = aux_separate();
     for (int a = 0; a < 3; a++) if (sep && !aux_to_main[a]) { cur[2 + a * 2] = ch[(3 + a) * 2] * k; cur[3 + a * 2] = ch[(3 + a) * 2 + 1] * k; }
     // the D/A converters (main, the three expander buses) and the computer's sample rate
-    dac.push(cur, sep, otto.sample_rate(otto_master()), out_rate, audio, audio_aux);
+    const double dac_in_rate = otto.sample_rate(otto_master());
+    const size_t host_frame_begin = audio.size() / 2;
+    std::vector<double> source_positions;
+    const bool trace_host_pcm = getenv("ASR_HOST_PCM_TRACE") != nullptr;
+    dac.push(cur, sep, dac_in_rate, out_rate, audio, audio_aux,
+             trace_host_pcm ? &source_positions : nullptr);
+    if (trace_host_pcm) {
+        const uint64_t dsp_frame = esp.host_frame_count();
+        const size_t produced = audio.size() / 2 - host_frame_begin;
+        if (produced != source_positions.size()) {
+            fprintf(stderr, "ASR_HOST_PCM error=source_position_count_mismatch frame=%llu\n",
+                    (unsigned long long)dsp_frame);
+        } else {
+            auto &trace = host_pcm_trace();
+            for (size_t i = 0; i < produced; ++i)
+                trace.write(host_frame_begin + i, source_positions[i], dsp_frame, dac_in_rate, out_rate,
+                            audio[(host_frame_begin + i) * 2], audio[(host_frame_begin + i) * 2 + 1]);
+        }
+        const char *start_env = getenv("ASR_HOST_PCM_START_FRAME");
+        if (start_env && dsp_frame == strtoull(start_env, nullptr, 10))
+            fprintf(stderr, "ESPAUDIO kind=clock frame=%llu cycles=%llu otto_clock_hz=%.6f dsp_rate_hz=%.9f active_voices=%d host_output_rate_hz=%.3f dac_model=%d serial_route=%d,%d,%d,%d direct_mask=%02x host_frame_begin=%zu host_frame_end=%zu\n",
+                    (unsigned long long)dsp_frame, (unsigned long long)total_cycles,
+                    otto.sample_rate(otto_master()) * 16.0 * (otto.active_voices() + 1), dac_in_rate,
+                    otto.active_voices(), out_rate, (int)dac.get_model(), esp_route[0], esp_route[1],
+                    esp_route[2], esp_route[3], direct_mask, host_frame_begin, audio.size() / 2);
+    }
     // DI-10 S/PDIF output: the main DAC's data, 16 bits, when the system runs at 44.1 kHz (with the
     // 30 kHz effects the output is off: a receiver cannot lock to it); straight to out_rate (at 44.1 kHz
     // untouched)
