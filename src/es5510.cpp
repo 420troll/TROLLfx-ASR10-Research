@@ -81,6 +81,12 @@ ES5510::ES5510() : dram(DRAM_SIZE) {
     reset();
 }
 
+uint32_t ES5510::active_program_words() const {
+    for (uint32_t i = 0; i < 160; ++i)
+        if (((instr[i] >> 12) & 0x0f) == 0x0f) return i + 1;
+    return 0;
+}
+
 void ES5510::set_halt(bool h) {
     if (pipelog && h != halt_asserted)
         fprintf(stderr, "ESPPHASE kind=pa4_%s frame=%llu cycles=%llu host_pc=%06x\n",

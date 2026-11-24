@@ -1,0 +1,169 @@
+#include "trollfx/es5510_factory_runtime.hpp"
+#include "es5510.h"
+
+#include <array>
+#include <atomic>
+#include <cassert>
+#include <cmath>
+#include <cstdlib>
+#include <cstdio>
+#include <filesystem>
+#include <new>
+#include <string>
+#include <vector>
+
+using namespace trollfx::es5510;
+static std::atomic<bool> watch_allocations{false};
+static std::atomic<unsigned> callback_allocations{0};
+void* operator new(std::size_t n) {
+    if (watch_allocations.load(std::memory_order_relaxed)) callback_allocations.fetch_add(1,std::memory_order_relaxed);
+    if (void* p=std::malloc(n)) return p;
+    throw std::bad_alloc();
+}
+void* operator new[](std::size_t n) {
+    if (watch_allocations.load(std::memory_order_relaxed)) callback_allocations.fetch_add(1,std::memory_order_relaxed);
+    if (void* p=std::malloc(n)) return p;
+    throw std::bad_alloc();
+}
+void operator delete(void* p) noexcept { std::free(p); }
+void operator delete[](void* p) noexcept { std::free(p); }
+void operator delete(void* p,std::size_t) noexcept { std::free(p); }
+void operator delete[](void* p,std::size_t) noexcept { std::free(p); }
+
+static std::string make_checkpoint(unsigned words) {
+    const auto path = (std::filesystem::temp_directory_path() /
+        ("es5510-runtime-synthetic-" + std::to_string(words) + ".esp")).string();
+    ES5510 dsp;
+    for (unsigned i = 0; i < words; ++i) {
+        const std::uint64_t instruction = i + 1 == words ? 0x00000000f000ULL
+            : i == 0 ? ((std::uint64_t(239) << 24) | (std::uint64_t(237) << 16) | 0x9000ULL)
+            : i == 1 ? ((std::uint64_t(238) << 24) | (std::uint64_t(236) << 16) | 0x9000ULL)
+            : 0;
+        for (unsigned b = 0; b < 6; ++b)
+            dsp.host_w(3 + b, static_cast<std::uint8_t>(instruction >> (40 - 8 * b)));
+        dsp.host_w(0xc0, static_cast<std::uint8_t>(i));
+    }
+    dsp.host_w(0x18, 0x48); // captured route mode used by the factory profiles
+    FILE* f = std::fopen(path.c_str(), "wb");
+    assert(f && dsp.write_capture(f));
+    std::fclose(f);
+    return path;
+}
+
+static EffectPackage package(EffectId id, const std::string& path) {
+    if (id == EffectId::Rom01Hall)
+        return {id, path, 89, 29761.89453125, true, true, true};
+    return {id, path, 60, 44100.0, true, true, true};
+}
+
+static std::vector<float> render(FactoryRuntime& fx, const std::vector<float>& input,
+                                 const std::vector<std::size_t>& blocks, double rate=48000.0) {
+    std::vector<float> output(input.size(), 0.0f);
+    std::size_t offset=0, bi=0;
+    while (offset < input.size()/2) {
+        const std::size_t n=std::min(blocks[bi++ % blocks.size()], input.size()/2-offset);
+        const unsigned before=callback_allocations.load();
+        watch_allocations.store(true);
+        const bool ok=fx.processStereo(input.data()+2*offset, output.data()+2*offset, n, rate);
+        watch_allocations.store(false);
+        assert(ok);
+        assert(callback_allocations.load()==before);
+        offset += n;
+    }
+    return output;
+}
+
+int main() {
+    const auto hall_path = make_checkpoint(89);
+    const auto rom02_path = make_checkpoint(60);
+    {
+        FactoryRuntime fx;
+        auto bad=package(EffectId::Rom01Hall,hall_path); bad.pipeline_reset_acknowledged=false;
+        assert(!fx.loadEffect(bad));
+        assert(fx.getStatus().code==StatusCode::PackageRejected);
+        assert(fx.loadEffect(package(EffectId::Rom01Hall,hall_path)));
+        assert(fx.getStatus().active_program_words==89);
+        assert(fx.getStatus().processing_rate_hz==48000.0);
+        assert(fx.setRegister(0x20,0x123456,0));
+        assert(!fx.setRegister(0xc0,0,0));
+        assert(!fx.setRegister(0x20,0x1000000,0));
+
+        constexpr std::size_t frames=4097;
+        std::vector<float> input(frames*2);
+        std::uint32_t rng=0x12345678;
+        for (std::size_t i=0;i<frames;++i) {
+            switch ((i/513)%5) {
+            case 0: input[2*i]=input[2*i+1]=0.0f; break; // silence
+            case 1: input[2*i]=input[2*i+1]=(i==513?0.8f:0.0f); break; // impulse
+            case 2: input[2*i]=input[2*i+1]=0.5f*std::sin(2.0*3.141592653589793*997.0*i/48000.0); break;
+            case 3: input[2*i]=0.25f; input[2*i+1]=-0.25f; break; // stereo polarity
+            default:
+                rng ^= rng << 13; rng ^= rng >> 17; rng ^= rng << 5;
+                input[2*i]=static_cast<float>(static_cast<std::int32_t>(rng))/2147483648.0f*0.2f;
+                rng ^= rng << 13; rng ^= rng >> 17; rng ^= rng << 5;
+                input[2*i+1]=static_cast<float>(static_cast<std::int32_t>(rng))/2147483648.0f*0.2f;
+            }
+        }
+        const auto one_block=render(fx,input,{frames});
+        assert(fx.getStatus().scheduled_writes_applied==1);
+        assert(fx.reset());
+        assert(fx.setRegister(0x20,0x123456,0));
+        const auto variable=render(fx,input,{1,7,64,128,256,512,1024});
+        assert(one_block==variable);
+        auto st=fx.getStatus();
+        assert(st.processed_dsp_frames==frames);
+        assert(st.scheduled_writes_applied==1);
+        assert(!fx.setRegister(0x20,1,st.processed_dsp_frames-1));
+        assert(fx.reset());
+        assert(fx.setProcessingRate(RateMode::FactoryReference));
+        const auto factory_one=render(fx,input,{frames});
+        assert(fx.reset());
+        const auto factory_partitioned=render(fx,input,{1,7,64,128,256,512,1024});
+        assert(factory_one==factory_partitioned);
+        assert(fx.reset());
+        assert(fx.setProcessingRate(RateMode::Experimental48000));
+        const auto low_host_one=render(fx,input,{frames},32000.0);
+        assert(fx.reset());
+        const auto low_host_partitioned=render(fx,input,{1,7,64,128,256,512,1024},32000.0);
+        assert(low_host_one==low_host_partitioned);
+        for (std::size_t i=3;i<frames;++i) {
+            assert(std::fabs(one_block[2*i]-input[2*(i-2)])<1.0f/32768.0f);
+            assert(std::fabs(one_block[2*i+1]-input[2*(i-2)+1])<1.0f/32768.0f);
+        }
+        assert(fx.reset());
+        assert(fx.getStatus().scheduled_writes_applied==0);
+        assert(fx.setProcessingRate(RateMode::FactoryReference));
+        assert(std::fabs(fx.getStatus().processing_rate_hz-29761.89453125)<0.001);
+        assert(fx.reset());
+        assert(fx.setRegister(0x21,0x654321,3));
+        std::array<float,14> four_in{},four_out{};
+        assert(fx.processStereo(four_in.data(),four_out.data(),5,48000.0));
+        assert(fx.getStatus().scheduled_writes_applied==0);
+        assert(fx.processStereo(four_in.data()+10,four_out.data()+10,1,48000.0));
+        assert(fx.getStatus().scheduled_writes_applied==0);
+        assert(fx.processStereo(four_in.data()+12,four_out.data()+12,1,48000.0));
+        assert(fx.getStatus().scheduled_writes_applied==1);
+        assert(!fx.setRegister(0x21,0,3));
+        assert(fx.loadEffect(package(EffectId::Rom02Reverb44k,rom02_path),RateMode::FactoryReference));
+        assert(fx.getStatus().effect==EffectId::Rom02Reverb44k);
+        assert(fx.getStatus().active_program_words==60);
+        assert(fx.getStatus().processing_rate_hz==44100.0);
+    }
+    {
+        FactoryRuntime fx;
+        assert(fx.loadEffect(package(EffectId::Rom02Reverb44k,rom02_path),RateMode::FactoryReference));
+        std::array<float,2*1024> in{},out{};
+        for (std::size_t i=0;i<in.size()/2;++i) {
+            in[2*i]=0.2f*std::sin(2.0*3.141592653589793*431.0*i/48000.0);
+            in[2*i+1]=-in[2*i];
+        }
+        for (std::size_t n : {1u,7u,64u,128u,256u,512u,1024u}) {
+            assert(fx.reset());
+            assert(fx.processStereo(in.data(),out.data(),n,48000.0));
+            assert(fx.getStatus().processed_dsp_frames==static_cast<std::uint64_t>(std::floor(n*44100.0/48000.0 + 1e-9)));
+        }
+    }
+    std::filesystem::remove(hall_path);
+    std::filesystem::remove(rom02_path);
+    std::puts("ES5510 runtime synthetic tests: PASS");
+}

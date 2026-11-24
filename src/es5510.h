@@ -40,6 +40,7 @@ public:
         return pending;
     }
     uint8_t serial_ctl() const { return host_serial; }   // bits 2-5: SER0-3 are outputs
+    uint32_t active_program_words() const;
 
     // Execute one complete sample period (run the program from PC 0 to END).
     void run_frame();

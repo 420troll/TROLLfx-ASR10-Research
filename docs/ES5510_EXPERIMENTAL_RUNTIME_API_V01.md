@@ -16,10 +16,25 @@ Example (after obtaining a validated private package):
 using namespace trollfx::es5510;
 FactoryRuntime fx;
 EffectPackage pkg{EffectId::Rom01Hall, "/private/hall/run.esp", 89,
-                  29761.89453125, true, true};
+                  29761.89453125, true, true, true};
 if (!fx.loadEffect(pkg, RateMode::Experimental48000)) { /* inspect fx.getStatus() */ }
 std::array<float, 512 * 2> input{}, output{};
 fx.processStereo(input.data(), output.data(), 512, 48000.0);
 ```
 
 The example intentionally contains no effect payload and its booleans are placeholders for a package-validation layer, not permission to trust unverified metadata. V0.1 has no GUI, plugin wrapper, live cross-thread control queue, physical-device timing claim, or factory parameter mapping.
+
+## V0.1 behavior and validation boundary
+
+The stream converter linearly interpolates host stereo input at DSP-frame times and linearly interpolates the native serial output onto host frames. It uses a fixed 32-point history and retains fractional phase across calls. To make the output interpolation causal, it introduces `ceil(host_rate / processing_rate) + 1` host frames of startup/steady latency (two frames at 48/48 kHz, three frames at 48 kHz host with either factory rate). It does not automatically flush the tail; send zero input to render it. Float values are clipped to `[-1,1]`, converted to PCM16 with symmetric nearest rounding (endpoints saturate), and serial PCM16 output is scaled by `1/32768`.
+
+The callback-path test wraps global allocation operators and observes zero C++ heap allocations over varied block calls. The native core itself remains unchanged except for a read-only active-program-length inspection accessor. `load_capture_after_pipeline_reset` is still the authority for capture structural validity; package evidence flags are required, but the embedding host must derive them from the private validation workflow and must not set them from user input without verification. V0.1 does not itself parse the private JSON manifest or verify its SHA-256 references.
+
+Build the public example from the repository root:
+
+```sh
+tools/audio_validation/build_factory_runtime_example.sh
+build/audio-validation/es5510-factory-runtime-example hall /private/path/run-checkpoint.esp
+```
+
+The example only runs when the checkpoint path and metadata have already passed the existing strict manifest and replay boundary gates. Never commit the checkpoint.

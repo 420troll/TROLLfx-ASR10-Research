@@ -28,6 +28,7 @@ struct EffectPackage {
     double factory_processing_rate_hz = 0.0;
     bool pipeline_reset_acknowledged = false;
     bool package_provenance_validated = false;
+    bool serial_route_validated = false;
 };
 
 struct RuntimeStatus {
@@ -63,7 +64,7 @@ public:
 
     // Writes a 24-bit ES5510 register (GPR indices 0x00..0xBF). Applies before
     // the DSP frame whose zero-based absolute index is scheduled_frame. Calls
-    // must be made between audio blocks; events at/before the current frame fail.
+    // must be made between audio blocks; events before the next unprocessed frame fail.
     bool setRegister(std::uint8_t index, std::uint32_t value, std::uint64_t scheduled_frame);
 
     // Interleaved stereo float PCM, [-1,+1] nominal. Input is routed to SER2 L/R
