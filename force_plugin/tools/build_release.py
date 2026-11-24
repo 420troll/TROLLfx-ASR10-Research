@@ -238,11 +238,17 @@ def main():
                 if backup and backup.exists() and not final.exists(): backup.rename(final)
                 raise
             if backup and backup.exists(): shutil.rmtree(backup)
-            zip_path=ROOT/"force_plugin/dist"/f"asr10-fx-collection-{version}-candidate.zip"
+            state=json.loads((final/"release-manifest.json").read_text())
+            archive_state="playable" if state.get("release_state")=="playable" else "candidate"
+            zip_path=ROOT/"force_plugin/dist"/f"asr10-fx-collection-{version}-{archive_state}.zip"
+            stale_state="candidate" if archive_state=="playable" else "playable"
+            stale_zip=ROOT/"force_plugin/dist"/f"asr10-fx-collection-{version}-{stale_state}.zip"
+            if stale_zip.exists(): stale_zip.unlink()
+            stale_sum=stale_zip.with_suffix(stale_zip.suffix+".sha256")
+            if stale_sum.exists(): stale_sum.unlink()
             if not a.no_zip:
                 create_zip(final,zip_path)
-            state=json.loads((final/"release-manifest.json").read_text())
-            print(f"Packaged {state['release_state']} candidate: {final}")
+            print(f"Packaged {state['release_state']} release: {final}")
             if not a.no_zip: print(f"Archive: {zip_path}")
             print(f"SDK: {sdk} @ {sdk_commit}")
             print(f"Toolchain: {tc['command']} ({tc['version']})")
