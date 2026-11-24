@@ -32,9 +32,9 @@ The SDK maps Q-Link columns from positions on the fixed 4x4 grid. The generated 
 |---|---|---|---|---|---|---|
 | BROWSE | Wet/Dry | Input Gain | Output Gain | FX Slot | Bypass | Blank |
 | MIX | Wet/Dry | Input Gain | Output Gain | FX Slot | Bypass | Blank |
-| EDIT | HALL BUS1 / ROM02 BUS1 | HALL BUS2 / ROM02 BUS2 | ROM02 BUS1* | ROM02 BUS2* | Blank | Blank |
+| EDIT | HALL BUS1 | HALL BUS2 | ROM02 BUS1 | ROM02 BUS2 | Blank | Blank |
 
-`*` The generated editor grid has the HALL pair on Q1/Q2 and ROM-02 pair on Q3/Q4 because the current fixed skin generator cannot bind effect-dependent parameters to the same Q-Link positions on one tab. The effect visibility conditions ensure only the selected algorithm's controls appear. Future manifest-driven parameter metadata can populate the same editor page/banks, but this initial fixed layout should be normalized when the host gains a supported shared dynamic Q-Link binding.
+The effect visibility conditions show only the selected algorithm's controls. The generated editor grid places the HALL pair on Q1/Q2 and the ROM-02 pair on Q3/Q4 because the current fixed skin generator cannot bind effect-dependent parameters to the same Q-Link positions on one tab. Future manifest-driven parameter metadata can populate the same editor page/banks, but this initial fixed layout should be normalized when the host gains a supported shared dynamic Q-Link binding.
 
 ## State, callback, and preserved engine
 
