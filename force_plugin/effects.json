@@ -1,0 +1,256 @@
+[
+  {
+    "slot": 1,
+    "name": "HALL REVERB",
+    "category": "Reverb",
+    "runtime": "ROM-01 HALL",
+    "runtime_supported": true
+  },
+  {
+    "slot": 2,
+    "name": "44KHZ REVERB",
+    "category": "Reverb",
+    "runtime": "ROM-02 REVERB",
+    "runtime_supported": true
+  },
+  {
+    "slot": 3,
+    "name": "ROOM REVERB",
+    "category": "Reverb"
+  },
+  {
+    "slot": 4,
+    "name": "DUAL DELAYS",
+    "category": "Delay"
+  },
+  {
+    "slot": 5,
+    "name": "44KHZ DELAYS",
+    "category": "Delay"
+  },
+  {
+    "slot": 6,
+    "name": "CHORUS+REVRB",
+    "category": "Reverb"
+  },
+  {
+    "slot": 7,
+    "name": "PHASER+REVRB",
+    "category": "Reverb"
+  },
+  {
+    "slot": 8,
+    "name": "FLANGER+REV",
+    "category": "Other"
+  },
+  {
+    "slot": 9,
+    "name": "ROT.SPKR+REV",
+    "category": "Other"
+  },
+  {
+    "slot": 10,
+    "name": "CHOR+REV+DDL",
+    "category": "Delay"
+  },
+  {
+    "slot": 11,
+    "name": "CMP+DIST+REV",
+    "category": "Dynamics"
+  },
+  {
+    "slot": 12,
+    "name": "DIST+CHO+REV",
+    "category": "Other"
+  },
+  {
+    "slot": 13,
+    "name": "WAH+DIST+REV",
+    "category": "Other"
+  },
+  {
+    "slot": 14,
+    "name": "SMALL ROOM",
+    "category": "Reverb"
+  },
+  {
+    "slot": 15,
+    "name": "LARGE ROOM",
+    "category": "Reverb"
+  },
+  {
+    "slot": 16,
+    "name": "HALL REVERB2",
+    "category": "Reverb"
+  },
+  {
+    "slot": 17,
+    "name": "SMALL PLATE",
+    "category": "Reverb"
+  },
+  {
+    "slot": 18,
+    "name": "LARGE PLATE",
+    "category": "Reverb"
+  },
+  {
+    "slot": 19,
+    "name": "REVRSE REVRB",
+    "category": "Reverb"
+  },
+  {
+    "slot": 20,
+    "name": "REVRSE REVB2",
+    "category": "Other"
+  },
+  {
+    "slot": 21,
+    "name": "GATED REVERB",
+    "category": "Reverb"
+  },
+  {
+    "slot": 22,
+    "name": "NLIN REVRB 1",
+    "category": "Reverb"
+  },
+  {
+    "slot": 23,
+    "name": "NLIN REVRB 2",
+    "category": "Reverb"
+  },
+  {
+    "slot": 24,
+    "name": "NLIN REVRB 3",
+    "category": "Reverb"
+  },
+  {
+    "slot": 25,
+    "name": "MULTITAP DDL",
+    "category": "Delay"
+  },
+  {
+    "slot": 26,
+    "name": "EQ+DELAY LFO",
+    "category": "Delay"
+  },
+  {
+    "slot": 27,
+    "name": "VCF+DISTORT",
+    "category": "Other"
+  },
+  {
+    "slot": 28,
+    "name": "GUITAR AMP1",
+    "category": "Other"
+  },
+  {
+    "slot": 29,
+    "name": "GUITAR AMP2",
+    "category": "Other"
+  },
+  {
+    "slot": 30,
+    "name": "GUITAR AMP3",
+    "category": "Other"
+  },
+  {
+    "slot": 31,
+    "name": "SPKR CABINET",
+    "category": "Other"
+  },
+  {
+    "slot": 32,
+    "name": "TUNABLE SPKR",
+    "category": "Other"
+  },
+  {
+    "slot": 33,
+    "name": "EQ+CHOR+DDL",
+    "category": "Delay"
+  },
+  {
+    "slot": 34,
+    "name": "EQ+VIBR+DDL",
+    "category": "Delay"
+  },
+  {
+    "slot": 35,
+    "name": "EQ+FLNGR+DDL",
+    "category": "Delay"
+  },
+  {
+    "slot": 36,
+    "name": "EQ+TREM+DDL",
+    "category": "Delay"
+  },
+  {
+    "slot": 37,
+    "name": "PHASER+DDL",
+    "category": "Delay"
+  },
+  {
+    "slot": 38,
+    "name": "8-VOICE CHOR",
+    "category": "Modulation"
+  },
+  {
+    "slot": 39,
+    "name": "PITCH SHIFT",
+    "category": "Modulation"
+  },
+  {
+    "slot": 40,
+    "name": "PITCH+DDL",
+    "category": "Delay"
+  },
+  {
+    "slot": 41,
+    "name": "FAST PITCHSH",
+    "category": "Modulation"
+  },
+  {
+    "slot": 42,
+    "name": "EQ+CMPRESSOR",
+    "category": "Dynamics"
+  },
+  {
+    "slot": 43,
+    "name": "EXPANDER",
+    "category": "Dynamics"
+  },
+  {
+    "slot": 44,
+    "name": "KEYED EXPNDR",
+    "category": "Dynamics"
+  },
+  {
+    "slot": 45,
+    "name": "INVRS EXPNDR",
+    "category": "Dynamics"
+  },
+  {
+    "slot": 46,
+    "name": "DE-ESSER",
+    "category": "Dynamics"
+  },
+  {
+    "slot": 47,
+    "name": "DUCKER",
+    "category": "Dynamics"
+  },
+  {
+    "slot": 48,
+    "name": "RUMBLE FILTR",
+    "category": "Other"
+  },
+  {
+    "slot": 49,
+    "name": "PARAM EQ",
+    "category": "EQ"
+  },
+  {
+    "slot": 50,
+    "name": "VAN DER POL",
+    "category": "Other"
+  }
+]
