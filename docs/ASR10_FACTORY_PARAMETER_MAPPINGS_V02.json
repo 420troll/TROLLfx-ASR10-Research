@@ -1,0 +1,634 @@
+{
+  "schema": "trollfx-asr10-verified-parameter-mappings-v2",
+  "evidence": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only.",
+  "curve_policy": "No interpolation, full range, factory default, or smoothing law is inferred.",
+  "effects": [
+    {
+      "slot": 1,
+      "parameters": [
+        {
+          "id": "reverb_mix_bus1",
+          "ui_label": "REVERB MIX BUS1",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 28,
+              "text": "28",
+              "writes": [
+                [
+                  124,
+                  "0x3D0000"
+                ]
+              ]
+            },
+            {
+              "value": 29,
+              "text": "29",
+              "writes": [
+                [
+                  124,
+                  "0x3F0000"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 1
+        },
+        {
+          "id": "reverb_mix_bus2",
+          "ui_label": "REVERB MIX BUS2",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 28,
+              "text": "28",
+              "writes": [
+                [
+                  122,
+                  "0x3D0000"
+                ]
+              ]
+            },
+            {
+              "value": 29,
+              "text": "29",
+              "writes": [
+                [
+                  122,
+                  "0x3F0000"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 2
+        },
+        {
+          "id": "decay_time",
+          "ui_label": "DECAY TIME",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 40,
+              "text": "40",
+              "writes": [
+                [
+                  3,
+                  "0x340000"
+                ],
+                [
+                  4,
+                  "0xCC0000"
+                ],
+                [
+                  5,
+                  "0x6ADFFF"
+                ],
+                [
+                  91,
+                  "0x080034"
+                ],
+                [
+                  110,
+                  "0x340000"
+                ]
+              ]
+            },
+            {
+              "value": 41,
+              "text": "41",
+              "writes": [
+                [
+                  3,
+                  "0x350000"
+                ],
+                [
+                  4,
+                  "0xCB0000"
+                ],
+                [
+                  5,
+                  "0x6A0DFF"
+                ],
+                [
+                  91,
+                  "0x080035"
+                ],
+                [
+                  110,
+                  "0x350000"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 4
+        },
+        {
+          "id": "hi_freq_damping",
+          "ui_label": "HI FREQ DAMPING",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 31,
+              "text": "31",
+              "writes": [
+                [
+                  108,
+                  "0x57FFFF"
+                ],
+                [
+                  109,
+                  "0x280000"
+                ]
+              ]
+            },
+            {
+              "value": 32,
+              "text": "32",
+              "writes": [
+                [
+                  108,
+                  "0x56FFFF"
+                ],
+                [
+                  109,
+                  "0x290000"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 7
+        }
+      ]
+    },
+    {
+      "slot": 2,
+      "parameters": [
+        {
+          "id": "reverb_mix_bus1",
+          "ui_label": "REVERB MIX BUS1",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 25,
+              "text": "25",
+              "writes": [
+                [
+                  124,
+                  "0x350000"
+                ]
+              ]
+            },
+            {
+              "value": 26,
+              "text": "26",
+              "writes": [
+                [
+                  124,
+                  "0x370000"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 1
+        },
+        {
+          "id": "reverb_mix_bus2",
+          "ui_label": "REVERB MIX BUS2",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 25,
+              "text": "25",
+              "writes": [
+                [
+                  122,
+                  "0x350000"
+                ]
+              ]
+            },
+            {
+              "value": 26,
+              "text": "26",
+              "writes": [
+                [
+                  122,
+                  "0x370000"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 2
+        }
+      ]
+    },
+    {
+      "slot": 3,
+      "parameters": [
+        {
+          "id": "decay_time",
+          "ui_label": "DECAY TIME",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 64,
+              "text": "64",
+              "writes": [
+                [
+                  110,
+                  "0x520000"
+                ]
+              ]
+            },
+            {
+              "value": 65,
+              "text": "65",
+              "writes": [
+                [
+                  110,
+                  "0x530000"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 4
+        },
+        {
+          "id": "diffusion",
+          "ui_label": "DIFFUSION",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 50,
+              "text": "50",
+              "writes": [
+                [
+                  7,
+                  "0x400000"
+                ],
+                [
+                  9,
+                  "0xC00000"
+                ],
+                [
+                  10,
+                  "0x5FFFFF"
+                ],
+                [
+                  11,
+                  "0x330000"
+                ],
+                [
+                  12,
+                  "0xCD0000"
+                ],
+                [
+                  18,
+                  "0x6BADFF"
+                ]
+              ]
+            },
+            {
+              "value": 51,
+              "text": "51",
+              "writes": [
+                [
+                  7,
+                  "0x410000"
+                ],
+                [
+                  9,
+                  "0xBF0000"
+                ],
+                [
+                  10,
+                  "0x5EFDFF"
+                ],
+                [
+                  11,
+                  "0x33CC00"
+                ],
+                [
+                  12,
+                  "0xCC3400"
+                ],
+                [
+                  18,
+                  "0x6B0A2A"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 6
+        },
+        {
+          "id": "hi_freq_damping",
+          "ui_label": "HI FREQ DAMPING",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 9,
+              "text": "9",
+              "writes": [
+                [
+                  108,
+                  "0x73FFFF"
+                ],
+                [
+                  109,
+                  "0x0C0000"
+                ]
+              ]
+            },
+            {
+              "value": 10,
+              "text": "10",
+              "writes": [
+                [
+                  108,
+                  "0x72FFFF"
+                ],
+                [
+                  109,
+                  "0x0D0000"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 7
+        }
+      ]
+    },
+    {
+      "slot": 4,
+      "parameters": [
+        {
+          "id": "delay_time_l",
+          "ui_label": "BS1 TIME L",
+          "manual_label": "DELAY TIME",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 350,
+              "text": "350",
+              "writes": [
+                [
+                  11,
+                  "0x290500"
+                ]
+              ]
+            },
+            {
+              "value": 351,
+              "text": "351",
+              "writes": [
+                [
+                  11,
+                  "0x292300"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 3
+        }
+      ]
+    },
+    {
+      "slot": 6,
+      "parameters": [
+        {
+          "id": "chorus_rate",
+          "ui_label": "CHORUS RATE",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 24,
+              "text": "24",
+              "writes": [
+                [
+                  144,
+                  "0x0007F7"
+                ],
+                [
+                  145,
+                  "0x000C91"
+                ],
+                [
+                  146,
+                  "0x000B11"
+                ]
+              ]
+            },
+            {
+              "value": 25,
+              "text": "25",
+              "writes": [
+                [
+                  144,
+                  "0x000836"
+                ],
+                [
+                  145,
+                  "0x000CF5"
+                ],
+                [
+                  146,
+                  "0x000B69"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 11
+        }
+      ]
+    },
+    {
+      "slot": 7,
+      "parameters": [
+        {
+          "id": "phase_rate",
+          "ui_label": "PHASE RATE",
+          "units": "display steps",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 20,
+              "text": "20",
+              "writes": [
+                [
+                  142,
+                  "0x0003D7"
+                ]
+              ]
+            },
+            {
+              "value": 21,
+              "text": "21",
+              "writes": [
+                [
+                  142,
+                  "0x00049C"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 12
+        }
+      ]
+    },
+    {
+      "slot": 28,
+      "parameters": [
+        {
+          "id": "preamp_gain",
+          "ui_label": "PREAMP GAIN",
+          "units": "dB display",
+          "display_format": "signed integer",
+          "points": [
+            {
+              "value": 12,
+              "text": "+12",
+              "writes": [
+                [
+                  112,
+                  "0x020100"
+                ]
+              ]
+            },
+            {
+              "value": 13,
+              "text": "+13",
+              "writes": [
+                [
+                  112,
+                  "0x023F00"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 3
+        }
+      ]
+    },
+    {
+      "slot": 41,
+      "parameters": [
+        {
+          "id": "voice1_fine",
+          "ui_label": "VOICE1 FINE",
+          "units": "display steps",
+          "display_format": "signed integer",
+          "points": [
+            {
+              "value": -11,
+              "text": "-11",
+              "writes": [
+                [
+                  96,
+                  "0xFF36EA"
+                ]
+              ]
+            },
+            {
+              "value": -10,
+              "text": "-10",
+              "writes": [
+                [
+                  96,
+                  "0xFF4547"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 3
+        }
+      ]
+    },
+    {
+      "slot": 42,
+      "parameters": [
+        {
+          "id": "comp_ratio",
+          "ui_label": "COMP RATIO",
+          "units": "ratio",
+          "display_format": "N/1",
+          "points": [
+            {
+              "value": 4,
+              "text": "4/1",
+              "writes": [
+                [
+                  139,
+                  "0x1FFFFF"
+                ]
+              ]
+            },
+            {
+              "value": 5,
+              "text": "5/1",
+              "writes": [
+                [
+                  139,
+                  "0x199999"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 2
+        }
+      ]
+    },
+    {
+      "slot": 49,
+      "parameters": [
+        {
+          "id": "bass_fc",
+          "ui_label": "BASS FC",
+          "units": "Hz display",
+          "display_format": "integer",
+          "points": [
+            {
+              "value": 100,
+              "text": "100",
+              "writes": [
+                [
+                  87,
+                  "0x7D5E06"
+                ],
+                [
+                  88,
+                  "0x82A1FA"
+                ]
+              ]
+            },
+            {
+              "value": 101,
+              "text": "101",
+              "writes": [
+                [
+                  87,
+                  "0x7D574A"
+                ],
+                [
+                  88,
+                  "0x82A8B6"
+                ]
+              ]
+            }
+          ],
+          "live_display_order": 1
+        }
+      ]
+    }
+  ]
+}

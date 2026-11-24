@@ -1,4 +1,5 @@
 #include "trollfx/es5510_factory_runtime.hpp"
+#include "trollfx/es5510_factory_parameter_discovery_v02.hpp"
 #include "es5510.h"
 
 #include <array>
@@ -68,7 +69,12 @@ static ValidatedEffectPackage generic_package(std::uint8_t slot, unsigned words,
     d.run_checkpoint_path=path; d.run_checkpoint_sha256=std::string(64,'b');
     d.firmware_event_schedule.push_back({0,0x20,0x123456});
     VerifiedParameterDefinition parameter; parameter.id="test"; parameter.ui_label="Test";
-    parameter.verified_points.push_back({7,0x21,0x654321}); d.parameters.push_back(parameter);
+    ParameterPoint single; single.display_value=7; single.gpr=0x21; single.value24=0x654321;
+    parameter.verified_points.push_back(single); d.parameters.push_back(parameter);
+    VerifiedParameterDefinition grouped; grouped.id="group"; grouped.ui_label="Group";
+    ParameterPoint group_point; group_point.display_value=3;
+    group_point.ordered_writes={{0x22,0x111111},{0x23,0x222222}};
+    grouped.verified_points.push_back(group_point); d.parameters.push_back(grouped);
     return p;
 }
 
@@ -192,10 +198,11 @@ int main() {
         assert(fx.loadEffect(*registry.find(17),RateMode::FactoryReference));
         assert(fx.getStatus().active_program_words==3);
         assert(fx.setParameter(short_package.descriptor,"test",7,0));
+        assert(fx.setParameter(short_package.descriptor,"group",3,0));
         assert(!fx.setParameter(short_package.descriptor,"test",8,0));
         std::array<float,4> in{},out{};
         assert(fx.processStereo(in.data(),out.data(),2,32000.0));
-        assert(fx.getStatus().scheduled_writes_applied==2); // firmware init + parameter
+        assert(fx.getStatus().scheduled_writes_applied==4); // firmware init + single + ordered two-register group
         assert(fx.loadEffect(*registry.find(50)));
         assert(fx.getStatus().active_program_words==160);
         auto invalid=generic_package(16,60,rom02_path); invalid.descriptor.routing.input_port=4;
@@ -213,6 +220,78 @@ int main() {
         for(std::uint64_t i=0;i<1025;++i)
             overflow.descriptor.firmware_event_schedule.push_back({i,static_cast<std::uint8_t>(i%0x40),0});
         assert(!registry.register_validated(overflow));
+
+        auto near_full=generic_package(47,3,short_path);
+        near_full.descriptor.firmware_event_schedule.clear();
+        for (std::uint64_t i=0;i<1023;++i)
+            near_full.descriptor.firmware_event_schedule.push_back({0,static_cast<std::uint8_t>(i%0x40),static_cast<std::uint32_t>(i&0xffffff)});
+        EffectRegistry full_registry;
+        assert(full_registry.register_validated(near_full));
+        FactoryRuntime full_runtime;
+        assert(full_runtime.loadEffect(*full_registry.find(47),RateMode::FactoryReference));
+        assert(!full_runtime.setParameter(near_full.descriptor,"group",3,100)); // group must fail atomically
+        assert(full_runtime.setParameter(near_full.descriptor,"test",7,100)); // the one free slot is still available
+        std::vector<float> full_in(2*101),full_out(2*101);
+        assert(full_runtime.processStereo(full_in.data(),full_out.data(),101,32017.0));
+        assert(full_runtime.getStatus().scheduled_writes_applied==1024);
+    }
+    {
+        const std::array<std::uint8_t,10> slots{{1,2,3,4,6,7,28,41,42,49}};
+        std::size_t supported_controls=0;
+        for (auto slot : slots) {
+            auto definition=generic_package(slot,3,short_path);
+            assert(parameter_discovery_v02::append_verified_parameters(definition.descriptor));
+            assert(!definition.descriptor.parameters.empty());
+            for (const auto& parameter : definition.descriptor.parameters) {
+                if (parameter.id=="test" || parameter.id=="group") continue;
+                ++supported_controls;
+                FactoryRuntime runtime;
+                assert(runtime.loadEffect(definition,RateMode::FactoryReference));
+                assert(runtime.setParameter(definition.descriptor,parameter.id,
+                                            parameter.verified_points[1].display_value,0));
+                std::array<float,4> in{},out{};
+                assert(runtime.processStereo(in.data(),out.data(),2,48000.0));
+                const auto writes=parameter.verified_points[1].ordered_writes.empty()
+                    ? 1u : static_cast<unsigned>(parameter.verified_points[1].ordered_writes.size());
+                assert(runtime.getStatus().scheduled_writes_applied==1+writes);
+                assert(std::isfinite(out[0]) && std::isfinite(out[1]));
+            }
+        }
+        assert(supported_controls==16);
+    }
+    {
+        auto hall = generic_package(1,3,short_path);
+        assert(parameter_discovery_v02::append_verified_parameters(hall.descriptor));
+        auto decay = std::find_if(hall.descriptor.parameters.begin(),hall.descriptor.parameters.end(),
+            [](const auto& p){return p.id=="decay_time";});
+        assert(decay!=hall.descriptor.parameters.end());
+        assert(decay->verified_points.size()==2);
+        assert(decay->verified_points[1].display_value==41);
+        assert(decay->verified_points[1].ordered_writes.size()==5);
+        assert(decay->verified_points[1].ordered_writes[0].gpr==0x03);
+        assert(decay->verified_points[1].ordered_writes[4].gpr==0x6e);
+        EffectRegistry registry;
+        assert(registry.register_validated(hall));
+        FactoryRuntime fx;
+        assert(fx.loadEffect(*registry.find(1),RateMode::FactoryReference));
+        assert(fx.setParameter(hall.descriptor,"decay_time",41,0));
+        std::array<float,4> in{},out{};
+        assert(fx.processStereo(in.data(),out.data(),2,48000.0));
+        assert(fx.getStatus().scheduled_writes_applied==6); // package init + five ordered writes
+        auto chorus=generic_package(6,3,short_path);
+        assert(parameter_discovery_v02::append_verified_parameters(chorus.descriptor));
+        auto rate=std::find_if(chorus.descriptor.parameters.begin(),chorus.descriptor.parameters.end(),
+            [](const auto& p){return p.id=="chorus_rate";});
+        assert(rate!=chorus.descriptor.parameters.end());
+        assert(rate->verified_points[0].ordered_writes.size()==3);
+        assert(rate->verified_points[1].display_value==25);
+        auto pitch=generic_package(41,3,short_path);
+        assert(parameter_discovery_v02::append_verified_parameters(pitch.descriptor));
+        auto fine=std::find_if(pitch.descriptor.parameters.begin(),pitch.descriptor.parameters.end(),
+            [](const auto& p){return p.id=="voice1_fine";});
+        assert(fine!=pitch.descriptor.parameters.end());
+        assert(fine->verified_points[0].display_text=="-11");
+        assert(fine->verified_points[1].display_value==-10);
     }
     std::filesystem::remove(hall_path);
     std::filesystem::remove(rom02_path);
