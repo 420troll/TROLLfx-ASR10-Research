@@ -6,9 +6,9 @@
   "release_state": "candidate",
   "playable": false,
   "playable_marker_required": "INTEGRATION_STATUS",
-  "built_utc": "2026-11-24T20:46:36.092177+00:00",
-  "source_commit": "1c765a63f84e7f38e124be8e5ec7c45686992b11",
-  "source_inputs_sha256": "6413ac014bf0df304f09027fffc9a45c2bc90af77274279c17eb76815c4cfcda",
+  "built_utc": "2026-11-24T21:19:18.373566+00:00",
+  "source_commit": "6ca4ba6fc26e4b0afebcb1053e7697c03db6738c",
+  "source_inputs_sha256": "37ee1adf61cb255117d0f88a56311c5230154c636a5b0924559548ab1cc2d53e",
   "sdk": {
     "path": "/mnt/c/Users/Gamer/research/AkaiForceSDK",
     "origin": "https://github.com/420troll/AkaiForceSDK.git",
@@ -37,7 +37,7 @@
   "targets": {
     "native": {
       "host": "x86_64",
-      "binary_sha256": "37daaef264e58d7ff3f1600d8620936e10ef8554a03df802819c079300806ed6",
+      "binary_sha256": "70fb9f4f8831d8cb3393022a0078b503fdbd3e373a2ccf95af253e1fe77bc904",
       "host_sim_parameter_dump": "PASS"
     },
     "arm32": {
@@ -66,8 +66,8 @@
     }
   },
   "binaries": {
-    "arm32_sha256": "7857d0f47981f3bcb09b54f1fbc5aa0e9bd726772dbf011d3f09fbb2da1e2f72",
-    "arm64_sha256": "b30afc7a0a422a1b2807a0c31751c7580835d1a168e1879de20334e736b8ae04"
+    "arm32_sha256": "73c6a912fe9d9be8712fb579f90a74dd0a3c88c2b0a3675fbc19e273291d5ed0",
+    "arm64_sha256": "5e5310f013f21c80ac27e2c0947d709ad9c1707d9d9b88033f40e744a5200d19"
   },
   "build_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
   "package_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
