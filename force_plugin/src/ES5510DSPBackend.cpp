@@ -84,6 +84,23 @@ ES5510DSPBackend::set_verified_bus(
     return schedule(runtime, effect, parameter, display_value, frame);
 }
 
+bool ES5510DSPBackend::set_verified_parameter(
+    std::uint8_t slot, const char* parameter_id, std::int32_t display_value) noexcept {
+    if (!parameter_id || active_slot_.load(std::memory_order_acquire) != slot ||
+        status_.load(std::memory_order_acquire) != ES5510BackendStatus::Ready)
+        return false;
+    const auto* provider = provider_.load(std::memory_order_acquire);
+    const auto* package = provider ? provider->package_for_slot(slot) : nullptr;
+    if (!package) return false;
+    const auto& descriptor = package->descriptor;
+    const auto found = std::find_if(descriptor.parameters.begin(), descriptor.parameters.end(),
+        [parameter_id](const auto& parameter) { return parameter.id == parameter_id; });
+    if (found == descriptor.parameters.end()) return false;
+    auto& runtime = runtime_[active_index_.load(std::memory_order_acquire)];
+    const auto frame = runtime.getStatus().processed_dsp_frames;
+    return runtime.setParameter(descriptor, found->id, display_value, frame);
+}
+
 void ES5510DSPBackend::worker_loop() noexcept {
     while (!stop_worker_.load(std::memory_order_acquire)) {
         const auto generation=request_generation_.load(std::memory_order_acquire);

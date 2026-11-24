@@ -26,6 +26,12 @@ void operator delete(void*p,std::size_t)noexcept{std::free(p);}void operator del
 
 namespace {
 constexpr int kRate=48000,kMaxBlock=256,kStatusParam=5,kEffectParam=0;
+struct ParameterProbe { unsigned slot; int index; const char* expected; };
+constexpr ParameterProbe kVerifiedParameters[] = {
+ {1,12,"41"},{1,13,"32"},{3,14,"65"},{3,15,"51"},{3,16,"10"},
+ {4,17,"351"},{6,18,"25"},{7,19,"21"},{28,20,"+13"},
+ {41,21,"-10"},{42,22,"5/1"},{49,23,"101"}
+};
 struct Host{double rate=kRate;int block=kMaxBlock;AEffect* effect=nullptr;} host;
 VstIntPtr host_callback(AEffect*,VstInt32 op,VstInt32,VstIntPtr,void*,float){
  switch(op){case audioMasterVersion:return 2400;case audioMasterGetSampleRate:return static_cast<VstIntPtr>(host.rate);case audioMasterGetBlockSize:return host.block;case audioMasterGetVendorVersion:return 0x0101;default:return 0;}
@@ -41,6 +47,7 @@ struct Plugin {
  void select(unsigned slot){effect->setParameter(effect,kEffectParam,float(slot-1)/49.0f);}
  void set(int index,float normalized){effect->setParameter(effect,index,normalized);}
  float get(int index)const{return effect->getParameter(effect,index);}
+ std::string display(int index)const{char text[64]{};effect->dispatcher(effect,effGetParamDisplay,index,0,text,0);return text;}
 };
 void callback(Plugin&p,const float*il,const float*ir,float*ol,float*orr,int n){float*inputs[2]={const_cast<float*>(il),const_cast<float*>(ir)};float*outputs[2]={ol,orr};auto before=callback_allocations.load();in_audio=true;p.effect->processReplacing(p.effect,inputs,outputs,n);in_audio=false;if(callback_allocations.load()!=before)throw std::runtime_error("allocation occurred in packaged VST callback");}
 struct Stimulus{std::vector<float> data;std::size_t frames=0;explicit Stimulus(const std::string&path){std::ifstream f(path,std::ios::binary);if(!f)throw std::runtime_error("input stimulus missing");f.seekg(0,std::ios::end);auto size=f.tellg();if(size<=0||size%(2*sizeof(float)))throw std::runtime_error("input stimulus must be stereo float32");frames=static_cast<std::size_t>(size)/(2*sizeof(float));data.resize(frames*2);f.seekg(0);f.read(reinterpret_cast<char*>(data.data()),size);if(!f)throw std::runtime_error("cannot read input stimulus");}};
@@ -54,7 +61,7 @@ int main(int argc,char**argv)try{
  if(argc<5||argc>6){std::cerr<<"usage: vst_binary_test PLUGIN ASSET_ROOT STIMULUS OUTPUT_DIR [missing]\n";return 2;}
  if(setenv("TROLLFX_FACTORY_PACKAGES_DIR",argv[2],1)!=0)throw std::runtime_error("cannot set local factory asset root");
  Stimulus stimulus(argv[3]);std::filesystem::create_directories(argv[4]);
- Plugin plugin(argv[1]);if(plugin.effect->numParams!=12)throw std::runtime_error("unexpected plugin parameter ABI");
+ Plugin plugin(argv[1]);if(plugin.effect->numParams!=24)throw std::runtime_error("unexpected plugin parameter ABI");
  if(argc==6&&std::string(argv[5])=="missing"){
   std::size_t cursor=0;BlockResult render;process_frames(plugin,stimulus,2048,cursor,nullptr,&render);
   if(plugin.plain_status()!=1||!plugin.selected_effect_unavailable())throw std::runtime_error("empty local collection was not reported unavailable");
@@ -70,12 +77,16 @@ int main(int argc,char**argv)try{
   transition_frames+=elapsed;
   if(slot==1){plugin.set(8,1.0f);plugin.set(9,1.0f);if(plugin.get(8)<0.999f||plugin.get(9)<0.999f)throw std::runtime_error("HALL BUS parameter values did not round-trip");}
   if(slot==2){plugin.set(10,1.0f);plugin.set(11,1.0f);if(plugin.get(10)<0.999f||plugin.get(11)<0.999f)throw std::runtime_error("ROM-02 BUS parameter values did not round-trip");}
+  for(const auto& probe:kVerifiedParameters)if(probe.slot==slot)plugin.set(probe.index,1.0f);
   BlockResult render;process_frames(plugin,stimulus,8192,cursor,nullptr,&render);
   double energy_l=0,energy_r=0;float peak=0;for(std::size_t i=0;i<render.output.size();i+=2){auto l=render.output[i],r=render.output[i+1];energy_l+=double(l)*l;energy_r+=double(r)*r;peak=std::max(peak,std::max(std::abs(l),std::abs(r)));}
   double rms_l=std::sqrt(energy_l/8192),rms_r=std::sqrt(energy_r/8192);
   const std::string out=std::string(argv[4])+"/slot-"+(slot<10?"0":"")+std::to_string(slot)+".f32";save_raw(out,render.output);
   std::cout<<"SLOT "<<slot<<" READY frames=8192 rms_l="<<rms_l<<" rms_r="<<rms_r<<" peak="<<peak<<" transition_frames="<<elapsed<<" status="<<plugin.plain_status()<<"\n";
   if(rms_l<=0.0||rms_r<=0.0)throw std::runtime_error("selected package produced no stereo wet output at slot "+std::to_string(slot));
+  for(const auto& probe:kVerifiedParameters)if(probe.slot==slot&&
+     (plugin.get(probe.index)<0.999f||plugin.display(probe.index)!=probe.expected))
+      throw std::runtime_error("verified control display/write point mismatch at slot "+std::to_string(slot)+" parameter "+std::to_string(probe.index));
  }
  // Bind wet/dry, gain, and bypass behavior to this same shared object.
  std::size_t elapsed=0;if(!wait_ready(plugin,1,stimulus,cursor,elapsed))throw std::runtime_error("cannot return to HALL for host-control checks");
@@ -97,9 +108,9 @@ int main(int argc,char**argv)try{
  plugin.select(2);plugin.set(10,1.0f);plugin.set(11,0.0f);plugin.set(1,0.75f);plugin.set(2,0.6f);plugin.set(3,0.4f);plugin.set(4,1.0f);
  void* chunk=nullptr;auto bytes=plugin.effect->dispatcher(plugin.effect,effGetChunk,0,0,&chunk,0);if(bytes<=0||!chunk)throw std::runtime_error("plugin did not provide state chunk");
  std::vector<unsigned char> saved(static_cast<unsigned char*>(chunk),static_cast<unsigned char*>(chunk)+bytes);
- plugin.select(1);plugin.set(10,0.0f);plugin.set(11,1.0f);plugin.set(1,0.0f);plugin.set(2,0.5f);plugin.set(3,0.5f);plugin.set(4,0.0f);
+ plugin.select(1);plugin.set(10,0.0f);plugin.set(11,1.0f);plugin.set(12,0.0f);plugin.set(1,0.0f);plugin.set(2,0.5f);plugin.set(3,0.5f);plugin.set(4,0.0f);
  plugin.effect->dispatcher(plugin.effect,effSetChunk,0,bytes,saved.data(),0);
- if(std::abs(plugin.get(kEffectParam)-float(1.0/49.0))>1e-4f||std::abs(plugin.get(10)-1.0f)>1e-4f||std::abs(plugin.get(11))>1e-4f||std::abs(plugin.get(1)-0.75f)>1e-4f||std::abs(plugin.get(2)-0.6f)>1e-4f||std::abs(plugin.get(3)-0.4f)>1e-4f||std::abs(plugin.get(4)-1.0f)>1e-4f)throw std::runtime_error("state restore missed effect, host, or verified parameter values");
+ if(std::abs(plugin.get(kEffectParam)-float(1.0/49.0))>1e-4f||std::abs(plugin.get(10)-1.0f)>1e-4f||std::abs(plugin.get(11))>1e-4f||std::abs(plugin.get(12)-1.0f)>1e-4f||plugin.display(12)!="41"||std::abs(plugin.get(1)-0.75f)>1e-4f||std::abs(plugin.get(2)-0.6f)>1e-4f||std::abs(plugin.get(3)-0.4f)>1e-4f||std::abs(plugin.get(4)-1.0f)>1e-4f)throw std::runtime_error("state restore missed effect, host, or verified parameter values");
  std::cout<<"BINARY_PASS entry=VSTPluginMain slots=50 callbacks_allocations="<<callback_allocations.load()<<" transition_frames="<<transition_frames<<" wet_dry=gain=bypass=PASS state_roundtrip=PASS\n";
  return 0;
 }catch(const std::exception&e){std::cerr<<"BINARY_FAIL "<<e.what()<<"\n";return 1;}

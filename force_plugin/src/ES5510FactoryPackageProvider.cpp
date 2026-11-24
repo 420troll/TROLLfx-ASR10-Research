@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #include "ES5510FactoryPackageProvider.h"
+#include "trollfx/es5510_factory_parameter_discovery_v02.hpp"
 #include <algorithm>
 #include <array>
 #include <cerrno>
@@ -87,6 +88,10 @@ void ES5510FactoryPackageProvider::load_index(){
     if(hash_file(history)!=c[11])throw std::runtime_error("firmware event history digest mismatch");
     if(hash_file(schedule)!=c[13])throw std::runtime_error("firmware schedule digest mismatch");
     d.package_manifest_path=manifest.string();d.initialization_manifest_path=manifest.string();d.run_checkpoint_path=checkpoint.string();d.run_checkpoint_sha256=c[9];d.firmware_event_schedule_path=schedule.string();d.firmware_event_schedule_sha256=c[13];d.firmware_event_schedule=read_schedule(schedule,static_cast<std::size_t>(decimal(c[14])));
+    // V2 consists only of verified, discrete host-observed points. This
+    // metadata is attached after package integrity validation and does not
+    // alter any package bytes, receipt, or availability decision.
+    parameter_discovery_v02::append_verified_parameters(d);
     p.validation_receipt_valid=true;p.initialization_state_valid=true;p.program_identity_valid=true;p.pipeline_reset_valid=true;p.routing_valid=true;
     std::string error;if(!registry_.register_validated(std::move(p),&error))throw std::runtime_error(std::string("universal registry rejected descriptor: ")+error);
     errors_[slot].clear();

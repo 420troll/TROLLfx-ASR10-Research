@@ -40,6 +40,10 @@ public:
         trollfx::es5510::factory_parameters_v01::FactoryEffect effect,
         trollfx::es5510::factory_parameters_v01::Parameter parameter,
         int display_value) noexcept;
+    // Schedules one verified discrete point (or its complete ordered GPR
+    // write group) for the currently active factory package.
+    bool set_verified_parameter(std::uint8_t slot, const char* parameter_id,
+                                std::int32_t display_value) noexcept;
     void process(const float* const* inputs, float* const* outputs,
                  std::size_t frames) noexcept;
     ES5510BackendStatus status() const noexcept { return status_.load(std::memory_order_acquire); }

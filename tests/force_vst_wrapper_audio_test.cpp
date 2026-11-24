@@ -27,12 +27,17 @@ int main() {
             Parameter::ReverbMixBus1,26)==EncodeStatus::Encoded);
     }
     ASR10FXCollection plugin;
+    assert(plugin.numParams()==24); // legacy IDs 0..11 retained; V2 controls append at 12..23
     plugin.set(0,0.0f); // factory slot 1: HALL
     plugin.set(1,100.0f); plugin.set(2,0.0f); plugin.set(3,0.0f);
     plugin.prepare(48000.0,256);
     assert(plugin.displayText(5)=="READY");
     assert(plugin.displayText(0).find("READY") != std::string::npos);
     assert(plugin.param(6).id=="reverb_bus1" && plugin.param(7).id=="reverb_bus2");
+    assert(plugin.param(12).id=="factory_decay_time_slot1");
+    assert(plugin.displayText(12)=="UNCHANGED"); // no unverified factory default is written
+    plugin.set(12,1.0f); // verified HALL DECAY TIME display point 41
+    assert(plugin.displayText(12)=="41");
     plugin.set(8,1.0f); // verified HALL BUS1 28 -> 29
     plugin.set(9,1.0f); // verified HALL BUS2 28 -> 29
     ASR10FXCollection hall_default;

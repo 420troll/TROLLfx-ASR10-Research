@@ -20,15 +20,28 @@ for page in ui["pages"]:
     assert len(page["controls"]) == 16
 
 src = (ROOT / "src/ASR10FXCollection.cpp").read_text()
+provider_src = (ROOT / "src/ES5510FactoryPackageProvider.cpp").read_text()
 for label in expected:
     assert f'"{label[0]:02d} {label[1]}"' in src
 assert "provider->package_for_slot(slot)" in src
 assert "[UNAVAILABLE]" in src and "[READY]" in src
 assert '#include "ES5510FactoryPackageProvider.h"' in src
 assert "TROLLfx_GetProductionFactoryPackageProvider()" in src
-assert "backend_.set_verified_bus" in src
+assert "backend_.set_verified_parameter" in src
+assert "kFactoryControls" in src and "set_verified_parameter" in src
+assert "parameter_discovery_v02.hpp" in provider_src
+assert "append_verified_parameters(d)" in provider_src
 assert "backend_.request_effect" in src and "backend_.process" in src
+assert "saveExtraState" in src and "loadExtraState" in src
 assert "visibleWhen" in (ROOT / "ui.json").read_text()
+editor_controls = ui["pages"][2]["controls"]
+assert [x["param"] for x in editor_controls] == [
+    "BASS FC", "COMP RATIO", "VOICE1 FINE", "PREAMP GAIN",
+    "PHASE RATE", "CHORUS RATE", "BS1 TIME L", "HI FREQ DAMPING (ROOM)",
+    "DIFFUSION", "DECAY TIME (ROOM)", "HI FREQ DAMPING (HALL)",
+    "DECAY TIME (HALL)", "HALL BUS1", "HALL BUS2", "ROM02 BUS1", "ROM02 BUS2"]
+catalog_v2 = json.loads((ROOT.parent / "docs/ASR10_FACTORY_PARAMETER_MAPPINGS_V02.json").read_text())
+assert sum(len(effect["parameters"]) for effect in catalog_v2["effects"]) == 16
 release_skin = ROOT / "dist" / "TROLLfx - VST - ASR10 FX Collection" / "Plugin Skins"
 if (release_skin / "Q-Links.json").is_file():
     qlinks = json.loads((release_skin / "Q-Links.json").read_text())
@@ -37,6 +50,5 @@ if (release_skin / "Q-Links.json").is_file():
     first = maps[0]["Q-Links"]
     assert [first[f"Q-Link {n}"] for n in range(1, 6)] == [1, 2, 3, 0, 4]
     editor = maps[2]["Q-Links"]
-    assert [editor[f"Q-Link {n}"] for n in range(1, 5)] == [8, 9, 10, 11]
-    assert all(editor[f"Q-Link {n}"] == -1 for n in range(5, 9))
+    assert [editor[f"Q-Link {n}"] for n in range(1, 17)] == list(range(8, 24))
 print("50 original labels, provider-derived availability, page layout and verified controls: PASS")

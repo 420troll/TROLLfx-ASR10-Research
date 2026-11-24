@@ -71,6 +71,7 @@ def package(effect: str, manifest: Path, checkpoint: Path, reference_root: Path,
 def emit(path: Path, packages: list[dict]) -> None:
     lines = ["// generated in /tmp after strict factory-runtime validation; do not commit",
              '#include "ES5510DSPBackend.h"', '#include <stdexcept>', '#include <string>', '#include <utility>',
+             '#include "trollfx/es5510_factory_parameter_discovery_v02.hpp"',
              "namespace trollfx_test {", "using namespace trollfx::es5510;",
              "class Provider final : public IValidatedFactoryPackageProvider {",
              "public:", "  Provider() {" ]
@@ -88,7 +89,8 @@ def emit(path: Path, packages: list[dict]) -> None:
           f"      d.firmware_event_schedule_path={cxx(str(p['events']))}; d.firmware_event_schedule_sha256={cxx(p['events_sha'])};"]
         for frame, gpr, value in p["event_rows"]:
             lines.append(f"      d.firmware_event_schedule.push_back(ScheduledGprWrite{{{frame}ULL,{gpr},{value}u}});")
-        lines += ["      p.validation_receipt_valid=true; p.initialization_state_valid=true;",
+        lines += ["      parameter_discovery_v02::append_verified_parameters(d);",
+                  "      p.validation_receipt_valid=true; p.initialization_state_valid=true;",
                   "      p.program_identity_valid=true; p.pipeline_reset_valid=true; p.routing_valid=true;",
                   f"      std::string error; if(!registry_.register_validated(std::move(p), &error)) throw std::runtime_error(error); }} // {label}"]
     lines += ["  }", "  const ValidatedEffectPackage* package_for_slot(EffectSlot slot) const noexcept override { return registry_.find(slot); }",

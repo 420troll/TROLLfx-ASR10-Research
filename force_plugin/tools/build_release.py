@@ -28,7 +28,8 @@ def source_digest() -> str:
             "force_plugin/src/ES5510FactoryPackageProvider.cpp","force_plugin/src/ES5510FactoryPackageProvider.h","force_plugin/effects.json",
             "src/es5510.cpp","src/es5510.h","src/es5510_capture.h","src/es5510_factory_runtime.cpp",
             "include/trollfx/es5510_factory_runtime.hpp","include/trollfx/es5510_factory_registry.hpp",
-            "include/trollfx/es5510_factory_parameter_control_v01.hpp")
+            "include/trollfx/es5510_factory_parameter_control_v01.hpp",
+            "include/trollfx/es5510_factory_parameter_discovery_v02.hpp")
     for rel in inputs:
         h.update(rel.encode()+b"\0"); h.update((ROOT/rel).read_bytes())
     return h.hexdigest()
@@ -149,7 +150,8 @@ def main():
         shutil.copy2(ROOT/"force_plugin/src/ES5510FactoryPackageProvider.h",stage/"src/ES5510FactoryPackageProvider.h")
         for rel in ("src/es5510.h","src/es5510_capture.h","include/trollfx/es5510_factory_runtime.hpp",
                     "include/trollfx/es5510_factory_registry.hpp",
-                    "include/trollfx/es5510_factory_parameter_control_v01.hpp"):
+                    "include/trollfx/es5510_factory_parameter_control_v01.hpp",
+                    "include/trollfx/es5510_factory_parameter_discovery_v02.hpp"):
             dest=stage/"src"/Path(rel).name if rel.startswith("src/") else stage/"src"/"trollfx"/Path(rel).name
             dest.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(ROOT/rel,dest)
         # Native audio verification uses the actual SDK plugin wrapper and the

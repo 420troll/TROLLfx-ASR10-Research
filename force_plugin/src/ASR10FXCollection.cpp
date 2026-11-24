@@ -4,9 +4,14 @@
 #include "ES5510DSPBackend.h"
 #include "ES5510FactoryPackageProvider.h"
 #include "trollfx/es5510_factory_parameter_control_v01.hpp"
+#include "trollfx/es5510_factory_parameter_discovery_v02.hpp"
 
 #include <algorithm>
+#include <array>
+#include <atomic>
 #include <cstdint>
+#include <cstring>
+#include <iterator>
 #include <string>
 #include <vector>
 
@@ -50,6 +55,68 @@ const IValidatedFactoryPackageProvider* resolveProvider() {
 int choiceAt(const mpc::Plugin& plugin, int index) noexcept {
     return plugin.getInt(index);
 }
+
+struct FactoryControl {
+    int parameter_index;
+    std::uint8_t slot;
+    const char* id;
+    const char* label;
+};
+
+constexpr FactoryControl kFactoryControls[] = {
+    {8, 1, "reverb_mix_bus1", "HALL BUS1"},
+    {9, 1, "reverb_mix_bus2", "HALL BUS2"},
+    {10, 2, "reverb_mix_bus1", "ROM02 BUS1"},
+    {11, 2, "reverb_mix_bus2", "ROM02 BUS2"},
+    {12, 1, "decay_time", "DECAY TIME (HALL)"},
+    {13, 1, "hi_freq_damping", "HI FREQ DAMPING (HALL)"},
+    {14, 3, "decay_time", "DECAY TIME (ROOM)"},
+    {15, 3, "diffusion", "DIFFUSION"},
+    {16, 3, "hi_freq_damping", "HI FREQ DAMPING (ROOM)"},
+    {17, 4, "delay_time_l", "BS1 TIME L"},
+    {18, 6, "chorus_rate", "CHORUS RATE"},
+    {19, 7, "phase_rate", "PHASE RATE"},
+    {20, 28, "preamp_gain", "PREAMP GAIN"},
+    {21, 41, "voice1_fine", "VOICE1 FINE"},
+    {22, 42, "comp_ratio", "COMP RATIO"},
+    {23, 49, "bass_fc", "BASS FC"}
+};
+constexpr std::size_t kLegacyControlCount = 4;
+constexpr std::size_t kV2ControlCount = sizeof(kFactoryControls) / sizeof(kFactoryControls[0]) - kLegacyControlCount;
+
+const trollfx::es5510::VerifiedParameterDefinition* findParameter(
+    const IValidatedFactoryPackageProvider* provider, std::uint8_t slot, const char* id) noexcept {
+    const auto* package = provider ? provider->package_for_slot(slot) : nullptr;
+    if (!package || !id) return nullptr;
+    const auto& parameters = package->descriptor.parameters;
+    const auto it = std::find_if(parameters.begin(), parameters.end(),
+        [id](const auto& parameter) { return parameter.id == id; });
+    return it == parameters.end() ? nullptr : &*it;
+}
+
+std::vector<std::string> parameterChoices(
+    const IValidatedFactoryPackageProvider* provider, std::uint8_t slot,
+    const char* id, bool& supported) {
+    const bool has_package = provider && provider->package_for_slot(slot);
+    const auto* parameter = findParameter(provider, slot, id);
+    trollfx::es5510::EffectDescriptor fallback;
+    if (!parameter && !has_package) {
+        fallback.slot = slot;
+        trollfx::es5510::parameter_discovery_v02::append_verified_parameters(fallback);
+        const auto it = std::find_if(fallback.parameters.begin(), fallback.parameters.end(),
+            [id](const auto& candidate) { return candidate.id == id; });
+        if (it != fallback.parameters.end()) parameter = &*it;
+    }
+    supported = parameter && parameter->verified_points.size() == 2;
+    if (!supported) return {"UNVERIFIED"};
+    std::vector<std::string> choices;
+    choices.reserve(parameter->verified_points.size());
+    for (const auto& point : parameter->verified_points) {
+        choices.push_back(point.display_text.empty() ? std::to_string(point.display_value)
+                                                     : point.display_text);
+    }
+    return choices;
+}
 } // namespace
 
 class ASR10FXCollection final : public mpc::Plugin {
@@ -72,6 +139,7 @@ public:
     ASR10FXCollection()
         : mpc::Plugin(makeInfo()), provider_(resolveProvider()),
           backend_(provider_) {
+        applied_control_values_.fill(-1);
         using namespace mpc;
         addParam(choiceParam("effect_slot", "FX Slot", effectChoices(provider_), 0));
         addParam(floatParam("host_wet", "Wet / Dry", 0, 100, 100, "%", 0));
@@ -91,6 +159,17 @@ public:
         addParam(choiceParam("hall_bus2", "HALL BUS2", numericChoices(28, 29), 0));
         addParam(choiceParam("rom02_bus1", "ROM02 BUS1", numericChoices(25, 26), 0));
         addParam(choiceParam("rom02_bus2", "ROM02 BUS2", numericChoices(25, 26), 0));
+        for (std::size_t i = kLegacyControlCount; i < std::size(kFactoryControls); ++i) {
+            const auto& control = kFactoryControls[i];
+            bool supported = false;
+            auto choices = parameterChoices(provider_, control.slot, control.id, supported);
+            control_supported_[i - kLegacyControlCount] = supported;
+            std::string id = "factory_";
+            id += control.id;
+            id += "_slot";
+            id += std::to_string(control.slot);
+            addParam(choiceParam(id.c_str(), control.label, std::move(choices), 0));
+        }
     }
 
     void prepare(double rate, int) override {
@@ -112,6 +191,27 @@ public:
                 case ES5510BackendStatus::Failed: out = "LOAD ERR"; break;
             }
             return true;
+        }
+        if (index >= 8 && index < 24) {
+            const auto spec_index = static_cast<std::size_t>(index - 8);
+            const auto& control = kFactoryControls[spec_index];
+            if (!provider_ || !provider_->package_for_slot(control.slot)) {
+                out = "PACKAGE REQUIRED";
+                return true;
+            }
+            if (findParameter(provider_, control.slot, control.id) == nullptr) {
+                out = "UNVERIFIED";
+                return true;
+            }
+            if (index >= 12) {
+                const auto control_index = static_cast<std::size_t>(index - 12);
+                if (!control_supported_[control_index]) { out = "UNVERIFIED"; return true; }
+                if ((edited_v2_mask_.load(std::memory_order_relaxed) & (1u << control_index)) == 0) {
+                    out = "UNCHANGED";
+                    return true;
+                }
+            }
+            return false;
         }
         if (index != Fx) return false;
         const int slot_index = std::clamp(static_cast<int>(plain), 0, 49);
@@ -140,15 +240,9 @@ public:
         const auto active = backend_.active_slot();
         if (active != applied_slot_) {
             applied_slot_ = active;
-            applied_bus1_ = applied_bus2_ = -1;
+            applied_control_values_.fill(-1);
         }
-        if (active == 1) {
-            applyBus(active, 1, HallBus1, applied_bus1_);
-            applyBus(active, 2, HallBus2, applied_bus2_);
-        } else if (active == 2) {
-            applyBus(active, 1, Rom02Bus1, applied_bus1_);
-            applyBus(active, 2, Rom02Bus2, applied_bus2_);
-        }
+        applyVerifiedControls(active);
 
         const float* inputs[2] = {context.inputs ? context.inputs[0] : nullptr,
                                   context.inputs ? context.inputs[1] : nullptr};
@@ -159,26 +253,50 @@ public:
     }
 
 private:
-    void applyBus(std::uint8_t effect_slot, int bus, int parameter_index,
-                  int& previously_applied) noexcept {
-        const int value = choiceAt(*this, parameter_index);
-        if (value == previously_applied) return;
-        using namespace trollfx::es5510::factory_parameters_v01;
-        const auto effect = effect_slot == 1 ? FactoryEffect::Rom01Hall
-                                              : FactoryEffect::Rom02Reverb44k;
-        const auto parameter = bus == 1 ? Parameter::ReverbMixBus1
-                                         : Parameter::ReverbMixBus2;
-        const int display_value = value == 0
-            ? (effect_slot == 1 ? 28 : 25)
-            : (effect_slot == 1 ? 29 : 26);
-        const auto result = backend_.set_verified_bus(effect, parameter, display_value);
-        if (result == EncodeStatus::Encoded) previously_applied = value;
+    void applyVerifiedControls(std::uint8_t active) noexcept {
+        const auto edited = edited_v2_mask_.load(std::memory_order_relaxed);
+        for (std::size_t i = 0; i < std::size(kFactoryControls); ++i) {
+            const auto& control = kFactoryControls[i];
+            if (control.slot != active) continue;
+            if (i >= kLegacyControlCount &&
+                (edited & (1u << (i - kLegacyControlCount))) == 0) continue;
+            if (i >= kLegacyControlCount && !control_supported_[i - kLegacyControlCount]) continue;
+            const int selected_point = choiceAt(*this, control.parameter_index);
+            if (selected_point == applied_control_values_[i]) continue;
+            const auto* definition = findParameter(provider_, active, control.id);
+            if (!definition || selected_point < 0 ||
+                static_cast<std::size_t>(selected_point) >= definition->verified_points.size()) continue;
+            const auto display_value = definition->verified_points[static_cast<std::size_t>(selected_point)].display_value;
+            if (backend_.set_verified_parameter(active, control.id, display_value))
+                applied_control_values_[i] = selected_point;
+        }
+    }
+
+    void parameterChanged(int index, float) override {
+        if (index >= 12 && index < 24)
+            edited_v2_mask_.fetch_or(static_cast<std::uint16_t>(1u << (index - 12)),
+                                     std::memory_order_relaxed);
+    }
+
+    void saveExtraState(std::vector<std::uint8_t>& out) override {
+        const auto mask = edited_v2_mask_.load(std::memory_order_relaxed);
+        out = {'T', 'F', 'P', '2', static_cast<std::uint8_t>(mask & 0xff),
+               static_cast<std::uint8_t>(mask >> 8)};
+    }
+
+    void loadExtraState(const std::uint8_t* data, std::size_t size) override {
+        if (!data || size != 6 || std::memcmp(data, "TFP2", 4) != 0) return;
+        const auto mask = static_cast<std::uint16_t>(data[4]) |
+                          static_cast<std::uint16_t>(data[5] << 8);
+        edited_v2_mask_.store(static_cast<std::uint16_t>(mask & 0x0fff), std::memory_order_relaxed);
     }
 
     const IValidatedFactoryPackageProvider* provider_ = nullptr;
     ES5510DSPBackend backend_;
     std::uint8_t applied_slot_ = 0; // audio thread only
-    int applied_bus1_ = -1, applied_bus2_ = -1;
+    std::array<int, sizeof(kFactoryControls) / sizeof(kFactoryControls[0])> applied_control_values_{};
+    std::array<bool, kV2ControlCount> control_supported_{};
+    std::atomic<std::uint16_t> edited_v2_mask_{0};
 };
 
 #ifndef TROLLFX_FORCE_PLUGIN_TEST
