@@ -124,7 +124,9 @@ public:
 
     std::size_t size() const noexcept { return packages_.size(); }
     static constexpr std::size_t kMaxFactorySlots = 50;
-    static constexpr std::size_t kMaxFirmwareEvents = 256;
+    // Covers the current importer schedules (largest observed here: 583)
+    // while keeping registration and callback storage strictly bounded.
+    static constexpr std::size_t kMaxFirmwareEvents = 1024;
 
 private:
     std::vector<ValidatedEffectPackage> packages_; // registration is control-thread only

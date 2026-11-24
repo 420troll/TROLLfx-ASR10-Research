@@ -9,7 +9,7 @@
 
 namespace trollfx::es5510 {
 namespace {
-constexpr std::size_t kEventCapacity = 256;
+constexpr std::size_t kEventCapacity = 1024;
 constexpr std::size_t kResampleHistory = 32;
 constexpr std::uint8_t kDefaultInputPort = 2;
 constexpr std::uint8_t kDefaultOutputPort = 1;
