@@ -1,0 +1,2 @@
+BUILD CANDIDATE ONLY — NOT PLAYABLE / DO NOT INSTALL.
+This package has no approved DSP integration verification marker. Use the repository's opt-in installer only for a playable package.

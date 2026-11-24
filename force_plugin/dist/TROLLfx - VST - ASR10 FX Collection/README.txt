@@ -1,11 +1,11 @@
-# TROLLfx ASR-10 FX Collection — Force candidate
+# TROLLfx ASR-10 FX Collection — release infrastructure
 
-Version 1.0.0-experimental. Original Akai Force ARMv7 hard-float target; experimental 48 kHz mode.
+The build produces a VST2 package for the original Akai Force (ARMv7 hard-float), plus AArch64 compatibility output. It is marked **candidate / not playable** until the DSP integration report passes the explicit marker gate. Build/package does not install or restart anything.
 
-This unverified Force candidate provides the expandable 50-slot browser and host parameter shell. All 50 OS-observed slot labels are present; slots 3–50 are marked unavailable. HALL and ROM-02 are marked as needing packages, but this candidate has no Force-side factory package loader. Until authentic, validated state packages are connected, the signal remains dry passthrough. No mock factory audio is used or claimed.
+```sh
+AKAI_FORCE_SDK=/path/to/AkaiForceSDK force_plugin/tools/build_candidate.sh
+```
 
-The current VST state chunk saves the fixed parameter values, but named user presets, parameter application, meters, and actual wet/dry blending are not implemented. See `docs/TROLLFX_ASR10_FORCE_COLLECTION_V1.md` for the runtime/API blocker.
+For the full commands, SDK discovery rules, package paths, marker report schema, installation safety and rollback, see [`docs/TROLLFX_ASR10_FORCE_BUILD_PACKAGING.md`](../docs/TROLLFX_ASR10_FORCE_BUILD_PACKAGING.md).
 
-Build with `force_plugin/tools/build_candidate.sh`. Output is a build candidate, not a device-tested release. No firmware, ROM, EFE, checkpoints, microprograms, captures or audio are bundled. The folder contains `SHA256SUMS` and license notices. The repository source is GPL-3.0; the linked MPC SDK framework identifies as MIT.
-
-Manual install: `force_plugin/tools/install.sh PACKAGE_DIR FORCE_VST2_PLUGINS_DIR`. Manual rollback: `force_plugin/tools/rollback.sh FORCE_VST2_PLUGINS_DIR`. Neither script restarts the host.
+The installer accepts only a checksummed package with `INTEGRATION_STATUS` bound to its ARM32 binary. It requires an explicit package and destination path. Build candidates currently contain no DSP verification marker and must not be installed. No proprietary factory assets are bundled. Repository source is GPL-3.0-only; the compiled SDK framework notice is MIT.

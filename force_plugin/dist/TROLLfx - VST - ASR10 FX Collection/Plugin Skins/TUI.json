@@ -908,9 +908,9 @@
             {
                 "key": "Parameter 0",
                 "value": [
-                    "01 HALL REVERB [PACKAGE]",
-                    "02 44KHZ REVERB [PACKAGE]",
-                    "03 ROOM REVERB [UNAVAILABLE]",
+                    "01 HALL REVERB [UNAVAILABLE]",
+                    "02 44KHZ REVERB [IDENTITY CONFL",
+                    "03 ROOM REVERB [IDENTITY AMBIGU",
                     "04 DUAL DELAYS [UNAVAILABLE]",
                     "05 44KHZ DELAYS [UNAVAILABLE]",
                     "06 CHORUS+REVRB [UNAVAILABLE]",

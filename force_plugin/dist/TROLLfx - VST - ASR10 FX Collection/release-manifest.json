@@ -1,0 +1,70 @@
+{
+  "schema": "trollfx-force-release-manifest-v1",
+  "product": "TROLLfx - VST - ASR10 FX Collection",
+  "version": "1.0.0",
+  "release_channel": "experimental",
+  "release_state": "candidate",
+  "playable": false,
+  "playable_marker_required": "INTEGRATION_STATUS",
+  "built_utc": "2026-11-24T20:26:40.135546+00:00",
+  "source_commit": "def0e87a3291f7cef770ad3b5fbb23c2e244e8fc",
+  "source_inputs_sha256": "48a72ef811b311ffe714961288ee9e6f8f00efe825ba5b0553d158c48104cfd2",
+  "sdk": {
+    "path": "/mnt/c/Users/Gamer/research/AkaiForceSDK",
+    "origin": "https://github.com/420troll/AkaiForceSDK.git",
+    "commit": "4521c247a2deae30efb9e93d53fc8f9390c51e81"
+  },
+  "toolchain": {
+    "kind": "zig-python",
+    "command": "/usr/bin/python3 -m ziglang",
+    "version": "0.17.1",
+    "paths": {}
+  },
+  "targets": {
+    "native": {
+      "host": "x86_64",
+      "binary_sha256": "fbee669dc3f4fc748e7bac2170465076b3e0fc347ae297416535e7853542b902",
+      "host_sim_parameter_dump": "PASS"
+    },
+    "arm32": {
+      "elf_class": "ELF32",
+      "machine": "ARM",
+      "cpu_abi": "ARMv7-A / hard-float (VFP registers)",
+      "needed_libraries": [
+        "ld-linux-armhf.so.3",
+        "libc.so.6",
+        "libdl.so.2",
+        "libm.so.6"
+      ],
+      "max_glibc": "2.27"
+    },
+    "arm64": {
+      "elf_class": "ELF64",
+      "machine": "AArch64",
+      "needed_libraries": [
+        "libc.so.6",
+        "libdl.so.2",
+        "libm.so.6",
+        "libpthread.so.0"
+      ],
+      "max_glibc": "2.27"
+    }
+  },
+  "binaries": {
+    "arm32_sha256": "875029ce404d79111880f42e1480e4b824bb967b63a8b15ef9c716d88b8b859d",
+    "arm64_sha256": "9d8730701a71aa111e1ab32b31f982cc243ba6e8b2c7d521d044671852c7bc1e"
+  },
+  "build_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
+  "package_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
+  "sdk_validation": {
+    "result": "PASS",
+    "errors": 0,
+    "warnings": 0,
+    "command": "tools/validate.py"
+  },
+  "licensing": {
+    "project": "GPL-3.0-only",
+    "sdk_framework": "MIT",
+    "proprietary_factory_payloads_included": false
+  }
+}
