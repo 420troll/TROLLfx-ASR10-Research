@@ -188,12 +188,14 @@ def capture_is_valid(entry: dict, directory: Path) -> bool:
         return False
 
 
-def host_event_summary(log: Path, start_time: float | None = None, end_time: float | None = None) -> dict:
+def host_event_summary(log: Path, start_time: float | None = None, end_time: float | None = None,
+                       lines: list[str] | None = None) -> dict:
     counts = {"gpr": 0, "instruction": 0, "combined": 0, "ram": 0}
     gpr_indices: set[int] = set()
     instruction_indices: set[int] = set()
     ram_lines = 0
-    for line in log.read_text(errors="replace").splitlines():
+    lines = lines if lines is not None else log.read_text(errors="replace").splitlines()
+    for line in lines:
         m = re.match(r"ESPHOST " + HOST_META_RE + r"(gpr|instr|both|ram)\b", line)
         if not m:
             continue
@@ -305,7 +307,8 @@ def capture(args) -> int:
     return 1 if any(r["status"] == "failed" for r in results) else 0
 
 
-def active_program_matches_host(log: Path, esp: Path, snap: dict, at_time: float | None = None) -> dict:
+def active_program_matches_host(log: Path, esp: Path, snap: dict, at_time: float | None = None,
+                                lines: list[str] | None = None) -> dict:
     raw = esp.read_bytes()
     if raw[:8] != b"ES5510C\0":
         return {"verified": False, "reason": "invalid snapshot magic"}
@@ -314,7 +317,8 @@ def active_program_matches_host(log: Path, esp: Path, snap: dict, at_time: float
     active = snap["program"]["active_words_through_first_END"]
     last: dict[int,str] = {}
     rx = re.compile(r"ESPHOST " + HOST_META_RE + r"(?:instr|both) ([0-9a-fA-F]{2}) <- ([0-9a-fA-F]{12})(?:.*? t=([0-9.]+))?$")
-    for line in log.read_text(errors="replace").splitlines():
+    lines = lines if lines is not None else log.read_text(errors="replace").splitlines()
+    for line in lines:
         m = rx.search(line)
         if m:
             if at_time is not None and m.group(3) is not None and float(m.group(3)) > at_time + 1e-6:
@@ -407,8 +411,11 @@ def capture_sweep(args) -> int:
         t += args.interval
     logfile = out/"selector-sweep.log"
     run(cli, rom_dir, os_image, t+args.tail, command, emulator_env(), logfile)
+    # Read the large ordered OS trace once. Per-effect extraction must not
+    # duplicate or repeatedly parse the full host transaction log.
+    full_log_lines = logfile.read_text(errors="replace").splitlines()
     captures = {}
-    for line in logfile.read_text(errors="replace").splitlines():
+    for line in full_log_lines:
         m = re.match(r'ESP_ROM_CAPTURE(?:_EXISTS)? id=(\d+) time=([0-9.]+)(?: display=(.*?))? path=(.*)$', line)
         if m:
             captures[int(m.group(1))] = {"time": float(m.group(2)), "display": m.group(3) or "", "path": Path(m.group(4))}
@@ -454,9 +461,7 @@ def capture_sweep(args) -> int:
             active = snap["program"]["active_words_through_first_END"]
             if active is None or snap["runtime"]["control"]["halted"]:
                 raise RuntimeError("snapshot lacks an END position or DSP was halted")
-            hostlog = directory/"host.log"
-            shutil.copy2(logfile, hostlog)
-            host_match = active_program_matches_host(hostlog, esp, snap, capture_info["time"])
+            host_match = active_program_matches_host(logfile, esp, snap, capture_info["time"], full_log_lines)
             if not host_match["verified"]:
                 raise RuntimeError("active snapshot instructions do not match the last observed host commits")
             start_audio = capture_info["time"] + args.audio_offset
@@ -468,8 +473,8 @@ def capture_sweep(args) -> int:
                 raise RuntimeError("too little stable audio remains before the next effect selection")
             audio = extract_wav_segment(full_wav, wav, start_audio, audio_duration)
             prior_time = ordered[pos-1][1]["time"] if pos else args.start
-            event_window = host_event_summary(hostlog, prior_time, capture_info["time"])
-            record.update({"status": "captured", "esp": esp.name, "log": hostlog.name,
+            event_window = host_event_summary(logfile, prior_time, capture_info["time"], full_log_lines)
+            record.update({"status": "captured", "esp": esp.name, "log": "../selector-sweep.log",
                            "wav": wav.name, "summary": summary.name,
                            "active_instructions_through_first_END": active,
                            "end_indices": snap["program"]["END_indices"],
@@ -480,7 +485,7 @@ def capture_sweep(args) -> int:
                            "signal_configuration": snap["runtime"]["signal_configuration"],
                            "host_program_match": host_match, "host_events": event_window,
                            "audio": audio,
-                           "hashes": {"esp": sha256(esp), "log": sha256(hostlog), "wav": sha256(wav), "summary": sha256(summary)}})
+                           "hashes": {"esp": sha256(esp), "log": sha256(logfile), "wav": sha256(wav), "summary": sha256(summary)}})
             atomic_json(manifest_path, manifest)
         except Exception as exc:
             record.update({"status": "failed", "failure": f"{type(exc).__name__}: {exc}"})

@@ -33,6 +33,10 @@ fi
 mkdir -p "$out"
 python3 "$repo/tools/capture_asr10_rom_effects.py" enumerate \
     --cli "$cli" --rom-dir "$rom_dir" --os-image "$os_image" --output "$out"
-python3 "$repo/tools/capture_asr10_rom_effects.py" capture-sweep \
+ESP_PIPELOG=1 python3 "$repo/tools/capture_asr10_rom_effects.py" capture-sweep \
     --cli "$cli" --rom-dir "$rom_dir" --os-image "$os_image" \
     --output "$out" --inventory "$out/inventory.json"
+python3 "$repo/tools/package_rom_effect_collection.py" \
+    --source "$out" --inventory "$out/inventory.json" \
+    --output "$out/validated-packages" \
+    --catalog "$repo/docs/ASR10_ROM_EFFECT_CATALOG.json"
