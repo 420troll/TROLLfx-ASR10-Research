@@ -34,10 +34,12 @@ target_link_libraries(asr10core PUBLIC musashi)
 add_executable(asr10-cli src/cli.cpp)
 target_link_libraries(asr10-cli asr10core)
 
-# Experimental, mock-backed offline ES5510 host (no SDL or audio-device dependency).
+# Experimental offline ES5510 host (no SDL or audio-device dependency).
 add_executable(trollfx-audio-host
-  src/trollfx_audio_host_cli.cpp src/experimental_audio_host.cpp src/wav_io.cpp)
-target_include_directories(trollfx-audio-host PRIVATE src)
+  src/trollfx_audio_host_cli.cpp src/experimental_audio_host.cpp
+  src/factory_runtime_audio_adapter.cpp src/es5510_factory_runtime.cpp
+  src/es5510.cpp src/wav_io.cpp)
+target_include_directories(trollfx-audio-host PRIVATE include src)
 
 # --- SDL2 front end
 if(APPLE)

@@ -36,10 +36,10 @@ public:
     void process(const float* in, float* out, size_t n) noexcept override {
         for (size_t i = 0; i < n * 2; ++i) out[i] = in[i] * (effect == trollfx::audio::Effect::Hall ? 0.5f : 0.75f);
     }
-    uint32_t latency_frames() const noexcept override { return 0; }
+    uint32_t latency_frames() const noexcept override { return latency; }
     size_t memory_bytes() const noexcept override { return 0; }
     trollfx::audio::Effect effect = trollfx::audio::Effect::Hall;
-    uint32_t sample_rate = 0, prepares = 0;
+    uint32_t sample_rate = 0, prepares = 0, latency = 0;
 };
 
 using namespace trollfx::audio;
@@ -72,6 +72,15 @@ int main() {
     float mono_out[2]{};
     dry.process(stereo, 2, mono_out, 1, 2);
     assert(std::abs(mono_out[0] - 0.25f) < 1e-6f && std::abs(mono_out[1] + 0.5f) < 1e-6f);
+
+    // The host delays the dry path to match a processor's reported algorithmic latency.
+    PassThrough delayed_pass; delayed_pass.latency=2;
+    AudioHost delayed_host(delayed_pass); delayed_host.set_controls({0.0f,1.0f,1.0f});
+    float delayed_input[8]={0.1f,0.2f,0.3f,0.4f,0.5f,0.6f,0.7f,0.8f};
+    float delayed_output[8]{};
+    delayed_host.process(delayed_input,2,delayed_output,2,4);
+    assert(delayed_output[0]==0.0f && delayed_output[1]==0.0f);
+    assert(std::abs(delayed_output[4]-0.1f)<1e-6f && std::abs(delayed_output[5]-0.2f)<1e-6f);
 
     // The callback path handles arbitrary buffer sizes without heap activity.
     std::vector<float> callback_in(2 * 2049, 0.1f), callback_out(2 * 2049);

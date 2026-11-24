@@ -81,18 +81,12 @@ The ROM and the operating system belong to Ensoniq/E-mu and are **not included**
 
 ### Experimental ES5510 WAV host
 
-The separate V0.1 host can process stereo WAVs offline at 48 kHz and exercise
-host-level HALL/ROM-02 switching. Its current backend is a deterministic mock;
-it does not run authentic factory effects. See
-[`docs/ES5510_EXPERIMENTAL_AUDIO_HOST_V01.md`](docs/ES5510_EXPERIMENTAL_AUDIO_HOST_V01.md)
-for build, usage, tests, performance measurements, and runtime integration
-status.
-
-```sh
-sh tools/build_experimental_audio_host.sh
-build/experimental-audio-host/trollfx-audio-host input.wav output.wav \
-  --effect hall --wet 0.35 --block 256
-```
+The V0.1 WAV host processes stereo audio through the native ES5510 core with
+validated private ROM-01 HALL or ROM-02 44KHZ REVERB state packages. This is an
+experimental 48 kHz offline processor, not a packaged factory ROM product.
+See [`docs/ES5510_EXPERIMENTAL_INTEGRATED_V01.md`](docs/ES5510_EXPERIMENTAL_INTEGRATED_V01.md)
+for build and run commands. Mock processing is available only with an explicit
+`--backend mock` selection.
 
 - **Disks:** drag a floppy image (`.img`, or a Giebler `.ede` / `.eda` image) onto the window, or one or more instruments (`.efa`/`.efe`):
   they are put on a temporary floppy in the drive, then use LOAD as usual. The drive's eject button

@@ -137,7 +137,15 @@ void AudioHost::process(const float* input, int input_channels, float* output,
             }
 
             const size_t frame = offset + i;
-            const float dry_l = in_scratch[2 * i], dry_r = in_scratch[2 * i + 1];
+            const float current_dry_l = in_scratch[2 * i], current_dry_r = in_scratch[2 * i + 1];
+            const uint32_t requested_latency = processor_.latency_frames();
+            const size_t dry_latency = std::min<size_t>(requested_latency, kDryDelayCapacity - 1);
+            dry_history_left_[dry_history_pos_] = current_dry_l;
+            dry_history_right_[dry_history_pos_] = current_dry_r;
+            const size_t dry_read = (dry_history_pos_ + kDryDelayCapacity - dry_latency) % kDryDelayCapacity;
+            const float dry_l = dry_latency ? dry_history_left_[dry_read] : current_dry_l;
+            const float dry_r = dry_latency ? dry_history_right_[dry_read] : current_dry_r;
+            dry_history_pos_ = (dry_history_pos_ + 1) % kDryDelayCapacity;
             const float wet_l = finite_or_zero(wet_scratch[2 * i]);
             const float wet_r = finite_or_zero(wet_scratch[2 * i + 1]);
             float left = ((1.0f - wet_mix) * dry_l + wet_mix * wet_l) * out_gain * transition;

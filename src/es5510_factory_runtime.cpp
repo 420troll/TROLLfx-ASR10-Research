@@ -191,6 +191,7 @@ bool FactoryRuntime::loadEffect(const EffectPackage& p, RateMode mode) {
     s.status.active_program_words = p.active_program_words;
     s.status.rate_mode = mode;
     s.status.processing_rate_hz = s.dsp_rate;
+    s.status.algorithmic_latency_host_frames = static_cast<std::uint32_t>(std::ceil(48000.0 / s.dsp_rate) + 1.0);
     s.status.code = StatusCode::Ready;
     s.message = s.status.message = "ready";
     return true;
@@ -214,6 +215,7 @@ bool FactoryRuntime::setProcessingRate(RateMode mode) {
     s.phase = 0.0;
     s.status.rate_mode = mode;
     s.status.processing_rate_hz = s.dsp_rate;
+    s.status.algorithmic_latency_host_frames = static_cast<std::uint32_t>(std::ceil(s.host_rate / s.dsp_rate) + 1.0);
     s.status.code = StatusCode::Ready;
     s.message = s.status.message = "processing rate changed; DSP state retained";
     return true;
@@ -254,6 +256,7 @@ bool FactoryRuntime::processStereo(const float* input, float* output, std::size_
     s.status.host_rate_hz = host_rate;
     const double ratio = s.dsp_rate / host_rate;
     const double output_latency = std::ceil(host_rate / s.dsp_rate) + 1.0;
+    s.status.algorithmic_latency_host_frames = static_cast<std::uint32_t>(output_latency);
     for (std::size_t i = 0; i < frames; ++i) {
         const double now = s.host_frame_time + 1.0;
         const std::int16_t current_l = to_serial(input[2 * i]);

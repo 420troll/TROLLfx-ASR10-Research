@@ -40,6 +40,7 @@ struct RuntimeStatus {
     std::uint64_t processed_dsp_frames = 0;
     std::uint64_t scheduled_writes_applied = 0;
     std::uint32_t active_program_words = 0;
+    std::uint32_t algorithmic_latency_host_frames = 0;
     const char* message = "not loaded"; // static storage; valid until next API call
 };
 

@@ -3,6 +3,7 @@
 #include <atomic>
 #include <cstddef>
 #include <cstdint>
+#include <array>
 #include <vector>
 
 namespace trollfx::audio {
@@ -71,7 +72,7 @@ public:
     uint32_t host_rate() const noexcept { return host_rate_; }
     uint32_t dsp_rate() const noexcept { return dsp_rate_; }
     uint32_t latency_frames() const noexcept { return processor_.latency_frames(); }
-    size_t memory_bytes() const noexcept { return processor_.memory_bytes(); }
+    size_t memory_bytes() const noexcept { return processor_.memory_bytes() + sizeof(dry_history_left_) + sizeof(dry_history_right_); }
     bool switch_pending() const noexcept { return switch_busy_.load(std::memory_order_acquire); }
 
 private:
@@ -87,6 +88,10 @@ private:
     Phase phase_ = Phase::Running;
     uint32_t phase_frame_ = 0;
     float fade_from_ = 1.0f;
+    static constexpr size_t kDryDelayCapacity = 512;
+    std::array<float, kDryDelayCapacity> dry_history_left_{};
+    std::array<float, kDryDelayCapacity> dry_history_right_{};
+    size_t dry_history_pos_ = 0;
 };
 
 float db_to_linear(float db) noexcept;

@@ -33,6 +33,9 @@ class ExperimentalAudioHostCliTests(unittest.TestCase):
                        cwd=ROOT, capture_output=True, text=True)
 
     def invoke(self, source, output, *args):
+        args = list(args)
+        if "--backend" not in args:
+            args = ["--backend", "mock", *args]
         return subprocess.run([str(BIN), str(source), str(output), *args], cwd=ROOT,
                               capture_output=True, text=True)
 
@@ -138,16 +141,18 @@ class ExperimentalAudioHostCliTests(unittest.TestCase):
             write_pcm16(source, RATE, [(0, 0)] * 32)
             result = self.invoke(source, output, "--backend", "runtime")
             self.assertEqual(result.returncode, 2)
-            self.assertIn("requires --factory-state", result.stderr)
-            missing = self.invoke(source, output, "--backend", "runtime", "--factory-state",
-                                  str(root / "missing-private-state.json"))
+            self.assertIn("runtime requires manifest, checkpoint", result.stderr)
+            missing = self.invoke(source, output, "--backend", "runtime",
+                                  "--hall-checkpoint", str(root / "missing-hall.esp"),
+                                  "--hall-manifest", str(root / "missing-hall.json"),
+                                  "--hall-reference-dir", str(root / "missing-hall-ref"),
+                                  "--hall-events", str(root / "missing-hall-events.csv"),
+                                  "--rom02-checkpoint", str(root / "missing-rom02.esp"),
+                                  "--rom02-manifest", str(root / "missing-rom02.json"),
+                                  "--rom02-reference-dir", str(root / "missing-rom02-ref"),
+                                  "--rom02-events", str(root / "missing-rom02-events.csv"))
             self.assertEqual(missing.returncode, 2)
-            self.assertIn("factory state package does not exist", missing.stderr)
-            state = root / "authorized-private-state.json"
-            state.write_bytes(b"test placeholder outside checkout")
-            unavailable = self.invoke(source, output, "--backend", "runtime", "--factory-state", str(state))
-            self.assertEqual(unavailable.returncode, 2)
-            self.assertIn("runtime adapter is not available", unavailable.stderr)
+            self.assertIn("private factory package validation failed", missing.stderr)
             self.assertFalse(output.exists())
 
 
