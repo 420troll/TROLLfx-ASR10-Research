@@ -20,6 +20,7 @@ public:
     // Host CPU context for correlating parameter-driven ES5510 commits.
     void set_host_context(uint64_t cycles, uint32_t pc) { host_cycles = cycles; host_pc = pc; }
     uint64_t host_frame_count() const { return frame_count; }
+    uint32_t register_value(uint8_t reg) { return static_cast<uint32_t>(rd(reg)) & 0x00ffffffu; }
     // Research-only execution context for correlating ESP frame boundaries with the host.
     void set_frame_context(uint64_t cycles, uint32_t pc) { host_cycles = cycles; host_pc = pc; }
 
@@ -43,6 +44,9 @@ public:
     void list_program(FILE *f);
     // Offline lossless export; call only from the control/CLI thread.
     bool write_capture(FILE *f);
+    // Resume a captured RUN boundary only when external evidence establishes
+    // that HALT reset the omitted in-flight pipeline before this checkpoint.
+    bool load_capture_after_pipeline_reset(FILE *f);
     // Optional test-only trace; null by default. Caller owns the FILE lifetime.
     void set_diagnostic_trace(FILE *f) { diagnostic_trace = f; }
 

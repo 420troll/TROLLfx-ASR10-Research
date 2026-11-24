@@ -29,6 +29,8 @@ public:
         kFlagNot = 0x04, kFlagMask = 0xf8;
 
     bool prepare();
+    // Captures omit the in-flight pipeline; use only after a verified HALT reset.
+    bool loadCaptureAfterPipelineReset(FILE* f) noexcept;
     void reset() noexcept;
     // Clear execution/register pipelines while preserving external DRAM.
     // Useful for bounded microprogram changes in a real-time host.
@@ -48,6 +50,9 @@ public:
     // 0..2 and output is serial port 3. Sixteen-bit bus samples are used.
     void processFrame(const std::array<std::int16_t, 6>& inputs,
                       std::array<std::int16_t, 2>& outputs) noexcept;
+    // Replay the exact eight serial latches observed at a verified pre-frame
+    // boundary, including ports not written by the host routing that frame.
+    void runFrameWithSerialState(const std::array<std::int16_t, 8>& serial) noexcept;
 
     static constexpr std::uint64_t encode(unsigned a, unsigned b, unsigned c,
                                           unsigned d, unsigned aluOp,
