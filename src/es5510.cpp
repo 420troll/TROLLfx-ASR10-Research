@@ -73,6 +73,9 @@ ES5510::ES5510() : dram(DRAM_SIZE) {
     pipelog = getenv("ESP_PIPELOG") != nullptr;
     const char *frame_log = getenv("ESP_FRAMELOG");
     if (frame_log) frame_trace_limit = (uint32_t)std::clamp(atoi(frame_log), 0, 4096);
+    if (const char *frame = getenv("ESP_STATE_TRACE_FRAME")) state_trace_frame = strtoull(frame, nullptr, 10);
+    if (const char *frame = getenv("ESP_RUN_SNAPSHOT_FRAME")) run_snapshot_frame = strtoull(frame, nullptr, 10);
+    if (const char *dir = getenv("ESP_RUN_SNAPSHOT_DIR")) run_snapshot_dir = dir;
     reset();
 }
 
@@ -112,6 +115,39 @@ void ES5510::reset() {
 void ES5510::sync_spr() {
     for (int r = 234; r < 256; r++) gpr[r] = read_reg((uint8_t)r);
     gpr[DIL_SRC] = (int32_t)((uint32_t)(uint16_t)dil << 8);
+}
+
+void ES5510::trace_state(const char *kind, int trace_pc) {
+    if (state_trace_frame == 0 || frame_count != state_trace_frame) return;
+    fprintf(stderr,
+            "ESPSTATE seq=%llu kind=%s frame=%llu cycles=%llu host_pc=%06x dsp_pc=%02x at_pc=%02x "
+            "ee=%06x ef=%06x f3=%06x f4=%06x f8=%06x fa=%06x mach48=%012llx mac_overflow=%u "
+            "dil16=%04x dbase=%06x ccr=%02x alu_pending=%u mac_pending=%u "
+            "ram=%u:%u:%08x ram_p=%u:%u:%08x ram_pp=%u:%u:%08x dol_count=%d\n",
+            (unsigned long long)++state_trace_sequence, kind,
+            (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, pc,
+            trace_pc < 0 ? 0xff : trace_pc,
+            (unsigned)read_reg(0xee) & 0xffffffu, (unsigned)read_reg(0xef) & 0xffffffu,
+            (unsigned)read_reg(0xf3) & 0xffffffu, (unsigned)read_reg(0xf4) & 0xffffffu,
+            (unsigned)read_reg(0xf8) & 0xffffffu, (unsigned)read_reg(0xfa) & 0xffffffu,
+            (unsigned long long)((uint64_t)machl & 0xffffffffffffULL), (unsigned)mac_overflow,
+            (unsigned)(uint16_t)dil, (unsigned)dbase & 0xffffffu, (unsigned)ccr,
+            (unsigned)alu.write_result, (unsigned)mulacc.write_result,
+            (unsigned)ram.cycle, (unsigned)ram.io, (unsigned)ram.address,
+            (unsigned)ram_p.cycle, (unsigned)ram_p.io, (unsigned)ram_p.address,
+            (unsigned)ram_pp.cycle, (unsigned)ram_pp.io, (unsigned)ram_pp.address, dol_count);
+}
+
+void ES5510::ser_w(int i, int16_t v) {
+    ser[i] = v;
+    const int spr = 234 + (i ^ 1);
+    gpr[spr] = (int32_t)((uint32_t)(int32_t)v << 8);
+    if (state_trace_frame != 0 && frame_count + 1 == state_trace_frame) {
+        fprintf(stderr, "ESPSTATE seq=%llu kind=serial_input_latch frame=%llu cycles=%llu host_pc=%06x lane=%d spr=%02x sample=%04x value=%06x\n",
+                (unsigned long long)++state_trace_sequence,
+                (unsigned long long)(frame_count + 1), (unsigned long long)host_cycles,
+                host_pc, i, spr, (unsigned)(uint16_t)v, (unsigned)gpr[spr] & 0xffffffu);
+    }
 }
 
 uint8_t ES5510::host_r(int offset) {
@@ -462,6 +498,7 @@ void ES5510::finish_dec(Dec &d) {
 
 void ES5510::run_frame() {
     ++frame_count;
+    trace_state("frame_enter");
     struct ServeRead { ES5510 *e; ~ServeRead() { if (e->read_pending >= 0) { e->gpr_latch = e->gpr[e->read_pending] & 0xffffff; e->read_pending = -1; } } } serve{ this };
     static const char *trace = getenv("ESP_TRACE");     // debug: "every,reg,reg,..." (hex GPR numbers)
     static long frames = 0;
@@ -480,6 +517,7 @@ void ES5510::run_frame() {
     if (state == HALTED) {
         if (halt_asserted) { host_control &= ~0x04; return; }
         state = RUNNING; host_control |= 0x04; pc = 0;
+        trace_state("run_start");
         trace_first_instruction = pipelog;
         frame_trace_remaining = frame_trace_limit;
         frame_trace_index = 0;
@@ -499,7 +537,21 @@ void ES5510::run_frame() {
                     memsiz & 0xffffff, memmask & 0xffffff, memincrement & 0xffffff, dlength & 0xffffff,
                     abase & 0xffffff, bbase & 0xffffff, dbase & 0xffffff, sigreg & 0xffffff);
         }
+        if (run_snapshot_frame != 0 && frame_count == run_snapshot_frame && !run_snapshot_dir.empty()) {
+            char path[4096];
+            snprintf(path, sizeof(path), "%s/run-frame-%llu.esp", run_snapshot_dir.c_str(),
+                     (unsigned long long)frame_count);
+            FILE *capture = fopen(path, "wb");
+            const bool ok = capture && write_capture(capture);
+            if (capture) fclose(capture);
+            if (pipelog)
+                fprintf(stderr, "ESPPHASE kind=run_snapshot frame=%llu cycles=%llu host_pc=%06x pc=%02x ok=%u path=%s\n",
+                        (unsigned long long)frame_count, (unsigned long long)host_cycles,
+                        host_pc, pc, (unsigned)ok, path);
+            trace_state("snapshot_created");
+        }
     }
+    trace_state("pre_instruction_boundary");
     const uint64_t trace_frame = diagnostic_frame++;
     if (pipelog && frame_trace_remaining > 0) {
         fprintf(stderr, "ESPPFRAME kind=input index=%u frame=%llu cycles=%llu host_pc=%06x serial=%02x lanes=%04x,%04x,%04x,%04x,%04x,%04x,%04x,%04x\n",
@@ -543,6 +595,25 @@ void ES5510::run_frame() {
         aw = alu.write_result; aa = alu.aValue; ab = alu.bValue;
         from_saved(); pm = &pm0; pa = &pa0;
     };
+    auto trace_execution = [&](const char *kind, uint8_t trace_pc) {
+        if (state_trace_frame == 0 || frame_count != state_trace_frame) return;
+        fprintf(stderr,
+                "ESPSTATE seq=%llu kind=%s frame=%llu cycles=%llu host_pc=%06x dsp_pc=%02x "
+                "ee=%06x ef=%06x f3=%06x f4=%06x f8=%06x fa=%06x mach48=%012llx mac_overflow=%u "
+                "dil16=%04x dbase=%06x ccr=%02x alu_pending=%u mac_pending=%u "
+                "ram=%u:%u:%08x ram_p=%u:%u:%08x ram_pp=%u:%u:%08x dol_count=%d\n",
+                (unsigned long long)++state_trace_sequence, kind,
+                (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, trace_pc,
+                (unsigned)read_reg(0xee) & 0xffffffu, (unsigned)read_reg(0xef) & 0xffffffu,
+                (unsigned)read_reg(0xf3) & 0xffffffu, (unsigned)read_reg(0xf4) & 0xffffffu,
+                (unsigned)read_reg(0xf8) & 0xffffffu, (unsigned)read_reg(0xfa) & 0xffffffu,
+                (unsigned long long)((uint64_t)machl & 0xffffffffffffULL), (unsigned)mac_overflow,
+                (unsigned)(uint16_t)dil, (unsigned)dbase & 0xffffffu, (unsigned)ccr,
+                (unsigned)aw, (unsigned)mw,
+                (unsigned)r0.cycle, (unsigned)r0.io, (unsigned)r0.address,
+                (unsigned)r1.cycle, (unsigned)r1.io, (unsigned)r1.address,
+                (unsigned)r2.cycle, (unsigned)r2.io, (unsigned)r2.address, dol_count);
+    };
     // a result into a special register: the serial outputs inline (the common case), the others
     // through write_reg()
 #define ESP_WRITE_SPECIAL(r, v) do { const uint16_t r_ = (r); \
@@ -556,6 +627,7 @@ void ES5510::run_frame() {
     for (int i = 0; i < 160 + 2; i++) {
         const uint8_t trace_pc = pc;
         const Dec &d = dec[pc];
+        trace_execution("instruction_begin", trace_pc);
         if (pipelog && trace_first_instruction) {
             fprintf(stderr, "ESPPHASE kind=first_instruction frame=%llu cycles=%llu host_pc=%06x pc=%02x word=%012llx\n",
                     (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc,
@@ -655,6 +727,7 @@ void ES5510::run_frame() {
                             trace_pc, ri, (unsigned)gpr[ri] & 0xffffff);
                 fprintf(diagnostic_trace, "END,%llu,%02x\n", (unsigned long long)trace_frame, trace_pc);
             }
+            trace_execution("instruction_end", trace_pc);
             break;                        // (END)
         }
         if (d.one_operand) ab = gpr[d.b1_src];
@@ -666,10 +739,12 @@ void ES5510::run_frame() {
         if (diagnostic_trace) for (int ri = 0; ri < 0x104; ++ri) if (trace_before[ri] != gpr[ri])
             fprintf(diagnostic_trace, "W,%llu,%02x,%03x,%06x\n", (unsigned long long)trace_frame,
                     pc, ri, (unsigned)gpr[ri] & 0xffffff);
+        trace_execution("instruction_end", trace_pc);
         if (++pc >= 160) pc = 0;
     }
 #undef ESP_WRITE_SPECIAL
     store();
+    trace_state("frame_exit");
     if (pipelog && trace_output_pending) {
         fprintf(stderr, "ESPPFRAME kind=output index=%u frame=%llu cycles=%llu host_pc=%06x serial=%02x lanes=%04x,%04x,%04x,%04x,%04x,%04x,%04x,%04x\n",
                 frame_trace_index, (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, host_serial,

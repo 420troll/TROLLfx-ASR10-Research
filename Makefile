@@ -9,6 +9,10 @@ CORE_OBJ = build/asr10.o build/dac_out.o build/m68302.o build/duart.o build/fdc.
 
 all: asr10-cli
 
+test-es5510-hardware-state: tests/es5510_hardware_state_test.cpp src/es5510.cpp src/es5510.h | build
+	$(CXX) $(CXXFLAGS) $(INC) tests/es5510_hardware_state_test.cpp src/es5510.cpp -o build/es5510-hardware-state-test
+	./build/es5510-hardware-state-test
+
 build:
 	mkdir -p build
 

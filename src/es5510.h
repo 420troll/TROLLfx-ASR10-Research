@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstdio>
 #include <array>
+#include <string>
 
 class ES5510 {
 public:
@@ -24,7 +25,7 @@ public:
 
     // serial ports: index 0..7 = 0L,0R,1L,1R,2L,2R,3L,3R
     int16_t ser_r(int i) const { return ser[i]; }
-    void    ser_w(int i, int16_t v) { ser[i] = v; gpr[234 + (i ^ 1)] = (int32_t)((uint32_t)(int32_t)v << 8); }
+    void    ser_w(int i, int16_t v);
 
     void set_halt(bool h);
     bool halted() const { return state == HALTED; }
@@ -64,6 +65,10 @@ private:
     bool halt_asserted = false;
     bool trace_first_instruction = false;
     bool trace_output_pending = false;
+    uint64_t state_trace_frame = 0;
+    uint64_t state_trace_sequence = 0;
+    uint64_t run_snapshot_frame = 0;
+    std::string run_snapshot_dir;
     uint32_t frame_trace_limit = 1;
     uint32_t frame_trace_remaining = 0;
     uint32_t frame_trace_index = 0;
@@ -88,6 +93,7 @@ private:
     int32_t gpr[0x104];
     static constexpr int DIL_SRC = 0x100, TRASH = 0x101;   // TRASH: results that go to no register
     void sync_spr();
+    void trace_state(const char *kind, int trace_pc = -1);
     int16_t ser[8];     // 0L 0R 1L 1R 2L 2R 3L 3R
     int64_t machl = 0;
     bool mac_overflow = false;
