@@ -1155,6 +1155,102 @@
                     "25 BUS",
                     "26 BUS"
                 ]
+            },
+            {
+                "key": "Parameter 12",
+                "value": [
+                    "UNCHANGED",
+                    "40",
+                    "41"
+                ]
+            },
+            {
+                "key": "Parameter 13",
+                "value": [
+                    "UNCHANGED",
+                    "31",
+                    "32"
+                ]
+            },
+            {
+                "key": "Parameter 14",
+                "value": [
+                    "UNCHANGED",
+                    "64",
+                    "65"
+                ]
+            },
+            {
+                "key": "Parameter 15",
+                "value": [
+                    "UNCHANGED",
+                    "50",
+                    "51"
+                ]
+            },
+            {
+                "key": "Parameter 16",
+                "value": [
+                    "UNCHANGED",
+                    "9",
+                    "10"
+                ]
+            },
+            {
+                "key": "Parameter 17",
+                "value": [
+                    "UNCHANGED",
+                    "350",
+                    "351"
+                ]
+            },
+            {
+                "key": "Parameter 18",
+                "value": [
+                    "UNCHANGED",
+                    "24",
+                    "25"
+                ]
+            },
+            {
+                "key": "Parameter 19",
+                "value": [
+                    "UNCHANGED",
+                    "20",
+                    "21"
+                ]
+            },
+            {
+                "key": "Parameter 20",
+                "value": [
+                    "UNCHANGED",
+                    "+12",
+                    "+13"
+                ]
+            },
+            {
+                "key": "Parameter 21",
+                "value": [
+                    "UNCHANGED",
+                    "-11",
+                    "-10"
+                ]
+            },
+            {
+                "key": "Parameter 22",
+                "value": [
+                    "UNCHANGED",
+                    "4/1",
+                    "5/1"
+                ]
+            },
+            {
+                "key": "Parameter 23",
+                "value": [
+                    "UNCHANGED",
+                    "100",
+                    "101"
+                ]
             }
         ],
         "info": {
@@ -1698,76 +1794,384 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "text 0",
-                                "type": "Label",
+                                "name": "PREAMP GAIN",
+                                "type": "sliderWithFocusMenu",
                                 "data": {
                                     "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 30.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "left",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "VERIFIED FACTORY BUS PARAMETERS"
+                                    "handleName": "Data"
                                 }
                             },
                             "handle remapping": {
                                 "version": 1,
-                                "map": []
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 20"
+                                    }
+                                ]
                             },
                             "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Show",
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "23 45 278 107"
+                                "bounds": "23 45 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/27/50/Parameter 0"
+                                ]
                             }
                         },
                         {
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "text 1",
-                                "type": "Label",
+                                "name": "VOICE1 FINE",
+                                "type": "sliderWithFocusMenu",
                                 "data": {
                                     "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 30.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "left",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "UNVERIFIED CONTROLS NOT EXPOSED"
+                                    "handleName": "Data"
                                 }
                             },
                             "handle remapping": {
                                 "version": 1,
-                                "map": []
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 21"
+                                    }
+                                ]
                             },
                             "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Show",
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "343 45 278 107"
+                                "bounds": "343 45 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/40/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "COMP RATIO",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 22"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "663 45 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/41/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "BASS FC",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 23"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "983 45 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/48/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "HI FREQ DAMPING (ROOM)",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 16"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 196 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/2/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "BS1 TIME L",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 17"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "343 196 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/3/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "CHORUS RATE",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 18"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "663 196 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/5/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "PHASE RATE",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 19"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "983 196 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/6/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "DECAY TIME (HALL)",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 12"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 346 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/0/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "HI FREQ DAMPING (HALL)",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 13"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "343 346 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/0/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "DECAY TIME (ROOM)",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 14"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "663 346 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/2/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "DIFFUSION",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 15"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "983 346 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/2/50/Parameter 0"
+                                ]
                             }
                         },
                         {

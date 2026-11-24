@@ -2,7 +2,7 @@
 
 Integration branch: `integration/asr10-force-parameter-mappings-v2`
 Codex 1 source: `research/asr10-automated-parameter-discovery-v2` at `e29cb8a`
-Release source commit: `c860418f16d6b1e5678f0688ed239a556ccd58e9`
+Release source commit: `c4d3d7b531b4c8ba516036318423d928b8342b90`
 
 ## Controls and runtime behavior
 
@@ -37,12 +37,12 @@ The SDK build used `/mnt/c/Users/Gamer/research/AkaiForceSDK` at `4521c247a2deae
 
 | Artifact | SHA-256 | Result |
 |---|---|---|
-| Native x86_64 VST2 | `e08af9818e473792ec4eb25579237f7e24bbe876542864b3a0a5221af3bf3bd8` | Binary-bound VST callback and SDK host simulator passed |
+| Native x86_64 VST2 | `48fd2f6a0a946f933a2b7121cb364e50cf8f69a8c0836b38ebd57c169178da49` | Binary-bound VST callback and SDK host simulator passed |
 | ARMv7 hard-float VST2 | `a7ae1752ec99cd40c98ea41dda94b91031aa219f240ef0205f4a1752514a8c56` | ELF32 ARMv7; exported VST entry; SDK package validation passed |
 | AArch64 VST2 | `c2e6279d59a3150d11279583d026dd4b3f767b2ee89386fcff082929bd3e73be` | ELF64 AArch64; SDK package validation passed |
-| Binary playback report | `82f28552af7a072f62dc9d11b004a049145a4589934906586350810efe6c137b` | Bound to the native and ARMv7 hashes above |
+| Binary playback report | `768d6e189a79bdc2c07e8a4bd7177bd97e5b6e50948926fc72b24efa79428091` | Bound to the native and ARMv7 hashes above |
 
-The native VST harness loaded the packaged plugin binary and processed all 50 validated packages. It exercised both verified points for each of the twelve appended controls, checked the visible strings, and restored the saved slot, host controls, BUS values, and a V2 parameter choice. The recorded suite also passed finite stereo output, missing-package silence, effect switching, zero callback allocations, and the official SDK host simulator. The SDK validator reported zero errors and zero warnings; TUI parameter handles are within 0–23.
+The native VST harness loaded the packaged plugin binary and processed all 50 validated packages. It exercised both verified points for each of the twelve appended controls, checked the visible strings, and restored the saved slot, host controls, BUS values, and a V2 parameter choice. The recorded suite also passed finite stereo output, missing-package silence, effect switching, zero callback allocations, and the official SDK host simulator. The SDK validator reported zero errors and zero warnings; TUI parameter handles are within 0–23. The release report records 50/50 slot passes, `callback_allocations: 0`, and slot 50 in `clock_evidence_gaps`.
 
 The ARMv7 binary was built and ABI-checked but not executed on ARM hardware. Slot 50 retains the existing evidence note: it plays in the experimental 48 kHz package test, while its authentic post-RUN factory clock remains unverified.
 
