@@ -11,7 +11,7 @@ int main() {
     TROLLfx_InstallValidatedFactoryPackageProvider(nullptr);
     ASR10FXCollection missing_plugin;
     missing_plugin.prepare(48000.0,256);
-    assert(missing_plugin.getInt(5)==0); // no provider: package required, never a dry/mock effect
+    assert(missing_plugin.getInt(5)==1); // production provider exists, but has no package in the test environment
     constexpr int N=256; std::array<float,N> l{},r{},ol{},orr{};
     l.fill(0.25f); r.fill(-0.25f);
     const float* inputs[2]={l.data(),r.data()}; float* outputs[2]={ol.data(),orr.data()};

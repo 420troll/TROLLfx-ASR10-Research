@@ -24,6 +24,8 @@ for label in expected:
     assert f'"{label[0]:02d} {label[1]}"' in src
 assert "provider->package_for_slot(slot)" in src
 assert "[UNAVAILABLE]" in src and "[READY]" in src
+assert '#include "ES5510FactoryPackageProvider.h"' in src
+assert "TROLLfx_GetProductionFactoryPackageProvider()" in src
 assert "backend_.set_verified_bus" in src
 assert "backend_.request_effect" in src and "backend_.process" in src
 assert "visibleWhen" in (ROOT / "ui.json").read_text()

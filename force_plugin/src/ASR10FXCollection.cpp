@@ -2,6 +2,7 @@
 // Copyright (C) 2026 TROLLfx contributors
 #include "mpc_plugin.h"
 #include "ES5510DSPBackend.h"
+#include "ES5510FactoryPackageProvider.h"
 #include "trollfx/es5510_factory_parameter_control_v01.hpp"
 
 #include <algorithm>
@@ -41,6 +42,11 @@ std::vector<std::string> numericChoices(int first, int second) {
     return {std::to_string(first) + " BUS", std::to_string(second) + " BUS"};
 }
 
+const IValidatedFactoryPackageProvider* resolveProvider() {
+    const auto* injected = TROLLfx_GetValidatedFactoryPackageProvider();
+    return injected ? injected : TROLLfx_GetProductionFactoryPackageProvider();
+}
+
 int choiceAt(const mpc::Plugin& plugin, int index) noexcept {
     return plugin.getInt(index);
 }
@@ -64,7 +70,7 @@ class ASR10FXCollection final : public mpc::Plugin {
 
 public:
     ASR10FXCollection()
-        : mpc::Plugin(makeInfo()), provider_(TROLLfx_GetValidatedFactoryPackageProvider()),
+        : mpc::Plugin(makeInfo()), provider_(resolveProvider()),
           backend_(provider_) {
         using namespace mpc;
         addParam(choiceParam("effect_slot", "FX Slot", effectChoices(provider_), 0));
@@ -97,11 +103,21 @@ public:
     void reset() override { applied_slot_ = 0; }
 
     bool formatValue(int index, float plain, std::string& out) override {
+        const auto status = backend_.status();
+        if (index == Status) {
+            switch (status) {
+                case ES5510BackendStatus::NoProvider: out = "MISSING"; break;
+                case ES5510BackendStatus::Unavailable: out = "UNAVAIL"; break;
+                case ES5510BackendStatus::Loading: out = "LOADING"; break;
+                case ES5510BackendStatus::Ready: out = "READY"; break;
+                case ES5510BackendStatus::Failed: out = "LOAD ERR"; break;
+            }
+            return true;
+        }
         if (index != Fx) return false;
         const int slot_index = std::clamp(static_cast<int>(plain), 0, 49);
         const auto slot = static_cast<std::uint8_t>(slot_index + 1);
         const auto* package = provider_ ? provider_->package_for_slot(slot) : nullptr;
-        const auto status = backend_.status();
         const char* state = "UNAVAILABLE";
         if (!provider_) state = "PACKAGE REQUIRED";
         else if (!package) state = "UNAVAILABLE";
