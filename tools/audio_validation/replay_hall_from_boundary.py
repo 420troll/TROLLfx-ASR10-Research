@@ -420,7 +420,7 @@ def main() -> int:
     scheduler_lines=[f'{e["event_id"]}:{e["cycles"]}:{e["dsp_frame"]}:{e["host_pc"]}:{e["index"]:02x}:{e["value"]:06x}:{e["boundary_frame"]}' for e in bundles[0]["writes"]]
     full_events_sha=sha((startup_hash+"\n"+"\n".join(scheduler_lines)+"\n").encode())
     exe=out/"hall-boundary-replay"
-    sources=[ROOT/"src/es5510.cpp",ROOT/"third_party/trollfx_mame_es5510/mame_es5510_standalone.cpp",ROOT/"tools/audio_validation/hall_boundary_replay.cpp"]
+    sources=[ROOT/"src/es5510.cpp",ROOT/"third_party/trollfx_mame_es5510/mame_es5510_standalone.cpp",ROOT/"tools/audio_validation/factory_boundary_replay.cpp"]
     subprocess.run(["c++","-std=c++17","-O2","-Isrc","-Ithird_party/trollfx_mame_es5510",*map(str,sources),"-o",str(exe)],cwd=ROOT,check=True)
     verify_spec=importlib.util.spec_from_file_location("hall_replay_verify",VERIFY_PATH)
     verifier=importlib.util.module_from_spec(verify_spec);verify_spec.loader.exec_module(verifier)

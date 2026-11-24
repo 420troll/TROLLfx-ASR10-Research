@@ -25,7 +25,7 @@ static int lane(const trollfx::esp::MameES5510& e, unsigned i) {
 }
 
 int main(int argc,char**argv) try {
-    if(argc!=6&&argc!=8){std::cerr<<"usage: hall-boundary-replay SNAPSHOT UPDATES IO OUTPUT STATE-CHECKS [DIAGNOSTIC-FRAME TRACE-PREFIX]\n";return 2;}
+    if(argc!=6&&argc!=8){std::cerr<<"usage: factory-boundary-replay SNAPSHOT UPDATES IO OUTPUT STATE-CHECKS [DIAGNOSTIC-FRAME TRACE-PREFIX]\n";return 2;}
     const std::uint64_t diagnosticFrame=argc==8?std::stoull(argv[6]):UINT64_MAX;
     FILE* f=std::fopen(argv[1],"rb"); if(!f)throw std::runtime_error("cannot open checkpoint");
     ES5510 native; if(!native.load_capture_after_pipeline_reset(f)){std::fclose(f);throw std::runtime_error("invalid or incomplete ES5510 checkpoint");} std::fclose(f);
