@@ -908,9 +908,9 @@
             {
                 "key": "Parameter 0",
                 "value": [
-                    "01 HALL REVERB [PACKAGE]",
-                    "02 44KHZ REVERB [INDEPENDENT PA",
-                    "03 ROOM REVERB [IDENTITY AMBIGU",
+                    "01 HALL REVERB [UNAVAILABLE]",
+                    "02 44KHZ REVERB [UNAVAILABLE]",
+                    "03 ROOM REVERB [UNAVAILABLE]",
                     "04 DUAL DELAYS [UNAVAILABLE]",
                     "05 44KHZ DELAYS [UNAVAILABLE]",
                     "06 CHORUS+REVRB [UNAVAILABLE]",
@@ -965,15 +965,6 @@
                 "value": [
                     "Off",
                     "On"
-                ]
-            },
-            {
-                "key": "Parameter 5",
-                "value": [
-                    "Package required",
-                    "Unavailable",
-                    "Ready",
-                    "Load failed"
                 ]
             },
             {
