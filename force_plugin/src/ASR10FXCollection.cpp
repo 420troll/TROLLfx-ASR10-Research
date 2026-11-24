@@ -95,8 +95,7 @@ public:
 
     void prepare(double rate, int) override {
         const auto selected = static_cast<std::uint8_t>(std::clamp(getInt(Fx), 0, 49) + 1);
-        const bool loaded = backend_.prepare(selected, rate);
-        updateStatus(loaded);
+        backend_.prepare(selected, rate);
         applied_slot_ = 0;
     }
 
@@ -157,7 +156,6 @@ public:
                              context.outputs ? context.outputs[1] : nullptr};
         backend_.process(inputs, outputs,
                          static_cast<std::size_t>(std::max(0, context.numFrames)));
-        reflectStatus();
     }
 
 private:
@@ -175,25 +173,6 @@ private:
             : (effect_slot == 1 ? 29 : 26);
         const auto result = backend_.set_verified_bus(effect, parameter, display_value);
         if (result == EncodeStatus::Encoded) previously_applied = value;
-    }
-
-    void updateStatus(bool loaded) noexcept {
-        if (!provider_) set(Status, 0.0f);
-        else if (loaded) set(Status, 2.0f);
-        else if (backend_.status() == ES5510BackendStatus::Unavailable) set(Status, 1.0f);
-        else if (backend_.status() == ES5510BackendStatus::Loading) set(Status, 4.0f);
-        else if (backend_.status() == ES5510BackendStatus::Failed) set(Status, 3.0f);
-        else set(Status, 1.0f);
-    }
-
-    void reflectStatus() noexcept {
-        switch (backend_.status()) {
-            case ES5510BackendStatus::NoProvider: set(Status, 0.0f); break;
-            case ES5510BackendStatus::Unavailable: set(Status, 1.0f); break;
-            case ES5510BackendStatus::Loading: set(Status, 4.0f); break;
-            case ES5510BackendStatus::Ready: set(Status, 2.0f); break;
-            case ES5510BackendStatus::Failed: set(Status, 3.0f); break;
-        }
     }
 
     const IValidatedFactoryPackageProvider* provider_ = nullptr;

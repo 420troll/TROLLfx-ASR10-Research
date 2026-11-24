@@ -36,6 +36,8 @@ struct Plugin {
  explicit Plugin(const std::string&path){library=dlopen(path.c_str(),RTLD_NOW|RTLD_LOCAL);if(!library)throw std::runtime_error(dlerror());auto entry=reinterpret_cast<Entry>(dlsym(library,"VSTPluginMain"));if(!entry)throw std::runtime_error("VSTPluginMain missing from packaged binary");effect=entry(host_callback);if(!effect||effect->magic!=kEffectMagic||effect->resvd2!=0||!effect->object||effect->numInputs!=2||effect->numOutputs!=2||!effect->processReplacing)throw std::runtime_error("VST entry/ABI initialization failed");host.effect=effect;effect->dispatcher(effect,effOpen,0,0,nullptr,0);effect->dispatcher(effect,effSetSampleRate,0,0,nullptr,float(kRate));effect->dispatcher(effect,effSetBlockSize,0,kMaxBlock,nullptr,0);effect->dispatcher(effect,effMainsChanged,0,1,nullptr,0);}
  ~Plugin(){if(effect){effect->dispatcher(effect,effMainsChanged,0,0,nullptr,0);effect->dispatcher(effect,effClose,0,0,nullptr,0);}if(library)dlclose(library);host.effect=nullptr;}
  int plain_status(){char text[64]{};effect->dispatcher(effect,effGetParamDisplay,kStatusParam,0,text,0);if(std::strcmp(text,"READY")==0)return 3;if(std::strcmp(text,"LOADING")==0)return 2;if(std::strcmp(text,"UNAVAIL")==0)return 1;if(std::strcmp(text,"MISSING")==0)return 0;if(std::strcmp(text,"LOAD ERR")==0)return 4;return -1;}
+ bool selected_effect_ready(){char text[64]{};effect->dispatcher(effect,effGetParamDisplay,kEffectParam,0,text,0);return std::strstr(text,"/ READY")!=nullptr;}
+ bool selected_effect_unavailable(){char text[64]{};effect->dispatcher(effect,effGetParamDisplay,kEffectParam,0,text,0);return std::strstr(text,"UNAVAILABLE")||std::strstr(text,"PACKAGE REQUIRED")||std::strstr(text,"LOAD FAILED");}
  void select(unsigned slot){effect->setParameter(effect,kEffectParam,float(slot-1)/49.0f);}
  void set(int index,float normalized){effect->setParameter(effect,index,normalized);}
  float get(int index)const{return effect->getParameter(effect,index);}
@@ -44,7 +46,7 @@ void callback(Plugin&p,const float*il,const float*ir,float*ol,float*orr,int n){f
 struct Stimulus{std::vector<float> data;std::size_t frames=0;explicit Stimulus(const std::string&path){std::ifstream f(path,std::ios::binary);if(!f)throw std::runtime_error("input stimulus missing");f.seekg(0,std::ios::end);auto size=f.tellg();if(size<=0||size%(2*sizeof(float)))throw std::runtime_error("input stimulus must be stereo float32");frames=static_cast<std::size_t>(size)/(2*sizeof(float));data.resize(frames*2);f.seekg(0);f.read(reinterpret_cast<char*>(data.data()),size);if(!f)throw std::runtime_error("cannot read input stimulus");}};
 struct BlockResult{std::vector<float> output;unsigned long long callbacks=0;std::size_t frames=0;};
 void process_frames(Plugin&p,const Stimulus&s,std::size_t total,std::size_t&cursor,std::vector<float>*capture,BlockResult*stats){constexpr int pattern[]={127,256,64,193};std::array<float,kMaxBlock> il{},ir{},ol{},orr{};int bi=0;std::vector<float> temp;if(capture)capture->clear();while(total){int n=std::min<std::size_t>(total,pattern[bi++%4]);for(int i=0;i<n;++i){auto pos=((cursor+i)%s.frames)*2;il[i]=s.data[pos];ir[i]=s.data[pos+1];}callback(p,il.data(),ir.data(),ol.data(),orr.data(),n);if(capture){for(int i=0;i<n;++i){capture->push_back(ol[i]);capture->push_back(orr[i]);}}if(stats){for(int i=0;i<n;++i){if(!std::isfinite(ol[i])||!std::isfinite(orr[i]))throw std::runtime_error("non-finite plugin output");stats->output.push_back(ol[i]);stats->output.push_back(orr[i]);}stats->frames+=n;}cursor=(cursor+n)%s.frames;total-=n;}}
-bool wait_ready(Plugin&p,unsigned slot,const Stimulus&s,std::size_t&cursor,std::size_t&elapsed){p.select(slot);for(unsigned i=0;i<20000;++i){process_frames(p,s,kMaxBlock,cursor,nullptr,nullptr);elapsed+=kMaxBlock;if(p.plain_status()==3)return true;if(p.plain_status()==0||p.plain_status()==1||p.plain_status()==4)return false;std::this_thread::yield();}return false;}
+bool wait_ready(Plugin&p,unsigned slot,const Stimulus&s,std::size_t&cursor,std::size_t&elapsed){p.select(slot);for(unsigned i=0;i<20000;++i){process_frames(p,s,kMaxBlock,cursor,nullptr,nullptr);elapsed+=kMaxBlock;if(p.selected_effect_ready())return true;if(p.selected_effect_unavailable())return false;std::this_thread::yield();}return false;}
 void save_raw(const std::string&path,const std::vector<float>&v){std::ofstream f(path,std::ios::binary);f.write(reinterpret_cast<const char*>(v.data()),static_cast<std::streamsize>(v.size()*sizeof(float)));if(!f)throw std::runtime_error("failed to write test render");}
 }
 
@@ -55,7 +57,7 @@ int main(int argc,char**argv)try{
  Plugin plugin(argv[1]);if(plugin.effect->numParams!=12)throw std::runtime_error("unexpected plugin parameter ABI");
  if(argc==6&&std::string(argv[5])=="missing"){
   std::size_t cursor=0;BlockResult render;process_frames(plugin,stimulus,2048,cursor,nullptr,&render);
-  if(plugin.plain_status()!=1)throw std::runtime_error("empty local collection was not reported unavailable");
+  if(plugin.plain_status()!=1||!plugin.selected_effect_unavailable())throw std::runtime_error("empty local collection was not reported unavailable");
   for(float x:render.output)if(x!=0.0f)throw std::runtime_error("missing package did not fail closed to silence");
   std::cout<<"MISSING_PASS status=Unavailable frames=2048 output=silence\n";return 0;
  }

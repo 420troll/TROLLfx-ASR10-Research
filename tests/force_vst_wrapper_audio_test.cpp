@@ -11,7 +11,7 @@ int main() {
     TROLLfx_InstallValidatedFactoryPackageProvider(nullptr);
     ASR10FXCollection missing_plugin;
     missing_plugin.prepare(48000.0,256);
-    assert(missing_plugin.getInt(5)==1); // production provider exists, but has no package in the test environment
+    assert(missing_plugin.displayText(5)=="UNAVAIL"); // status is rendered from backend state, not serialized parameter state
     constexpr int N=256; std::array<float,N> l{},r{},ol{},orr{};
     l.fill(0.25f); r.fill(-0.25f);
     const float* inputs[2]={l.data(),r.data()}; float* outputs[2]={ol.data(),orr.data()};
@@ -30,7 +30,7 @@ int main() {
     plugin.set(0,0.0f); // factory slot 1: HALL
     plugin.set(1,100.0f); plugin.set(2,0.0f); plugin.set(3,0.0f);
     plugin.prepare(48000.0,256);
-    assert(plugin.getInt(5)==2); // Ready, preserving the previous status enum index
+    assert(plugin.displayText(5)=="READY");
     assert(plugin.displayText(0).find("READY") != std::string::npos);
     assert(plugin.param(6).id=="reverb_bus1" && plugin.param(7).id=="reverb_bus2");
     plugin.set(8,1.0f); // verified HALL BUS1 28 -> 29
@@ -62,7 +62,7 @@ int main() {
     rom02_plugin.set(0,1.0f); rom02_plugin.set(1,100.0f); rom02_plugin.set(2,0.0f); rom02_plugin.set(3,0.0f);
     rom02_plugin.set(10,1.0f); // verified ROM-02 BUS1 25 -> 26
     rom02_plugin.prepare(48000.0,256);
-    assert(rom02_plugin.getInt(5)==2);
+    assert(rom02_plugin.displayText(5)=="READY");
     ASR10FXCollection rom02_default;
     rom02_default.set(0,1.0f); rom02_default.set(1,100.0f); rom02_default.set(2,0.0f); rom02_default.set(3,0.0f);
     rom02_default.prepare(48000.0,256);
