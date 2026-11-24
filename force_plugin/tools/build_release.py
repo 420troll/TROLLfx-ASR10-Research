@@ -23,7 +23,11 @@ def digest(path: Path) -> str:
 
 def source_digest() -> str:
     h=hashlib.sha256()
-    for rel in ("force_plugin/plugin.json","force_plugin/ui.json","force_plugin/src/ASR10FXCollection.cpp","force_plugin/effects.json"):
+    inputs=("force_plugin/plugin.json","force_plugin/ui.json","force_plugin/src/ASR10FXCollection.cpp",
+            "force_plugin/src/ES5510DSPBackend.cpp","force_plugin/src/ES5510DSPBackend.h","force_plugin/effects.json",
+            "src/es5510.cpp","src/es5510.h","src/es5510_capture.h","src/es5510_factory_runtime.cpp",
+            "include/trollfx/es5510_factory_runtime.hpp","include/trollfx/es5510_factory_registry.hpp")
+    for rel in inputs:
         h.update(rel.encode()+b"\0"); h.update((ROOT/rel).read_bytes())
     return h.hexdigest()
 
@@ -135,7 +139,19 @@ def main():
         (stage/"src").mkdir()
         shutil.copy2(ROOT/"force_plugin/plugin.json",stage/"plugin.json")
         shutil.copy2(ROOT/"force_plugin/ui.json",stage/"ui.json")
-        shutil.copy2(ROOT/"force_plugin/src/ASR10FXCollection.cpp",stage/"src/ASR10FXCollection.cpp")
+        staged_sources=("force_plugin/src/ASR10FXCollection.cpp","force_plugin/src/ES5510DSPBackend.cpp",
+                        "src/es5510.cpp","src/es5510_factory_runtime.cpp")
+        for rel in staged_sources: shutil.copy2(ROOT/rel,stage/"src"/Path(rel).name)
+        shutil.copy2(ROOT/"force_plugin/src/ES5510DSPBackend.h",stage/"src/ES5510DSPBackend.h")
+        for rel in ("src/es5510.h","src/es5510_capture.h","include/trollfx/es5510_factory_runtime.hpp",
+                    "include/trollfx/es5510_factory_registry.hpp"):
+            dest=stage/"src"/Path(rel).name if rel.startswith("src/") else stage/"src"/"trollfx"/Path(rel).name
+            dest.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(ROOT/rel,dest)
+        # Native audio verification uses the actual SDK plugin wrapper and the
+        # existing private RUN packages. It is deliberately not a playable marker.
+        tests=run([ROOT/"force_plugin/tools/test_es5510_backend.sh"],cwd=ROOT,check=False)
+        print(tests.stdout,end="")
+        if tests.returncode: raise RuntimeError("validator-gated native backend/VST-wrapper audio tests failed")
         args=[sys.executable,sdk/"tools/build.py",stage,"--target","all","--toolchain",("gcc" if tc["kind"]=="gcc" else "zig")]
         if tc["kind"] in ("zig","zig-python"): args += ["--zig",tc["arg"]]
         built=run(args,cwd=sdk,env=tc["env"])
@@ -172,6 +188,11 @@ def main():
               "playable_marker_required":"INTEGRATION_STATUS","built_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),
               "source_commit":revision,"source_inputs_sha256":source_digest(),"sdk":{"path":str(sdk),"origin":origin,"commit":sdk_commit},
               "toolchain":{"kind":tc["kind"],"command":tc["command"],"version":tc["version"],"paths":tc.get("paths",{})},
+              "engine":{"implementation":"native ES5510 + FactoryRuntime + validated package adapter",
+                "compiled_sources":["ASR10FXCollection.cpp","ES5510DSPBackend.cpp","es5510_factory_runtime.cpp","es5510.cpp"],
+                "provider_api":"IValidatedFactoryPackageProvider","production_provider":"not included; missing packages fail closed",
+                "native_backend_and_plugin_wrapper_audio_tests":"PASS","packaged_binary_bound_audio_test":"NOT_RUN",
+                "playable_release_gate":"NOT_MET"},
               "targets":{"native":{"host":platform.machine(),"binary_sha256":digest(native),"host_sim_parameter_dump":"PASS"},**abi},"binaries":{"arm32_sha256":digest(arm32),"arm64_sha256":digest(arm64)},
               "build_command":"force_plugin/tools/build_candidate.sh --toolchain auto","package_command":"force_plugin/tools/build_candidate.sh --toolchain auto","sdk_validation":{"result":"PASS","errors":int(summary.group(1)),"warnings":int(summary.group(2)),"command":"tools/validate.py"},
               "licensing":{"project":"GPL-3.0-only","sdk_framework":"MIT","proprietary_factory_payloads_included":False}}

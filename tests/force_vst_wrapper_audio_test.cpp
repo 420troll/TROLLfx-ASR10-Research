@@ -1,0 +1,55 @@
+#define TROLLFX_FORCE_PLUGIN_TEST
+#include "../force_plugin/src/ASR10FXCollection.cpp"
+#include "validated_test_packages.hpp"
+#include <array>
+#include <cassert>
+#include <cmath>
+#include <cstdio>
+
+int main() {
+    auto provider=trollfx_test::make_provider();
+    TROLLfx_InstallValidatedFactoryPackageProvider(nullptr);
+    ASR10FXCollection missing_plugin;
+    missing_plugin.prepare(48000.0,256);
+    assert(missing_plugin.getInt(5)==1); // explicitly unavailable, not a dry/mock effect
+    constexpr int N=256; std::array<float,N> l{},r{},ol{},orr{};
+    l.fill(0.25f); r.fill(-0.25f);
+    const float* inputs[2]={l.data(),r.data()}; float* outputs[2]={ol.data(),orr.data()};
+    mpc::ProcessContext ctx; ctx.inputs=inputs; ctx.outputs=outputs; ctx.numInputs=2; ctx.numOutputs=2; ctx.numFrames=N; ctx.sampleRate=48000.0;
+    missing_plugin.process(ctx);
+    for(int i=0;i<N;++i)assert(ol[i]==0.0f&&orr[i]==0.0f);
+    TROLLfx_InstallValidatedFactoryPackageProvider(&provider);
+    ASR10FXCollection plugin;
+    plugin.set(0,0.0f); // factory slot 1: HALL
+    plugin.set(1,100.0f); plugin.set(2,0.0f); plugin.set(3,0.0f);
+    plugin.prepare(48000.0,256);
+    assert(plugin.getInt(5)==2); // Ready, after strict package validation and checkpoint load
+    l.fill(0.0f); r.fill(0.0f); ol.fill(0.0f); orr.fill(0.0f);
+    double hall_energy=0.0;
+    for(int block=0;block<24;++block) {
+        for(int i=0;i<N;++i){const float x=0.25f*std::sin(float((block*N+i)*0.03125));l[i]=x;r[i]=-x;}
+        plugin.process(ctx);
+        for(int i=0;i<N;++i)hall_energy+=ol[i]*ol[i]+orr[i]*orr[i];
+    }
+    assert(hall_energy>1e-8);
+    plugin.set(0,1.0f); // select ROM-02 44KHZ REVERB through the plugin parameter
+    double switched_energy=0.0;
+    for(int block=0;block<5000;++block) {
+        for(int i=0;i<N;++i){const float x=0.25f*std::sin(float(((block+24)*N+i)*0.03125));l[i]=x;r[i]=-x;}
+        plugin.process(ctx);
+        for(int i=0;i<N;++i)switched_energy+=ol[i]*ol[i]+orr[i]*orr[i];
+    }
+    assert(switched_energy>1e-8);
+    ASR10FXCollection rom02_plugin;
+    rom02_plugin.set(0,1.0f); rom02_plugin.set(1,100.0f); rom02_plugin.set(2,0.0f); rom02_plugin.set(3,0.0f);
+    rom02_plugin.prepare(48000.0,256);
+    assert(rom02_plugin.getInt(5)==2);
+    double rom02_energy=0.0;
+    for(int block=0;block<24;++block) {
+        for(int i=0;i<N;++i){const float x=0.25f*std::sin(float((block*N+i)*0.03125));l[i]=x;r[i]=-x;}
+        rom02_plugin.process(ctx);
+        for(int i=0;i<N;++i)rom02_energy+=ol[i]*ol[i]+orr[i]*orr[i];
+    }
+    assert(rom02_energy>1e-8);
+    std::printf("VST wrapper HALL energy %.9g; ROM-02 energy %.9g; selection and audio paths PASS\n",hall_energy,rom02_energy);
+}
