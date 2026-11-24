@@ -36,10 +36,10 @@ assert "not a factory default/reset" in src
 assert "visibleWhen" in (ROOT / "ui.json").read_text()
 editor_controls = ui["pages"][2]["controls"]
 assert [x["param"] for x in editor_controls] == [
-    "BASS FC", "COMP RATIO", "VOICE1 FINE", "PREAMP GAIN",
-    "PHASE RATE", "CHORUS RATE", "BS1 TIME L", "HI FREQ DAMPING (ROOM)",
-    "DIFFUSION", "DECAY TIME (ROOM)", "HI FREQ DAMPING (HALL)",
-    "DECAY TIME (HALL)", "HALL BUS1", "HALL BUS2", "ROM02 BUS1", "ROM02 BUS2"]
+    "PREAMP GAIN", "VOICE1 FINE", "COMP RATIO", "BASS FC",
+    "HI FREQ DAMPING (ROOM)", "BS1 TIME L", "CHORUS RATE", "PHASE RATE",
+    "DECAY TIME (HALL)", "HI FREQ DAMPING (HALL)", "DECAY TIME (ROOM)",
+    "DIFFUSION", "HALL BUS1", "HALL BUS2", "ROM02 BUS1", "ROM02 BUS2"]
 catalog_v2 = json.loads((ROOT.parent / "docs/ASR10_FACTORY_PARAMETER_MAPPINGS_V02.json").read_text())
 assert sum(len(effect["parameters"]) for effect in catalog_v2["effects"]) == 16
 release_skin = ROOT / "dist" / "TROLLfx - VST - ASR10 FX Collection" / "Plugin Skins"
