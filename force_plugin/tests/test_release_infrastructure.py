@@ -32,6 +32,17 @@ class ReleaseInfraTests(unittest.TestCase):
             self.assertEqual(p.returncode,2,p.stdout+p.stderr)
             self.assertFalse(target.exists())
 
+    def test_rollback_preserves_removed_folder(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)/'VST2 Plugins';active=root/'TROLLfx - VST - ASR10 FX Collection';active.mkdir(parents=True)
+            (active/'plugin.json').write_text(json.dumps({'name':'ASR10 FX Collection','manufacturer':'TROLLfx'}))
+            p=subprocess.run([sys.executable,str(TOOLS/'rollback_package.py'),str(root)],text=True,capture_output=True)
+            self.assertEqual(p.returncode,0,p.stdout+p.stderr)
+            self.assertFalse(active.exists())
+            preserved=list(root.glob('.removed-TROLLfx - VST - ASR10 FX Collection-*'))
+            self.assertEqual(len(preserved),1)
+            self.assertTrue((preserved[0]/'plugin.json').is_file())
+
     def test_failed_dsp_report_cannot_write_marker(self):
         with tempfile.TemporaryDirectory() as tmp:
             report=Path(tmp)/'report.json';report.write_text(json.dumps({'schema':'trollfx-force-dsp-integration-report-v1','status':'FAIL'}))

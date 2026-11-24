@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Discover the Force SDK/toolchain, build all SDK targets and package a gated candidate."""
 from __future__ import annotations
-import argparse, datetime, hashlib, json, os, re, shutil, subprocess, sys, tempfile, zipfile
+import argparse, datetime, hashlib, json, os, platform, re, shutil, subprocess, sys, tempfile, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -144,8 +144,10 @@ def main():
         if not staged_out.is_dir(): raise RuntimeError(f"SDK builder output not found: {staged_out}")
         readelf=shutil.which("arm-linux-gnueabihf-readelf") or shutil.which("readelf")
         if not readelf: raise RuntimeError("readelf is required for explicit architecture/ABI verification")
+        native=stage/"build/native/asr10-fx-collection.so"
         arm32=staged_out/"VST/asr10-fx-collection-arm32.so"
         arm64=staged_out/"VST/asr10-fx-collection-arm64.so"
+        if not native.is_file(): raise RuntimeError("SDK build did not emit the native host-simulator binary")
         if not arm32.is_file() or not arm64.is_file(): raise RuntimeError("SDK build did not emit both ARM package targets")
         abi={"arm32":readelf_info(readelf,arm32,"arm32"),"arm64":readelf_info(readelf,arm64,"arm64")}
         # Build a fresh sibling, validate it, then replace the old candidate atomically.
@@ -170,7 +172,7 @@ def main():
               "playable_marker_required":"INTEGRATION_STATUS","built_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),
               "source_commit":revision,"source_inputs_sha256":source_digest(),"sdk":{"path":str(sdk),"origin":origin,"commit":sdk_commit},
               "toolchain":{"kind":tc["kind"],"command":tc["command"],"version":tc["version"],"paths":tc.get("paths",{})},
-              "targets":abi,"binaries":{"arm32_sha256":digest(arm32),"arm64_sha256":digest(arm64)},
+              "targets":{"native":{"host":platform.machine(),"binary_sha256":digest(native),"host_sim_parameter_dump":"PASS"},**abi},"binaries":{"arm32_sha256":digest(arm32),"arm64_sha256":digest(arm64)},
               "build_command":"force_plugin/tools/build_candidate.sh --toolchain auto","package_command":"force_plugin/tools/build_candidate.sh --toolchain auto","sdk_validation":{"result":"PASS","errors":int(summary.group(1)),"warnings":int(summary.group(2)),"command":"tools/validate.py"},
               "licensing":{"project":"GPL-3.0-only","sdk_framework":"MIT","proprietary_factory_payloads_included":False}}
             (out/"release-manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")

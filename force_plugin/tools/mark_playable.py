@@ -29,7 +29,8 @@ def main():
  if r.get('arm32_binary_sha256')!=binary_hash: raise SystemExit('refusing marker: report is not bound to this ARMv7 binary')
  if r.get('mock_backend') is not False: raise SystemExit('refusing marker: report must confirm mock_backend=false')
  if int(r.get('processed_dsp_frames',0))<1 or int(r.get('non_silent_output_frames',0))<1: raise SystemExit('refusing marker: no numerical DSP output evidence')
- if r.get('verified_slots')!=list(range(1,51)): raise SystemExit('refusing marker: all 50 slots must pass processing checks')
+ slots=r.get('verified_slots')
+ if not isinstance(slots,list) or any(type(v) is not int for v in slots) or slots!=list(range(1,51)): raise SystemExit('refusing marker: all 50 slots must pass processing checks')
  required={'factory_processing','effect_switching','no_mock_fallback','initialization_validation','stereo_routing'}
  passed=r.get('passed_tests')
  if not isinstance(passed,list) or not required.issubset(set(passed)): raise SystemExit('refusing marker: required test results are missing')

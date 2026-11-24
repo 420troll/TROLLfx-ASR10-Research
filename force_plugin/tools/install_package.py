@@ -31,6 +31,12 @@ def verify(folder:Path):
  if rel.is_absolute() or '..' in rel.parts: raise ValueError('unsafe plugin binary path')
  arm=folder/rel
  if marker.get('arm32_binary_sha256')!=sha(arm) or m.get('binaries',{}).get('arm32_sha256')!=sha(arm): raise ValueError('playable evidence is not bound to the packaged ARM32 binary')
+ rel64=Path(plugin.get('file64',''))
+ if rel64.is_absolute() or '..' in rel64.parts: raise ValueError('unsafe AArch64 manifest path')
+ arm64=folder/rel64
+ if not arm64.is_file() or m.get('binaries',{}).get('arm64_sha256')!=sha(arm64): raise ValueError('AArch64 binary hash mismatch')
+ if marker.get('version')!=plugin.get('version') or m.get('version')!=plugin.get('version'): raise ValueError('version metadata does not agree')
+ if marker.get('verification_report_sha256')!=m.get('verification_report_sha256'): raise ValueError('verification report hash mismatch')
  if marker.get('mock_backend') is not False or marker.get('verified_slots')!=list(range(1,51)): raise ValueError('playable marker lacks non-mock full-collection coverage')
  if plugin.get('name')!='ASR10 FX Collection' or plugin.get('manufacturer')!='TROLLfx': raise ValueError('plugin identity mismatch')
  if m.get('sdk_validation',{}).get('result')!='PASS': raise ValueError('SDK validation evidence missing')
