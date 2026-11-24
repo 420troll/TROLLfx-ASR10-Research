@@ -9,8 +9,10 @@ import re
 expected=[(int(n),label.strip()) for n,label in re.findall(r'^\|\s*(\d{2})\s*\|\s*([^|]+?)\s*\|',text,re.M)]
 expected=[x for x in expected if 1<=x[0]<=50]
 assert [(x['slot'],x['name']) for x in data]==expected
-assert [(x['slot'],x['name']) for x in data if x.get('runtime_supported')]==[(1,'HALL REVERB'),(2,'44KHZ REVERB')]
+assert not any(x.get('runtime_supported') for x in data)
 assert json.loads((root/'plugin.json').read_text())['version']=='1.0.0-experimental'
 src=(root/'src/ASR10FXCollection.cpp').read_text()
-assert src.count('[UNAVAILABLE]')==48 and '[PACKAGE]' in src
-print('catalog and fail-closed UI checks: PASS')
+assert src.count('[UNAVAILABLE]')==48
+assert '[IDENTITY CONFLICT]' in src and '[IDENTITY AMBIGUOUS]' in src
+assert 'c.outputs[ch][i]=0.f' in src
+print('catalog identity warnings and no-dry fail-closed UI checks: PASS')

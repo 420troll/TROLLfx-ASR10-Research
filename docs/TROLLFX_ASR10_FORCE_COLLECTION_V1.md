@@ -2,9 +2,9 @@
 
 ## Status
 
-This is an **unverified Force candidate**, not a playable authentic factory-effects release. It builds the VST2 ARMv7 hard-float plugin shell and touchscreen browser for all 50 OS 3.53 ROM slots. Slots 1 and 2 are identified as the only effects accepted by the integrated ES5510 runtime; the browser marks them as requiring packages. Slots 3–50 display as unavailable. The plug-in outputs dry input while an effect package is not loaded, and does not use mock DSP. Its status page reports package required or unavailable.
+This is an **unverified Force candidate**, not a playable authentic factory-effects release. The source includes a VST2 ARMv7 hard-float plugin shell and touchscreen browser for all 50 OS 3.53 ROM slots, but the native backend is not connected. The plugin now marks all slots unavailable (with explicit identity warnings for slots 02 and 03) and outputs silence while unavailable; it does not substitute dry pass-through or mock DSP.
 
-The Force VST currently does not load authentic HALL or ROM-02 package data. The integrated runtime API (`docs/ES5510_EXPERIMENTAL_RUNTIME_API_V01.md`) accepts only ROM-01 HALL and ROM-02, and requires its embedding application to validate private checkpoint, two-boot, event, and serial-route evidence before creating runtime packages. It has no general 50-effect loader, Force asset importer, or live VST integration contract. BUS1/BUS2 controls are exposed for the verified mappings, but this candidate does not schedule them into a runtime. Wet/dry is retained in the host-facing parameter contract; until a package backend is present, processing remains dry passthrough. No factory playback or parameter functionality is claimed.
+The collection slot 02 checkpoint conflicts with the independent ROM-02 program identity; slot 03 carries the independent ROM-02 program digest under the ROOM REVERB display label. See `docs/TROLLFX_ASR10_FORCE_50_INTEGRATION_RC.md`. None of the collection packages are registered as playable in the Force plugin. The generic runtime API requires an embedding application to validate package identity, initialization state, checkpoint, routing, and event schedule. There is no Force-side loader/importer or live VST integration contract. BUS1/BUS2 controls, meters, and named user presets are not functional.
 
 ## Browser and controls
 
@@ -14,18 +14,18 @@ The Force VST currently does not load authentic HALL or ROM-02 package data. The
 
 The inspected SDK clone is `420troll/AkaiForceSDK`, commit `4521c247a2deae30efb9e93d53fc8f9390c51e81`. Its builder targets the original Force with ARMv7-A, Cortex-A17, NEON/VFPv4 and hard-float and emits VST2 plus `Plugin Skins/TUI.json` and `Q-Links.json`. SDK project sources include the SDK MIT framework; the candidate does not introduce another plug-in framework.
 
-From this repository root, build/package only:
+From this repository root, the intended build command is:
 
 ```sh
 python3 force_plugin/tools/test_catalog.py
 force_plugin/tools/build_candidate.sh
 ```
 
-Output is `force_plugin/dist/TROLLfx - VST - ASR10 FX Collection/`. The build script uses `AKAI_FORCE_SDK` if set, otherwise looks for sibling `AkaiForceSDK`. It does not copy anything to a device. The package includes a SHA256SUMS file. To manually install or remove a package, use `force_plugin/tools/install.sh PACKAGE_DIR FORCE_VST2_PLUGINS_DIR` or `force_plugin/tools/rollback.sh FORCE_VST2_PLUGINS_DIR`; neither script restarts the host.
+Output would be `force_plugin/dist/TROLLfx - VST - ASR10 FX Collection/`. The build script uses `AKAI_FORCE_SDK` if set, otherwise looks for sibling `AkaiForceSDK`. No SDK exists in this environment, so this command currently fails before building. Do not install the existing `dist` binaries; they came from the dry-shell candidate and are not the native runtime. The package includes a SHA256SUMS file. To manually install or remove a package, use `force_plugin/tools/install.sh PACKAGE_DIR FORCE_VST2_PLUGINS_DIR` or `force_plugin/tools/rollback.sh FORCE_VST2_PLUGINS_DIR`; neither script restarts the host.
 
 ## User-local factory assets
 
-No ROM, firmware, EFE, checkpoint, microprogram, audio capture, or private state is included. Do not place private assets in a distributable package. A later import tool must run the existing fail-closed runtime validator on authorized local packages, preserve their evidence and hashes, and reject packages without initialization, two-boot, event, clock, input, and routing evidence. The Force-side loader must verify the validation receipt and file hashes before setting runtime evidence flags. Until that work and a general runtime API exist, selecting HALL or ROM-02 reports that a package is required and leaves the signal dry.
+No ROM, firmware, EFE, checkpoint, microprogram, audio capture, or private state is included. Do not place private assets in a distributable package. A later import tool must run the existing fail-closed runtime validator on authorized local packages, preserve their evidence and hashes, and reject packages without initialization, two-boot, event, clock, input, and routing evidence. The Force-side loader must verify the validation receipt and file hashes before setting runtime evidence flags. Until that work is complete, all slots report unavailable and the plugin outputs silence.
 
 ## License and troubleshooting
 

@@ -4,253 +4,351 @@
     "name": "HALL REVERB",
     "category": "Reverb",
     "runtime": "ROM-01 HALL",
-    "runtime_supported": true
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 2,
     "name": "44KHZ REVERB",
     "category": "Reverb",
     "runtime": "ROM-02 REVERB",
-    "runtime_supported": true
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 3,
     "name": "ROOM REVERB",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 4,
     "name": "DUAL DELAYS",
-    "category": "Delay"
+    "category": "Delay",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 5,
     "name": "44KHZ DELAYS",
-    "category": "Delay"
+    "category": "Delay",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 6,
     "name": "CHORUS+REVRB",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 7,
     "name": "PHASER+REVRB",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 8,
     "name": "FLANGER+REV",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 9,
     "name": "ROT.SPKR+REV",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 10,
     "name": "CHOR+REV+DDL",
-    "category": "Delay"
+    "category": "Delay",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 11,
     "name": "CMP+DIST+REV",
-    "category": "Dynamics"
+    "category": "Dynamics",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 12,
     "name": "DIST+CHO+REV",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 13,
     "name": "WAH+DIST+REV",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 14,
     "name": "SMALL ROOM",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 15,
     "name": "LARGE ROOM",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 16,
     "name": "HALL REVERB2",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 17,
     "name": "SMALL PLATE",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 18,
     "name": "LARGE PLATE",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 19,
     "name": "REVRSE REVRB",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 20,
     "name": "REVRSE REVB2",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 21,
     "name": "GATED REVERB",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 22,
     "name": "NLIN REVRB 1",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 23,
     "name": "NLIN REVRB 2",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 24,
     "name": "NLIN REVRB 3",
-    "category": "Reverb"
+    "category": "Reverb",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 25,
     "name": "MULTITAP DDL",
-    "category": "Delay"
+    "category": "Delay",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 26,
     "name": "EQ+DELAY LFO",
-    "category": "Delay"
+    "category": "Delay",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 27,
     "name": "VCF+DISTORT",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 28,
     "name": "GUITAR AMP1",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 29,
     "name": "GUITAR AMP2",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 30,
     "name": "GUITAR AMP3",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 31,
     "name": "SPKR CABINET",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 32,
     "name": "TUNABLE SPKR",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 33,
     "name": "EQ+CHOR+DDL",
-    "category": "Delay"
+    "category": "Delay",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 34,
     "name": "EQ+VIBR+DDL",
-    "category": "Delay"
+    "category": "Delay",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 35,
     "name": "EQ+FLNGR+DDL",
-    "category": "Delay"
+    "category": "Delay",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 36,
     "name": "EQ+TREM+DDL",
-    "category": "Delay"
+    "category": "Delay",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 37,
     "name": "PHASER+DDL",
-    "category": "Delay"
+    "category": "Delay",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 38,
     "name": "8-VOICE CHOR",
-    "category": "Modulation"
+    "category": "Modulation",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 39,
     "name": "PITCH SHIFT",
-    "category": "Modulation"
+    "category": "Modulation",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 40,
     "name": "PITCH+DDL",
-    "category": "Delay"
+    "category": "Delay",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 41,
     "name": "FAST PITCHSH",
-    "category": "Modulation"
+    "category": "Modulation",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 42,
     "name": "EQ+CMPRESSOR",
-    "category": "Dynamics"
+    "category": "Dynamics",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 43,
     "name": "EXPANDER",
-    "category": "Dynamics"
+    "category": "Dynamics",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 44,
     "name": "KEYED EXPNDR",
-    "category": "Dynamics"
+    "category": "Dynamics",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 45,
     "name": "INVRS EXPNDR",
-    "category": "Dynamics"
+    "category": "Dynamics",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 46,
     "name": "DE-ESSER",
-    "category": "Dynamics"
+    "category": "Dynamics",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 47,
     "name": "DUCKER",
-    "category": "Dynamics"
+    "category": "Dynamics",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 48,
     "name": "RUMBLE FILTR",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 49,
     "name": "PARAM EQ",
-    "category": "EQ"
+    "category": "EQ",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   },
   {
     "slot": 50,
     "name": "VAN DER POL",
-    "category": "Other"
+    "category": "Other",
+    "runtime_supported": false,
+    "capture_status": "captured-not-integrated"
   }
 ]
