@@ -30,6 +30,15 @@ public:
 
     void set_halt(bool h);
     bool halted() const { return state == HALTED; }
+    void arm_experiment_run_capture(uint32_t active_words) {
+        experiment_capture_words = active_words;
+        experiment_capture_armed = active_words != 0;
+    }
+    bool take_experiment_run_start() {
+        const bool pending = experiment_run_start_pending;
+        experiment_run_start_pending = false;
+        return pending;
+    }
     uint8_t serial_ctl() const { return host_serial; }   // bits 2-5: SER0-3 are outputs
 
     // Execute one complete sample period (run the program from PC 0 to END).
@@ -75,6 +84,11 @@ private:
     uint64_t frame_trace_start_frame = 0;
     uint64_t run_snapshot_frame = 0;
     std::string run_snapshot_dir;
+    uint32_t experiment_capture_words = 0;
+    bool experiment_capture_armed = false;
+    bool experiment_capture_mode = false;
+    bool experiment_capture_saw_halt = false;
+    bool experiment_run_start_pending = false;
     bool load_transaction_seen = false;
     uint32_t load_instruction_commits = 0;
     uint32_t load_gpr_commits = 0;

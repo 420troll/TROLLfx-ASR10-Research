@@ -414,7 +414,18 @@ void Asr10::io_write(PageType t, uint32_t a, uint32_t v, int sz) {
             if (trace_io) fprintf(stderr, "ESP W %06x (%02x) = %02x pc=%06x\n", a, (a >> 1) & 0xff, v & 0xff, last_pc());
             return;
         }
-        if (sz == 2 || (a & 1)) otto.write((a >> 1) & 0x3f, v & 0xff);
+        if (sz == 2 || (a & 1)) {
+            const int port = (a >> 1) & 0x3f;
+            const int reg = port >> 2;
+            otto.write(port, v & 0xff);
+            static const bool clock_trace = std::getenv("ASR_OTTO_CLOCK_TRACE") != nullptr;
+            if (clock_trace && reg == 11 && (port & 3) == 3) {
+                fprintf(stderr, "OTTO_CLOCK_WRITE cycles=%llu frame=%llu register=%02x value=%02x active_voices=%d otto_clock_hz=%.6f dsp_rate_hz=%.9f pc=%06x\n",
+                        (unsigned long long)total_cycles,
+                        (unsigned long long)esp.host_frame_count(), reg, v & 0xff,
+                        otto.active_voices(), otto_master(), otto.sample_rate(otto_master()), last_pc());
+            }
+        }
         if (trace_io) fprintf(stderr, "OTTO W %06x = %02x pc=%06x\n", a, v & 0xff, last_pc());
         return;
     case P_IO3:
@@ -548,8 +559,24 @@ void Asr10::otto_frame() {
         // not an instruction-exact timestamp within the slice.
         esp.set_frame_context(total_cycles, last_pc());
         // OTTO serial channels feed the ESP serial inputs; ESP SER1 drives the main DAC
+        static const char *impulse = getenv("ASR_EXPERIMENT_RUN_IMPULSE"); // impulse on selected effect's first RUN frame
+        static const char *frame_sine = getenv("ASR_EXPERIMENT_SINE_FRAMES"); // freq:amplitude:reference-rate, phase resets at RUN
         static const char *tsine = getenv("ASR_TEST_SINE");   // debug: freq[:amp] sine into ESP input 1
-        if (tsine) {
+        if (impulse && *impulse) {
+            const bool at_impulse = esp.take_experiment_run_start();
+            double amplitude = 0.25;
+            if (const char *amp = getenv("ASR_EXPERIMENT_IMPULSE_AMPLITUDE")) amplitude = atof(amp);
+            const int32_t v = at_impulse ? (int32_t)(amplitude * 524287.0) : 0;
+            for (int p = 0; p < 4; p++) if (esp_route[p] >= 0) { ch[esp_route[p] * 2] = v; ch[esp_route[p] * 2 + 1] = v; break; }
+        } else if (frame_sine && *frame_sine) {
+            static double phase = 0.0; static bool started = false;
+            double f = 440.0, amplitude = 0.25, reference_rate = 29761.89453125;
+            sscanf(frame_sine, "%lf:%lf:%lf", &f, &amplitude, &reference_rate);
+            if (esp.take_experiment_run_start()) { phase = 0.0; started = true; }
+            const int32_t v = started ? (int32_t)(sin(phase) * amplitude * 524287.0) : 0;
+            if (started) phase += 2 * M_PI * f / reference_rate;
+            for (int p = 0; p < 4; p++) if (esp_route[p] >= 0) { ch[esp_route[p] * 2] = v; ch[esp_route[p] * 2 + 1] = v; break; }
+        } else if (tsine) {
             static double ph = 0; double f = atof(tsine), am = strchr(tsine, ':') ? atof(strchr(tsine, ':') + 1) : 0.25;
             int32_t v = (int32_t)(sin(ph) * am * 524287.0);
             ph += 2 * M_PI * f / otto.sample_rate(otto_master());

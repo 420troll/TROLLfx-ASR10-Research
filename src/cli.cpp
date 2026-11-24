@@ -243,6 +243,11 @@ int main(int argc, char **argv) {
     int stable_display_slices = 0;
     std::set<int> rom_snapshots;
     std::string last_rom_selection;
+    const long experiment_capture_id = std::getenv("ESP_EXPERIMENT_CAPTURE_ROM_ID")
+        ? std::strtol(std::getenv("ESP_EXPERIMENT_CAPTURE_ROM_ID"), nullptr, 10) : -1;
+    const uint32_t experiment_capture_words = std::getenv("ESP_EXPERIMENT_CAPTURE_WORDS")
+        ? (uint32_t)std::strtoul(std::getenv("ESP_EXPERIMENT_CAPTURE_WORDS"), nullptr, 10) : 0;
+    bool experiment_capture_armed = false;
     for (int64_t t = 0; t < total; t += slice) {
         double now = t / m.cpu_clock;
         while (mi < midi.size() && midi[mi].first <= now) { for (auto b : midi[mi].second) m.midi_in(b); mi++; }
@@ -311,7 +316,7 @@ int main(int argc, char **argv) {
         { std::string at = "A:"; at += m.audio_led(0) ? 'Y' : '-'; at += m.audio_led(2) ? 'R' : '-';
           at += " B:"; at += m.audio_led(1) ? 'Y' : '-'; at += m.audio_led(3) ? 'R' : '-'; d1 += " {" + at + "}"; }
         d1 += " <" + m.panel.annunciators() + ">";
-        if (!esp_rom_dir.empty()) {
+        if (!esp_rom_dir.empty() || experiment_capture_id > 0) {
             const std::string marker = "FX=ROM-";
             size_t pos = d0.find(marker);
             if (pos != std::string::npos && d0 == last0) ++stable_display_slices;
@@ -330,8 +335,15 @@ int main(int argc, char **argv) {
                                 m.otto.active_voices(), m.out_rate, selection.c_str());
                         last_rom_selection = selection;
                     }
+                    if (!experiment_capture_armed && (long)id == experiment_capture_id && experiment_capture_words) {
+                        m.esp.arm_experiment_run_capture(experiment_capture_words);
+                        experiment_capture_armed = true;
+                        fprintf(stderr, "ESP_EXPERIMENT_CAPTURE_ARM id=%02ld words=%u cycles=%llu frame=%llu\n",
+                                id, experiment_capture_words, (unsigned long long)m.cycles(),
+                                (unsigned long long)m.esp.host_frame_count());
+                    }
                 }
-                if (id > 0 && id <= 999 && rom_snapshots.insert((int)id).second) {
+                if (!esp_rom_dir.empty() && id > 0 && id <= 999 && rom_snapshots.insert((int)id).second) {
                     char path[2048];
                     snprintf(path, sizeof(path), "%s/ROM-%02ld.esp", esp_rom_dir.c_str(), id);
                     FILE *existing = fopen(path, "rb");

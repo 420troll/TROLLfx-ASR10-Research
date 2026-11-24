@@ -73,10 +73,11 @@ ES5510::ES5510() : dram(DRAM_SIZE) {
     hostlog = getenv("ESP_HOSTLOG") != nullptr;
     pipelog = getenv("ESP_PIPELOG") != nullptr;
     const char *frame_log = getenv("ESP_FRAMELOG");
-    if (frame_log) frame_trace_limit = (uint32_t)std::clamp(atoll(frame_log), 0LL, 32768LL);
+    if (frame_log) frame_trace_limit = (uint32_t)std::clamp(atoll(frame_log), 0LL, 131072LL);
     if (const char *start = getenv("ESP_FRAMELOG_START_FRAME")) frame_trace_start_frame = strtoull(start, nullptr, 10);
     if (const char *frame = getenv("ESP_RUN_SNAPSHOT_FRAME")) run_snapshot_frame = strtoull(frame, nullptr, 10);
     if (const char *dir = getenv("ESP_RUN_SNAPSHOT_DIR")) run_snapshot_dir = dir;
+    experiment_capture_mode = getenv("ESP_EXPERIMENT_CAPTURE_WORDS") != nullptr;
     reset();
 }
 
@@ -86,6 +87,11 @@ void ES5510::set_halt(bool h) {
                 h ? "halt_assert" : "run_release", (unsigned long long)frame_count,
                 (unsigned long long)host_cycles, host_pc);
     halt_asserted = h;
+    if (h && experiment_capture_armed) experiment_capture_saw_halt = true;
+    if (!h && experiment_capture_saw_halt) {
+        experiment_run_start_pending = true;
+        experiment_capture_saw_halt = false;
+    }
 }
 
 void ES5510::reset() {
@@ -484,7 +490,14 @@ void ES5510::run_frame() {
     if (state == HALTED) {
         if (halt_asserted) { host_control &= ~0x04; return; }
         state = RUNNING; host_control |= 0x04; pc = 0;
-        const bool selected_run = frame_trace_start_frame == 0 || frame_count == frame_trace_start_frame;
+        int program_end = -1;
+        for (int i = 0; i < 160; ++i) {
+            if (((instr[i] >> 12) & 0xf) == 0xf) { program_end = i; break; }
+        }
+        const bool experiment_run = experiment_capture_armed && program_end + 1 == (int)experiment_capture_words;
+        if (experiment_run) experiment_capture_armed = false;
+        const bool selected_run = experiment_run ||
+            (!experiment_capture_mode && (frame_trace_start_frame == 0 || frame_count == frame_trace_start_frame));
         trace_first_instruction = pipelog && selected_run;
         frame_trace_remaining = selected_run ? frame_trace_limit : 0;
         frame_trace_index = 0;
@@ -504,7 +517,7 @@ void ES5510::run_frame() {
                     memsiz & 0xffffff, memmask & 0xffffff, memincrement & 0xffffff, dlength & 0xffffff,
                     abase & 0xffffff, bbase & 0xffffff, dbase & 0xffffff, sigreg & 0xffffff);
         }
-        if (run_snapshot_frame != 0 && frame_count == run_snapshot_frame && !run_snapshot_dir.empty()) {
+        if (((run_snapshot_frame != 0 && frame_count == run_snapshot_frame) || experiment_run) && !run_snapshot_dir.empty()) {
             char path[4096];
             snprintf(path, sizeof(path), "%s/run-frame-%llu.esp", run_snapshot_dir.c_str(),
                      (unsigned long long)frame_count);

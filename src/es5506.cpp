@@ -30,6 +30,18 @@ inline int32_t apply_highpass(int32_t out, int32_t cutoff, int32_t in, int32_t p
 
 ES5506::ES5506() { compute_tables(); reset(); }
 
+int ES5506::active_voices() const {
+    // Experiment-only emulation of a supported OTTO voice-count setup. The environment value
+    // is the number of slots (1..32); the hardware register stores the highest slot index.
+    static const int override = []() {
+        const char *value = std::getenv("ASR_EXPERIMENT_VOICE_SLOTS");
+        if (!value || !*value) return -1;
+        const int slots = std::atoi(value);
+        return slots >= 1 && slots <= 32 ? slots - 1 : -1;
+    }();
+    return override >= 0 ? override : m_active_voices;
+}
+
 void ES5506::reset() {
     m_active_voices = 0x1f;
     m_mode = 0x17;
@@ -211,7 +223,7 @@ void ES5506::generate_irq(Voice &v, int n) {
 
 void ES5506::generate_frame(int32_t out[12]) {
     for (int i = 0; i < 12; i++) out[i] = 0;
-    for (int n = 0; n <= m_active_voices; n++) {
+    for (int n = 0; n <= active_voices(); n++) {
         Voice &v = m_voice[n];
         // (MAME stops a voice whose START equals END; the ASR-10 OS passes through START == END
         // while it moves the loop of a Transwave, so doing that here cut notes off)
@@ -287,7 +299,7 @@ uint32_t ES5506::reg_read_low(Voice &v, int reg) {
     case 8: return (v.k2ramp << 8) | (v.k2ramp >> 31);
     case 9: return v.k1;
     case 10: return (v.k1ramp << 8) | (v.k1ramp >> 31);
-    case 11: return m_active_voices;
+    case 11: return active_voices();
     case 12: return m_mode;
     case 13: return read_pot ? (read_pot() & 0x3ff) : 0;
     case 14: { uint32_t r = m_irqv; m_irqv = 0x80; if (irq_cb) irq_cb(false); return r; }

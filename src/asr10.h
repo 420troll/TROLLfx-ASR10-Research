@@ -7,6 +7,7 @@
 #include <functional>
 #include <mutex>
 #include <atomic>
+#include <cstdlib>
 #include "m68302.h"
 #include "duart.h"
 #include "fdc.h"
@@ -108,7 +109,17 @@ public:
     double otto_clock_44k = 33868800.0 / 2;   // 16.934 MHz -> 44.1 kHz with 24 voices
     // The 44.1 kHz effects run the OTTO with 24 voice slots from a second clock (the OS shows
     // "23 VOICE 44K"); the select line is not identified, so the clock follows the slot count.
-    double otto_master() const { return otto.active_voices() + 1 <= 24 ? otto_clock_44k : otto_clock; }
+    double otto_master() const {
+        const int voice_slots = otto.active_voices() + 1;
+        // Experiment-only override for controlled rate tests. This changes scheduler timing,
+        // not ES5510 arithmetic, and does not model an authentic OTTO oscillator setting.
+        static const double experiment_rate = []() {
+            const char *value = std::getenv("ASR_EXPERIMENT_DSP_RATE_HZ");
+            return value ? std::atof(value) : 0.0;
+        }();
+        if (experiment_rate > 0.0) return experiment_rate * 16.0 * voice_slots;
+        return voice_slots <= 24 ? otto_clock_44k : otto_clock;
+    }
     int esp_route[4] = { 0, -1, 1, 2 };   // OTTO channel feeding ESP SER0..SER3 (-1 = none)
     int direct_mask = 0x38;               // OTTO channels wired straight to the outputs (aux)
     int32_t chan_peak[6] = {};

@@ -20,8 +20,8 @@ public:
     // out[ch*2+0] = left, out[ch*2+1] = right, 6 channels, 20-bit signed range
     void generate_frame(int32_t out[12]);
 
-    int  active_voices() const { return m_active_voices; }
-    double sample_rate(double clock) const { return clock / (16.0 * (m_active_voices + 1)); }
+    int  active_voices() const;
+    double sample_rate(double clock) const { return clock / (16.0 * (active_voices() + 1)); }
 
     std::function<uint16_t(int bank, uint32_t addr)> read_sample;
     // the same as a plain function (used instead when set: no std::function call per sample)
