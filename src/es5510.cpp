@@ -500,7 +500,8 @@ void ES5510::run_frame() {
         for (int i = 0; i < 160; ++i) {
             if (((instr[i] >> 12) & 0xf) == 0xf) { program_end = i; break; }
         }
-        const bool experiment_run = experiment_capture_armed && program_end + 1 == (int)experiment_capture_words;
+        const bool experiment_run = experiment_capture_armed &&
+            (experiment_capture_words == 0 || program_end + 1 == (int)experiment_capture_words);
         if (experiment_run) experiment_capture_armed = false;
         const bool selected_run = experiment_run ||
             (!experiment_capture_mode && (frame_trace_start_frame == 0 || frame_count == frame_trace_start_frame));
@@ -534,6 +535,10 @@ void ES5510::run_frame() {
                 fprintf(stderr, "ESPPHASE kind=run_snapshot frame=%llu cycles=%llu host_pc=%06x pc=%02x ok=%u path=%s\n",
                         (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, pc,
                         (unsigned)ok, path);
+        }
+        if (experiment_run) {
+            experiment_run_capture_complete = true;
+            experiment_run_capture_complete_frame = frame_count;
         }
     }
     const uint64_t trace_frame = diagnostic_frame++;

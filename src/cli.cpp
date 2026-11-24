@@ -22,6 +22,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <sstream>
 #include <algorithm>
 extern "C" {
 #include "m68k.h"
@@ -245,9 +246,19 @@ int main(int argc, char **argv) {
     std::string last_rom_selection;
     const long experiment_capture_id = std::getenv("ESP_EXPERIMENT_CAPTURE_ROM_ID")
         ? std::strtol(std::getenv("ESP_EXPERIMENT_CAPTURE_ROM_ID"), nullptr, 10) : -1;
+    std::set<long> experiment_capture_ids;
+    if (const char *ids = std::getenv("ESP_EXPERIMENT_CAPTURE_ROM_IDS")) {
+        std::stringstream values(ids); std::string value;
+        while (std::getline(values, value, ',')) {
+            char *end = nullptr; long id = std::strtol(value.c_str(), &end, 10);
+            if (end != value.c_str() && *end == '\0' && id > 0 && id <= 999) experiment_capture_ids.insert(id);
+        }
+    }
+    if (experiment_capture_id > 0) experiment_capture_ids.insert(experiment_capture_id);
     const uint32_t experiment_capture_words = std::getenv("ESP_EXPERIMENT_CAPTURE_WORDS")
         ? (uint32_t)std::strtoul(std::getenv("ESP_EXPERIMENT_CAPTURE_WORDS"), nullptr, 10) : 0;
-    bool experiment_capture_armed = false;
+    long experiment_capture_armed_id = -1;
+    std::set<long> experiment_capture_completed_ids;
     for (int64_t t = 0; t < total; t += slice) {
         double now = t / m.cpu_clock;
         while (mi < midi.size() && midi[mi].first <= now) { for (auto b : midi[mi].second) m.midi_in(b); mi++; }
@@ -309,6 +320,15 @@ int main(int argc, char **argv) {
         for (auto &r : raws) if (r.first >= 0 && r.first <= now) { m.duart.rx_byte(1, r.second.first); m.duart.rx_byte(1, r.second.second); r.first = -1; }
         m.esp.set_hostlog_time(now);
         m.run(slice);
+        uint64_t experiment_capture_frame = 0;
+        if (m.esp.take_experiment_run_capture_complete(experiment_capture_frame)) {
+            if (experiment_capture_armed_id > 0) {
+                experiment_capture_completed_ids.insert(experiment_capture_armed_id);
+                fprintf(stderr, "ESP_EXPERIMENT_CAPTURE_COMPLETE id=%02ld frame=%llu\n",
+                        experiment_capture_armed_id, (unsigned long long)experiment_capture_frame);
+            }
+            experiment_capture_armed_id = -1;
+        }
         std::string d0 = m.panel.text(), d1 = m.panel.attr_line(0), dc = m.panel.attr_line(1);
         for (int k = 0; k < Panel::COLS; k++) if (dc[k] != ' ') d1[k] = dc[k];
         std::string inds; for (int i = 0; i < 16; i++) inds += " *B"[m.panel.ind[i] % 3];
@@ -316,7 +336,7 @@ int main(int argc, char **argv) {
         { std::string at = "A:"; at += m.audio_led(0) ? 'Y' : '-'; at += m.audio_led(2) ? 'R' : '-';
           at += " B:"; at += m.audio_led(1) ? 'Y' : '-'; at += m.audio_led(3) ? 'R' : '-'; d1 += " {" + at + "}"; }
         d1 += " <" + m.panel.annunciators() + ">";
-        if (!esp_rom_dir.empty() || experiment_capture_id > 0) {
+        if (!esp_rom_dir.empty() || !experiment_capture_ids.empty()) {
             const std::string marker = "FX=ROM-";
             size_t pos = d0.find(marker);
             if (pos != std::string::npos && d0 == last0) ++stable_display_slices;
@@ -335,9 +355,10 @@ int main(int argc, char **argv) {
                                 m.otto.active_voices(), m.out_rate, selection.c_str());
                         last_rom_selection = selection;
                     }
-                    if (!experiment_capture_armed && (long)id == experiment_capture_id && experiment_capture_words) {
+                    if (experiment_capture_armed_id < 0 && experiment_capture_ids.count(id) &&
+                        !experiment_capture_completed_ids.count(id) && experiment_capture_words <= 160) {
                         m.esp.arm_experiment_run_capture(experiment_capture_words);
-                        experiment_capture_armed = true;
+                        experiment_capture_armed_id = id;
                         fprintf(stderr, "ESP_EXPERIMENT_CAPTURE_ARM id=%02ld words=%u cycles=%llu frame=%llu\n",
                                 id, experiment_capture_words, (unsigned long long)m.cycles(),
                                 (unsigned long long)m.esp.host_frame_count());

@@ -200,6 +200,19 @@ int main() {
         assert(fx.getStatus().active_program_words==160);
         auto invalid=generic_package(16,60,rom02_path); invalid.descriptor.routing.input_port=4;
         assert(!registry.register_validated(invalid));
+        auto large_schedule=generic_package(49,3,short_path);
+        for(std::uint64_t i=0;i<600;++i)
+            large_schedule.descriptor.firmware_event_schedule.push_back({i/2,static_cast<std::uint8_t>(i%0x40),static_cast<std::uint32_t>(i&0xffffff)});
+        assert(registry.register_validated(large_schedule));
+        FactoryRuntime scheduled;
+        assert(scheduled.loadEffect(*registry.find(49),RateMode::FactoryReference));
+        std::array<float,2*2048> scheduled_in{},scheduled_out{};
+        assert(scheduled.processStereo(scheduled_in.data(),scheduled_out.data(),2048,48000.0));
+        assert(scheduled.getStatus().scheduled_writes_applied==601); // includes the package's frame-zero initialization write
+        auto overflow=generic_package(48,3,short_path);
+        for(std::uint64_t i=0;i<1025;++i)
+            overflow.descriptor.firmware_event_schedule.push_back({i,static_cast<std::uint8_t>(i%0x40),0});
+        assert(!registry.register_validated(overflow));
     }
     std::filesystem::remove(hall_path);
     std::filesystem::remove(rom02_path);
