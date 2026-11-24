@@ -1,0 +1,71 @@
+{
+  "kit": {
+    "theme": "amber",
+    "accent": "ffdb8b3d"
+  },
+  "pages": [
+    {
+      "name": "BROWSE",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "50 OS 3.53 EFFECTS / EXPERIMENTAL 48 kHz"
+        },
+        {
+          "param": "FX Slot",
+          "widget": "slider",
+          "overlay": "menu"
+        },
+        {
+          "param": "Load Status",
+          "widget": "slider",
+          "overlay": "menu"
+        }
+      ]
+    },
+    {
+      "name": "HOST",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "HOST CONTROLS / NOT FACTORY PARAMETERS"
+        },
+        {
+          "param": "Wet / Dry",
+          "widget": "fader"
+        },
+        {
+          "param": "Input Gain",
+          "widget": "knob"
+        },
+        {
+          "param": "Output Gain",
+          "widget": "knob"
+        },
+        {
+          "param": "Host Bypass",
+          "widget": "switch"
+        }
+      ]
+    },
+    {
+      "name": "REVERB",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "VERIFIED BUS VALUES / ROM-01 OR ROM-02"
+        },
+        {
+          "param": "Reverb BUS1",
+          "widget": "slider",
+          "overlay": "menu"
+        },
+        {
+          "param": "Reverb BUS2",
+          "widget": "slider",
+          "overlay": "menu"
+        }
+      ]
+    }
+  ]
+}
