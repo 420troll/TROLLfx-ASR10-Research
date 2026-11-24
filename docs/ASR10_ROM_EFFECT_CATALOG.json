@@ -1,0 +1,471 @@
+{
+  "capture_status": "validated emulator RUN-state snapshot",
+  "distinct_programs_observed": 46,
+  "effect_slots": 50,
+  "effects": [
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "HALL REVERB",
+      "id": 1,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": [
+        1,
+        2
+      ]
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "44KHZ REVERB",
+      "id": 2,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": [
+        1,
+        2
+      ]
+    },
+    {
+      "active_program_words": 60,
+      "capture_status": "validated",
+      "display_name": "ROOM REVERB",
+      "id": 3,
+      "observed_dsp_rate_hz": 44100.0,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "DUAL DELAYS",
+      "id": 4,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "44KHZ DELAYS",
+      "id": 5,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 60,
+      "capture_status": "validated",
+      "display_name": "CHORUS+REVRB",
+      "id": 6,
+      "observed_dsp_rate_hz": 44100.0,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "PHASER+REVRB",
+      "id": 7,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "FLANGER+REV",
+      "id": 8,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "ROT.SPKR+REV",
+      "id": 9,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "CHOR+REV+DDL",
+      "id": 10,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "CMP+DIST+REV",
+      "id": 11,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "DIST+CHO+REV",
+      "id": 12,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "WAH+DIST+REV",
+      "id": 13,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "SMALL ROOM",
+      "id": 14,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "LARGE ROOM",
+      "id": 15,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "HALL REVERB2",
+      "id": 16,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "SMALL PLATE",
+      "id": 17,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "LARGE PLATE",
+      "id": 18,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": [
+        18,
+        19
+      ]
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "REVRSE REVRB",
+      "id": 19,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": [
+        18,
+        19
+      ]
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "REVRSE REVB2",
+      "id": 20,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "GATED REVERB",
+      "id": 21,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "NLIN REVRB 1",
+      "id": 22,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "NLIN REVRB 2",
+      "id": 23,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": [
+        23,
+        24
+      ]
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "NLIN REVRB 3",
+      "id": 24,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": [
+        23,
+        24
+      ]
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "MULTITAP DDL",
+      "id": 25,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "EQ+DELAY LFO",
+      "id": 26,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "VCF+DISTORT",
+      "id": 27,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "GUITAR AMP1",
+      "id": 28,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "GUITAR AMP2",
+      "id": 29,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": [
+        29,
+        30
+      ]
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "GUITAR AMP3",
+      "id": 30,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": [
+        29,
+        30
+      ]
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "SPKR CABINET",
+      "id": 31,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "TUNABLE SPKR",
+      "id": 32,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "EQ+CHOR+DDL",
+      "id": 33,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "EQ+VIBR+DDL",
+      "id": 34,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "EQ+FLNGR+DDL",
+      "id": 35,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "EQ+TREM+DDL",
+      "id": 36,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "PHASER+DDL",
+      "id": 37,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "8-VOICE CHOR",
+      "id": 38,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "PITCH SHIFT",
+      "id": 39,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "PITCH+DDL",
+      "id": 40,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "FAST PITCHSH",
+      "id": 41,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "EQ+CMPRESSOR",
+      "id": 42,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "EXPANDER",
+      "id": 43,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "KEYED EXPNDR",
+      "id": 44,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "INVRS EXPNDR",
+      "id": 45,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "DE-ESSER",
+      "id": 46,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "DUCKER",
+      "id": 47,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "RUMBLE FILTR",
+      "id": 48,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "PARAM EQ",
+      "id": 49,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    },
+    {
+      "active_program_words": 89,
+      "capture_status": "validated",
+      "display_name": "VAN DER POL",
+      "id": 50,
+      "observed_dsp_rate_hz": 29761.895,
+      "shared_program_ids": []
+    }
+  ],
+  "identity_source": "OS 3.53 FX Select display",
+  "schema": "asr10-rom-effect-catalog-v1",
+  "shared_program_groups": [
+    {
+      "distinct_gpr_states": true,
+      "distinct_special_register_states": true,
+      "effect_ids": [
+        1,
+        2
+      ],
+      "same_active_instruction_image": true
+    },
+    {
+      "distinct_gpr_states": true,
+      "distinct_special_register_states": true,
+      "effect_ids": [
+        18,
+        19
+      ],
+      "same_active_instruction_image": true
+    },
+    {
+      "distinct_gpr_states": true,
+      "distinct_special_register_states": true,
+      "effect_ids": [
+        23,
+        24
+      ],
+      "same_active_instruction_image": true
+    },
+    {
+      "distinct_gpr_states": true,
+      "distinct_special_register_states": true,
+      "effect_ids": [
+        29,
+        30
+      ],
+      "same_active_instruction_image": true
+    }
+  ]
+}

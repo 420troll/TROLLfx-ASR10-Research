@@ -1,8 +1,8 @@
 # ASR-10 OS 3.53 ROM Effect Catalog (Redacted)
 
-Names and selection numbers below were read from the running OS 3.53 display. This catalog contains no firmware, program bytes, register values, raw traces, WAVs, or private hashes.
+Names and selection numbers below were read from the running OS 3.53 display. This human-readable catalog contains no firmware, program bytes, register values, raw traces, WAVs, or private hashes. The matching machine-readable catalog is [`ASR10_ROM_EFFECT_CATALOG.json`](ASR10_ROM_EFFECT_CATALOG.json); it adds per-run DSP rates, active word counts, and shared-program slot groups without payload bytes or hashes.
 
-OS-observed entries: **50**. Capture status is local-run status and may vary by researcher.
+OS-observed entries: **50**. In the latest phase-logged local emulator sweep, all 50 private packages validated; see [`ASR10_ALL_50_EFFECTS.md`](ASR10_ALL_50_EFFECTS.md). Capture status may vary by researcher.
 
 | OS ID | Display name | Capture status |
 |---:|---|---|

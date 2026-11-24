@@ -29,6 +29,13 @@ The output is from an emulator session under ASR-10 OS 3.53, not a physical
 ASR-10 hardware capture. The `.esp` files are live processor snapshots and do
 not contain all CPU or ES5510 pipeline state needed for exact mid-run resume.
 
+The package collection produced by the newer phase-logged pipeline is
+documented in [ASR10_ALL_50_EFFECTS.md](ASR10_ALL_50_EFFECTS.md). That run
+retained per-slot reset/upload/RUN phase records and built 50 private package
+manifests from its complete PC-zero state captures. Its per-run rate
+observations and active-program sharing groups are in
+[`ASR10_ROM_EFFECT_CATALOG.json`](ASR10_ROM_EFFECT_CATALOG.json).
+
 ## Repeatability check
 
 A second deterministic selector run reproduced ROM IDs 1 and 2. For both
@@ -99,9 +106,10 @@ tools/run_rom50_capture_pipeline.sh \
 ```
 
 It scans the current OS image, captures the built-in HALL reference, then runs
-the stable-display sweep. It builds the native CLI when absent or stale. Review
-the local `status.json` before treating results as complete. Never add the
-private output tree to Git.
+the stable-display sweep with pipeline phase logging and packages the
+validated per-effect states. It builds the native CLI when absent or stale.
+Review the local `status.json` and `validated-packages/collection-manifest.json`
+before treating results as complete. Never add the private output tree to Git.
 
 ## Remaining limits
 
