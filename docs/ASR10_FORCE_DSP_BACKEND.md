@@ -78,3 +78,14 @@ Build the package with the command above. The package installer remains opt-in;
 do not run it for this unplayable candidate. For any later authorized install,
 use the installer’s matching rollback script and the documented pre-install
 backup. No Force device test was available for this report.
+
+## 50-effect playback harness
+
+The branch also carries the native 50-effect playback harness from commit
+`071d860`. It accepts packages only through the importer audit's
+`registry_eligible` entries, exercises the existing FactoryRuntime, renders
+deterministic stereo stimuli, and records timing, finite-sample, output, and
+matched-reference metrics. Its captured report is desktop/native evidence and
+does not replace a test of the packaged VST shared object. Binary-bound plugin
+verification is performed separately by `force_plugin/tools/test_packaged_vst.py`
+on the provider branch and must be repeated after the final integration build.
