@@ -1,5 +1,6 @@
 // Ensoniq ES5510 ESP - see es5510.h for attribution.
 #include "es5510.h"
+#include "es5510_capture.h"
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -795,4 +796,39 @@ bool ES5510::write_capture(FILE *f) {
         if (!bytes(b, sizeof b)) return false;
     }
     return fflush(f) == 0;
+}
+
+bool ES5510::load_capture_after_pipeline_reset(FILE *f) {
+    es5510_capture::State s;
+    if (!es5510_capture::read(f, s)) return false;
+    // The format omits in-flight ALU/MAC/RAM/DOL slots. This API therefore
+    // always starts from the pipeline-reset state; callers must validate the
+    // corresponding external HALT/reset evidence before using it.
+    reset();
+    for (int i=0; i<160; ++i) { instr[i]=s.instructions[i]; decode(i); }
+    for (int i=0; i<192; ++i) gpr[i]=static_cast<int32_t>(s.gpr[i]);
+    for (int i=234; i<256; ++i) gpr[i]=static_cast<int32_t>(s.spr[i-234]);
+    const uint8_t* r=s.runtime.data();
+    host_control=r[0]; host_serial=r[1]; ram_ctl=r[2];
+    halt_asserted=r[4]!=0; state=r[3]?HALTED:RUNNING; pc=r[5]; refresh_pc=r[6];
+    memsiz=static_cast<int32_t>(r[7] | (uint32_t(r[8])<<8) | (uint32_t(r[9])<<16) | (uint32_t(r[10])<<24));
+    memmask=static_cast<int32_t>(r[11] | (uint32_t(r[12])<<8) | (uint32_t(r[13])<<16) | (uint32_t(r[14])<<24));
+    memincrement=static_cast<int32_t>(r[15] | (uint32_t(r[16])<<8) | (uint32_t(r[17])<<16) | (uint32_t(r[18])<<24));
+    dram_mask=r[19] | (uint32_t(r[20])<<8) | (uint32_t(r[21])<<16) | (uint32_t(r[22])<<24);
+    memshift=static_cast<int8_t>(r[23]);
+    auto be24=[&](int off) { return int32_t((uint32_t(r[off])<<16)|(uint32_t(r[off+1])<<8)|r[off+2]); };
+    auto be48=[&](int off) { uint64_t v=0; for (int i=0;i<6;++i) v=(v<<8)|r[off+i]; return v; };
+    gpr_latch=be24(27); instr_latch=be48(30); dadr_latch=be24(36); dol_latch=be24(39); dil_latch=be24(42);
+    read_pending=static_cast<int32_t>(r[45] | (uint32_t(r[46])<<8) | (uint32_t(r[47])<<16) | (uint32_t(r[48])<<24));
+    for (int i=0;i<8;++i) ser[i]=static_cast<int16_t>(uint16_t(r[49+2*i]) | (uint16_t(r[50+2*i])<<8));
+    dil=static_cast<int16_t>(uint16_t(r[65]) | (uint16_t(r[66])<<8));
+    machl=sext48(static_cast<int64_t>(be48(67))); mac_overflow=r[73]!=0;
+    dlength=s.spr[245-234]; abase=s.spr[246-234]; bbase=s.spr[247-234]; dbase=s.spr[248-234];
+    sigreg=s.spr[249-234]; mulshift=((sigreg>>22)&1)?1:2;
+    ccr=static_cast<uint8_t>((s.spr[250-234]>>16)&FLAG_MASK);
+    cmr=static_cast<uint8_t>((s.spr[251-234]>>16)&(FLAG_MASK|FLAG_NOT));
+    for (std::size_t i=0;i<dram.size();++i) dram[i]=s.dram[i];
+    ram=ram_p=ram_pp=Ram{}; alu=Alu{}; mulacc=Mac{}; dol[0]=dol[1]=0; dol_count=0;
+    gpr[DIL_SRC]=static_cast<int32_t>((uint32_t)(uint16_t)dil<<8);
+    return true;
 }

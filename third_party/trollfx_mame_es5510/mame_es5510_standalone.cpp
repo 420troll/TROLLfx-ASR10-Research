@@ -3,6 +3,7 @@
 // Standalone adapter portions follow MAME src/devices/cpu/es5510/es5510.cpp.
 // See THIRD_PARTY_NOTICES.md for the full redistribution terms.
 #include "mame_es5510_standalone.hpp"
+#include "es5510_capture.h"
 
 #include <algorithm>
 #include <cstring>
@@ -21,6 +22,31 @@ bool MameES5510::prepare() {
     try { dram_.assign(kDramWords, 0); }
     catch (...) { return false; }
     reset();
+    return true;
+}
+
+bool MameES5510::loadCaptureAfterPipelineReset(FILE* f) noexcept {
+    es5510_capture::State s;
+    if (!es5510_capture::read(f, s) || dram_.size() != kDramWords) return false;
+    resetExecutionState();
+    instructions_=s.instructions;
+    gpr_=s.gpr;
+    const auto* r=s.runtime.data();
+    hostSerial_=r[1]; halted_=r[3]!=0;
+    auto le32=[&](int off) { return std::uint32_t(r[off])|(std::uint32_t(r[off+1])<<8)|
+                                   (std::uint32_t(r[off+2])<<16)|(std::uint32_t(r[off+3])<<24); };
+    auto be48=[&](int off) { std::uint64_t v=0; for(int i=0;i<6;++i)v=(v<<8)|r[off+i]; return v; };
+    memMask_=le32(11); memIncrement_=le32(15); memShift_=r[23];
+    dLength_=s.spr[245-234]; aBase_=s.spr[246-234]; bBase_=s.spr[247-234];
+    dBase_=s.spr[248-234]; sigReg_=s.spr[249-234];
+    ccr_=static_cast<std::uint8_t>((s.spr[250-234]>>16)&kFlagMask);
+    cmr_=static_cast<std::uint8_t>((s.spr[251-234]>>16)&(kFlagMask|kFlagNot));
+    for(int i=0;i<8;++i) serial_[i]=static_cast<std::int16_t>(std::uint16_t(r[49+i*2])|(std::uint16_t(r[50+i*2])<<8));
+    dil_=static_cast<std::int16_t>(std::uint16_t(r[65])|(std::uint16_t(r[66])<<8));
+    mac_=sign48(be48(67)); macOverflow_=r[73]!=0;
+    std::copy(s.dram.begin(),s.dram.end(),dram_.begin());
+    // The snapshot is immediately after the measured pipeline-reset event.
+    ram_= {}; ramP_= {}; ramPP_= {}; alu_={}; alu_.op=15; macPipe_={}; dol_.fill(0); dolCount_=0;
     return true;
 }
 
@@ -224,6 +250,11 @@ void MameES5510::processFrame(const std::array<std::int16_t, 6>& inputs,
     executeOneFrame();
     outputs[0]=(hostSerial_&0x20u)?serial_[6]:0;
     outputs[1]=(hostSerial_&0x20u)?serial_[7]:0;
+}
+
+void MameES5510::runFrameWithSerialState(const std::array<std::int16_t, 8>& serial) noexcept {
+    serial_=serial;
+    executeOneFrame();
 }
 
 void MameES5510::executeOneFrame() noexcept {
