@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/trollfx-force-dsp-integration-report-v1.schema.json",
+  "title": "TROLLfx Force DSP integration verification report",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "arm32_binary_sha256",
+    "mock_backend",
+    "processed_dsp_frames",
+    "non_silent_output_frames",
+    "verified_slots",
+    "passed_tests",
+    "engine_id",
+    "test_command",
+    "input_sha256",
+    "output_sha256"
+  ],
+  "properties": {
+    "schema": {
+      "const": "trollfx-force-dsp-integration-report-v1"
+    },
+    "status": {
+      "const": "PASS"
+    },
+    "arm32_binary_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "mock_backend": {
+      "const": false
+    },
+    "processed_dsp_frames": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "non_silent_output_frames": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "verified_slots": {
+      "type": "array",
+      "minItems": 50,
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {
+        "oneOf": [
+          {
+            "const": 1
+          },
+          {
+            "const": 2
+          },
+          {
+            "const": 3
+          },
+          {
+            "const": 4
+          },
+          {
+            "const": 5
+          },
+          {
+            "const": 6
+          },
+          {
+            "const": 7
+          },
+          {
+            "const": 8
+          },
+          {
+            "const": 9
+          },
+          {
+            "const": 10
+          },
+          {
+            "const": 11
+          },
+          {
+            "const": 12
+          },
+          {
+            "const": 13
+          },
+          {
+            "const": 14
+          },
+          {
+            "const": 15
+          },
+          {
+            "const": 16
+          },
+          {
+            "const": 17
+          },
+          {
+            "const": 18
+          },
+          {
+            "const": 19
+          },
+          {
+            "const": 20
+          },
+          {
+            "const": 21
+          },
+          {
+            "const": 22
+          },
+          {
+            "const": 23
+          },
+          {
+            "const": 24
+          },
+          {
+            "const": 25
+          },
+          {
+            "const": 26
+          },
+          {
+            "const": 27
+          },
+          {
+            "const": 28
+          },
+          {
+            "const": 29
+          },
+          {
+            "const": 30
+          },
+          {
+            "const": 31
+          },
+          {
+            "const": 32
+          },
+          {
+            "const": 33
+          },
+          {
+            "const": 34
+          },
+          {
+            "const": 35
+          },
+          {
+            "const": 36
+          },
+          {
+            "const": 37
+          },
+          {
+            "const": 38
+          },
+          {
+            "const": 39
+          },
+          {
+            "const": 40
+          },
+          {
+            "const": 41
+          },
+          {
+            "const": 42
+          },
+          {
+            "const": 43
+          },
+          {
+            "const": 44
+          },
+          {
+            "const": 45
+          },
+          {
+            "const": 46
+          },
+          {
+            "const": 47
+          },
+          {
+            "const": 48
+          },
+          {
+            "const": 49
+          },
+          {
+            "const": 50
+          }
+        ]
+      }
+    },
+    "passed_tests": {
+      "type": "array",
+      "uniqueItems": true,
+      "allOf": [
+        {
+          "contains": {
+            "const": "factory_processing"
+          }
+        },
+        {
+          "contains": {
+            "const": "effect_switching"
+          }
+        },
+        {
+          "contains": {
+            "const": "no_mock_fallback"
+          }
+        },
+        {
+          "contains": {
+            "const": "initialization_validation"
+          }
+        },
+        {
+          "contains": {
+            "const": "stereo_routing"
+          }
+        }
+      ]
+    },
+    "engine_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "test_command": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "output_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,7 +1,7 @@
 {
   "name": "ASR10 FX Collection",
   "manufacturer": "TROLLfx",
-  "version": "1.0.0-experimental",
+  "version": "1.0.0",
   "format": "vst2",
   "kind": "effect",
   "uid": "TfxF",
@@ -10,6 +10,7 @@
   "category": "Effect",
   "file32": "VST/asr10-fx-collection-arm32.so",
   "file64": "VST/asr10-fx-collection-arm64.so",
-  "description": "Experimental 48 kHz ASR-10 factory FX collection; factory packages are user supplied.",
-  "license": "GPL-3.0-only"
+  "description": "TROLLfx ASR-10 effects collection; experimental V0.1 candidate. Playability requires INTEGRATION_STATUS verification.",
+  "license": "GPL-3.0-only",
+  "releaseChannel": "experimental"
 }

@@ -10,7 +10,8 @@ expected=[(int(n),label.strip()) for n,label in re.findall(r'^\|\s*(\d{2})\s*\|\
 expected=[x for x in expected if 1<=x[0]<=50]
 assert [(x['slot'],x['name']) for x in data]==expected
 assert not any(x.get('runtime_supported') for x in data)
-assert json.loads((root/'plugin.json').read_text())['version']=='1.0.0-experimental'
+manifest=json.loads((root/'plugin.json').read_text())
+assert manifest['version']=='1.0.0' and manifest['releaseChannel']=='experimental'
 src=(root/'src/ASR10FXCollection.cpp').read_text()
 assert src.count('[UNAVAILABLE]')==48
 assert '[IDENTITY CONFLICT]' in src and '[IDENTITY AMBIGUOUS]' in src
