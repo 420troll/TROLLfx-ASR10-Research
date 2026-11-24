@@ -124,7 +124,9 @@ public:
 
     std::size_t size() const noexcept { return packages_.size(); }
     static constexpr std::size_t kMaxFactorySlots = 50;
-    static constexpr std::size_t kMaxFirmwareEvents = 256;
+    // Some observed factory programs issue >256 GPR updates per 32768 frames.
+    // Keep this fixed and fail closed above a documented bound.
+    static constexpr std::size_t kMaxFirmwareEvents = 1024;
 
 private:
     std::vector<ValidatedEffectPackage> packages_; // registration is control-thread only

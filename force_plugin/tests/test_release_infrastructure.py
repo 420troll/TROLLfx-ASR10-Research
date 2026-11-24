@@ -1,10 +1,21 @@
-import hashlib, json, subprocess, sys, tempfile, unittest
+import hashlib, json, shutil, subprocess, sys, tempfile, unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 PACKAGE=ROOT/'force_plugin/dist/TROLLfx - VST - ASR10 FX Collection'
 TOOLS=ROOT/'force_plugin/tools'
 sys.path.insert(0,str(TOOLS))
 import build_release, install_package
+
+def candidate_fixture(parent):
+    package=Path(parent)/'candidate';shutil.copytree(PACKAGE,package)
+    for name in ('INTEGRATION_STATUS','factory-playback-status.json'):
+        (package/name).unlink(missing_ok=True)
+    manifest_path=package/'release-manifest.json';manifest=json.loads(manifest_path.read_text())
+    manifest.update({'release_state':'candidate','playable':False});manifest.pop('playable_marker',None)
+    manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
+    (package/'INSTALL.txt').write_text('BUILD CANDIDATE ONLY — NOT PLAYABLE / DO NOT INSTALL.\n')
+    build_release.create_checksums(package)
+    return package
 
 class ReleaseInfraTests(unittest.TestCase):
     def test_sdk_discovery_finds_valid_checkout(self):
@@ -13,24 +24,23 @@ class ReleaseInfraTests(unittest.TestCase):
         self.assertTrue((sdk/'framework/mpc_plugin.h').is_file())
 
     def test_candidate_manifest_and_package_checksums(self):
-        m=json.loads((PACKAGE/'release-manifest.json').read_text())
-        self.assertEqual(m['release_state'],'candidate')
-        self.assertFalse(m['playable'])
-        expected={}
-        for line in (PACKAGE/'SHA256SUMS').read_text().splitlines():
-            h,name=line.split('  ',1); expected[name]=h
-        actual={p.relative_to(PACKAGE).as_posix() for p in PACKAGE.rglob('*') if p.is_file() and p.name!='SHA256SUMS'}
-        self.assertEqual(set(expected),actual)
-        for name,h in expected.items(): self.assertEqual(hashlib.sha256((PACKAGE/name).read_bytes()).hexdigest(),h)
+        with tempfile.TemporaryDirectory() as tmp:
+            package=candidate_fixture(tmp);m=json.loads((package/'release-manifest.json').read_text())
+            self.assertEqual(m['release_state'],'candidate');self.assertFalse(m['playable'])
+            expected={}
+            for line in (package/'SHA256SUMS').read_text().splitlines():
+                h,name=line.split('  ',1);expected[name]=h
+            actual={p.relative_to(package).as_posix() for p in package.rglob('*') if p.is_file() and p.name!='SHA256SUMS'}
+            self.assertEqual(set(expected),actual)
+            for name,h in expected.items():self.assertEqual(hashlib.sha256((package/name).read_bytes()).hexdigest(),h)
 
     def test_candidate_refused_without_creating_install_root(self):
         with tempfile.TemporaryDirectory() as tmp:
             target=Path(tmp)/'VST2 Plugins'
-            with self.assertRaisesRegex(ValueError,'no DSP integration marker'):
-                install_package.verify(PACKAGE)
-            p=subprocess.run([sys.executable,str(TOOLS/'install_package.py'),str(PACKAGE),str(target)],text=True,capture_output=True)
-            self.assertEqual(p.returncode,2,p.stdout+p.stderr)
-            self.assertFalse(target.exists())
+            package=candidate_fixture(tmp)
+            with self.assertRaisesRegex(ValueError,'no DSP integration marker'):install_package.verify(package)
+            p=subprocess.run([sys.executable,str(TOOLS/'install_package.py'),str(package),str(target)],text=True,capture_output=True)
+            self.assertEqual(p.returncode,2,p.stdout+p.stderr);self.assertFalse(target.exists())
 
     def test_rollback_preserves_removed_folder(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -46,8 +56,9 @@ class ReleaseInfraTests(unittest.TestCase):
     def test_failed_dsp_report_cannot_write_marker(self):
         with tempfile.TemporaryDirectory() as tmp:
             report=Path(tmp)/'report.json';report.write_text(json.dumps({'schema':'trollfx-force-dsp-integration-report-v1','status':'FAIL'}))
-            p=subprocess.run([sys.executable,str(TOOLS/'mark_playable.py'),'--package',str(PACKAGE),'--report',str(report)],text=True,capture_output=True)
+            package=candidate_fixture(tmp)
+            p=subprocess.run([sys.executable,str(TOOLS/'mark_playable.py'),'--package',str(package),'--report',str(report)],text=True,capture_output=True)
             self.assertNotEqual(p.returncode,0)
-            self.assertFalse((PACKAGE/'INTEGRATION_STATUS').exists())
+            self.assertFalse((package/'INTEGRATION_STATUS').exists())
 
 if __name__=='__main__': unittest.main(verbosity=2)

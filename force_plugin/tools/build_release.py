@@ -24,7 +24,8 @@ def digest(path: Path) -> str:
 def source_digest() -> str:
     h=hashlib.sha256()
     inputs=("force_plugin/plugin.json","force_plugin/ui.json","force_plugin/src/ASR10FXCollection.cpp",
-            "force_plugin/src/ES5510DSPBackend.cpp","force_plugin/src/ES5510DSPBackend.h","force_plugin/effects.json",
+            "force_plugin/src/ES5510DSPBackend.cpp","force_plugin/src/ES5510DSPBackend.h",
+            "force_plugin/src/ES5510FactoryPackageProvider.cpp","force_plugin/src/ES5510FactoryPackageProvider.h","force_plugin/effects.json",
             "src/es5510.cpp","src/es5510.h","src/es5510_capture.h","src/es5510_factory_runtime.cpp",
             "include/trollfx/es5510_factory_runtime.hpp","include/trollfx/es5510_factory_registry.hpp")
     for rel in inputs:
@@ -140,9 +141,11 @@ def main():
         shutil.copy2(ROOT/"force_plugin/plugin.json",stage/"plugin.json")
         shutil.copy2(ROOT/"force_plugin/ui.json",stage/"ui.json")
         staged_sources=("force_plugin/src/ASR10FXCollection.cpp","force_plugin/src/ES5510DSPBackend.cpp",
+                        "force_plugin/src/ES5510FactoryPackageProvider.cpp",
                         "src/es5510.cpp","src/es5510_factory_runtime.cpp")
         for rel in staged_sources: shutil.copy2(ROOT/rel,stage/"src"/Path(rel).name)
         shutil.copy2(ROOT/"force_plugin/src/ES5510DSPBackend.h",stage/"src/ES5510DSPBackend.h")
+        shutil.copy2(ROOT/"force_plugin/src/ES5510FactoryPackageProvider.h",stage/"src/ES5510FactoryPackageProvider.h")
         for rel in ("src/es5510.h","src/es5510_capture.h","include/trollfx/es5510_factory_runtime.hpp",
                     "include/trollfx/es5510_factory_registry.hpp"):
             dest=stage/"src"/Path(rel).name if rel.startswith("src/") else stage/"src"/"trollfx"/Path(rel).name
@@ -165,6 +168,25 @@ def main():
         arm64=staged_out/"VST/asr10-fx-collection-arm64.so"
         if not native.is_file(): raise RuntimeError("SDK build did not emit the native host-simulator binary")
         if not arm32.is_file() or not arm64.is_file(): raise RuntimeError("SDK build did not emit both ARM package targets")
+        integration_report=Path(tempfile.gettempdir())/f"trollfx-force-binary-report-{os.getpid()}.json"
+        collection=Path(os.environ.get("TROLLFX_FACTORY_PACKAGE_COLLECTION",
+            "/home/gamer/research/private-results/asr10-all-50-effects/validated-packages"))
+        host_sim=sdk/".sdk-tools/host_sim"
+        binary_test_status="NOT_RUN"; binary_report=None
+        if collection.is_dir() and host_sim.is_file():
+            test=run([sys.executable,ROOT/"force_plugin/tools/test_packaged_vst.py","--native-plugin",native,
+                      "--arm32-plugin",arm32,"--sdk",sdk,"--collection",collection,"--host-sim",host_sim,
+                      "--report",integration_report],cwd=ROOT,check=False)
+            print(test.stdout,end="")
+            if test.returncode==0 and integration_report.is_file():
+                binary_report=json.loads(integration_report.read_text())
+                binary_test_status="PASS" if binary_report.get("status")=="PASS" else "FAIL"
+            else:
+                binary_test_status="FAIL"
+                print("Binary-bound package test failed; candidate will remain unplayable.",file=sys.stderr)
+                if test.stderr: print(test.stderr,end="",file=sys.stderr)
+        else:
+            print("Binary-bound package test not run: set TROLLFX_FACTORY_PACKAGE_COLLECTION to a trusted 50-slot collection.",file=sys.stderr)
         abi={"arm32":readelf_info(readelf,arm32,"arm32"),"arm64":readelf_info(readelf,arm64,"arm64")}
         # Build a fresh sibling, validate it, then replace the old candidate atomically.
         temp_pkg=Path(tempfile.mkdtemp(prefix=".force-dist-",dir=ROOT/"force_plugin"))
@@ -189,16 +211,20 @@ def main():
               "source_commit":revision,"source_inputs_sha256":source_digest(),"sdk":{"path":str(sdk),"origin":origin,"commit":sdk_commit},
               "toolchain":{"kind":tc["kind"],"command":tc["command"],"version":tc["version"],"paths":tc.get("paths",{})},
               "engine":{"implementation":"native ES5510 + FactoryRuntime + validated package adapter",
-                "compiled_sources":["ASR10FXCollection.cpp","ES5510DSPBackend.cpp","es5510_factory_runtime.cpp","es5510.cpp"],
-                "provider_api":"IValidatedFactoryPackageProvider","production_provider":"not included; missing packages fail closed",
-                "native_backend_and_plugin_wrapper_audio_tests":"PASS","packaged_binary_bound_audio_test":"NOT_RUN",
-                "playable_release_gate":"NOT_MET"},
+                "compiled_sources":["ASR10FXCollection.cpp","ES5510DSPBackend.cpp","ES5510FactoryPackageProvider.cpp","es5510_factory_runtime.cpp","es5510.cpp"],
+                "provider_api":"IValidatedFactoryPackageProvider","production_provider":"local trusted-import index; missing or invalid packages fail closed",
+                "binary_bound_native_vst_test":binary_test_status,
+                "binary_test_report_sha256":digest(integration_report) if binary_test_status=="PASS" else None,
+                "packaged_binary_bound_audio_test":"PASS" if binary_test_status=="PASS" else binary_test_status,
+                "playable_release_gate":"MET" if binary_test_status=="PASS" else "NOT_MET"},
               "targets":{"native":{"host":platform.machine(),"binary_sha256":digest(native),"host_sim_parameter_dump":"PASS"},**abi},"binaries":{"arm32_sha256":digest(arm32),"arm64_sha256":digest(arm64)},
               "build_command":"force_plugin/tools/build_candidate.sh --toolchain auto","package_command":"force_plugin/tools/build_candidate.sh --toolchain auto","sdk_validation":{"result":"PASS","errors":int(summary.group(1)),"warnings":int(summary.group(2)),"command":"tools/validate.py"},
               "licensing":{"project":"GPL-3.0-only","sdk_framework":"MIT","proprietary_factory_payloads_included":False}}
             (out/"release-manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
             (out/"INSTALL.txt").write_text("BUILD CANDIDATE ONLY — NOT PLAYABLE / DO NOT INSTALL.\nThis package has no approved DSP integration verification marker. Use the repository's opt-in installer only for a playable package.\n")
             create_checksums(out)
+            if binary_test_status=="PASS" and binary_report is not None:
+                run([sys.executable,ROOT/"force_plugin/tools/mark_playable.py","--package",out,"--report",integration_report],cwd=ROOT)
             final=ROOT/"force_plugin/dist"/PLUGIN_FOLDER
             backup=None
             if final.exists():
@@ -215,10 +241,12 @@ def main():
             zip_path=ROOT/"force_plugin/dist"/f"asr10-fx-collection-{version}-candidate.zip"
             if not a.no_zip:
                 create_zip(final,zip_path)
-            print(f"Packaged unplayable candidate: {final}")
+            state=json.loads((final/"release-manifest.json").read_text())
+            print(f"Packaged {state['release_state']} candidate: {final}")
             if not a.no_zip: print(f"Archive: {zip_path}")
             print(f"SDK: {sdk} @ {sdk_commit}")
             print(f"Toolchain: {tc['command']} ({tc['version']})")
+            if integration_report.exists(): integration_report.unlink()
         finally:
             if temp_pkg.exists(): shutil.rmtree(temp_pkg)
     finally:

@@ -13,10 +13,11 @@ assert not any(x.get('runtime_supported') for x in data)
 manifest=json.loads((root/'plugin.json').read_text())
 assert manifest['version']=='1.0.0' and manifest['releaseChannel']=='experimental'
 src=(root/'src/ASR10FXCollection.cpp').read_text()
-assert src.count('[UNAVAILABLE]')==47
-assert '[IDENTITY AMBIGUOUS]' in src and '[PACKAGE]' in src and '[INDEPENDENT PACKAGE]' in src
+assert 'for(unsigned i=0;i<50;++i)' in src
+assert '" [READY]":" [UNAVAILABLE]"' in src
 assert 'TROLLfx_GetValidatedFactoryPackageProvider()' in src
 assert 'backend_.request_effect' in src and 'backend_.process' in src
-assert 'ES5510BackendStatus::NoProvider?1' in src
+assert 'TROLLfx_GetProductionFactoryPackageProvider()' in src
+assert 'out="UNAVAIL"' in src and 'out="LOADING"' in src and 'out="READY"' in src
 assert 'mock' not in src.lower()
 print('50-slot catalog, package identity labels, real backend connection and unavailable status: PASS')

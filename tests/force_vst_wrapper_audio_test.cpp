@@ -11,7 +11,7 @@ int main() {
     TROLLfx_InstallValidatedFactoryPackageProvider(nullptr);
     ASR10FXCollection missing_plugin;
     missing_plugin.prepare(48000.0,256);
-    assert(missing_plugin.getInt(5)==1); // explicitly unavailable, not a dry/mock effect
+    std::string status_text;assert(missing_plugin.formatValue(5,0.0f,status_text)&&status_text=="UNAVAIL");
     constexpr int N=256; std::array<float,N> l{},r{},ol{},orr{};
     l.fill(0.25f); r.fill(-0.25f);
     const float* inputs[2]={l.data(),r.data()}; float* outputs[2]={ol.data(),orr.data()};
@@ -23,7 +23,7 @@ int main() {
     plugin.set(0,0.0f); // factory slot 1: HALL
     plugin.set(1,100.0f); plugin.set(2,0.0f); plugin.set(3,0.0f);
     plugin.prepare(48000.0,256);
-    assert(plugin.getInt(5)==2); // Ready, after strict package validation and checkpoint load
+    assert(plugin.formatValue(5,0.0f,status_text)&&status_text=="READY");
     l.fill(0.0f); r.fill(0.0f); ol.fill(0.0f); orr.fill(0.0f);
     double hall_energy=0.0;
     for(int block=0;block<24;++block) {
@@ -43,7 +43,7 @@ int main() {
     ASR10FXCollection rom02_plugin;
     rom02_plugin.set(0,1.0f); rom02_plugin.set(1,100.0f); rom02_plugin.set(2,0.0f); rom02_plugin.set(3,0.0f);
     rom02_plugin.prepare(48000.0,256);
-    assert(rom02_plugin.getInt(5)==2);
+    assert(rom02_plugin.formatValue(5,0.0f,status_text)&&status_text=="READY");
     double rom02_energy=0.0;
     for(int block=0;block<24;++block) {
         for(int i=0;i<N;++i){const float x=0.25f*std::sin(float((block*N+i)*0.03125));l[i]=x;r[i]=-x;}
