@@ -115,6 +115,23 @@ def event_fingerprint(lines: list[str], reset_sequence: int, run_sequence: int) 
     return sha(("\n".join(ordered) + "\n").encode())
 
 
+def execution_event_fingerprint(lines: list[str], reset_sequence: int, last_frame: int) -> dict:
+    selected = []
+    host_count = io_count = 0
+    for i, line in enumerate(lines, 1):
+        if i < reset_sequence or not ("ESPHOST " in line or "ESPIO " in line):
+            continue
+        m = re.search(r"\bframe=(\d+)", line)
+        if not m or int(m.group(1)) > last_frame:
+            continue
+        selected.append(line)
+        host_count += "ESPHOST " in line
+        io_count += "ESPIO " in line
+    return {"sha256": sha(("\n".join(selected) + "\n").encode()),
+            "event_count": len(selected), "host_event_count": host_count,
+            "io_event_count": io_count, "last_frame_inclusive": last_frame}
+
+
 def inspect_snapshot(path: Path) -> dict:
     p = subprocess.run([sys.executable, str(ROOT/"tools/esp_capture.py"), str(path)],
                        capture_output=True, text=True, check=True)
@@ -162,6 +179,10 @@ def bundle_run(run_dir: Path, start_frame: int, frames: int, boot_id: str) -> di
     if not snapshot_path.is_file():
         raise ValueError("RUN-boundary state snapshot is missing")
     state = inspect_snapshot(snapshot_path)
+    reset = parsed["pipeline_reset"]
+    state["pipeline"]["reset_event"] = {k: reset.get(k) for k in
+                                         ("frame", "cycles", "alu_pending", "mac_pending",
+                                          "ram_slots_cleared", "dol_count")}
     if state["capture_sha256"] != sha(snapshot_path.read_bytes()):
         raise ValueError("snapshot digest is inconsistent")
     host_map_path = run_dir / "host-output-map.csv"
@@ -202,6 +223,9 @@ def bundle_run(run_dir: Path, start_frame: int, frames: int, boot_id: str) -> di
     raw_lines = parsed["lines"]
     fw_hash = event_fingerprint(raw_lines, int(parsed["pipeline_reset"]["log_sequence"]),
                                 int(parsed["run_start"]["log_sequence"]))
+    execution_events = {str(n): execution_event_fingerprint(
+        raw_lines, int(parsed["pipeline_reset"]["log_sequence"]), start_frame + n - 1)
+        for n in (256, 4096, 32768) if n <= frames}
     input_rows, output_rows = parsed["input"], parsed["output"]
     raw_in = b"".join(struct.pack("<hh", x["lanes"][4], x["lanes"][5]) for x in input_rows)
     rate = float(parsed["clock"]["dsp_rate_hz"])
@@ -222,7 +246,8 @@ def bundle_run(run_dir: Path, start_frame: int, frames: int, boot_id: str) -> di
                               "unique_instruction_addresses": int(parsed["upload"]["unique_addresses"]),
                               "first_end_word": int(parsed["upload"]["first_end"]),
                               "gpr_spr_commit_count": int(parsed["upload"]["gpr_commits"]),
-                              "ordered_event_sha256": fw_hash},
+                              "ordered_event_sha256": fw_hash,
+                              "execution_event_sequences": execution_events},
             "host_output": {"wav_file": "render.wav", "wav_sha256": sha((run_dir/"render.wav").read_bytes()),
                             "windows": host_windows,
                             "host_map_file": "host-output-map.csv", "mapped_host_frames": len(host_rows_checked),
@@ -246,7 +271,9 @@ def bundle_run(run_dir: Path, start_frame: int, frames: int, boot_id: str) -> di
                  "input_samples": [{"index": i, "left": input_rows[i]["lanes"][4],
                                     "right": input_rows[i]["lanes"][5]} for i in range(n)],
                  "metadata": {"absolute_start_frame": start_frame, "frame_count": n,
-                              "initial_state": state, "firmware_load": meta["firmware_load"],
+                              "initial_state": state,
+                              "firmware_load": {**meta["firmware_load"],
+                                                "execution_event_sequence": meta["firmware_load"]["execution_event_sequences"][str(n)]},
                               "stimulus": meta["stimulus"], "host_output": {
                                   "host_rate_hz": host_rate, "wav_file": meta["host_output"]["windows"][str(n)]["wav_file"],
                                   "wav_sha256": meta["host_output"]["windows"][str(n)]["wav_sha256"],
