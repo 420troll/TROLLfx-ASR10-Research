@@ -108,6 +108,7 @@ void ES5510::reset() {
     dlength = abase = bbase = dbase = 0; ccr = cmr = 0; dol[0] = dol[1] = 0; dol_count = 0;
     sync_spr();
     trace_first_instruction = trace_output_pending = false;
+    trace_selected_frame = false;
     frame_trace_remaining = frame_trace_index = 0;
     load_transaction_seen = false; load_instruction_commits = load_gpr_commits = 0;
     load_instruction_addresses.fill(false);
@@ -486,6 +487,7 @@ void ES5510::run_frame() {
         state = RUNNING; host_control |= 0x04; pc = 0;
         const bool selected_run = frame_trace_start_frame == 0 || frame_count == frame_trace_start_frame;
         trace_first_instruction = pipelog && selected_run;
+        trace_selected_frame = pipelog && selected_run;
         frame_trace_remaining = selected_run ? frame_trace_limit : 0;
         frame_trace_index = 0;
         trace_output_pending = selected_run && frame_trace_remaining > 0;
@@ -659,6 +661,10 @@ void ES5510::run_frame() {
         pa = &d;
         aw = !skip || d.op == 4;
         if (d.op == 0xf) {
+            if (trace_selected_frame)
+                fprintf(stderr, "ESPPHASE kind=first_end frame=%llu cycles=%llu host_pc=%06x pc=%02x instructions=%u\n",
+                        (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc,
+                        trace_pc, (unsigned)(trace_pc + 1));
             alu_operation_end();
             if (diagnostic_trace && r1.cycle == WRITE && !r1.io && dol_count > 0)
                 fprintf(diagnostic_trace, "RW,%llu,%02x,%08x,%04x\n", (unsigned long long)trace_frame,
@@ -686,6 +692,11 @@ void ES5510::run_frame() {
         if (++pc >= 160) pc = 0;
     }
 #undef ESP_WRITE_SPECIAL
+    if (trace_selected_frame) {
+        fprintf(stderr, "ESPPHASE kind=first_frame_complete frame=%llu cycles=%llu host_pc=%06x pc=%02x\n",
+                (unsigned long long)frame_count, (unsigned long long)host_cycles, host_pc, pc);
+        trace_selected_frame = false;
+    }
     store();
     if (pipelog && trace_output_pending) {
         fprintf(stderr, "ESPPFRAME kind=output index=%u frame=%llu cycles=%llu host_pc=%06x serial=%02x lanes=%04x,%04x,%04x,%04x,%04x,%04x,%04x,%04x\n",

@@ -68,6 +68,7 @@ private:
 
     bool halt_asserted = false;
     bool trace_first_instruction = false;
+    bool trace_selected_frame = false;
     bool trace_output_pending = false;
     uint32_t frame_trace_limit = 1;
     uint32_t frame_trace_remaining = 0;
