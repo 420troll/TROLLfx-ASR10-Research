@@ -36,7 +36,7 @@ int main() {
     assert(plugin.param(6).id=="reverb_bus1" && plugin.param(7).id=="reverb_bus2");
     assert(plugin.param(12).id=="factory_decay_time_slot1");
     assert(plugin.displayText(12)=="UNCHANGED"); // no unverified factory default is written
-    plugin.set(12,1.0f); // verified HALL DECAY TIME display point 41
+    plugin.set(12,2.0f); // second verified HALL DECAY TIME point; choice 0 is no-write
     assert(plugin.displayText(12)=="41");
     plugin.set(8,1.0f); // verified HALL BUS1 28 -> 29
     plugin.set(9,1.0f); // verified HALL BUS2 28 -> 29

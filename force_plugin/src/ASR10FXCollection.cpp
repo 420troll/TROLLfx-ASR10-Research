@@ -232,12 +232,9 @@ public:
 
 private:
     void applyVerifiedControls(std::uint8_t active) noexcept {
-        const auto edited = edited_v2_mask_.load(std::memory_order_relaxed);
         for (std::size_t i = 0; i < std::size(kFactoryControls); ++i) {
             const auto& control = kFactoryControls[i];
             if (control.slot != active) continue;
-            if (i >= kLegacyControlCount &&
-                (edited & (1u << (i - kLegacyControlCount))) == 0) continue;
             if (i >= kLegacyControlCount && !control_supported_[i - kLegacyControlCount]) continue;
             const int selected_point = choiceAt(*this, control.parameter_index);
             if (selected_point == applied_control_values_[i]) continue;
