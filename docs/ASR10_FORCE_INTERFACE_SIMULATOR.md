@@ -72,6 +72,12 @@ Therefore, the tested plugin-side route is not the cause of a failed desktop VST
 
 A useful next device diagnostic would capture the displayed Q-Link assignment/value before and after switching effects and observe whether a physical rotation changes the displayed value. If the value changes, collect a plugin-side parameter trace while audio is running; if it does not, compare the installed `Q-Links.json` hash and active page/map behavior. This is a future read-only diagnostic suggestion only; this task did not connect to or modify the Force.
 
+## Codex 1 / Codex 3 integration status
+
+Codex 1's branch `feature/asr10-pc-audio-testing-backend` is available at `26877fc`. Its `FactoryAudioTestBackend` provides an offline/streaming native runtime audio API and exact parameter-write audit log. It does not load the VST or observe the plugin's applied-write trace, so the existing VST bridge remains authoritative for GUI Q-Link events and DSP traces. The optional WAV comparison boundary is `process_audio(input, block) -> {wet, bypass, metrics}`; any adapter should call Codex 1's backend rather than add DSP logic here.
+
+No Codex 3 host-event interface branch was visible at this handoff. The current JSON-shaped VST bridge seam remains documented above. When Codex 3 publishes its interface, route browser gestures through that API and retain GUI ownership of skin parsing, rendering, and mouse input. Do not infer register writes from the GUI's temporary expected-register metadata.
+
 ## Third-party code and assets
 
 No source from the examined projects was copied into the simulator. The approach was informed by:
