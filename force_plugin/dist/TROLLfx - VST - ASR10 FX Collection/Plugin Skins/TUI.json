@@ -2714,6 +2714,173 @@
                     "678 0 248 624",
                     "998 0 248 624"
                 ]
+            },
+            {
+                "version": 1,
+                "tabName": "EDIT 2",
+                "fnKeyIndex": 3,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff15191c",
+                            "image": ""
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff15191c",
+                            "image": ""
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "text 0",
+                                "type": "Label",
+                                "data": {
+                                    "version": 1,
+                                    "textStyle": {
+                                        "version": 1,
+                                        "font": {
+                                            "version": 1,
+                                            "name": "Titillium Web",
+                                            "style": "Regular",
+                                            "height": 30.0
+                                        },
+                                        "colour": "fff4f8fa",
+                                        "justification": "left",
+                                        "case": "Original"
+                                    },
+                                    "type": "Text",
+                                    "handleName": "Data",
+                                    "text": "LCD READOUT / VERIFIED POINTS ONLY"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": []
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "No",
+                                "showWhenDataModelInvalid": "Show",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 45 278 107"
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "BS1 TIME L (44KHZ DELAYS)",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 24"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/4/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "FLANGE RATE",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 25"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "343 497 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/7/50/Parameter 0"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "QUALITY",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 26"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "663 497 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/38/50/Parameter 0"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
             }
         ]
     }

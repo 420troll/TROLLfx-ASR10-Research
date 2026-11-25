@@ -82,13 +82,31 @@ missing packages.
 
 ## Verification
 
-The V3 metadata and editor changes have passed focused registry generation,
-parameter mapping, synthetic runtime, and native plugin-wrapper tests. The
-release candidate is being rebuilt from the resulting source commit. Its exact
-native, ARMv7, and ARM64 binary hashes, binary-bound playback report, SDK
-validation, and independent Codex 3 review are recorded here after that build;
-older V3 artifact hashes are intentionally not presented as evidence for this
-updated 19-control candidate.
+The final candidate in `force_plugin/dist/TROLLfx - VST - ASR10 FX Collection`
+is built from source commit `ef6d185a428881863ba5ab308319feba58e9b715`, with
+source-input SHA-256
+`167a3f83a109e49582c75b9fae097ae3b59451ca2ca685bbd42341498376c1c8`, using
+SDK commit `4521c247a2deae30efb9e93d53fc8f9390c51e81` and Zig 0.17.1.
+
+| Artifact | SHA-256 | Verification |
+|---|---|---|
+| Native x86_64 VST2 | `fa4f514c38a441438516415e21f1cd92742fe8364a2b7b583950927608b8fdf6` | Native binary-bound test and SDK host simulator passed |
+| ARMv7 hard-float VST2 | `18b5272b5c0b5656bb1f81a24d81490b0283b5c7a4397142375595685d0f771c` | ELF32 ARMv7 / hard-float, SDK validation, and QEMU VST execution passed |
+| ARM64 VST2 | `53e1732f017440afa471fb876ed4a5c0999d02f696591ff54393b7a6c7e123d0` | ELF64 AArch64 and SDK package validation passed |
+| Native binary playback report | `beb707af51882062e7e6a346638b70422de20a0b2edb52bfcd23610c97e1d85f` | 50 eligible packages, 27 parameters, all 19 verified points, zero callback allocations |
+| ARM32 QEMU report | `49230c16023982b0955e9863c98a35946c56097b2c0c06452f27fdbcfe5fef23` | 50 ARMv7 binary-bound package renders and assertions passed under QEMU 8.2.2; not hardware validation |
+
+The native binary test verifies the VST entry point, all 50 factory packages,
+both verified points for all 19 factory controls, stereo finite/non-silent
+output, missing-package silence, host wet/dry/gain/bypass, switching, host
+chunk restore including a V3 control, and zero callback allocations. The
+QEMU run checks the same ARM32 VST entry and 50-slot playback path; the
+release directory contains per-slot finite-output metrics and exact plugin,
+input, package-index, and render hashes. Its checks are emulated and do not
+prove Force hardware behavior. The generated map preserves EDIT Q1–Q16 →
+indices 8–23 and assigns the new EDIT 2 controls to Q1–Q3 → indices 24–26.
+SDK validation reports four tabs, parameter handles in 0–26, zero errors, and
+zero warnings. Both ARM binaries require at most GLIBC 2.27.
 
 The build command was:
 
@@ -116,11 +134,13 @@ PYTHONPATH=/tmp/trollfx-force-zig \
 
 This ARMv7 execution is an emulator check. It is not a physical Force test.
 
-The updated binary-bound test is expected to verify the 27-parameter ABI,
-all 50 factory packages, all 19 controls' exact verified points, stereo
-non-silent output, missing-package silence, host wet/dry/gain/bypass, effect
-switching, and host chunk restoration. No claim for this binary is made until
-the new build and tests complete.
+Final regression results: 80 repository unit tests passed; the 5 release
+infrastructure tests passed with `AKAI_FORCE_SDK` set; the 19-control
+registry tests passed; synthetic runtime, native VST wrapper, all-50 native
+binary package playback, ARM32 QEMU package playback, catalog/Q-Link checks,
+and package checksum validation passed. The QEMU test harness is
+`force_plugin/tools/test_arm32_vst_qemu.py` and writes a redacted JSON report;
+its generated audio and temporary package assets remain outside Git.
 
 No screenshot is included: the local SDK build/host simulator generates and
 validates the Force skin JSON but does not render the touchscreen. No Force

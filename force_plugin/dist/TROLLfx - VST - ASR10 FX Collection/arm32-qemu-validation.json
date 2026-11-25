@@ -1,0 +1,480 @@
+{
+  "schema": "trollfx-arm32-vst-qemu-validation-v1",
+  "status": "PASS",
+  "target": "ARMv7 hard-float VST2",
+  "execution_environment": "QEMU user-mode emulation; not Force hardware validation",
+  "qemu_version": "qemu-arm version 8.2.2 (Debian 1:8.2.2+ds-0ubuntu1.18)",
+  "cpu_model": "max",
+  "sysroot": "/usr/arm-linux-gnueabihf",
+  "plugin_sha256": "18b5272b5c0b5656bb1f81a24d81490b0283b5c7a4397142375595685d0f771c",
+  "input_sha256": "aed2b5cc76b6a6aecade012ab71eb80e39223ef375bb68a93c705a185f1bbd61",
+  "trusted_package_index_sha256": "8bbb71d362529d39f94305ec5c927cb7c93477eb6cdcf627afaf90de464b8267",
+  "output_renders_sha256": "f7b66d3f28ea010dfb90f3f21466503caac88c771e15456ab56acf1593312ed2",
+  "accepted_packages": 50,
+  "processed_slots": 50,
+  "frames_per_slot": 8192,
+  "callback_allocations": 0,
+  "binary_assertions": [
+    "VSTPluginMain entry",
+    "stereo finite output",
+    "all 50 validated packages",
+    "19 verified parameter points",
+    "effect switching",
+    "wet/dry and gain",
+    "bypass",
+    "host chunk state roundtrip"
+  ],
+  "aggregate_result": "BINARY_PASS",
+  "slots": [
+    {
+      "slot": 1,
+      "frames": 8192,
+      "rms_left": 0.131146,
+      "rms_right": 0.129484,
+      "peak": 0.253815,
+      "switch_completion_frames": 256,
+      "finite_stereo": true
+    },
+    {
+      "slot": 2,
+      "frames": 8192,
+      "rms_left": 0.125659,
+      "rms_right": 0.11173,
+      "peak": 0.240875,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 3,
+      "frames": 8192,
+      "rms_left": 0.122633,
+      "rms_right": 0.12554,
+      "peak": 0.249542,
+      "switch_completion_frames": 1280,
+      "finite_stereo": true
+    },
+    {
+      "slot": 4,
+      "frames": 8192,
+      "rms_left": 0.135052,
+      "rms_right": 0.113846,
+      "peak": 0.30188,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 5,
+      "frames": 8192,
+      "rms_left": 0.149975,
+      "rms_right": 0.128931,
+      "peak": 0.285492,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 6,
+      "frames": 8192,
+      "rms_left": 0.132839,
+      "rms_right": 0.125919,
+      "peak": 0.233978,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 7,
+      "frames": 8192,
+      "rms_left": 0.134169,
+      "rms_right": 0.128966,
+      "peak": 0.23526,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 8,
+      "frames": 8192,
+      "rms_left": 0.134595,
+      "rms_right": 0.129087,
+      "peak": 0.2341,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 9,
+      "frames": 8192,
+      "rms_left": 0.12592,
+      "rms_right": 0.123035,
+      "peak": 0.217621,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 10,
+      "frames": 8192,
+      "rms_left": 0.134017,
+      "rms_right": 0.125856,
+      "peak": 0.229523,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 11,
+      "frames": 8192,
+      "rms_left": 0.132277,
+      "rms_right": 0.112748,
+      "peak": 0.262451,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 12,
+      "frames": 8192,
+      "rms_left": 0.107573,
+      "rms_right": 0.0734024,
+      "peak": 0.251862,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 13,
+      "frames": 8192,
+      "rms_left": 0.139176,
+      "rms_right": 0.118446,
+      "peak": 0.274353,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 14,
+      "frames": 8192,
+      "rms_left": 0.179761,
+      "rms_right": 0.179829,
+      "peak": 0.438049,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 15,
+      "frames": 8192,
+      "rms_left": 0.151173,
+      "rms_right": 0.140744,
+      "peak": 0.349091,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 16,
+      "frames": 8192,
+      "rms_left": 0.125819,
+      "rms_right": 0.125069,
+      "peak": 0.278839,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 17,
+      "frames": 8192,
+      "rms_left": 0.186179,
+      "rms_right": 0.130672,
+      "peak": 0.489807,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 18,
+      "frames": 8192,
+      "rms_left": 0.124871,
+      "rms_right": 0.123953,
+      "peak": 0.307587,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 19,
+      "frames": 8192,
+      "rms_left": 0.124649,
+      "rms_right": 0.119104,
+      "peak": 0.194763,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 20,
+      "frames": 8192,
+      "rms_left": 0.126968,
+      "rms_right": 0.12005,
+      "peak": 0.194794,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 21,
+      "frames": 8192,
+      "rms_left": 0.129205,
+      "rms_right": 0.175395,
+      "peak": 0.448914,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 22,
+      "frames": 8192,
+      "rms_left": 0.14956,
+      "rms_right": 0.160908,
+      "peak": 0.394623,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 23,
+      "frames": 8192,
+      "rms_left": 0.197895,
+      "rms_right": 0.163048,
+      "peak": 0.52655,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 24,
+      "frames": 8192,
+      "rms_left": 0.148603,
+      "rms_right": 0.18818,
+      "peak": 0.565491,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 25,
+      "frames": 8192,
+      "rms_left": 0.151658,
+      "rms_right": 0.21875,
+      "peak": 0.471954,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 26,
+      "frames": 8192,
+      "rms_left": 0.208548,
+      "rms_right": 0.119101,
+      "peak": 0.372314,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 27,
+      "frames": 8192,
+      "rms_left": 0.109168,
+      "rms_right": 0.105184,
+      "peak": 0.261292,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 28,
+      "frames": 8192,
+      "rms_left": 0.115521,
+      "rms_right": 0.108284,
+      "peak": 0.181885,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 29,
+      "frames": 8192,
+      "rms_left": 0.111143,
+      "rms_right": 0.105664,
+      "peak": 0.999969,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 30,
+      "frames": 8192,
+      "rms_left": 0.177402,
+      "rms_right": 0.165068,
+      "peak": 0.338135,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 31,
+      "frames": 8192,
+      "rms_left": 0.528018,
+      "rms_right": 0.528018,
+      "peak": 0.999969,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 32,
+      "frames": 8192,
+      "rms_left": 0.14211,
+      "rms_right": 0.125479,
+      "peak": 0.320221,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 33,
+      "frames": 8192,
+      "rms_left": 0.205026,
+      "rms_right": 0.136075,
+      "peak": 0.355133,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 34,
+      "frames": 8192,
+      "rms_left": 0.119633,
+      "rms_right": 0.113281,
+      "peak": 0.190735,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 35,
+      "frames": 8192,
+      "rms_left": 0.14366,
+      "rms_right": 0.0266602,
+      "peak": 0.245544,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 36,
+      "frames": 8192,
+      "rms_left": 0.252611,
+      "rms_right": 0.239999,
+      "peak": 0.447632,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 37,
+      "frames": 8192,
+      "rms_left": 0.147421,
+      "rms_right": 0.143022,
+      "peak": 0.339691,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 38,
+      "frames": 8192,
+      "rms_left": 0.108937,
+      "rms_right": 0.0383906,
+      "peak": 0.352631,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 39,
+      "frames": 8192,
+      "rms_left": 0.117393,
+      "rms_right": 0.11858,
+      "peak": 0.194489,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 40,
+      "frames": 8192,
+      "rms_left": 0.0995471,
+      "rms_right": 0.0894817,
+      "peak": 0.303284,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 41,
+      "frames": 8192,
+      "rms_left": 0.158489,
+      "rms_right": 0.0819384,
+      "peak": 0.278534,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 42,
+      "frames": 8192,
+      "rms_left": 0.118416,
+      "rms_right": 0.112082,
+      "peak": 0.194702,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 43,
+      "frames": 8192,
+      "rms_left": 0.126578,
+      "rms_right": 0.11981,
+      "peak": 0.197296,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 44,
+      "frames": 8192,
+      "rms_left": 0.131183,
+      "rms_right": 0.131183,
+      "peak": 0.279999,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 45,
+      "frames": 8192,
+      "rms_left": 0.129529,
+      "rms_right": 0.122323,
+      "peak": 0.383453,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 46,
+      "frames": 8192,
+      "rms_left": 0.0732588,
+      "rms_right": 0.0683215,
+      "peak": 0.487823,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 47,
+      "frames": 8192,
+      "rms_left": 0.087498,
+      "rms_right": 0.087498,
+      "peak": 0.282745,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 48,
+      "frames": 8192,
+      "rms_left": 0.036656,
+      "rms_right": 0.0459955,
+      "peak": 0.173553,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 49,
+      "frames": 8192,
+      "rms_left": 0.0861418,
+      "rms_right": 0.0861463,
+      "peak": 0.175446,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    },
+    {
+      "slot": 50,
+      "frames": 8192,
+      "rms_left": 0.127453,
+      "rms_right": 0.120634,
+      "peak": 0.194794,
+      "switch_completion_frames": 1024,
+      "finite_stereo": true
+    }
+  ]
+}

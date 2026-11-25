@@ -6,9 +6,9 @@
   "release_state": "playable",
   "playable": true,
   "playable_marker_required": "INTEGRATION_STATUS",
-  "built_utc": "2026-11-25T00:06:45.741569+00:00",
-  "source_commit": "77895655392c1308b81f6a8f926f3595cb96a0bd",
-  "source_inputs_sha256": "a8298874b4a385324704cdd135d0d8b8e56d4c6c7ffef30df1330fe850e140fa",
+  "built_utc": "2026-11-25T00:40:37.533851+00:00",
+  "source_commit": "ef6d185a428881863ba5ab308319feba58e9b715",
+  "source_inputs_sha256": "167a3f83a109e49582c75b9fae097ae3b59451ca2ca685bbd42341498376c1c8",
   "sdk": {
     "path": "/mnt/c/Users/Gamer/research/AkaiForceSDK",
     "origin": "https://github.com/420troll/AkaiForceSDK.git",
@@ -32,14 +32,14 @@
     "provider_api": "IValidatedFactoryPackageProvider",
     "production_provider": "local trusted-import index; missing or invalid packages fail closed",
     "binary_bound_native_vst_test": "PASS",
-    "binary_test_report_sha256": "d6704af9cb4cfc3cbf63e6c4bacf3393de495ecdee210587956c527bbdc5c8d4",
+    "binary_test_report_sha256": "beb707af51882062e7e6a346638b70422de20a0b2edb52bfcd23610c97e1d85f",
     "packaged_binary_bound_audio_test": "PASS",
     "playable_release_gate": "MET"
   },
   "targets": {
     "native": {
       "host": "x86_64",
-      "binary_sha256": "c5bb9a8e6906126d820e4785667fbcba31cb2470236e70fe6812f6a4dc4944fa",
+      "binary_sha256": "fa4f514c38a441438516415e21f1cd92742fe8364a2b7b583950927608b8fdf6",
       "host_sim_parameter_dump": "PASS"
     },
     "arm32": {
@@ -68,8 +68,8 @@
     }
   },
   "binaries": {
-    "arm32_sha256": "fec8a0ccdbb8fbaa717a288d94b0b32ead63c5ba6b76c97a22661c6ce138f473",
-    "arm64_sha256": "2b743bb7ffb171a657e99b5db9d7ce506b22234fba2d7f987d17f14fb336a9ee"
+    "arm32_sha256": "18b5272b5c0b5656bb1f81a24d81490b0283b5c7a4397142375595685d0f771c",
+    "arm64_sha256": "53e1732f017440afa471fb876ed4a5c0999d02f696591ff54393b7a6c7e123d0"
   },
   "build_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
   "package_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
@@ -137,5 +137,13 @@
     49,
     50
   ],
-  "verification_report_sha256": "d6704af9cb4cfc3cbf63e6c4bacf3393de495ecdee210587956c527bbdc5c8d4"
+  "verification_report_sha256": "beb707af51882062e7e6a346638b70422de20a0b2edb52bfcd23610c97e1d85f",
+  "arm32_qemu_validation": {
+    "result": "PASS",
+    "emulator": "qemu-arm version 8.2.2 (Debian 1:8.2.2+ds-0ubuntu1.18)",
+    "hardware_validation": false,
+    "report": "arm32-qemu-validation.json",
+    "plugin_sha256": "18b5272b5c0b5656bb1f81a24d81490b0283b5c7a4397142375595685d0f771c",
+    "output_sha256": "49230c16023982b0955e9863c98a35946c56097b2c0c06452f27fdbcfe5fef23"
+  }
 }
