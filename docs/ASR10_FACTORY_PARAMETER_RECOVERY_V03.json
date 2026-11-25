@@ -1,0 +1,214 @@
+{
+  "schema": "trollfx-asr10-parameter-recovery-v03",
+  "source_baseline": "research/asr10-automated-parameter-discovery-v2@e29cb8a",
+  "scope": "New OS 3.53 panel observations only. V2 catalog and mappings remain unchanged. Slot 2/ROM-02 is excluded from V3 follow-up per task steering pending identity confirmation; earlier observations are not promoted.",
+  "control_policy": "Only explicitly listed points are runtime writable. UI range scans do not imply a register curve between listed points.",
+  "new_verified_controls": [
+    {
+      "slot": 5,
+      "factory_name": "44KHZ DELAYS",
+      "parameter_id": "delay_time_l",
+      "display_name": "BS1 TIME L",
+      "display_order": 3,
+      "units": "display steps",
+      "display_format": "integer",
+      "display_domain": {
+        "minimum": null,
+        "maximum": null,
+        "documented_range": "0 to 1300 ms",
+        "live_range_scan": "not run"
+      },
+      "conversion": "verified discrete points only",
+      "register_verification": "two repeated Up/Down trials, exact reverse and same GPR",
+      "audio_verification": "native ES5510 compared; output was finite but bit-identical for this stimulus/window",
+      "points": [
+        {
+          "value": 350,
+          "text": "350",
+          "writes": [
+            [
+              11,
+              "0x3C2900"
+            ]
+          ]
+        },
+        {
+          "value": 351,
+          "text": "351",
+          "writes": [
+            [
+              11,
+              "0x3C5500"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 8,
+      "factory_name": "FLANGER+REV",
+      "parameter_id": "flange_rate",
+      "display_name": "FLANGE RATE",
+      "display_order": 4,
+      "units": "display steps",
+      "display_format": "integer",
+      "display_domain": {
+        "minimum": null,
+        "maximum": null,
+        "documented_range": "0 to 99",
+        "live_range_scan": "not run"
+      },
+      "conversion": "verified discrete points only",
+      "register_verification": "two repeated reversible trials; GPR 0x86 excluded because its value varied across repeats as modulation activity",
+      "audio_verification": "native ES5510 compared; output was finite but bit-identical for this stimulus/window",
+      "points": [
+        {
+          "value": 20,
+          "text": "20",
+          "writes": [
+            [
+              132,
+              "0x0003D7"
+            ],
+            [
+              133,
+              "0x0003D7"
+            ]
+          ]
+        },
+        {
+          "value": 21,
+          "text": "21",
+          "writes": [
+            [
+              132,
+              "0x00049C"
+            ],
+            [
+              133,
+              "0x00049C"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 39,
+      "factory_name": "PITCH SHIFT",
+      "parameter_id": "quality",
+      "display_name": "QUALITY",
+      "display_order": 9,
+      "units": "mode",
+      "display_format": "text",
+      "display_domain": {
+        "values": [
+          "LONG/SMOOTHER",
+          "SHORT/COARSER"
+        ]
+      },
+      "conversion": "verified discrete modes only",
+      "register_verification": "six ordered GPR writes repeat and reverse exactly across two trials",
+      "audio_verification": "large native ES5510 difference measured; finite output",
+      "points": [
+        {
+          "value": 0,
+          "text": "LONG/SMOOTHER",
+          "writes": [
+            [
+              4,
+              "0x0667DE"
+            ],
+            [
+              7,
+              "0x0667DE"
+            ],
+            [
+              10,
+              "0x002F1F"
+            ],
+            [
+              97,
+              "0x044446"
+            ],
+            [
+              100,
+              "0x044446"
+            ],
+            [
+              160,
+              "0x7FFFEE"
+            ]
+          ]
+        },
+        {
+          "value": 1,
+          "text": "SHORT/COARSER",
+          "writes": [
+            [
+              4,
+              "0x03CFE1"
+            ],
+            [
+              7,
+              "0x03CFE1"
+            ],
+            [
+              10,
+              "0x004F40"
+            ],
+            [
+              97,
+              "0x028978"
+            ],
+            [
+              100,
+              "0x028978"
+            ],
+            [
+              160,
+              "0x7FFFCF"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "range_scans": [
+    {
+      "slot": 1,
+      "factory_name": "HALL REVERB",
+      "display_name": "DECAY TIME",
+      "baseline": "40",
+      "minimum": "0",
+      "maximum": "99",
+      "restored_exactly": true
+    },
+    {
+      "slot": 3,
+      "factory_name": "ROOM REVERB",
+      "display_name": "DIFFUSION",
+      "baseline": "50",
+      "minimum": "0",
+      "maximum": "99",
+      "restored_exactly": true
+    },
+    {
+      "slot": 3,
+      "factory_name": "ROOM REVERB",
+      "display_name": "HI FREQ DAMPING",
+      "baseline": "9",
+      "minimum": "0",
+      "maximum": "99",
+      "restored_exactly": true
+    }
+  ],
+  "unresolved": [],
+  "counts": {
+    "v2_verified_controls_preserved": 16,
+    "new_controls_with_reversible_register_mappings": 3,
+    "total_controls_with_verified_points": 19,
+    "new_points": 6,
+    "new_full_live_display_ranges": 3,
+    "slot_2_v3_followup": "deferred per user direction; no V3 control promoted"
+  }
+}

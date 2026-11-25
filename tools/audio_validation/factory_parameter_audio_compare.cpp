@@ -1,5 +1,6 @@
 #include "trollfx/es5510_factory_runtime.hpp"
 #include "trollfx/es5510_factory_parameter_discovery_v02.hpp"
+#include "trollfx/es5510_factory_parameter_discovery_v03.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -78,7 +79,8 @@ int main(int argc,char**argv) try {
         std::getline(ss,gpr,','); std::getline(ss,value,',');
         d.firmware_event_schedule.push_back({std::stoull(frame),static_cast<std::uint8_t>(std::stoul(gpr,nullptr,16)),static_cast<std::uint32_t>(std::stoul(value,nullptr,16))});
     }
-    if (!parameter_discovery_v02::append_verified_parameters(d)) throw std::runtime_error("slot has no V2 recovered controls");
+    parameter_discovery_v02::append_verified_parameters(d);
+    if (!parameter_discovery_v03::append_verified_parameters(d)) throw std::runtime_error("slot has no V3 recovered control");
     ValidatedEffectPackage p; p.descriptor=std::move(d);
     // The invoking Python wrapper independently checks audit eligibility and
     // checkpoint/schedule hashes before calling this private-package utility.

@@ -115,10 +115,24 @@ def summarize_log(text, expected_slot):
                 trial["down_host_writes"] = summarize_window(events, int(down_start["cycles"]), int(restore["cycles"]))
             row["trials"].append(trial)
         probes.append(row)
+    ranges = []
+    for range_id, group in by_id.items():
+        if not any(e["event"] == "PANEL_RANGE_FOUND" for e in group):
+            continue
+        get = lambda name: next((e for e in group if e["event"] == name), None)
+        found, low, high, restored = (get("PANEL_RANGE_FOUND"), get("PANEL_RANGE_MIN"),
+                                       get("PANEL_RANGE_MAX"), get("PANEL_RANGE_RESTORE"))
+        ranges.append({"id": range_id, "baseline_display": None if not found else found.get("display"),
+                       "minimum_display": None if not low else low.get("display"),
+                       "maximum_display": None if not high else high.get("display"),
+                       "minimum_steps_from_baseline": None if not low else int(low["down_steps"]),
+                       "maximum_steps_from_baseline": None if not high else int(high["up_steps"]),
+                       "restored_exactly": None if not restored else restored.get("exact") == "1",
+                       "events": group})
     return {"selected_effect_slots_observed": selects,
             "expected_slot": expected_slot,
             "selection_verified": any(s["slot"] == expected_slot for s in selects),
-            "panel_events": panel, "probes": probes,
+            "panel_events": panel, "probes": probes, "range_scans": ranges,
             "warning": "Host writes are correlated with display-driven action windows; baseline comparison is required before assigning a GPR. Periodic or modulated writes are not automatically classified as parameter writes."}
 
 
@@ -141,13 +155,16 @@ def build_command(args, entry, candidate, id_token):
     # factory slot. Earlier trial exposed a real race: the display briefly
     # showed HALL before the final analog selector event.
     settled = scan_end + 0.5
-    run_seconds = max(args.seconds, settled + 8.0)
+    run_seconds = max(args.seconds, settled + (180.0 if args.mode == "range" else 8.0))
     command += ["--seconds", f"{run_seconds:.2f}"]
     command += ["--panel-tap-on-display", f"{settled:.2f},45,5,{code},edit"]
     command += ["--panel-tap-on-display", f"{settled:.2f},45,9,FREE,effects"]
     command += ["--panel-mark-on-display", f"{settled:.2f},45,VAR=,variation"]
     command += ["--panel-search-right", f"{settled:.2f},45,64,VAR=,{candidate},candidate_search"]
-    command += ["--panel-probe-control", f"{settled:.2f},45,2,{candidate},candidate_probe,{args.revert_button}"]
+    if args.mode == "range":
+        command += ["--panel-probe-range", f"{settled:.2f},180,{candidate},candidate_range"]
+    else:
+        command += ["--panel-probe-control", f"{settled:.2f},45,2,{candidate},candidate_probe,{args.revert_button}"]
     return command
 
 
@@ -159,6 +176,8 @@ def main():
     ap.add_argument("--inventory", type=Path, required=True, help="private inventory.json from the authorized 50-slot sweep")
     ap.add_argument("--slot", type=int, required=True)
     ap.add_argument("--candidate", required=True, help="short display substring from the documented catalog, e.g. DIFFUSION")
+    ap.add_argument("--mode", choices=("point", "range"), default="point",
+                    help="reversible one-step trial or bounded endpoint scan with exact restoration")
     ap.add_argument("--seconds", type=float, default=55)
     ap.add_argument("--repetitions", type=int, default=2, help="reversible probe repetitions; 0 records a stable no-edit baseline")
     ap.add_argument("--revert-button", type=int, default=11, help="panel button used to reverse the edit (11=Down, 33=Cancel/No)")
@@ -175,10 +194,11 @@ def main():
     if not 0 <= args.revert_button <= 41:
         ap.error("--revert-button must be a panel button code from 0 through 41")
     command = build_command(args, entry, args.candidate, token)
-    probe_arg = command.index("--panel-probe-control") + 1
-    probe_fields = command[probe_arg].split(",")
-    probe_fields[2] = str(args.repetitions)
-    command[probe_arg] = ",".join(probe_fields)
+    if args.mode == "point":
+        probe_arg = command.index("--panel-probe-control") + 1
+        probe_fields = command[probe_arg].split(",")
+        probe_fields[2] = str(args.repetitions)
+        command[probe_arg] = ",".join(probe_fields)
     log_path = args.output / f"slot-{args.slot:02d}-{token}.log"
     report_path = args.output / f"slot-{args.slot:02d}-{token}-report.json"
     env = dict(os.environ, ESP_HOSTLOG="1", ASR_ROUTE="-1,-1,1,-1,0", ASR_TEST_SINE="440:0.25")
@@ -186,12 +206,13 @@ def main():
         run = subprocess.run(command, stdout=stream, stderr=subprocess.STDOUT, env=env, check=False)
     text = log_path.read_text(errors="replace")
     report = summarize_log(text, args.slot)
-    report.update({"candidate": args.candidate, "variation": next((p.get("display") for p in report["panel_events"] if p["id"] == "variation"), None),
-                   "simulated_seconds": max(args.seconds, 16.0 + 0.15 * (int(entry["select_raw"]) - 8) + 8.5),
+    report.update({"candidate": args.candidate, "mode": args.mode,
+                   "variation": next((p.get("display") for p in report["panel_events"] if p["id"] == "variation"), None),
+                   "simulated_seconds": float(command[command.index("--seconds") + 1]),
                    "exit_code": run.returncode, "raw_log": str(log_path), "audio_file": command[command.index("--wav") + 1]})
     report_path.write_text(json.dumps(report, indent=2) + "\n")
-    print(f"slot={args.slot} candidate={args.candidate} selected={report['selection_verified']} probes={len(report['probes'])} exit={run.returncode}")
-    if run.returncode or not report["selection_verified"] or not report["probes"]:
+    print(f"slot={args.slot} candidate={args.candidate} selected={report['selection_verified']} probes={len(report['probes'])} ranges={len(report['range_scans'])} exit={run.returncode}")
+    if run.returncode or not report["selection_verified"] or not (report["probes"] or report["range_scans"]):
         raise SystemExit(2)
 
 

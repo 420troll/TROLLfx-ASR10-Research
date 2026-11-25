@@ -57,11 +57,12 @@ int main(int argc, char **argv) {
     std::vector<std::pair<double, std::pair<int,int>>> buttons;  // time, (code, down)
     std::vector<std::pair<double, std::string>> parameter_marks;
     struct PanelAction {
-        enum class Kind { TapOnChange, TapOnDisplay, MarkOnDisplay, WalkRight, SearchRight, ProbeControl } kind;
+        enum class Kind { TapOnChange, TapOnDisplay, MarkOnDisplay, WalkRight, SearchRight, ProbeControl, ProbeRange } kind;
         double after = 0.0, timeout = 0.0, pressed_at = 0.0, phase_time = 0.0;
         std::string needle, id, target, last_match, before_display, control_baseline;
         int code = 0, revert_code = 11, match_stable = 0, change_stable = 0, remaining_steps = 0, step_index = 0;
-        int repetitions = 0, iteration = 0, phase = 0;
+        int repetitions = 0, iteration = 0, phase = 0, range_steps_up = 0, range_steps_down = 0;
+        int range_steps_origin = 0, range_steps_return = 0;
         bool down_sent = false, started = false, done = false, probe_key_released = false;
     };
     std::vector<PanelAction> panel_actions;
@@ -168,11 +169,12 @@ int main(int argc, char **argv) {
         } else if (a == "--param-mark") { // time:label
             std::string v = next(); size_t c = v.find(':');
             if (c != std::string::npos) parameter_marks.push_back({atof(v.substr(0, c).c_str()), v.substr(c + 1)});
-        } else if (a == "--panel-tap-on-change" || a == "--panel-tap-on-display" || a == "--panel-mark-on-display" || a == "--panel-walk-right" || a == "--panel-search-right" || a == "--panel-probe-control") {
+        } else if (a == "--panel-tap-on-change" || a == "--panel-tap-on-display" || a == "--panel-mark-on-display" || a == "--panel-walk-right" || a == "--panel-search-right" || a == "--panel-probe-control" || a == "--panel-probe-range") {
             const bool tap = a == "--panel-tap-on-change" || a == "--panel-tap-on-display";
             const bool walk = a == "--panel-walk-right";
             const bool search = a == "--panel-search-right";
             const bool probe = a == "--panel-probe-control";
+            const bool range = a == "--panel-probe-range";
             std::stringstream fields(next()); std::vector<std::string> part; std::string field;
             while (std::getline(fields, field, ',')) part.push_back(field);
             const size_t expected = probe ? (part.size() == 6 ? 6 : 5) : (tap || walk) ? 5 : search ? 6 : 4;
@@ -181,7 +183,7 @@ int main(int argc, char **argv) {
                 a == "--panel-tap-on-display" ? PanelAction::Kind::TapOnDisplay :
                 a == "--panel-walk-right" ? PanelAction::Kind::WalkRight :
                 search ? PanelAction::Kind::SearchRight :
-                probe ? PanelAction::Kind::ProbeControl : PanelAction::Kind::MarkOnDisplay;
+                probe ? PanelAction::Kind::ProbeControl : range ? PanelAction::Kind::ProbeRange : PanelAction::Kind::MarkOnDisplay;
             action.after = atof(part[0].c_str()); action.timeout = atof(part[1].c_str());
             if (action.after < 0.0 || action.timeout <= 0.0) { fprintf(stderr, "invalid %s time\n", a.c_str()); return 2; }
             if (tap) {
@@ -382,7 +384,8 @@ int main(int argc, char **argv) {
                         action.id.c_str(), action.kind == PanelAction::Kind::MarkOnDisplay ? "mark" :
                         action.kind == PanelAction::Kind::WalkRight ? "walk-right" :
                         action.kind == PanelAction::Kind::SearchRight ? "search-right" :
-                        action.kind == PanelAction::Kind::ProbeControl ? "probe" : "tap",
+                        action.kind == PanelAction::Kind::ProbeControl ? "probe" :
+                        action.kind == PanelAction::Kind::ProbeRange ? "range" : "tap",
                         action.needle.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
                         (unsigned long long)m.esp.host_frame_count());
                 action.done = true; panel_action_failed = true; continue;
@@ -435,6 +438,115 @@ int main(int argc, char **argv) {
                                     action.id.c_str(), action.target.c_str(), d0.c_str(), action.step_index);
                             action.done = true; panel_action_failed = true;
                         } else if (action.kind == PanelAction::Kind::WalkRight && action.remaining_steps == 0) action.done = true;
+                    }
+                }
+                continue;
+            }
+            if (action.kind == PanelAction::Kind::ProbeRange) {
+                if (action.phase == 0) {
+                    const bool matches = d0.find(action.needle) != std::string::npos;
+                    if (matches && d0 == action.last_match) ++action.match_stable;
+                    else { action.match_stable = matches ? 1 : 0; action.last_match = matches ? d0 : std::string(); }
+                    if (action.match_stable < 20) continue;
+                    action.control_baseline = d0;
+                    action.before_display = d0;
+                    action.phase_time = now;
+                    action.phase = 1;
+                    fprintf(stderr, "PANEL_RANGE_FOUND id=%s display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
+                            (unsigned long long)m.esp.host_frame_count());
+                } else if (action.phase == 1) {
+                    if (d0 != action.control_baseline) {
+                        fprintf(stderr, "PANEL_RANGE_IDLE_UNSTABLE id=%s before=\"%.22s\" after=\"%.22s\"\n",
+                                action.id.c_str(), action.control_baseline.c_str(), d0.c_str());
+                        action.done = true; panel_action_failed = true; continue;
+                    }
+                    if (now - action.phase_time < 0.5) continue;
+                    action.phase = 2; // scan upward to the observed upper endpoint
+                    action.last_match.clear(); action.match_stable = 0;
+                    fprintf(stderr, "PANEL_RANGE_IDLE_END id=%s display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
+                            (unsigned long long)m.esp.host_frame_count());
+                } else {
+                    const int button = (action.phase == 2 || action.phase == 5) ? 10 : 11;
+                    if (!action.down_sent) {
+                        action.before_display = d0;
+                        action.down_sent = true;
+                        action.probe_key_released = false;
+                        action.pressed_at = now;
+                        action.last_match.clear();
+                        action.match_stable = 0;
+                        m.panel.button(button, true);
+                        const int next_step = action.phase == 2 ? action.range_steps_up + 1 :
+                                              action.phase == 3 ? action.range_steps_origin + 1 :
+                                              action.phase == 4 ? action.range_steps_down + 1 :
+                                                                  action.range_steps_return + 1;
+                        const char* segment = action.phase == 2 ? "to_max" : action.phase == 3 ? "to_origin" :
+                                              action.phase == 4 ? "to_min" : "restore";
+                        fprintf(stderr, "PANEL_RANGE_STEP_BEGIN id=%s segment=%s direction=%s step=%d display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                                action.id.c_str(), segment, button == 10 ? "up" : "down", next_step,
+                                d0.c_str(), now, (unsigned long long)m.cycles(),
+                                (unsigned long long)m.esp.host_frame_count());
+                    } else {
+                        if (!action.probe_key_released) {
+                            m.panel.button(button, false);
+                            action.probe_key_released = true;
+                        }
+                        if (d0 != action.before_display) {
+                            if (d0 == action.last_match) ++action.match_stable;
+                            else { action.match_stable = 1; action.last_match = d0; }
+                        } else { action.last_match.clear(); action.match_stable = 0; }
+                        if (action.match_stable >= 20) {
+                            const int from_phase = action.phase;
+                            action.down_sent = false;
+                            if (from_phase == 2) ++action.range_steps_up;
+                            if (from_phase == 3) ++action.range_steps_origin;
+                            if (from_phase == 4) ++action.range_steps_down;
+                            if (from_phase == 5) ++action.range_steps_return;
+                            const int completed_step = from_phase == 2 ? action.range_steps_up :
+                                                       from_phase == 3 ? action.range_steps_origin :
+                                                       from_phase == 4 ? action.range_steps_down :
+                                                                         action.range_steps_return;
+                            const char* segment = from_phase == 2 ? "to_max" : from_phase == 3 ? "to_origin" :
+                                                  from_phase == 4 ? "to_min" : "restore";
+                            fprintf(stderr, "PANEL_RANGE_STEP_DONE id=%s segment=%s direction=%s step=%d before=\"%.22s\" after=\"%.22s\" cycles=%llu frame=%llu\n",
+                                    action.id.c_str(), segment, button == 10 ? "up" : "down", completed_step,
+                                    action.before_display.c_str(), d0.c_str(),
+                                    (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                            if (from_phase == 3 && d0 == action.control_baseline) {
+                                action.phase = 4; action.range_steps_down = 0;
+                                fprintf(stderr, "PANEL_RANGE_ORIGIN_RESTORED id=%s display=\"%.22s\"\n",
+                                        action.id.c_str(), d0.c_str());
+                            } else if (from_phase == 5 && d0 == action.control_baseline) {
+                                fprintf(stderr, "PANEL_RANGE_RESTORE id=%s display=\"%.22s\" baseline=\"%.22s\" exact=1 up_steps=%d down_steps=%d cycles=%llu frame=%llu\n",
+                                        action.id.c_str(), d0.c_str(), action.control_baseline.c_str(),
+                                        action.range_steps_up, action.range_steps_down,
+                                        (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                                action.done = true;
+                            }
+                        } else if (now - action.pressed_at >= 0.30 && d0 == action.before_display) {
+                            const int stopped_phase = action.phase;
+                            action.down_sent = false;
+                            if (stopped_phase == 2) {
+                                action.phase = 3;
+                                fprintf(stderr, "PANEL_RANGE_MAX id=%s display=\"%.22s\" up_steps=%d time=%.6f cycles=%llu frame=%llu\n",
+                                        action.id.c_str(), d0.c_str(), action.range_steps_up, now,
+                                        (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                            } else if (stopped_phase == 4) {
+                                action.phase = 5;
+                                fprintf(stderr, "PANEL_RANGE_MIN id=%s display=\"%.22s\" down_steps=%d time=%.6f cycles=%llu frame=%llu\n",
+                                        action.id.c_str(), d0.c_str(), action.range_steps_down, now,
+                                        (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                            } else {
+                                fprintf(stderr, "PANEL_RANGE_RETURN_FAILED id=%s phase=%d display=\"%.22s\" baseline=\"%.22s\"\n",
+                                        action.id.c_str(), stopped_phase, d0.c_str(), action.control_baseline.c_str());
+                                action.done = true; panel_action_failed = true;
+                            }
+                        }
+                        if (action.range_steps_up > 1024 || action.range_steps_down > 1024) {
+                            fprintf(stderr, "PANEL_RANGE_STEP_LIMIT id=%s display=\"%.22s\"\n", action.id.c_str(), d0.c_str());
+                            action.done = true; panel_action_failed = true;
+                        }
                     }
                 }
                 continue;
