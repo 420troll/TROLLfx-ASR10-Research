@@ -25,6 +25,24 @@
       "file": "es5510_factory_editor_v04.hpp",
       "commit": "28458b3a1fb8c1e12f5f1abbdb70772e40e129fa",
       "sha256": "01eb7ab0040ef81a6ca129d637171759fbe6d1a53cfe64977db175fc6a56ded9"
+    },
+    {
+      "file": "ASR10_FULL_FACTORY_PARAMETER_REGISTRY_V1.json",
+      "commit": "7d38ec2bc3369ecd16f9e284ba85ccfd6fe46b55",
+      "sha256": "97bbbd06c59d34dbe1139d905fe889be2c2ece97fc3c58fc06ea0c88f148a54a"
+    }
+  ],
+  "external_evidence": [
+    {
+      "name": "ASR10_FACTORY_EFFECT_EDITOR_INVENTORY_V04.json",
+      "commit": "f1a9f0f524835de8c85bf66012e4a1e29a6df24b",
+      "stored_in_git": false,
+      "sha256": "3e3e10dc3032927d7ae433f1c1f59d9388b91da6855676f5eb429d4a0027d2e0"
+    },
+    {
+      "name": "ASR-10 Musician\u2019s Manual PDF supplied by user",
+      "stored_in_git": false,
+      "sha256": "e8ab5100904caf91fe355065ed9646aff197761b0663a7d452dc98af1f9a29dc"
     }
   ]
 }

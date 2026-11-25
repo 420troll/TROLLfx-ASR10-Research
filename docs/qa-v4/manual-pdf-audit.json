@@ -1,0 +1,5365 @@
+{
+  "schema": "asr10-manual-pdf-text-audit-v1",
+  "manual_sha256": "e8ab5100904caf91fe355065ed9646aff197761b0663a7d452dc98af1f9a29dc",
+  "manual_pages": 391,
+  "effect_headers_found": 50,
+  "all_effect_names_match_after_punctuation_normalization": true,
+  "range_status_counts": {
+    "EXACT_RANGE_TEXT_FOUND": 542,
+    "SHARED_VARIATION_TEXT_FOUND": 50,
+    "RANGE_ENDPOINTS_FOUND_UNITS_IN_PROSE": 2,
+    "NOT_FOUND_REVIEW": 0
+  },
+  "limits": [
+    "Exact text presence is a transcription check, not a determination that a descriptor is one independent control.",
+    "Ranges do not establish OS visibility or DSP behavior; grouped fields are tracked separately."
+  ],
+  "parameters": [
+    {
+      "slot": 1,
+      "effect_name": "HALL REVERB",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 1,
+      "effect_name": "HALL REVERB",
+      "parameter_id": "decay_time_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 1,
+      "effect_name": "HALL REVERB",
+      "parameter_id": "low_freq_decay_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 1,
+      "effect_name": "HALL REVERB",
+      "parameter_id": "diffusion_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 1,
+      "effect_name": "HALL REVERB",
+      "parameter_id": "hi_freq_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 1,
+      "effect_name": "HALL REVERB",
+      "parameter_id": "hi_freq_bandwidth_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 1,
+      "effect_name": "HALL REVERB",
+      "parameter_id": "detune_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 1,
+      "effect_name": "HALL REVERB",
+      "parameter_id": "detune_amt_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 1,
+      "effect_name": "HALL REVERB",
+      "parameter_id": "pre_delay_time_1",
+      "catalog_range": "0 to 500",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 2,
+      "effect_name": "44KHZ REVERB",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 2,
+      "effect_name": "44KHZ REVERB",
+      "parameter_id": "decay_time_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 2,
+      "effect_name": "44KHZ REVERB",
+      "parameter_id": "low_freq_decay_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 2,
+      "effect_name": "44KHZ REVERB",
+      "parameter_id": "diffusion_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 2,
+      "effect_name": "44KHZ REVERB",
+      "parameter_id": "hi_freq_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 2,
+      "effect_name": "44KHZ REVERB",
+      "parameter_id": "hi_freq_bandwidth_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 2,
+      "effect_name": "44KHZ REVERB",
+      "parameter_id": "detune_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 2,
+      "effect_name": "44KHZ REVERB",
+      "parameter_id": "detune_amt_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 2,
+      "effect_name": "44KHZ REVERB",
+      "parameter_id": "pre_delay_time_1",
+      "catalog_range": "0 to 340",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 3,
+      "effect_name": "ROOM REVERB",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 3,
+      "effect_name": "ROOM REVERB",
+      "parameter_id": "decay_time_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 3,
+      "effect_name": "ROOM REVERB",
+      "parameter_id": "low_freq_decay_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 3,
+      "effect_name": "ROOM REVERB",
+      "parameter_id": "diffusion_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 3,
+      "effect_name": "ROOM REVERB",
+      "parameter_id": "hi_freq_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 3,
+      "effect_name": "ROOM REVERB",
+      "parameter_id": "hi_freq_bandwidth_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 3,
+      "effect_name": "ROOM REVERB",
+      "parameter_id": "detune_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 3,
+      "effect_name": "ROOM REVERB",
+      "parameter_id": "detune_amt_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 3,
+      "effect_name": "ROOM REVERB",
+      "parameter_id": "pre_delay_time_1",
+      "catalog_range": "0 to 500",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 99,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 4,
+      "effect_name": "DUAL DELAYS",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 4,
+      "effect_name": "DUAL DELAYS",
+      "parameter_id": "bus1_and_2_delay_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 4,
+      "effect_name": "DUAL DELAYS",
+      "parameter_id": "bus1_and_2_feedback_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 4,
+      "effect_name": "DUAL DELAYS",
+      "parameter_id": "delay_time_1",
+      "catalog_range": "0 to 2000 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "RANGE_ENDPOINTS_FOUND_UNITS_IN_PROSE"
+    },
+    {
+      "slot": 5,
+      "effect_name": "44KHZ DELAYS",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 5,
+      "effect_name": "44KHZ DELAYS",
+      "parameter_id": "bus1_and_2_delay_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 5,
+      "effect_name": "44KHZ DELAYS",
+      "parameter_id": "bus1_and_2_feedback_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 5,
+      "effect_name": "44KHZ DELAYS",
+      "parameter_id": "delay_time_1",
+      "catalog_range": "0 to 1300 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "RANGE_ENDPOINTS_FOUND_UNITS_IN_PROSE"
+    },
+    {
+      "slot": 6,
+      "effect_name": "CHORUS+REVRB",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 6,
+      "effect_name": "CHORUS+REVRB",
+      "parameter_id": "bus1_rev_after_chor_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 6,
+      "effect_name": "CHORUS+REVRB",
+      "parameter_id": "bus2_reverb_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 6,
+      "effect_name": "CHORUS+REVRB",
+      "parameter_id": "early_rflection_lev_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 6,
+      "effect_name": "CHORUS+REVRB",
+      "parameter_id": "chorus_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 6,
+      "effect_name": "CHORUS+REVRB",
+      "parameter_id": "chorus_amt_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 6,
+      "effect_name": "CHORUS+REVRB",
+      "parameter_id": "chorus_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 6,
+      "effect_name": "CHORUS+REVRB",
+      "parameter_id": "chorus_feedback_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 100,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 7,
+      "effect_name": "PHASER+REVRB",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 101,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 7,
+      "effect_name": "PHASER+REVRB",
+      "parameter_id": "bus1_reverb_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 101,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 7,
+      "effect_name": "PHASER+REVRB",
+      "parameter_id": "bus2_reverb_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 101,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 7,
+      "effect_name": "PHASER+REVRB",
+      "parameter_id": "phase_center_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 101,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 7,
+      "effect_name": "PHASER+REVRB",
+      "parameter_id": "phase_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 101,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 7,
+      "effect_name": "PHASER+REVRB",
+      "parameter_id": "phase_width_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 101,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 7,
+      "effect_name": "PHASER+REVRB",
+      "parameter_id": "phase_feedback_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 101,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 7,
+      "effect_name": "PHASER+REVRB",
+      "parameter_id": "phase_depth_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 101,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 8,
+      "effect_name": "FLANGER+REV",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 8,
+      "effect_name": "FLANGER+REV",
+      "parameter_id": "bus1_reverb_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 8,
+      "effect_name": "FLANGER+REV",
+      "parameter_id": "bus2_reverb_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 8,
+      "effect_name": "FLANGER+REV",
+      "parameter_id": "flange_center_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 8,
+      "effect_name": "FLANGER+REV",
+      "parameter_id": "flange_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 8,
+      "effect_name": "FLANGER+REV",
+      "parameter_id": "flange_width_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 8,
+      "effect_name": "FLANGER+REV",
+      "parameter_id": "flange_feedback_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 8,
+      "effect_name": "FLANGER+REV",
+      "parameter_id": "flange_depth_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 9,
+      "effect_name": "ROT.SPKR+REV",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 9,
+      "effect_name": "ROT.SPKR+REV",
+      "parameter_id": "bus1_rev_after_roto_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 9,
+      "effect_name": "ROT.SPKR+REV",
+      "parameter_id": "bus2_reverb_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 9,
+      "effect_name": "ROT.SPKR+REV",
+      "parameter_id": "rotor_fast_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 9,
+      "effect_name": "ROT.SPKR+REV",
+      "parameter_id": "rotor_slow_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 9,
+      "effect_name": "ROT.SPKR+REV",
+      "parameter_id": "rotor_inertia_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 9,
+      "effect_name": "ROT.SPKR+REV",
+      "parameter_id": "fast_slow_switch_1",
+      "catalog_range": "see below",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 9,
+      "effect_name": "ROT.SPKR+REV",
+      "parameter_id": "dist_gain_in_out_in_and_out_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 9,
+      "effect_name": "ROT.SPKR+REV",
+      "parameter_id": "speaker_gain_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 9,
+      "effect_name": "ROT.SPKR+REV",
+      "parameter_id": "distortion_filter_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 102,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 10,
+      "effect_name": "CHOR+REV+DDL",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 103,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 10,
+      "effect_name": "CHOR+REV+DDL",
+      "parameter_id": "bus3_ddl_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 103,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 10,
+      "effect_name": "CHOR+REV+DDL",
+      "parameter_id": "ddl_time_l_r_1",
+      "catalog_range": "0 to 1500",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 103,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 10,
+      "effect_name": "CHOR+REV+DDL",
+      "parameter_id": "ddl_feedback_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 103,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 11,
+      "effect_name": "CMP+DIST+REV",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 104,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 11,
+      "effect_name": "CMP+DIST+REV",
+      "parameter_id": "bus1_rev_after_dist_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 104,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 11,
+      "effect_name": "CMP+DIST+REV",
+      "parameter_id": "compressor_threshld_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 104,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 11,
+      "effect_name": "CMP+DIST+REV",
+      "parameter_id": "dist_gain_in_and_out_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 104,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 11,
+      "effect_name": "CMP+DIST+REV",
+      "parameter_id": "dist_lpf_hpf_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 104,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 11,
+      "effect_name": "CMP+DIST+REV",
+      "parameter_id": "dist_flange_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 104,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 11,
+      "effect_name": "CMP+DIST+REV",
+      "parameter_id": "system_feedback_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 104,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 12,
+      "effect_name": "DIST+CHO+REV",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 105,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 12,
+      "effect_name": "DIST+CHO+REV",
+      "parameter_id": "bus1_dist_into_chor_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 105,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 12,
+      "effect_name": "DIST+CHO+REV",
+      "parameter_id": "chor_into_rev_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 105,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 12,
+      "effect_name": "DIST+CHO+REV",
+      "parameter_id": "bus3_reverb_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 105,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 12,
+      "effect_name": "DIST+CHO+REV",
+      "parameter_id": "dist_gain_in_and_out_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 105,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 12,
+      "effect_name": "DIST+CHO+REV",
+      "parameter_id": "dist_filter_fc_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 105,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 12,
+      "effect_name": "DIST+CHO+REV",
+      "parameter_id": "dist_filter_q_1",
+      "catalog_range": "1 to 25",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 105,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 12,
+      "effect_name": "DIST+CHO+REV",
+      "parameter_id": "distortion_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 105,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 13,
+      "effect_name": "WAH+DIST+REV",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 106,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 13,
+      "effect_name": "WAH+DIST+REV",
+      "parameter_id": "bus1_rev_after_dist_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 106,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 13,
+      "effect_name": "WAH+DIST+REV",
+      "parameter_id": "wah_filter_center_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 106,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 13,
+      "effect_name": "WAH+DIST+REV",
+      "parameter_id": "wah_range_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 106,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "decay_time_small_room_1",
+      "catalog_range": "0.20 to 100.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "large_room_1",
+      "catalog_range": "0.20 to 150.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "hall_reverb2_1",
+      "catalog_range": "0.70 to 250.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "predelay_time_1",
+      "catalog_range": "0 to 450 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "lf_decay_time_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "hf_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "hf_bandwidth_1",
+      "catalog_range": "1 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "diffus1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "diffus2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "decay_definition_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "detune_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "detune_depth_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "primary_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "refl_1_time_1",
+      "catalog_range": "0 to 120 milliseconds",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "refl_1_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "refl_1_send_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "refl_2_time_1",
+      "catalog_range": "0 to 120 milliseconds",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "refl_2_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "ref_2_send_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 14,
+      "effect_name": "SMALL ROOM",
+      "parameter_id": "positn_bal_1_to_3_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "decay_time_small_room_1",
+      "catalog_range": "0.20 to 100.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "large_room_1",
+      "catalog_range": "0.20 to 150.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "hall_reverb2_1",
+      "catalog_range": "0.70 to 250.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "predelay_time_1",
+      "catalog_range": "0 to 450 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "lf_decay_time_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "hf_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "hf_bandwidth_1",
+      "catalog_range": "1 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "diffus1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "diffus2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "decay_definition_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "detune_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "detune_depth_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "primary_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "refl_1_time_1",
+      "catalog_range": "0 to 120 milliseconds",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "refl_1_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "refl_1_send_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "refl_2_time_1",
+      "catalog_range": "0 to 120 milliseconds",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "refl_2_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "ref_2_send_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 15,
+      "effect_name": "LARGE ROOM",
+      "parameter_id": "positn_bal_1_to_3_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "decay_time_small_room_1",
+      "catalog_range": "0.20 to 100.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "large_room_1",
+      "catalog_range": "0.20 to 150.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "hall_reverb2_1",
+      "catalog_range": "0.70 to 250.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "predelay_time_1",
+      "catalog_range": "0 to 450 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "lf_decay_time_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "hf_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "hf_bandwidth_1",
+      "catalog_range": "1 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "diffus1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "diffus2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "decay_definition_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "detune_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "detune_depth_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "primary_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "refl_1_time_1",
+      "catalog_range": "0 to 120 milliseconds",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "refl_1_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "refl_1_send_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "refl_2_time_1",
+      "catalog_range": "0 to 120 milliseconds",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "refl_2_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "ref_2_send_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 16,
+      "effect_name": "HALL REVERB2",
+      "parameter_id": "positn_bal_1_to_3_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 107,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "decay_time_small_plate_1",
+      "catalog_range": "0.2 to 100.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "large_plate_1",
+      "catalog_range": "0.4 to 140.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "predelay_time_small_plate_1",
+      "catalog_range": "0 to 500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "large_plate_2",
+      "catalog_range": "0 to 430 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "hf_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "hf_bandwidth_1",
+      "catalog_range": "1 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "diffus1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "diffus2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "decay_definition_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "er_lev_1_to_4_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 17,
+      "effect_name": "SMALL PLATE",
+      "parameter_id": "l_r_balance_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "decay_time_small_plate_1",
+      "catalog_range": "0.2 to 100.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "large_plate_1",
+      "catalog_range": "0.4 to 140.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "predelay_time_small_plate_1",
+      "catalog_range": "0 to 500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "large_plate_2",
+      "catalog_range": "0 to 430 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "hf_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "hf_bandwidth_1",
+      "catalog_range": "1 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "diffus1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "diffus2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "decay_definition_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "er_lev_1_to_4_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 18,
+      "effect_name": "LARGE PLATE",
+      "parameter_id": "l_r_balance_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 109,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 19,
+      "effect_name": "REVRSE REVRB",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 111,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 19,
+      "effect_name": "REVRSE REVRB",
+      "parameter_id": "hold_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 111,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 19,
+      "effect_name": "REVRSE REVRB",
+      "parameter_id": "attack_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 111,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 19,
+      "effect_name": "REVRSE REVRB",
+      "parameter_id": "release_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 111,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 19,
+      "effect_name": "REVRSE REVRB",
+      "parameter_id": "trigger_threshold_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 111,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 19,
+      "effect_name": "REVRSE REVRB",
+      "parameter_id": "hf_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 111,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 19,
+      "effect_name": "REVRSE REVRB",
+      "parameter_id": "diffus1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 111,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 19,
+      "effect_name": "REVRSE REVRB",
+      "parameter_id": "diffus2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 111,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 19,
+      "effect_name": "REVRSE REVRB",
+      "parameter_id": "decay_definition_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 111,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 19,
+      "effect_name": "REVRSE REVRB",
+      "parameter_id": "slapback_time_1",
+      "catalog_range": "0 to 530ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 111,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 19,
+      "effect_name": "REVRSE REVRB",
+      "parameter_id": "slapback_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 111,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 20,
+      "effect_name": "REVRSE REVB2",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 112,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 20,
+      "effect_name": "REVRSE REVB2",
+      "parameter_id": "hold_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 112,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 20,
+      "effect_name": "REVRSE REVB2",
+      "parameter_id": "attack_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 112,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 20,
+      "effect_name": "REVRSE REVB2",
+      "parameter_id": "release_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 112,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 20,
+      "effect_name": "REVRSE REVB2",
+      "parameter_id": "trigger_threshold_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 112,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 20,
+      "effect_name": "REVRSE REVB2",
+      "parameter_id": "pre_trigger_time_1",
+      "catalog_range": "0 to 530 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 112,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 20,
+      "effect_name": "REVRSE REVB2",
+      "parameter_id": "hf_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 112,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 20,
+      "effect_name": "REVRSE REVB2",
+      "parameter_id": "diffus1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 112,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 20,
+      "effect_name": "REVRSE REVB2",
+      "parameter_id": "diffus2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 112,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 20,
+      "effect_name": "REVRSE REVB2",
+      "parameter_id": "decay_definition_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 112,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "attack_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "hold_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "decay_time_1",
+      "catalog_range": "0.2 to 100.0 sec.",
+      "catalog_units": "seconds",
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "release_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "trigger_thresh_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "retrigger_thresh_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "hf_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "diffus1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "diffus2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "definition_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "slapback_1",
+      "catalog_range": "0 to 500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "slapback_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "er_lev_1_to_4_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 21,
+      "effect_name": "GATED REVERB",
+      "parameter_id": "l_r_balance_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 113,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "env_lev_1_to_9_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "hf_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "hf_bandwidth_1",
+      "catalog_range": "1 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "diffus1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "diffus2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "densty_1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "densty_2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "primary_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "refl_1_time_non_lin_1_3_1",
+      "catalog_range": "0 to 600 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "non_lin_2_1",
+      "catalog_range": "0 to 85 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "refl_1_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "refl_2_time_non_lin_1_3_1",
+      "catalog_range": "0 to 600 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "non_lin_2_2",
+      "catalog_range": "0 to 85 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "refl_2_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 22,
+      "effect_name": "NLIN REVRB 1",
+      "parameter_id": "l_r_balance_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "env_lev_1_to_9_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "hf_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "hf_bandwidth_1",
+      "catalog_range": "1 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "diffus1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "diffus2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "densty_1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "densty_2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "primary_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "refl_1_time_non_lin_1_3_1",
+      "catalog_range": "0 to 600 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "non_lin_2_1",
+      "catalog_range": "0 to 85 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "refl_1_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "refl_2_time_non_lin_1_3_1",
+      "catalog_range": "0 to 600 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "non_lin_2_2",
+      "catalog_range": "0 to 85 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "refl_2_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 23,
+      "effect_name": "NLIN REVRB 2",
+      "parameter_id": "l_r_balance_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "env_lev_1_to_9_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "hf_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "hf_bandwidth_1",
+      "catalog_range": "1 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "diffus1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "diffus2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "densty_1_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "densty_2_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "primary_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "refl_1_time_non_lin_1_3_1",
+      "catalog_range": "0 to 600 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "non_lin_2_1",
+      "catalog_range": "0 to 85 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "refl_1_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "refl_2_time_non_lin_1_3_1",
+      "catalog_range": "0 to 600 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "non_lin_2_2",
+      "catalog_range": "0 to 85 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "refl_2_send_level_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 24,
+      "effect_name": "NLIN REVRB 3",
+      "parameter_id": "l_r_balance_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 116,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 25,
+      "effect_name": "MULTITAP DDL",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 118,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 25,
+      "effect_name": "MULTITAP DDL",
+      "parameter_id": "dly_1_time_1",
+      "catalog_range": "0 to 2186 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 118,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 25,
+      "effect_name": "MULTITAP DDL",
+      "parameter_id": "dly_1_rgn_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 118,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 25,
+      "effect_name": "MULTITAP DDL",
+      "parameter_id": "dly_1_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 118,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 25,
+      "effect_name": "MULTITAP DDL",
+      "parameter_id": "dly_1_pan_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 118,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 25,
+      "effect_name": "MULTITAP DDL",
+      "parameter_id": "regen_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 118,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "dly_time_l_1",
+      "catalog_range": "0 to 845 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "dly_time_r_1",
+      "catalog_range": "0 to 845 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "lfo_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "lfo_width_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "l_r_lfo_1",
+      "catalog_range": "OUT-OF-PHASE or IN-PHASE",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "delay_regen_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "dly_cross_regen_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "regen_damping_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "r_delay_input_1",
+      "catalog_range": "OFF or ON",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "r_output_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "bass_fc_1",
+      "catalog_range": "0 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "treble_fc_1",
+      "catalog_range": "1KHz to 15KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 26,
+      "effect_name": "EQ+DELAY LFO",
+      "parameter_id": "eq_trim_1",
+      "catalog_range": "-24 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 119,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "dist_level_in_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "dist_level_out_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "pre_dist_vcf_fc_1",
+      "catalog_range": "1 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "pre_dist_vcf_q_1",
+      "catalog_range": "1 to 25",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "pre_dist_env_fol_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "post_dist_vcf_fc_1",
+      "catalog_range": "01 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "post_dist_vcf_q_1",
+      "catalog_range": "1 to 25",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "post_dist_env_fol_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "attack_1",
+      "catalog_range": "50\u00b5s to 10.0s",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "release_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "distortion_bypass_1",
+      "catalog_range": "OFF or ON",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 27,
+      "effect_name": "VCF+DISTORT",
+      "parameter_id": "pre_eq_hp_fc_1",
+      "catalog_range": "0 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 121,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "preamp_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "output_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "tube_bias_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "pre_eq_trim_1",
+      "catalog_range": "-24 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "pre_eq_high_1",
+      "catalog_range": "4 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "pre_eq_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "pre_eq_gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "pre_eq_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "gate_off_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "gate_on_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "gate_release_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "high_pass_fc_1",
+      "catalog_range": "4 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "eq1_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "eq1_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "eq2_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "eq2_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 28,
+      "effect_name": "GUITAR AMP1",
+      "parameter_id": "low_pass_fc_1",
+      "catalog_range": "2.0 to 15.0 KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "preamp_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "output_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "tube_bias_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "pre_eq_trim_1",
+      "catalog_range": "-24 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "pre_eq_high_1",
+      "catalog_range": "4 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "pre_eq_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "pre_eq_gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "pre_eq_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "gate_off_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "gate_on_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "gate_release_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "high_pass_fc_1",
+      "catalog_range": "4 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "eq1_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "eq1_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "eq2_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "eq2_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 29,
+      "effect_name": "GUITAR AMP2",
+      "parameter_id": "low_pass_fc_1",
+      "catalog_range": "2.0 to 15.0 KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 122,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "preamp_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "output_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "pre_eq_trim_1",
+      "catalog_range": "-24 to +00 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "pre_eq_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "pre_eq_gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "pre_eq_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "expansion_ratio_1",
+      "catalog_range": "1:1 to 40:1, infinity",
+      "catalog_units": "ratio",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "threshold_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "gate_off_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "gate_on_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "gate_release_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "high_pass_fc_1",
+      "catalog_range": "4 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "eq1_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "eq1_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "eq2_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "eq2_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 30,
+      "effect_name": "GUITAR AMP3",
+      "parameter_id": "low_pass_fc_1",
+      "catalog_range": "2.0 to 15.0 KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 124,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 31,
+      "effect_name": "SPKR CABINET",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 126,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 31,
+      "effect_name": "SPKR CABINET",
+      "parameter_id": "output_gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 126,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 32,
+      "effect_name": "TUNABLE SPKR",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 126,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 32,
+      "effect_name": "TUNABLE SPKR",
+      "parameter_id": "mid1_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 126,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 32,
+      "effect_name": "TUNABLE SPKR",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 126,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 32,
+      "effect_name": "TUNABLE SPKR",
+      "parameter_id": "mid1_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 126,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 32,
+      "effect_name": "TUNABLE SPKR",
+      "parameter_id": "input_trim_1",
+      "catalog_range": "-24 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 126,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 32,
+      "effect_name": "TUNABLE SPKR",
+      "parameter_id": "output_gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 126,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "chor_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "chor_width_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "chorus_center_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "l_r_lfo_1",
+      "catalog_range": "OUT-OF-PHASE or IN-PHASE",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "dly_time_l_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "dly_time_r_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "delay_regen_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "echotime_l_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "echotime_r_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "echo_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "bass_fc_1",
+      "catalog_range": "0 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "treble_fc_1",
+      "catalog_range": "01KHz to 15KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 33,
+      "effect_name": "EQ+CHOR+DDL",
+      "parameter_id": "eq_trim_1",
+      "catalog_range": "-24 to +00 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 127,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "vibr_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "width_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "l_r_lfo_1",
+      "catalog_range": "OUT-OF-PHASE or IN-PHASE",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "sample_hold_rate_1",
+      "catalog_range": "0 to 100",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "delay_time_l_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "delay_time_r_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "delay_feedback_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "echotime_l_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "echotime_r_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "echo_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "bass_fc_1",
+      "catalog_range": "0 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "bass_gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "treble_fc_1",
+      "catalog_range": "01KHz to 15KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "treble_gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 34,
+      "effect_name": "EQ+VIBR+DDL",
+      "parameter_id": "eq_trim_1",
+      "catalog_range": "-24 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 129,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "flange_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "width_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "flange_center_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "flange_feedback_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "notch_depth_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "l_r_lfo_1",
+      "catalog_range": "OUT-OF-PHASE or IN-PHASE",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "sample_hold_rate_1",
+      "catalog_range": "0 to 100",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "dly_time_l_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "dly_time_r_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "delay_feedback_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "echo_time_l_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "echo_time_r_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "echo_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "bass_fc_1",
+      "catalog_range": "0 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "treble_fc_1",
+      "catalog_range": "1KHz to 15KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 35,
+      "effect_name": "EQ+FLNGR+DDL",
+      "parameter_id": "eq_trim_1",
+      "catalog_range": "-24 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 131,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "bus1_dly_aft_trem_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "bus2_delay_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "trem_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "depth_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "l_r_lfo_1",
+      "catalog_range": "OUT-OF-PHASE or IN-PHASE",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "sample_hold_rate_1",
+      "catalog_range": "0 to 100",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "dly_time_l_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "dly_time_r_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "delay_feedback_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "echo_time_l_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "echo_time_r_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "echo_level_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "bass_fc_1",
+      "catalog_range": "0 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "treble_fc_1",
+      "catalog_range": "1KHz to 15KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 36,
+      "effect_name": "EQ+TREM+DDL",
+      "parameter_id": "eq_trim_1",
+      "catalog_range": "-24 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 133,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 37,
+      "effect_name": "PHASER+DDL",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 134,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 37,
+      "effect_name": "PHASER+DDL",
+      "parameter_id": "phase_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 134,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 37,
+      "effect_name": "PHASER+DDL",
+      "parameter_id": "width_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 134,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 37,
+      "effect_name": "PHASER+DDL",
+      "parameter_id": "phase_center_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 134,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 37,
+      "effect_name": "PHASER+DDL",
+      "parameter_id": "phaser_feedback_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 134,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 37,
+      "effect_name": "PHASER+DDL",
+      "parameter_id": "notch_depth_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 134,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 37,
+      "effect_name": "PHASER+DDL",
+      "parameter_id": "l_r_lfo_1",
+      "catalog_range": "OUT-OF-PHASE or IN-PHASE",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 134,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 37,
+      "effect_name": "PHASER+DDL",
+      "parameter_id": "sample_hold_rate_1",
+      "catalog_range": "0 to 100",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 134,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 37,
+      "effect_name": "PHASER+DDL",
+      "parameter_id": "dly_time_l_1",
+      "catalog_range": "0 to 1600 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 134,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 37,
+      "effect_name": "PHASER+DDL",
+      "parameter_id": "dly_time_r_1",
+      "catalog_range": "0 to 1600 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 134,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 37,
+      "effect_name": "PHASER+DDL",
+      "parameter_id": "delay_feedback_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 134,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 38,
+      "effect_name": "8-VOICE CHOR",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 136,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 38,
+      "effect_name": "8-VOICE CHOR",
+      "parameter_id": "lfo_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 136,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 38,
+      "effect_name": "8-VOICE CHOR",
+      "parameter_id": "width_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 136,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 38,
+      "effect_name": "8-VOICE CHOR",
+      "parameter_id": "stereo_spread_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 136,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 38,
+      "effect_name": "8-VOICE CHOR",
+      "parameter_id": "chorus_regen_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 136,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 38,
+      "effect_name": "8-VOICE CHOR",
+      "parameter_id": "l_regen_time_1",
+      "catalog_range": "0 to 800 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 136,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 38,
+      "effect_name": "8-VOICE CHOR",
+      "parameter_id": "r_regen_time_1",
+      "catalog_range": "0 to 800 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 136,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 38,
+      "effect_name": "8-VOICE CHOR",
+      "parameter_id": "delay_regen_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 136,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "vc_1_semi_1",
+      "catalog_range": "-12 to +12",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "vc_1_fine_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "vc_1_vol_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "vc_1_pan_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "vc_2_semi_1",
+      "catalog_range": "-12 to +12",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "vc_2_fine_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "vc_2_vol_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "vc_2_pan_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "quality_1",
+      "catalog_range": "LONG/SMOOTHER or SHORT/COARSER",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "lfo_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 39,
+      "effect_name": "PITCH SHIFT",
+      "parameter_id": "width_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 137,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "vc_1_semi_1",
+      "catalog_range": "-12 to +12",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "vc_1_fine_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "voice_1_vol_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "voice_1_pan_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "vc_2_semi_1",
+      "catalog_range": "-12 to +12",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "vc_2_fine_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "voice_2_vol_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "voice_2_pan_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "dry_level_to_ddl_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "dly_time_l_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "dly_time_r_1",
+      "catalog_range": "0 to 1500 ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "dly_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 40,
+      "effect_name": "PITCH+DDL",
+      "parameter_id": "dly_regen_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 139,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 41,
+      "effect_name": "FAST PITCHSH",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 140,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 41,
+      "effect_name": "FAST PITCHSH",
+      "parameter_id": "voice_1_fine_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 140,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 41,
+      "effect_name": "FAST PITCHSH",
+      "parameter_id": "voice_1_vol_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 140,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 41,
+      "effect_name": "FAST PITCHSH",
+      "parameter_id": "voice_1_pan_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 140,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 41,
+      "effect_name": "FAST PITCHSH",
+      "parameter_id": "voice_2_fine_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 140,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 41,
+      "effect_name": "FAST PITCHSH",
+      "parameter_id": "voice_2_vol_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 140,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 41,
+      "effect_name": "FAST PITCHSH",
+      "parameter_id": "voice_2_pan_1",
+      "catalog_range": "-99 to +99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 140,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 41,
+      "effect_name": "FAST PITCHSH",
+      "parameter_id": "lfo_rate_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 140,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 41,
+      "effect_name": "FAST PITCHSH",
+      "parameter_id": "width_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 140,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "comp_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "comp_ratio_1",
+      "catalog_range": "1/1 to 40/1, infinity",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "comp_threshold_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "comp_attack_1",
+      "catalog_range": "50\u00b5s to 100ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "comp_release_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "gate_off_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "gate_on_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "gate_release_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "bass_fc_1",
+      "catalog_range": "0 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "treble_fc_1",
+      "catalog_range": "1KHz to 15KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 42,
+      "effect_name": "EQ+CMPRESSOR",
+      "parameter_id": "eq_trim_1",
+      "catalog_range": "-24 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 141,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "expansion_ratio_1",
+      "catalog_range": "1/1 to 1/40, INF",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "threshold_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "attack_time_1",
+      "catalog_range": "50\u00b5s to 100ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "release_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "hold_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "eq_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "high_pass_fc_1",
+      "catalog_range": "4 to 8000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "low_pass_fc_1",
+      "catalog_range": "100 Hz to 15 KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "trigger_mask_1",
+      "catalog_range": "OFF or ON",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "trigger_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "mask_threshold_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 43,
+      "effect_name": "EXPANDER",
+      "parameter_id": "output_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 144,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "expansion_ratio_1",
+      "catalog_range": "1/1 to 1/40, INF",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "threshold_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "attack_time_1",
+      "catalog_range": "50\u00b5s to 100ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "release_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "hold_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "eq_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "high_pass_fc_1",
+      "catalog_range": "4 to 8000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "low_pass_fc_1",
+      "catalog_range": "100 Hz to 15 KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "trigger_mask_1",
+      "catalog_range": "OFF or ON",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "trigger_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "mask_threshold_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "output_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 44,
+      "effect_name": "KEYED EXPNDR",
+      "parameter_id": "output_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 145,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "expansion_ratio_1",
+      "catalog_range": "1/1 to 40/1, INF",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "threshold_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "attack_time_1",
+      "catalog_range": "50\u00b5s to 100ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "release_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "gate_off_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "gate_on_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "bass_fc_1",
+      "catalog_range": "0 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "treble_fc_1",
+      "catalog_range": "1KHz to 15KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 45,
+      "effect_name": "INVRS EXPNDR",
+      "parameter_id": "eq_trim_1",
+      "catalog_range": "-24 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 147,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "output_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "comp_ratio_1",
+      "catalog_range": "1/1 to 40/1, INF",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "threshold_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "attack_time_1",
+      "catalog_range": "50\u00b5s to 100ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "release_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "gate_off_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "gate_on_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "high_pass_fc_1",
+      "catalog_range": "4 to 8000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "bass_fc_1",
+      "catalog_range": "0 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "mid1_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "mid1_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "treble_fc_1",
+      "catalog_range": "1KHz to 15KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "gain_3",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 46,
+      "effect_name": "DE-ESSER",
+      "parameter_id": "eq_trim_1",
+      "catalog_range": "-48 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 148,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "output_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "output_mix_1",
+      "catalog_range": "0 to 99",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "comp_ratio_1",
+      "catalog_range": "1/1 to 40/1, INF",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "threshold_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "attack_time_1",
+      "catalog_range": "50\u00b5s to 100ms",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "release_time_1",
+      "catalog_range": "1ms to 10.0s",
+      "catalog_units": "ms",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "gate_off_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "gate_on_1",
+      "catalog_range": "-96 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "bass_fc_1",
+      "catalog_range": "0 to 1000Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "mid1_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "mid1_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "treble_fc_1",
+      "catalog_range": "1KHz to 15KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "gain_3",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "high_pass_fc_1",
+      "catalog_range": "4 to 8000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 47,
+      "effect_name": "DUCKER",
+      "parameter_id": "eq_trim_1",
+      "catalog_range": "-48 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 150,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 48,
+      "effect_name": "RUMBLE FILTR",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 48,
+      "effect_name": "RUMBLE FILTR",
+      "parameter_id": "high_pass_fc_1",
+      "catalog_range": "4 to 8000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 48,
+      "effect_name": "RUMBLE FILTR",
+      "parameter_id": "low_pass_fc_1",
+      "catalog_range": "100 Hz to 15 KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 48,
+      "effect_name": "RUMBLE FILTR",
+      "parameter_id": "filter_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 49,
+      "effect_name": "PARAM EQ",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 49,
+      "effect_name": "PARAM EQ",
+      "parameter_id": "bass_fc_1",
+      "catalog_range": "0 to 1000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 49,
+      "effect_name": "PARAM EQ",
+      "parameter_id": "gain_1",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 49,
+      "effect_name": "PARAM EQ",
+      "parameter_id": "mid1_fc_1",
+      "catalog_range": "0 to 9999 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 49,
+      "effect_name": "PARAM EQ",
+      "parameter_id": "gain_2",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 49,
+      "effect_name": "PARAM EQ",
+      "parameter_id": "mid1_q_1",
+      "catalog_range": "1 to 18",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 49,
+      "effect_name": "PARAM EQ",
+      "parameter_id": "treble_fc_1",
+      "catalog_range": "1 to 15 KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 49,
+      "effect_name": "PARAM EQ",
+      "parameter_id": "gain_3",
+      "catalog_range": "-48 to +24 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 49,
+      "effect_name": "PARAM EQ",
+      "parameter_id": "eq_trim_1",
+      "catalog_range": "-24 to +0 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 152,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 50,
+      "effect_name": "VAN DER POL",
+      "parameter_id": "effect_variation",
+      "catalog_range": "four Effect Variations (manual description)",
+      "catalog_units": null,
+      "manual_pdf_page_window_center": 153,
+      "manual_text_check": "SHARED_VARIATION_TEXT_FOUND"
+    },
+    {
+      "slot": 50,
+      "effect_name": "VAN DER POL",
+      "parameter_id": "high_pass_fc_1",
+      "catalog_range": "4 to 8000 Hz",
+      "catalog_units": "Hz",
+      "manual_pdf_page_window_center": 153,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 50,
+      "effect_name": "VAN DER POL",
+      "parameter_id": "low_pass_fc_1",
+      "catalog_range": "100 Hz to 15 KHz",
+      "catalog_units": "kHz",
+      "manual_pdf_page_window_center": 153,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    },
+    {
+      "slot": 50,
+      "effect_name": "VAN DER POL",
+      "parameter_id": "filter_gain_1",
+      "catalog_range": "-48 to +48 dB",
+      "catalog_units": "dB",
+      "manual_pdf_page_window_center": 153,
+      "manual_text_check": "EXACT_RANGE_TEXT_FOUND"
+    }
+  ]
+}
