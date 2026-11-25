@@ -34,6 +34,9 @@ def source_digest() -> str:
             "include/trollfx/es5510_factory_editor_v03.hpp",
             "docs/ASR10_FACTORY_EDITOR_REGISTRY_V03.json",
             "docs/ASR10_FACTORY_PARAMETER_RECOVERY_V03.json",
+            "tests/force_vst_binary_audio_test.cpp",
+            "force_plugin/tools/test_packaged_vst.py",
+            "force_plugin/tools/test_arm32_vst_qemu.py",
             "tools/parameter_controls/build_editor_registry_v03.py")
     for rel in inputs:
         h.update(rel.encode()+b"\0"); h.update((ROOT/rel).read_bytes())

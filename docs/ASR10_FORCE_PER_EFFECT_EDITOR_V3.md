@@ -98,6 +98,24 @@ TROLLFX_FACTORY_PACKAGE_COLLECTION=/home/gamer/research/private-results/asr10-al
   sh force_plugin/tools/build_candidate.sh --toolchain auto --no-zip
 ```
 
+The ARMv7 package can also be tested under user-mode QEMU with the trusted
+local package collection. This compiles the binary-bound harness with the
+Force SDK framework, creates the same deterministic 8,192-frame stereo
+stimulus and a temporary provider asset tree, and writes a redacted JSON
+report (slot metrics and hashes only; no audio or package payloads):
+
+```sh
+PYTHONPATH=/tmp/trollfx-force-zig \
+  python3 force_plugin/tools/test_arm32_vst_qemu.py \
+    --arm32-plugin 'force_plugin/dist/TROLLfx - VST - ASR10 FX Collection/VST/asr10-fx-collection-arm32.so' \
+    --collection "$TROLLFX_FACTORY_PACKAGE_COLLECTION" \
+    --sdk /mnt/c/Users/Gamer/research/AkaiForceSDK \
+    --qemu-arm /tmp/trollfx-qemu-user/usr/bin/qemu-arm \
+    --report /tmp/asr10-arm32-qemu-validation.json
+```
+
+This ARMv7 execution is an emulator check. It is not a physical Force test.
+
 The updated binary-bound test is expected to verify the 27-parameter ABI,
 all 50 factory packages, all 19 controls' exact verified points, stereo
 non-silent output, missing-package silence, host wet/dry/gain/bypass, effect
