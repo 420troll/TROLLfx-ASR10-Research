@@ -48,6 +48,12 @@ ESPHOST event=5 cycles=120 frame=4 pc=fff97364 gpr 91 <- 000c91 t=0.2
         self.assertEqual(list(window["gpr_summary"]), ["0x90", "0x91"])
         self.assertEqual(window["write_count"], 2)
 
+    def test_register_parser_accepts_optional_cpu_caller_trace_field(self):
+        text = "ESPHOST event=4 cycles=100 frame=2 pc=fff97792 caller=fff97694 gpr 6e <- 340000 t=0.1\n"
+        events = PROBE.parse_register_events(text)
+        self.assertEqual(len(events), 1)
+        self.assertEqual((events[0]["gpr"], events[0]["value24"]), ("0x6e", "0x340000"))
+
     def test_build_command_uses_inventoried_target_and_direction(self):
         location = PROBE.select_field(self.inventory, 6, 1, "CHORUS FEEDBACK")
         args = SimpleNamespace(cli=Path("cli"), roms=Path("roms"), disk=Path("os.img"),

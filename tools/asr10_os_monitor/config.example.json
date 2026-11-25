@@ -1,0 +1,12 @@
+{
+  "cli": "/path/to/TROLLfx-ASR10-Research/build/research-cli/asr10-cli",
+  "rom_dir": "/path/to/authorized/asr10-rom-directory",
+  "os_disk": "/path/to/authorized/os353.img",
+  "selector_inventory": "/path/to/private-results/asr10-all-50-effects/inventory.json",
+  "parameter_mappings": "/path/to/TROLLfx-ASR10-Research/docs/ASR10_FACTORY_DSP_PARAMETER_MAPPINGS_V05.json",
+  "evidence_dir": "/path/to/private-results/asr10-os-monitor",
+  "bind": "127.0.0.1",
+  "port": 8765,
+  "emulator_seconds": 86400,
+  "cpu_trace": false
+}

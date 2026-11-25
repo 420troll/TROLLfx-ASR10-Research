@@ -15,7 +15,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-EVENT = re.compile(r"ESPHOST event=(\d+) cycles=(\d+) frame=(\d+) pc=([0-9a-f]+) (?:gpr ([0-9a-f]{2}) <- ([0-9a-f]{6})|both ([0-9a-f]{2}) <- ([0-9a-f]{12}) / ([0-9a-f]{6}))", re.I)
+EVENT = re.compile(r"ESPHOST event=(\d+) cycles=(\d+) frame=(\d+) pc=([0-9a-f]+) (?:caller=[0-9a-f]+ )?(?:gpr ([0-9a-f]{2}) <- ([0-9a-f]{6})|both ([0-9a-f]{2}) <- ([0-9a-f]{12}) / ([0-9a-f]{6}))", re.I)
 PANEL = re.compile(r"(PANEL_[A-Z_]+) id=([^ ]+)(.*)$")
 FIELD = re.compile(r'(\w+)="([^"]*)"|(\w+)=([^ ]+)')
 

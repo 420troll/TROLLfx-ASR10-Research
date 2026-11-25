@@ -1,5 +1,12 @@
 {
   "schema": "trollfx-asr10-factory-parameter-catalog-v1",
+  "additional_os2_appendix_catalog": {
+    "path": "ASR10_OS2_44KHZ_APPENDIX_PARAMETER_CATALOG_V1.json",
+    "effect_count": 12,
+    "parameter_field_heading_count": 215,
+    "slot_namespace": "OS2 additional 44 kHz effects; not numbered ROM slots 01-50",
+    "status": "manual-documented only; OS observations, DSP writes, and audio behavior remain separate evidence layers"
+  },
   "catalog_evidence": {
     "documented_ranges": "ASR-10 Musician's Manual Section 6, Effect Parameters; ranges are documentation, not emulator measurements",
     "live_register_mappings": "OS 3.53 live 22-character display observation; selector settled before editing; each mapping changed by one Up step, reversed, and repeated with exact display restoration. Values are discrete verified points only.",

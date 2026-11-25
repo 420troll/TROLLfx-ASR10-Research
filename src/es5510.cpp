@@ -71,6 +71,7 @@ const ES5510::RamCtl ES5510::RAMCTL[8] = {
 
 ES5510::ES5510() : dram(DRAM_SIZE) {
     hostlog = getenv("ESP_HOSTLOG") != nullptr;
+    host_caller_trace = getenv("ESP_CALLER_TRACE") != nullptr;
     pipelog = getenv("ESP_PIPELOG") != nullptr;
     const char *frame_log = getenv("ESP_FRAMELOG");
     if (frame_log) frame_trace_limit = (uint32_t)std::clamp(atoll(frame_log), 0LL, 131072LL);
@@ -238,7 +239,19 @@ void ES5510::host_w(int offset, uint8_t data) {
         }
         break;
     case 0xa0:
-        if (hostlog) fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x gpr %02x <- %06x t=%.6f\n", (unsigned long long)++host_event, (unsigned long long)host_cycles, (unsigned long long)frame_count, host_pc, data, gpr_latch & 0xffffff, hostlog_time);
+        if (hostlog) {
+            const uint64_t event = ++host_event;
+            if (host_caller_trace)
+                fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x caller=%06x gpr %02x <- %06x t=%.6f\n",
+                        (unsigned long long)event, (unsigned long long)host_cycles,
+                        (unsigned long long)frame_count, host_pc, host_caller_pc,
+                        data, gpr_latch & 0xffffff, hostlog_time);
+            else
+                fprintf(stderr, "ESPHOST event=%llu cycles=%llu frame=%llu pc=%06x gpr %02x <- %06x t=%.6f\n",
+                        (unsigned long long)event, (unsigned long long)host_cycles,
+                        (unsigned long long)frame_count, host_pc, data,
+                        gpr_latch & 0xffffff, hostlog_time);
+        }
         if (state == HALTED) ++load_gpr_commits;
         write_reg(data, gpr_latch); break;
     case 0xc0:

@@ -27,6 +27,7 @@ extern "C" {
 Asr10 *g_machine = nullptr;
 
 namespace {
+const bool trace_host_callers = std::getenv("ESP_CALLER_TRACE") != nullptr;
 struct HostPcmTrace {
     FILE *file = nullptr;
     uint64_t first_frame = 0, frame_count = 0;
@@ -404,7 +405,34 @@ void Asr10::io_write(PageType t, uint32_t a, uint32_t v, int sz) {
         if (a & 0x1000) {
             if (sz == 2 || (a & 1)) {
                 const uint8_t port = (a >> 1) & 0xff;
-                esp.set_host_context(total_cycles, last_pc());
+                uint32_t caller_pc = 0;
+                if (trace_host_callers) {
+                    const uint32_t sp = m68k_get_reg(nullptr, M68K_REG_SP);
+                    caller_pc = read32(sp);
+                    const uint8_t gpr = static_cast<uint8_t>(v);
+                    if (port == 0xa0 && (gpr == 0x03 || gpr == 0x04 || gpr == 0x05 ||
+                                         gpr == 0x5b || gpr == 0x6e)) {
+                        const uint32_t a2 = m68k_get_reg(nullptr, M68K_REG_A2);
+                        const uint32_t a6 = m68k_get_reg(nullptr, M68K_REG_A6);
+                        fprintf(stderr, "ESPCALL cycles=%llu frame=%llu pc=%06x sp=%06x gpr=%02x regs=",
+                                (unsigned long long)total_cycles,
+                                (unsigned long long)esp.host_frame_count(), last_pc(), sp, gpr);
+                        for (int reg = 0; reg < 16; ++reg)
+                            fprintf(stderr, "%s%08x", reg ? ":" : "",
+                                m68k_get_reg(nullptr, static_cast<m68k_register_t>(M68K_REG_D0 + reg)));
+                        fprintf(stderr, " stack=");
+                        for (unsigned offset = 0; offset < 96; offset += 2)
+                            fprintf(stderr, "%s%04x", offset ? ":" : "", read(sp + offset, 2) & 0xffff);
+                        fprintf(stderr, " a2mem=");
+                        for (int offset = -8; offset < 24; ++offset)
+                            fprintf(stderr, "%s%02x", offset == -8 ? "" : ":", read(a2 + offset, 1) & 0xff);
+                        fprintf(stderr, " a6mem=");
+                        for (int offset = -8; offset < 24; ++offset)
+                            fprintf(stderr, "%s%02x", offset == -8 ? "" : ":", read(a6 + offset, 1) & 0xff);
+                        fputc('\n', stderr);
+                    }
+                }
+                esp.set_host_context(total_cycles, last_pc(), caller_pc);
                 if (trace_esp_io) fprintf(stderr, "ESPIO event=%llu direction=W cycles=%llu frame=%llu t=%.6f port=%02x value=%02x pc=%06x\n",
                     (unsigned long long)++esp_io_event, (unsigned long long)total_cycles,
                     (unsigned long long)esp.host_frame_count(), total_cycles / cpu_clock, port,

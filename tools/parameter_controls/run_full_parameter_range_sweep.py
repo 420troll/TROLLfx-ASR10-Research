@@ -247,6 +247,8 @@ def build_command(args, selector: dict, location: dict, log_id: str) -> list[str
                 "--panel-tap-on-display", f"{settled:.2f},45,9,FREE,effects",
                 "--panel-probe-field", ",".join(field_args),
                 "--panel-probe-range", ",".join(range_args)]
+    if getattr(args, "monitor_stdio", False):
+        command.append("--monitor-stdio")
     return command
 
 
@@ -265,6 +267,8 @@ def main() -> None:
     ap.add_argument("--max-sweep-seconds", type=float, default=300.0)
     ap.add_argument("--settle-seconds", type=float, default=0.75,
                     help="quiet period after each changed LCD value before closing its GPR write window")
+    ap.add_argument("--monitor-stdio", action="store_true",
+                    help="also emit exact-cycle LCD telemetry (uses the CLI's nonblocking monitor path)")
     ap.add_argument("--edit-button", type=int, default=10)
     ap.add_argument("--revert-button", type=int, default=11)
     args = ap.parse_args()

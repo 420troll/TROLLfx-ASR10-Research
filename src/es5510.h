@@ -18,7 +18,9 @@ public:
     uint8_t host_r(int offset);
     void    host_w(int offset, uint8_t data);
     // Host CPU context for correlating parameter-driven ES5510 commits.
-    void set_host_context(uint64_t cycles, uint32_t pc) { host_cycles = cycles; host_pc = pc; }
+    void set_host_context(uint64_t cycles, uint32_t pc, uint32_t caller_pc = 0) {
+        host_cycles = cycles; host_pc = pc; host_caller_pc = caller_pc;
+    }
     uint64_t host_frame_count() const { return frame_count; }
     uint32_t register_value(uint8_t reg) { return static_cast<uint32_t>(rd(reg)) & 0x00ffffffu; }
     // Research-only execution context for correlating ESP frame boundaries with the host.
@@ -142,7 +144,8 @@ private:
     bool itrace = false, hostlog = false, pipelog = false;   // optional diagnostic traces
     uint64_t host_cycles = 0, host_event = 0, frame_count = 0;
     uint64_t ram_trace_event = 0;
-    uint32_t host_pc = 0;
+    uint32_t host_pc = 0, host_caller_pc = 0;
+    bool host_caller_trace = false;
     double hostlog_time = 0.0;              // headless-runner timestamp, diagnostic only
     FILE *diagnostic_trace = nullptr;
     uint64_t diagnostic_frame = 0;

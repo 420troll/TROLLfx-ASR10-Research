@@ -19,3 +19,4 @@ scsi/*
 *.esp
 *.capture
 research_local/
+tools/asr10_os_monitor/config.local.json

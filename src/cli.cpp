@@ -4,6 +4,9 @@
 #include "efe_disk.h"
 #include <cstdio>
 #include <chrono>
+#include <array>
+#include <fcntl.h>
+#include <unistd.h>
 #if defined(__has_include)
 #if __has_include(<valgrind/callgrind.h>)
 #include <valgrind/callgrind.h>
@@ -90,6 +93,7 @@ int main(int argc, char **argv) {
     struct DTone { double t, f, amp, dur, rate; };
     std::vector<DTone> dtones;
     bool di10 = false;
+    bool monitor_stdio = false;
     std::string dig_wav;
     std::string in_wav; double in_wav_t = 0;
     bool dac_ideal = false;
@@ -115,6 +119,7 @@ int main(int argc, char **argv) {
         else if (a == "--analog-at") { double t; int ch, v; if (sscanf(next().c_str(), "%lf:%d:%d", &t, &ch, &v) == 3 && ch >= 0 && ch < 8) analog_at.push_back({t, {ch, v}}); }
         else if (a == "--analog") { int ch, v; if (sscanf(next().c_str(), "%d:%d", &ch, &v) == 2 && ch >= 0 && ch < 8) analog_init.push_back({ch, v}); }
         else if (a == "--panel-log") panel_log = true;
+        else if (a == "--monitor-stdio") { monitor_stdio = true; panel_log = true; log_rom_select = true; }
         else if (a == "--log-rom-select") log_rom_select = true;
         else if (a == "--fdc-log") fdc_log = true;
         else if (a == "--trap-log") trap_log = true;
@@ -332,7 +337,14 @@ int main(int argc, char **argv) {
     std::sort(keys.begin(), keys.end(), [](auto &x, auto &y) { return x.first < y.first; });
     const int64_t slice = 16000;  // 1 ms
     int64_t total = (int64_t)(seconds * m.cpu_clock);
-    std::string last0, last1;
+    if (monitor_stdio) {
+        const int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+        if (flags >= 0) fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+    }
+    std::string monitor_input;
+    std::map<int, uint64_t> monitor_release;
+    bool monitor_quit = false;
+    std::string last0, last1, last_monitor_lcd, last_monitor_underline, last_monitor_cursor;
     int stable_display_slices = 0;
     std::set<int> rom_snapshots;
     std::string last_rom_selection;
@@ -353,6 +365,37 @@ int main(int argc, char **argv) {
     std::set<long> experiment_capture_completed_ids;
     for (int64_t t = 0; t < total; t += slice) {
         double now = t / m.cpu_clock;
+        if (monitor_stdio) {
+            char input[128];
+            const ssize_t count = ::read(STDIN_FILENO, input, sizeof(input));
+            if (count > 0) monitor_input.append(input, static_cast<size_t>(count));
+            size_t newline;
+            while ((newline = monitor_input.find('\n')) != std::string::npos) {
+                std::string command = monitor_input.substr(0, newline);
+                monitor_input.erase(0, newline + 1);
+                if (command == "QUIT") { monitor_quit = true; break; }
+                int code = -1, down = 0;
+                if (sscanf(command.c_str(), "BUTTON %d %d", &code, &down) == 2 && code >= 0 && code <= 41 && (down == 0 || down == 1)) {
+                    m.panel.button(code, down != 0);
+                    if (down) monitor_release.erase(code);
+                    else monitor_release.erase(code);
+                    fprintf(stderr, "MONITOR_INPUT button=%d down=%d cycles=%llu frame=%llu\n", code, down,
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                } else if (sscanf(command.c_str(), "TAP %d", &code) == 1 && code >= 0 && code <= 41) {
+                    m.panel.button(code, true);
+                    monitor_release[code] = m.cycles() + (int64_t)(0.030 * m.cpu_clock);
+                    fprintf(stderr, "MONITOR_INPUT button=%d action=tap cycles=%llu frame=%llu\n", code,
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                } else if (!command.empty()) {
+                    fprintf(stderr, "MONITOR_INPUT_ERROR reason=invalid_command\n");
+                }
+            }
+            if (monitor_quit) break;
+            for (auto it = monitor_release.begin(); it != monitor_release.end();) {
+                if (m.cycles() >= it->second) { m.panel.button(it->first, false); it = monitor_release.erase(it); }
+                else ++it;
+            }
+        }
         while (mi < midi.size() && midi[mi].first <= now) { for (auto b : midi[mi].second) m.midi_in(b); mi++; }
         while (ki < keys.size() && keys[ki].first <= now) { auto &k = keys[ki].second; m.panel.key(k.first - 36, k.second < 0 ? -k.second : k.second, k.second > 0); ki++; }
         while (bi < buttons.size() && buttons[bi].first <= now) {
@@ -422,6 +465,15 @@ int main(int argc, char **argv) {
             experiment_capture_armed_id = -1;
         }
         std::string d0 = m.panel.text(), d1 = m.panel.attr_line(0), dc = m.panel.attr_line(1);
+        if (monitor_stdio && (d0 != last_monitor_lcd || d1 != last_monitor_underline || dc != last_monitor_cursor))
+            fprintf(stderr, "PANELLCD cycles=%llu frame=%llu lcd=\"%.22s\" underline=\"%.22s\" cursor=\"%.22s\"\n",
+                    (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count(),
+                    d0.c_str(), d1.c_str(), dc.c_str());
+        if (monitor_stdio) {
+            last_monitor_lcd = d0;
+            last_monitor_underline = d1;
+            last_monitor_cursor = dc;
+        }
         const std::string panel_signature = d0 + d1 + dc;
         for (auto &action : panel_actions) {
             if (action.done || now < action.after) continue;
