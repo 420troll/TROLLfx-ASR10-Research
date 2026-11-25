@@ -1,0 +1,88 @@
+{
+  "schema": "trollfx-asr10-independent-release-gates-v3",
+  "candidate_refs": {
+    "qa_commit_parent": "ce53441",
+    "hall_runtime_research": "research/asr10-full-factory-parameter-recovery@6779dc8",
+    "pc_editor": "feature/asr10-force-pc-gui-simulator@08cc600"
+  },
+  "gates": [
+    {
+      "id": "manual_50_effect_identity_and_ranges",
+      "status": "PASS_WITH_EDITOR_SCHEMA_LIMITATION",
+      "evidence": "50 effects / 594 Section 6 descriptors; room/plate runtime registry ranges pass. Serialized editor schema labels/ranges remain stale for ROM-15/16/18 decay and ROM-18 predelay."
+    },
+    {
+      "id": "manual_to_os_field_completeness",
+      "status": "PARTIAL",
+      "evidence": "49 effects / 1,040 OS field associations; 94 manual rows remain unmatched and 500 OS-only associations remain unlinked. ROM-02 inventory is deferred. Unmatched observations do not prove absence."
+    },
+    {
+      "id": "composite_bus_stereo_parameter_identity",
+      "status": "PARTIAL",
+      "evidence": "PC editor's 27 Python tests cover bus/L-R splits, position/ER fields and nonlinear envelope split. Only five nonlinear envelope values are OS-observed; remaining manual values are hidden/manual-only."
+    },
+    {
+      "id": "modulation_destination_and_lockout",
+      "status": "PARTIAL",
+      "evidence": "Two manual assignments retained; per-effect/variation destination choices and direct-edit lockout are not fully OS-observed. Unknown destinations remain no-write."
+    },
+    {
+      "id": "hall_raw_display_transition",
+      "status": "PASS",
+      "evidence": "Two original-OS emulator runs under distinct CLI PIDs 154605 and 154697: 128 raw values / 100 LCD values / 28 duplicate buckets; all 198 transition groups, event order, cycle and DSP-frame stamps match exactly."
+    },
+    {
+      "id": "hall_register_value_order",
+      "status": "PASS_WITH_TIMING_LIMITATION",
+      "evidence": "All 198 OS transition groups match independently calculated GPR values and order. Runtime currently schedules the group at one frame while the OS writes are spread over multiple frames."
+    },
+    {
+      "id": "hall_full_range_runtime_api",
+      "status": "PASS_WITH_LIMITS",
+      "evidence": "A temporary test-only instrumented runtime copy passed all 198 state transitions and 990 GPR writes vs the OS matrix using a synthetic package. Authentic checkpoint audio over the full range is not tested."
+    },
+    {
+      "id": "hall_measurable_audio",
+      "status": "PARTIAL",
+      "evidence": "40/41 native runtime A/B differs measurably; full range, duplicates, intermediate frames and exact original-OS reference audio are not tested."
+    },
+    {
+      "id": "pc_editor_python_tests",
+      "status": "PASS",
+      "evidence": "Latest candidate 08cc600 independently passes 27/27 tests, including exact-point write authorization, unsupported no-write, state/draft migration, evidence separation, layout and audio smoke."
+    },
+    {
+      "id": "pc_editor_browser_tests",
+      "status": "NOT_TESTED_INDEPENDENTLY",
+      "evidence": "Candidate branch reports 21 passed; Playwright executable missing in independent environment."
+    },
+    {
+      "id": "native_vst_parameter_identity_and_chunk_compat",
+      "status": "PASS_WITH_SCOPE",
+      "evidence": "Editor tests preserve existing 19 stable IDs/routes and state save/restore. The new HALL stepper is not part of the native VST route registry; cross-version host chunk corpus is not tested."
+    },
+    {
+      "id": "armv7_abi",
+      "status": "NOT_TESTED",
+      "evidence": "Latest PC branch has no ARMv7 build; new HALL stepper integration not built for ARMv7."
+    },
+    {
+      "id": "physical_force_qlink_delivery",
+      "status": "NOT_TESTED",
+      "evidence": "No physical Force callback or device test."
+    },
+    {
+      "id": "factory_audio_equivalence",
+      "status": "NOT_TESTED",
+      "evidence": "No exact OS-reference audio comparison. Audible difference is not equivalence."
+    },
+    {
+      "id": "nonfinite_vst_input",
+      "status": "OPEN_DEFECT",
+      "evidence": "Previously tracked non-finite VST input behavior remains unresolved."
+    }
+  ],
+  "release_decision": "NOT_READY",
+  "full_range_hall_control_decision": "NOT_NATIVE_RUNTIME_READY",
+  "deployment": "NOT_PERFORMED"
+}

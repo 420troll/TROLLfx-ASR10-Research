@@ -1,0 +1,314 @@
+{
+  "schema": "trollfx-hall-decay-independent-qa-v1",
+  "evidence_basis": "original OS 3.53 emulator sweeps and independently parsed OS table",
+  "runs": [
+    {
+      "trace_sha256": "baa8328929fa9c142e7246bb6607ec1d5a9e99852ebf17760890ec3d6e693217",
+      "cli_pid": "154605",
+      "sweep_complete": true,
+      "display_values_seen": 100,
+      "directional_snapshot_counts": {
+        "up": 99,
+        "down": 99
+      },
+      "write_order_failures": 0,
+      "checks": {
+        "transition_cases": 196,
+        "clamped_coefficients_match": 196,
+        "unclamped_coefficients_match": 102,
+        "gpr5b_full_formula_match": 198,
+        "gpr6e_raw_match": 198
+      }
+    },
+    {
+      "trace_sha256": "b8fdf7d164ba960c86545a1f4fca3a619460eeb0ce23d5272ed11b29a3f086c5",
+      "cli_pid": "154697",
+      "sweep_complete": true,
+      "display_values_seen": 100,
+      "directional_snapshot_counts": {
+        "up": 99,
+        "down": 99
+      },
+      "write_order_failures": 0,
+      "checks": {
+        "transition_cases": 196,
+        "clamped_coefficients_match": 196,
+        "unclamped_coefficients_match": 102,
+        "gpr5b_full_formula_match": 198,
+        "gpr6e_raw_match": 198
+      }
+    }
+  ],
+  "cross_run": {
+    "full_write_groups_equal": true,
+    "by_direction": {
+      "up": {
+        "shared_display_count": 99,
+        "identical_full_register_groups": 99,
+        "different_displays": [],
+        "identical_ordered_value_cycle_frame_groups": 99,
+        "event_timing_different_displays": []
+      },
+      "down": {
+        "shared_display_count": 99,
+        "identical_full_register_groups": 99,
+        "different_displays": [],
+        "identical_ordered_value_cycle_frame_groups": 99,
+        "event_timing_different_displays": []
+      }
+    },
+    "table_decode_equal": true
+  },
+  "raw_display": {
+    "raw_codes": 128,
+    "display_values": 100,
+    "duplicate_bucket_count": 28,
+    "all_observed_routes_match_os_table": true,
+    "route_mismatch_count": 0,
+    "duplicate_pairs": [
+      {
+        "display": 1,
+        "raw_codes": [
+          1,
+          2
+        ]
+      },
+      {
+        "display": 4,
+        "raw_codes": [
+          5,
+          6
+        ]
+      },
+      {
+        "display": 8,
+        "raw_codes": [
+          10,
+          11
+        ]
+      },
+      {
+        "display": 12,
+        "raw_codes": [
+          15,
+          16
+        ]
+      },
+      {
+        "display": 15,
+        "raw_codes": [
+          19,
+          20
+        ]
+      },
+      {
+        "display": 19,
+        "raw_codes": [
+          24,
+          25
+        ]
+      },
+      {
+        "display": 22,
+        "raw_codes": [
+          28,
+          29
+        ]
+      },
+      {
+        "display": 26,
+        "raw_codes": [
+          33,
+          34
+        ]
+      },
+      {
+        "display": 29,
+        "raw_codes": [
+          37,
+          38
+        ]
+      },
+      {
+        "display": 33,
+        "raw_codes": [
+          42,
+          43
+        ]
+      },
+      {
+        "display": 36,
+        "raw_codes": [
+          46,
+          47
+        ]
+      },
+      {
+        "display": 40,
+        "raw_codes": [
+          51,
+          52
+        ]
+      },
+      {
+        "display": 44,
+        "raw_codes": [
+          56,
+          57
+        ]
+      },
+      {
+        "display": 47,
+        "raw_codes": [
+          60,
+          61
+        ]
+      },
+      {
+        "display": 51,
+        "raw_codes": [
+          65,
+          66
+        ]
+      },
+      {
+        "display": 54,
+        "raw_codes": [
+          69,
+          70
+        ]
+      },
+      {
+        "display": 58,
+        "raw_codes": [
+          74,
+          75
+        ]
+      },
+      {
+        "display": 62,
+        "raw_codes": [
+          79,
+          80
+        ]
+      },
+      {
+        "display": 65,
+        "raw_codes": [
+          83,
+          84
+        ]
+      },
+      {
+        "display": 69,
+        "raw_codes": [
+          88,
+          89
+        ]
+      },
+      {
+        "display": 72,
+        "raw_codes": [
+          92,
+          93
+        ]
+      },
+      {
+        "display": 76,
+        "raw_codes": [
+          97,
+          98
+        ]
+      },
+      {
+        "display": 79,
+        "raw_codes": [
+          101,
+          102
+        ]
+      },
+      {
+        "display": 83,
+        "raw_codes": [
+          106,
+          107
+        ]
+      },
+      {
+        "display": 86,
+        "raw_codes": [
+          110,
+          111
+        ]
+      },
+      {
+        "display": 90,
+        "raw_codes": [
+          115,
+          116
+        ]
+      },
+      {
+        "display": 94,
+        "raw_codes": [
+          120,
+          121
+        ]
+      },
+      {
+        "display": 97,
+        "raw_codes": [
+          124,
+          125
+        ]
+      }
+    ],
+    "direction_dependent_interior_displays": [
+      1,
+      4,
+      8,
+      12,
+      15,
+      19,
+      22,
+      26,
+      29,
+      33,
+      36,
+      40,
+      44,
+      47,
+      51,
+      54,
+      58,
+      62,
+      65,
+      69,
+      72,
+      76,
+      79,
+      83,
+      86,
+      90,
+      94,
+      97
+    ]
+  },
+  "old_102_196_reconciliation": {
+    "interior_cases": 196,
+    "unclamped_helper_matches": 102,
+    "unclamped_helper_mismatches": 94,
+    "mismatch_raw_codes_outside_12_76": 94,
+    "mismatch_raw_codes_inside_12_76": 0,
+    "all_clamped_formula_cases_match": true
+  },
+  "runtime_api": {
+    "independent_harness_steps": 254,
+    "up_steps": 127,
+    "down_steps": 127,
+    "accepted_ordered_writes": 1270,
+    "raw_register_readback_exposed": false,
+    "limitation": "This earlier harness made 127 API calls per direction, including 28 boundary no-op calls; the later test-only instrumented runtime copy checks exactly 99 LCD steps per direction and 990/990 applied register writes. The earlier harness should not be used as the canonical UI-step result."
+  },
+  "superseded_by": "HALL_DECAY_INDEPENDENT_RUNTIME_QA_V2.json"
+}

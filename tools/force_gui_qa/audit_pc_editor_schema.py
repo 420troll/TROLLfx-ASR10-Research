@@ -12,6 +12,9 @@ EXPECTED = {
     17: ("DECAY TIME", "0.2 to 100.0 sec."),
     18: ("DECAY TIME", "0.4 to 140.0 sec."),
 }
+EXTRA_EXPECTED = {
+    18: ("PREDELAY TIME", "0 to 430 ms"),
+}
 
 
 def audit(path: Path) -> dict:
@@ -29,6 +32,16 @@ def audit(path: Path) -> dict:
             seen.add(identity)
         if slot in EXPECTED:
             expected_name, expected_range = EXPECTED[slot]
+            matches = [p for p in effect["parameters"]
+                       if p.get("manual", {}).get("display_name", "").startswith(expected_name)]
+            if len(matches) != 1:
+                findings.append(f"ROM-{slot:02d}: expected one {expected_name}, found {len(matches)}")
+            elif matches[0]["manual"].get("documented_range") != expected_range:
+                findings.append(
+                    f"ROM-{slot:02d} {expected_name}: schema range "
+                    f"{matches[0]['manual'].get('documented_range')!r}; manual range {expected_range!r}")
+        if slot in EXTRA_EXPECTED:
+            expected_name, expected_range = EXTRA_EXPECTED[slot]
             matches = [p for p in effect["parameters"]
                        if p.get("manual", {}).get("display_name", "").startswith(expected_name)]
             if len(matches) != 1:

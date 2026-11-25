@@ -1,0 +1,126 @@
+{
+  "schema": "trollfx-asr10-hall-decay-independent-trace-audit-v1",
+  "primary": {
+    "input_sha256": "baa8328929fa9c142e7246bb6607ec1d5a9e99852ebf17760890ec3d6e693217",
+    "step_count": 200,
+    "shared_interior_display_values": 98,
+    "gpr6e_direction_difference_count": 28,
+    "gpr6e_direction_difference_values": [
+      1,
+      4,
+      8,
+      12,
+      15,
+      19,
+      22,
+      26,
+      29,
+      33,
+      36,
+      40,
+      44,
+      47,
+      51,
+      54,
+      58,
+      62,
+      65,
+      69,
+      72,
+      76,
+      79,
+      83,
+      86,
+      90,
+      94,
+      97
+    ],
+    "first_lcd_event_cycles": "947797188",
+    "first_lcd_event_frame": "1834868",
+    "full_log_sha256": "85b1403d7519e5307d1aa2a795846ea9658cbf6581891907b7b9ae6c69369990",
+    "full_log_start_cycles": 16030,
+    "full_log_start_frame": 29,
+    "helper_03_04_05_match_count": 102,
+    "helper_03_04_05_total_directional_cases": 196,
+    "unclamped_helper_mismatch_raw_domains": {
+      "raw_below_12": 16,
+      "raw_above_76": 78
+    },
+    "register_order": [
+      "0x6e",
+      "0x5b",
+      "0x03",
+      "0x04",
+      "0x05"
+    ]
+  },
+  "comparisons": [
+    {
+      "input_sha256": "b8fdf7d164ba960c86545a1f4fca3a619460eeb0ce23d5272ed11b29a3f086c5",
+      "step_count": 200,
+      "shared_interior_display_values": 98,
+      "gpr6e_direction_difference_count": 28,
+      "gpr6e_direction_difference_values": [
+        1,
+        4,
+        8,
+        12,
+        15,
+        19,
+        22,
+        26,
+        29,
+        33,
+        36,
+        40,
+        44,
+        47,
+        51,
+        54,
+        58,
+        62,
+        65,
+        69,
+        72,
+        76,
+        79,
+        83,
+        86,
+        90,
+        94,
+        97
+      ],
+      "first_lcd_event_cycles": "947797188",
+      "first_lcd_event_frame": "1834868",
+      "full_log_sha256": "85b1403d7519e5307d1aa2a795846ea9658cbf6581891907b7b9ae6c69369990",
+      "full_log_start_cycles": 16030,
+      "full_log_start_frame": 29,
+      "helper_03_04_05_match_count": 102,
+      "helper_03_04_05_total_directional_cases": 196,
+      "unclamped_helper_mismatch_raw_domains": {
+        "raw_below_12": 16,
+        "raw_above_76": 78
+      },
+      "register_order": [
+        "0x6e",
+        "0x5b",
+        "0x03",
+        "0x04",
+        "0x05"
+      ]
+    }
+  ],
+  "cross_run_transition_comparisons": [
+    {
+      "other_trace_sha256": "b8fdf7d164ba960c86545a1f4fca3a619460eeb0ce23d5272ed11b29a3f086c5",
+      "exact_raw_display_register_order_and_cycle_match": true,
+      "primary_transition_count": 198,
+      "other_transition_count": 198
+    }
+  ],
+  "independent_boot_evidence": "PASS_DISTINCT_PROCESS_IDS_AND_IDENTICAL_FULL_TRANSITION_TRACES",
+  "caller_recorded_process_ids": [
+    "154605",
+    "154697"
+  ]
+}
