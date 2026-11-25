@@ -57,13 +57,15 @@ int main(int argc, char **argv) {
     std::vector<std::pair<double, std::pair<int,int>>> buttons;  // time, (code, down)
     std::vector<std::pair<double, std::string>> parameter_marks;
     struct PanelAction {
-        enum class Kind { TapOnChange, TapOnDisplay, MarkOnDisplay, WalkRight, SearchRight, ProbeControl, ProbeRange, ScanEffectPages } kind;
+        enum class Kind { TapOnChange, TapOnDisplay, MarkOnDisplay, WalkRight, SearchRight, ProbeControl, ProbeField, ProbeRange, ScanEffectPages } kind;
         double after = 0.0, timeout = 0.0, pressed_at = 0.0, phase_time = 0.0;
         std::string needle, id, target, last_match, before_display, control_baseline;
         int code = 0, revert_code = 11, match_stable = 0, change_stable = 0, remaining_steps = 0, step_index = 0;
         int repetitions = 0, iteration = 0, phase = 0, range_steps_up = 0, range_steps_down = 0;
         int range_steps_origin = 0, range_steps_return = 0;
         int scan_page_limit = 0, scan_page_count = 0, scan_variations = 0;
+        int target_page_ordinal = -1, target_underline_start = -1, target_variation = 1;
+        int selected_variation = 1, variation_steps = 0;
         std::string scan_variation_display, scan_before_signature;
         bool down_sent = false, started = false, done = false, probe_key_released = false;
     };
@@ -171,22 +173,23 @@ int main(int argc, char **argv) {
         } else if (a == "--param-mark") { // time:label
             std::string v = next(); size_t c = v.find(':');
             if (c != std::string::npos) parameter_marks.push_back({atof(v.substr(0, c).c_str()), v.substr(c + 1)});
-        } else if (a == "--panel-tap-on-change" || a == "--panel-tap-on-display" || a == "--panel-mark-on-display" || a == "--panel-walk-right" || a == "--panel-search-right" || a == "--panel-probe-control" || a == "--panel-probe-range" || a == "--panel-scan-effects") {
+        } else if (a == "--panel-tap-on-change" || a == "--panel-tap-on-display" || a == "--panel-mark-on-display" || a == "--panel-walk-right" || a == "--panel-search-right" || a == "--panel-probe-control" || a == "--panel-probe-field" || a == "--panel-probe-range" || a == "--panel-scan-effects") {
             const bool tap = a == "--panel-tap-on-change" || a == "--panel-tap-on-display";
             const bool walk = a == "--panel-walk-right";
             const bool search = a == "--panel-search-right";
             const bool probe = a == "--panel-probe-control";
+            const bool field_probe = a == "--panel-probe-field";
             const bool range = a == "--panel-probe-range";
             const bool scan_effects = a == "--panel-scan-effects";
             std::stringstream fields(next()); std::vector<std::string> part; std::string field;
             while (std::getline(fields, field, ',')) part.push_back(field);
-            const size_t expected = scan_effects ? 6 : probe ? (part.size() == 6 ? 6 : 5) : (tap || walk) ? 5 : search ? 6 : 4;
+            const size_t expected = field_probe ? 10 : scan_effects ? 6 : probe ? (part.size() == 6 ? 6 : 5) : (tap || walk) ? 5 : search ? 6 : 4;
             if (part.size() != expected) { fprintf(stderr, "invalid %s field count\n", a.c_str()); return 2; }
             PanelAction action; action.kind = a == "--panel-tap-on-change" ? PanelAction::Kind::TapOnChange :
                 a == "--panel-tap-on-display" ? PanelAction::Kind::TapOnDisplay :
                 a == "--panel-walk-right" ? PanelAction::Kind::WalkRight :
                 search ? PanelAction::Kind::SearchRight :
-                probe ? PanelAction::Kind::ProbeControl : range ? PanelAction::Kind::ProbeRange :
+                probe ? PanelAction::Kind::ProbeControl : field_probe ? PanelAction::Kind::ProbeField : range ? PanelAction::Kind::ProbeRange :
                 scan_effects ? PanelAction::Kind::ScanEffectPages : PanelAction::Kind::MarkOnDisplay;
             action.after = atof(part[0].c_str()); action.timeout = atof(part[1].c_str());
             if (action.after < 0.0 || action.timeout <= 0.0) { fprintf(stderr, "invalid %s time\n", a.c_str()); return 2; }
@@ -200,6 +203,7 @@ int main(int argc, char **argv) {
                 action.remaining_steps = atoi(part[2].c_str()); action.needle = part[3]; action.target = part[4]; action.id = part[5];
                 if (action.remaining_steps < 1 || action.remaining_steps > 256 || action.target.empty()) { fprintf(stderr, "invalid panel search target/count\n"); return 2; }
             } else if (probe) {
+                action.code = 10; // Default direction is Up; optional field probes can select Down.
                 action.repetitions = atoi(part[2].c_str()); action.needle = part[3]; action.id = part[4];
                 if (action.repetitions < 0 || action.repetitions > 4) { fprintf(stderr, "invalid panel probe repetitions\n"); return 2; }
                 if (part.size() == 6) action.revert_code = atoi(part[5].c_str());
@@ -211,6 +215,21 @@ int main(int argc, char **argv) {
                 if (action.scan_page_limit < 1 || action.scan_page_limit > 128 ||
                     action.scan_variations < 1 || action.scan_variations > 4) {
                     fprintf(stderr, "invalid panel effect scan page/variation limits\n"); return 2;
+                }
+            } else if (field_probe) {
+                action.target_variation = atoi(part[2].c_str());
+                action.target_page_ordinal = atoi(part[3].c_str());
+                action.target_underline_start = atoi(part[4].c_str());
+                action.repetitions = atoi(part[5].c_str());
+                action.code = atoi(part[6].c_str());
+                action.revert_code = atoi(part[7].c_str());
+                action.needle = part[8]; action.id = part[9];
+                if (action.target_variation < 1 || action.target_variation > 4 ||
+                    action.target_page_ordinal < 0 || action.target_page_ordinal > 128 ||
+                    action.target_underline_start < -1 || action.target_underline_start > 21 ||
+                    action.repetitions < 0 || action.repetitions > 4 ||
+                    action.code < 0 || action.code > 41 || action.revert_code < 0 || action.revert_code > 41) {
+                    fprintf(stderr, "invalid panel field probe target/repetition/button\n"); return 2;
                 }
             } else { action.needle = part[2]; action.id = part[3]; }
             if (action.needle.empty() || action.id.empty()) { fprintf(stderr, "empty panel condition/action id\n"); return 2; }
@@ -398,6 +417,7 @@ int main(int argc, char **argv) {
                         action.kind == PanelAction::Kind::WalkRight ? "walk-right" :
                         action.kind == PanelAction::Kind::SearchRight ? "search-right" :
                         action.kind == PanelAction::Kind::ProbeControl ? "probe" :
+                        action.kind == PanelAction::Kind::ProbeField ? "field-probe" :
                         action.kind == PanelAction::Kind::ProbeRange ? "range" :
                         action.kind == PanelAction::Kind::ScanEffectPages ? "inventory" : "tap",
                         action.needle.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
@@ -453,6 +473,126 @@ int main(int argc, char **argv) {
                             action.done = true; panel_action_failed = true;
                         } else if (action.kind == PanelAction::Kind::WalkRight && action.remaining_steps == 0) action.done = true;
                     }
+                }
+                continue;
+            }
+            if (action.kind == PanelAction::Kind::ProbeField) {
+                if (action.phase == 0) {
+                    const bool at_variation = d0.find("VAR=") != std::string::npos;
+                    if (at_variation && panel_signature == action.last_match) ++action.match_stable;
+                    else { action.match_stable = at_variation ? 1 : 0; action.last_match = at_variation ? panel_signature : std::string(); }
+                    if (action.match_stable < 20) continue;
+                    action.scan_page_count = 0;
+                    const auto var_at = d0.find("VAR=");
+                    action.selected_variation = var_at == std::string::npos ? 0 : atoi(d0.c_str() + var_at + 4);
+                    if (action.selected_variation < 1 || action.selected_variation > 4) {
+                        fprintf(stderr, "PANEL_FIELD_VARIATION_FAILED id=%s display=\"%.22s\"\n", action.id.c_str(), d0.c_str());
+                        action.done = true; panel_action_failed = true; continue;
+                    }
+                    action.variation_steps = (action.target_variation - action.selected_variation + 4) % 4;
+                    action.phase = action.variation_steps ? 4 : (action.target_page_ordinal == 0 ? 2 : 1);
+                    action.last_match.clear(); action.match_stable = 0;
+                    if (action.phase == 4) {
+                        fprintf(stderr, "PANEL_FIELD_VARIATION_BEGIN id=%s from=%d target=%d steps=%d display=\"%.22s\"\n",
+                                action.id.c_str(), action.selected_variation, action.target_variation, action.variation_steps, d0.c_str());
+                        continue;
+                    }
+                    if (action.phase == 2) {
+                        const bool marker_ok = action.target_underline_start < 0 ||
+                            (action.target_underline_start < int(d1.size()) && d1[action.target_underline_start] != ' ');
+                        if (d0.find(action.needle) == std::string::npos || !marker_ok) {
+                            fprintf(stderr, "PANEL_FIELD_TARGET_MISMATCH id=%s page=0 needle=%s display=\"%.22s\" underline=\"%.22s\"\n",
+                                    action.id.c_str(), action.needle.c_str(), d0.c_str(), d1.c_str());
+                            action.done = true; panel_action_failed = true; continue;
+                        }
+                    }
+                }
+                if (action.phase == 4) {
+                    if (!action.down_sent) {
+                        action.before_display = d0;
+                        action.scan_before_signature = panel_signature;
+                        action.down_sent = true; action.probe_key_released = false;
+                        action.pressed_at = now; action.last_match.clear(); action.match_stable = 0;
+                        m.panel.button(10, true); // VAR Up selects the next OS variation.
+                    } else {
+                        if (!action.probe_key_released) { m.panel.button(10, false); action.probe_key_released = true; }
+                        if (panel_signature != action.scan_before_signature) {
+                            if (panel_signature == action.last_match) ++action.match_stable;
+                            else { action.last_match = panel_signature; action.match_stable = 1; }
+                        } else { action.last_match.clear(); action.match_stable = 0; }
+                        if (action.match_stable >= 20) {
+                            action.down_sent = false;
+                            const auto var_at = d0.find("VAR=");
+                            action.selected_variation = var_at == std::string::npos ? 0 : atoi(d0.c_str() + var_at + 4);
+                            if (action.selected_variation < 1 || action.selected_variation > 4) {
+                                fprintf(stderr, "PANEL_FIELD_VARIATION_FAILED id=%s display=\"%.22s\"\n", action.id.c_str(), d0.c_str());
+                                action.done = true; panel_action_failed = true; continue;
+                            }
+                            --action.variation_steps;
+                            fprintf(stderr, "PANEL_FIELD_VARIATION_STEP id=%s selected=%d remaining=%d display=\"%.22s\" cycles=%llu frame=%llu\n",
+                                    action.id.c_str(), action.selected_variation, action.variation_steps, d0.c_str(),
+                                    (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                            if (action.variation_steps <= 0) {
+                                if (action.selected_variation != action.target_variation) {
+                                    fprintf(stderr, "PANEL_FIELD_VARIATION_FAILED id=%s expected=%d observed=%d\n",
+                                            action.id.c_str(), action.target_variation, action.selected_variation);
+                                    action.done = true; panel_action_failed = true; continue;
+                                }
+                                action.scan_page_count = 0;
+                                action.phase = action.target_page_ordinal == 0 ? 2 : 1;
+                            }
+                        } else if (now - action.pressed_at >= 0.30 && panel_signature == action.scan_before_signature) {
+                            fprintf(stderr, "PANEL_FIELD_VARIATION_NO_CHANGE id=%s display=\"%.22s\"\n",
+                                    action.id.c_str(), d0.c_str());
+                            action.done = true; panel_action_failed = true; continue;
+                        }
+                    }
+                }
+                if (action.phase == 1) {
+                    if (!action.down_sent) {
+                        action.before_display = d0;
+                        action.scan_before_signature = panel_signature;
+                        action.down_sent = true; action.probe_key_released = false;
+                        action.pressed_at = now; action.last_match.clear(); action.match_stable = 0;
+                        m.panel.button(17, true); // Right, one editor field/page stop.
+                    } else {
+                        if (!action.probe_key_released) { m.panel.button(17, false); action.probe_key_released = true; }
+                        if (panel_signature != action.scan_before_signature) {
+                            if (panel_signature == action.last_match) ++action.match_stable;
+                            else { action.last_match = panel_signature; action.match_stable = 1; }
+                        } else { action.last_match.clear(); action.match_stable = 0; }
+                        if (action.match_stable >= 20) {
+                            action.down_sent = false;
+                            ++action.scan_page_count;
+                            if (d0.find("VAR=") != std::string::npos || action.scan_page_count > action.target_page_ordinal) {
+                                fprintf(stderr, "PANEL_FIELD_TARGET_MISMATCH id=%s page=%d target=%d needle=%s display=\"%.22s\" underline=\"%.22s\"\n",
+                                        action.id.c_str(), action.scan_page_count, action.target_page_ordinal,
+                                        action.needle.c_str(), d0.c_str(), d1.c_str());
+                                action.done = true; panel_action_failed = true; continue;
+                            }
+                            if (action.scan_page_count == action.target_page_ordinal) action.phase = 2;
+                        } else if (now - action.pressed_at >= 0.30 && panel_signature == action.scan_before_signature) {
+                            fprintf(stderr, "PANEL_FIELD_NAV_NO_CHANGE id=%s page=%d display=\"%.22s\"\n",
+                                    action.id.c_str(), action.scan_page_count, d0.c_str());
+                            action.done = true; panel_action_failed = true; continue;
+                        }
+                    }
+                }
+                if (action.phase == 2) {
+                    const bool marker_ok = action.target_underline_start < 0 ||
+                        (action.target_underline_start < int(d1.size()) && d1[action.target_underline_start] != ' ');
+                    if (d0.find(action.needle) == std::string::npos || !marker_ok) {
+                        fprintf(stderr, "PANEL_FIELD_TARGET_MISMATCH id=%s page=%d target=%d needle=%s display=\"%.22s\" underline=\"%.22s\"\n",
+                                action.id.c_str(), action.scan_page_count, action.target_page_ordinal,
+                                action.needle.c_str(), d0.c_str(), d1.c_str());
+                        action.done = true; panel_action_failed = true; continue;
+                    }
+                    fprintf(stderr, "PANEL_FIELD_SELECTED id=%s variation=%d page=%d needle=\"%s\" display=\"%.22s\" underline=\"%.22s\" cursor=\"%.22s\" cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.target_variation, action.target_page_ordinal, action.needle.c_str(), d0.c_str(), d1.c_str(), dc.c_str(),
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                    action.kind = PanelAction::Kind::ProbeControl;
+                    action.phase = 0; action.last_match.clear(); action.match_stable = 0;
+                    action.down_sent = false;
                 }
                 continue;
             }
@@ -658,16 +798,17 @@ int main(int argc, char **argv) {
                     if (action.match_stable < 20) continue;
                     action.before_display = d0;
                     action.control_baseline = d0;
+                    action.scan_before_signature = panel_signature;
                     action.phase_time = now;
                     action.phase = 1;
-                    fprintf(stderr, "PANEL_PROBE_FOUND id=%s display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
-                            action.id.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
+                    fprintf(stderr, "PANEL_PROBE_FOUND id=%s display=\"%.22s\" underline=\"%.22s\" cursor=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), d0.c_str(), d1.c_str(), dc.c_str(), now, (unsigned long long)m.cycles(),
                             (unsigned long long)m.esp.host_frame_count());
                     fprintf(stderr, "PANEL_PROBE_IDLE_BEGIN id=%s display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
                             action.id.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
                             (unsigned long long)m.esp.host_frame_count());
                 } else if (action.phase == 1) {
-                    if (d0 != action.before_display) {
+                    if (panel_signature != action.scan_before_signature) {
                         fprintf(stderr, "PANEL_PROBE_IDLE_UNSTABLE id=%s before=\"%.22s\" after=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
                                 action.id.c_str(), action.before_display.c_str(), d0.c_str(), now,
                                 (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
@@ -685,16 +826,17 @@ int main(int argc, char **argv) {
                     action.change_stable = 0;
                     action.phase = 3;
                     action.phase_time = now;
-                    m.panel.button(10, true); // Up
-                    fprintf(stderr, "PANEL_PROBE_UP_BEGIN id=%s iteration=%d display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
-                            action.id.c_str(), action.iteration, d0.c_str(), now,
+                    action.probe_key_released = false;
+                    m.panel.button(action.code, true);
+                    fprintf(stderr, "PANEL_PROBE_UP_BEGIN id=%s iteration=%d button=%d display=\"%.22s\" underline=\"%.22s\" cursor=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.iteration, action.code, d0.c_str(), d1.c_str(), dc.c_str(), now,
                             (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
                 } else if (action.phase == 3) {
                     // Panel value controls autorepeat quickly. Release after the
                     // first emulated slice so this is a single press, then wait
                     // for the complete display update without holding the key.
                     if (!action.probe_key_released) {
-                        m.panel.button(10, false);
+                        m.panel.button(action.code, false);
                         action.probe_key_released = true;
                     }
                     if (d0 != action.before_display) ++action.change_stable;
@@ -703,8 +845,8 @@ int main(int argc, char **argv) {
                     action.last_match = d0;
                     action.phase_time = now;
                     action.phase = 4;
-                    fprintf(stderr, "PANEL_PROBE_UP_DISPLAY id=%s iteration=%d before=\"%.22s\" after=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
-                            action.id.c_str(), action.iteration, action.before_display.c_str(), d0.c_str(), now,
+                    fprintf(stderr, "PANEL_PROBE_UP_DISPLAY id=%s iteration=%d before=\"%.22s\" after=\"%.22s\" underline=\"%.22s\" cursor=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.iteration, action.before_display.c_str(), d0.c_str(), d1.c_str(), dc.c_str(), now,
                             (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
                 } else if (action.phase == 4) {
                     if (d0 != action.last_match) {
@@ -722,8 +864,8 @@ int main(int argc, char **argv) {
                     fprintf(stderr, "PANEL_PROBE_REVERT_BEGIN id=%s button=%d iteration=%d display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
                             action.id.c_str(), action.revert_code, action.iteration, d0.c_str(), now,
                             (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
-                    fprintf(stderr, "PANEL_PROBE_DOWN_BEGIN id=%s iteration=%d display=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
-                            action.id.c_str(), action.iteration, d0.c_str(), now,
+                    fprintf(stderr, "PANEL_PROBE_DOWN_BEGIN id=%s iteration=%d button=%d display=\"%.22s\" underline=\"%.22s\" cursor=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.iteration, action.revert_code, d0.c_str(), d1.c_str(), dc.c_str(), now,
                             (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
                 } else if (action.phase == 5) {
                     if (!action.probe_key_released) {
@@ -736,8 +878,8 @@ int main(int argc, char **argv) {
                     action.last_match = d0;
                     action.phase_time = now;
                     action.phase = 6;
-                    fprintf(stderr, "PANEL_PROBE_DOWN_DISPLAY id=%s iteration=%d before=\"%.22s\" after=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
-                            action.id.c_str(), action.iteration, action.before_display.c_str(), d0.c_str(), now,
+                    fprintf(stderr, "PANEL_PROBE_DOWN_DISPLAY id=%s iteration=%d before=\"%.22s\" after=\"%.22s\" underline=\"%.22s\" cursor=\"%.22s\" time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.iteration, action.before_display.c_str(), d0.c_str(), d1.c_str(), dc.c_str(), now,
                             (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
                 } else if (action.phase == 6) {
                     if (d0 != action.last_match) {
@@ -746,9 +888,9 @@ int main(int argc, char **argv) {
                         action.done = true; panel_action_failed = true; continue;
                     }
                     if (now - action.phase_time < 0.25) continue;
-                    const bool restored = d0 == action.control_baseline;
-                    fprintf(stderr, "PANEL_PROBE_RESTORE id=%s iteration=%d display=\"%.22s\" baseline=\"%.22s\" exact=%d time=%.6f cycles=%llu frame=%llu\n",
-                            action.id.c_str(), action.iteration, d0.c_str(), action.control_baseline.c_str(),
+                    const bool restored = panel_signature == action.scan_before_signature;
+                    fprintf(stderr, "PANEL_PROBE_RESTORE id=%s iteration=%d display=\"%.22s\" baseline=\"%.22s\" underline=\"%.22s\" cursor=\"%.22s\" exact=%d time=%.6f cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.iteration, d0.c_str(), action.control_baseline.c_str(), d1.c_str(), dc.c_str(),
                             restored ? 1 : 0, now, (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
                     if (!restored) { action.done = true; panel_action_failed = true; continue; }
                     if (action.iteration >= action.repetitions) { action.done = true; continue; }

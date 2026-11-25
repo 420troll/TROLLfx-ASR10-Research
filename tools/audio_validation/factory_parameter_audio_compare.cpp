@@ -1,6 +1,7 @@
 #include "trollfx/es5510_factory_runtime.hpp"
 #include "trollfx/es5510_factory_parameter_discovery_v02.hpp"
 #include "trollfx/es5510_factory_parameter_discovery_v03.hpp"
+#include "trollfx/es5510_factory_parameter_discovery_v05.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -54,7 +55,10 @@ static void warm(FactoryRuntime& fx) {
 }
 
 static std::vector<float> render_tail(FactoryRuntime& fx) {
-    constexpr std::size_t frames=8192, block=256;
+    // Keep enough sustained input after the edit for long delay controls to
+    // become audible (e.g. 700 ms taps), and for slow modulation controls to
+    // traverse a useful part of their cycle.
+    constexpr std::size_t frames=65536, block=256;
     std::vector<float> out(frames*2);
     for (std::size_t offset=0;offset<frames;offset+=block) {
         auto in=input_signal(block,32768+offset);
@@ -80,7 +84,9 @@ int main(int argc,char**argv) try {
         d.firmware_event_schedule.push_back({std::stoull(frame),static_cast<std::uint8_t>(std::stoul(gpr,nullptr,16)),static_cast<std::uint32_t>(std::stoul(value,nullptr,16))});
     }
     parameter_discovery_v02::append_verified_parameters(d);
-    if (!parameter_discovery_v03::append_verified_parameters(d)) throw std::runtime_error("slot has no V3 recovered control");
+    parameter_discovery_v03::append_verified_parameters(d);
+    if (!parameter_discovery_v05::append_verified_parameters(d))
+        throw std::runtime_error("slot has no V5 recovered control");
     ValidatedEffectPackage p; p.descriptor=std::move(d);
     // The invoking Python wrapper independently checks audit eligibility and
     // checkpoint/schedule hashes before calling this private-package utility.
@@ -98,6 +104,8 @@ int main(int argc,char**argv) try {
         !b.setParameter(accepted->descriptor,argv[9],std::stoi(argv[11]),frame))
         throw std::runtime_error("runtime rejected verified point: "+std::string(a.getStatus().message)+" / "+b.getStatus().message);
     auto before=render_tail(a),after=render_tail(b);
+    const auto writes_a=a.getStatus().scheduled_writes_applied;
+    const auto writes_b=b.getStatus().scheduled_writes_applied;
     double eb=0,ea=0,ed=0; float peakb=0,peaka=0,peakd=0; std::size_t finite=0;
     for (std::size_t i=0;i<before.size();++i) {
         if (!std::isfinite(before[i]) || !std::isfinite(after[i])) continue;
@@ -111,6 +119,7 @@ int main(int argc,char**argv) try {
              <<" values="<<argv[10]<<"->"<<argv[11]<<" frames="<<before.size()/2
              <<" finite="<<finite<<" rms_before="<<std::sqrt(eb/finite)<<" rms_after="<<std::sqrt(ea/finite)
              <<" difference_rms="<<std::sqrt(ed/finite)<<" difference_peak="<<peakd
-             <<" peak_before="<<peakb<<" peak_after="<<peaka<<"\n";
+             <<" peak_before="<<peakb<<" peak_after="<<peaka
+             <<" scheduled_writes_before="<<writes_a<<" scheduled_writes_after="<<writes_b<<"\n";
     return 0;
 } catch (const std::exception& e) { std::cerr<<e.what()<<'\n'; return 1; }
