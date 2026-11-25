@@ -7,7 +7,7 @@
   "playable": false,
   "playable_marker_required": "INTEGRATION_STATUS",
   "built_utc": "2026-11-25T05:51:40.986009+00:00",
-  "source_commit": "5bf1f321c7f585ddc53dfbc9e1f001648cad4e5b",
+  "source_commit": "28458b3a1fb8c1e12f5f1abbdb70772e40e129fa",
   "source_inputs_sha256": "8291a4871e0609b729bb81fbc4b15951d5188feb3772f4ad5c1a8fe458fe44f7",
   "sdk": {
     "path": "/mnt/c/Users/Gamer/research/AkaiForceSDK",
