@@ -2,8 +2,8 @@
   "schema": "trollfx-playable-release-marker-v1",
   "status": "playable",
   "version": "1.0.0",
-  "arm32_binary_sha256": "a7ae1752ec99cd40c98ea41dda94b91031aa219f240ef0205f4a1752514a8c56",
-  "verification_report_sha256": "768d6e189a79bdc2c07e8a4bd7177bd97e5b6e50948926fc72b24efa79428091",
+  "arm32_binary_sha256": "fec8a0ccdbb8fbaa717a288d94b0b32ead63c5ba6b76c97a22661c6ce138f473",
+  "verification_report_sha256": "d6704af9cb4cfc3cbf63e6c4bacf3393de495ecdee210587956c527bbdc5c8d4",
   "engine_id": "native-es5510-factory-runtime-v0.1",
   "verified_slots": [
     1,

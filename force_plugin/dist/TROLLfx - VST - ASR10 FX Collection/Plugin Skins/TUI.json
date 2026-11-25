@@ -1069,56 +1069,56 @@
             {
                 "key": "Parameter 0",
                 "value": [
-                    "01 HALL REVERB / UNAVAILABLE",
-                    "02 44KHZ REVERB / UNAVAILABLE",
-                    "03 ROOM REVERB / UNAVAILABLE",
-                    "04 DUAL DELAYS / UNAVAILABLE",
-                    "05 44KHZ DELAYS / UNAVAILABLE",
-                    "06 CHORUS+REVRB / UNAVAILABLE",
-                    "07 PHASER+REVRB / UNAVAILABLE",
-                    "08 FLANGER+REV / UNAVAILABLE",
-                    "09 ROT.SPKR+REV / UNAVAILABLE",
-                    "10 CHOR+REV+DDL / UNAVAILABLE",
-                    "11 CMP+DIST+REV / UNAVAILABLE",
-                    "12 DIST+CHO+REV / UNAVAILABLE",
-                    "13 WAH+DIST+REV / UNAVAILABLE",
-                    "14 SMALL ROOM / UNAVAILABLE",
-                    "15 LARGE ROOM / UNAVAILABLE",
-                    "16 HALL REVERB2 / UNAVAILABLE",
-                    "17 SMALL PLATE / UNAVAILABLE",
-                    "18 LARGE PLATE / UNAVAILABLE",
-                    "19 REVRSE REVRB / UNAVAILABLE",
-                    "20 REVRSE REVB2 / UNAVAILABLE",
-                    "21 GATED REVERB / UNAVAILABLE",
-                    "22 NLIN REVRB 1 / UNAVAILABLE",
-                    "23 NLIN REVRB 2 / UNAVAILABLE",
-                    "24 NLIN REVRB 3 / UNAVAILABLE",
-                    "25 MULTITAP DDL / UNAVAILABLE",
-                    "26 EQ+DELAY LFO / UNAVAILABLE",
-                    "27 VCF+DISTORT / UNAVAILABLE",
-                    "28 GUITAR AMP1 / UNAVAILABLE",
-                    "29 GUITAR AMP2 / UNAVAILABLE",
-                    "30 GUITAR AMP3 / UNAVAILABLE",
-                    "31 SPKR CABINET / UNAVAILABLE",
-                    "32 TUNABLE SPKR / UNAVAILABLE",
-                    "33 EQ+CHOR+DDL / UNAVAILABLE",
-                    "34 EQ+VIBR+DDL / UNAVAILABLE",
-                    "35 EQ+FLNGR+DDL / UNAVAILABLE",
-                    "36 EQ+TREM+DDL / UNAVAILABLE",
-                    "37 PHASER+DDL / UNAVAILABLE",
-                    "38 8-VOICE CHOR / UNAVAILABLE",
-                    "39 PITCH SHIFT / UNAVAILABLE",
-                    "40 PITCH+DDL / UNAVAILABLE",
-                    "41 FAST PITCHSH / UNAVAILABLE",
-                    "42 EQ+CMPRESSOR / UNAVAILABLE",
-                    "43 EXPANDER / UNAVAILABLE",
-                    "44 KEYED EXPNDR / UNAVAILABLE",
-                    "45 INVRS EXPNDR / UNAVAILABLE",
-                    "46 DE-ESSER / UNAVAILABLE",
-                    "47 DUCKER / UNAVAILABLE",
-                    "48 RUMBLE FILTR / UNAVAILABLE",
-                    "49 PARAM EQ / UNAVAILABLE",
-                    "50 VAN DER POL / UNAVAILABLE"
+                    "01 HALL REVERB / UNAVAILABLE / ",
+                    "02 44KHZ REVERB / UNAVAILABLE /",
+                    "03 ROOM REVERB / UNAVAILABLE / ",
+                    "04 DUAL DELAYS / UNAVAILABLE / ",
+                    "05 44KHZ DELAYS / UNAVAILABLE /",
+                    "06 CHORUS+REVRB / UNAVAILABLE /",
+                    "07 PHASER+REVRB / UNAVAILABLE /",
+                    "08 FLANGER+REV / UNAVAILABLE / ",
+                    "09 ROT.SPKR+REV / UNAVAILABLE /",
+                    "10 CHOR+REV+DDL / UNAVAILABLE /",
+                    "11 CMP+DIST+REV / UNAVAILABLE /",
+                    "12 DIST+CHO+REV / UNAVAILABLE /",
+                    "13 WAH+DIST+REV / UNAVAILABLE /",
+                    "14 SMALL ROOM / UNAVAILABLE / N",
+                    "15 LARGE ROOM / UNAVAILABLE / N",
+                    "16 HALL REVERB2 / UNAVAILABLE /",
+                    "17 SMALL PLATE / UNAVAILABLE / ",
+                    "18 LARGE PLATE / UNAVAILABLE / ",
+                    "19 REVRSE REVRB / UNAVAILABLE /",
+                    "20 REVRSE REVB2 / UNAVAILABLE /",
+                    "21 GATED REVERB / UNAVAILABLE /",
+                    "22 NLIN REVRB 1 / UNAVAILABLE /",
+                    "23 NLIN REVRB 2 / UNAVAILABLE /",
+                    "24 NLIN REVRB 3 / UNAVAILABLE /",
+                    "25 MULTITAP DDL / UNAVAILABLE /",
+                    "26 EQ+DELAY LFO / UNAVAILABLE /",
+                    "27 VCF+DISTORT / UNAVAILABLE / ",
+                    "28 GUITAR AMP1 / UNAVAILABLE / ",
+                    "29 GUITAR AMP2 / UNAVAILABLE / ",
+                    "30 GUITAR AMP3 / UNAVAILABLE / ",
+                    "31 SPKR CABINET / UNAVAILABLE /",
+                    "32 TUNABLE SPKR / UNAVAILABLE /",
+                    "33 EQ+CHOR+DDL / UNAVAILABLE / ",
+                    "34 EQ+VIBR+DDL / UNAVAILABLE / ",
+                    "35 EQ+FLNGR+DDL / UNAVAILABLE /",
+                    "36 EQ+TREM+DDL / UNAVAILABLE / ",
+                    "37 PHASER+DDL / UNAVAILABLE / N",
+                    "38 8-VOICE CHOR / UNAVAILABLE /",
+                    "39 PITCH SHIFT / UNAVAILABLE / ",
+                    "40 PITCH+DDL / UNAVAILABLE / NO",
+                    "41 FAST PITCHSH / UNAVAILABLE /",
+                    "42 EQ+CMPRESSOR / UNAVAILABLE /",
+                    "43 EXPANDER / UNAVAILABLE / NO ",
+                    "44 KEYED EXPNDR / UNAVAILABLE /",
+                    "45 INVRS EXPNDR / UNAVAILABLE /",
+                    "46 DE-ESSER / UNAVAILABLE / NO ",
+                    "47 DUCKER / UNAVAILABLE / NO VE",
+                    "48 RUMBLE FILTR / UNAVAILABLE /",
+                    "49 PARAM EQ / UNAVAILABLE / VER",
+                    "50 VAN DER POL / UNAVAILABLE / "
                 ]
             },
             {
@@ -1342,7 +1342,7 @@
                                     },
                                     "type": "Text",
                                     "handleName": "Data",
-                                    "text": "50 FACTORY SLOTS / AVAILABILITY TAGGED"
+                                    "text": "50 SLOTS / STATUS IN EFFECT LABEL"
                                 }
                             },
                             "handle remapping": {
@@ -1356,6 +1356,82 @@
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
                                 "bounds": "343 45 278 107"
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "text 2",
+                                "type": "Label",
+                                "data": {
+                                    "version": 1,
+                                    "textStyle": {
+                                        "version": 1,
+                                        "font": {
+                                            "version": 1,
+                                            "name": "Titillium Web",
+                                            "style": "Regular",
+                                            "height": 30.0
+                                        },
+                                        "colour": "fff4f8fa",
+                                        "justification": "left",
+                                        "case": "Original"
+                                    },
+                                    "type": "Text",
+                                    "handleName": "Data",
+                                    "text": "EDIT SHOWS VERIFIED CONTROLS ONLY"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": []
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "No",
+                                "showWhenDataModelInvalid": "Show",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "663 45 278 107"
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "text 3",
+                                "type": "Label",
+                                "data": {
+                                    "version": 1,
+                                    "textStyle": {
+                                        "version": 1,
+                                        "font": {
+                                            "version": 1,
+                                            "name": "Titillium Web",
+                                            "style": "Regular",
+                                            "height": 30.0
+                                        },
+                                        "colour": "fff4f8fa",
+                                        "justification": "left",
+                                        "case": "Original"
+                                    },
+                                    "type": "Text",
+                                    "handleName": "Data",
+                                    "text": "NO VERIFIED EDIT? AUDIO STILL LOADS"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": []
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "No",
+                                "showWhenDataModelInvalid": "Show",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "983 45 278 107"
                             }
                         },
                         {
@@ -2178,7 +2254,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "HALL BUS1",
+                                "name": "REVERB MIX BUS1 (HALL)",
                                 "type": "radio2",
                                 "data": {
                                     "version": 1,
@@ -2210,7 +2286,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "HALL BUS1 seg 0",
+                                "name": "REVERB MIX BUS1 (HALL) seg 0",
                                 "type": "Label",
                                 "data": {
                                     "version": 1,
@@ -2251,7 +2327,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "HALL BUS1 seg 1",
+                                "name": "REVERB MIX BUS1 (HALL) seg 1",
                                 "type": "Label",
                                 "data": {
                                     "version": 1,
@@ -2292,7 +2368,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "HALL BUS2",
+                                "name": "REVERB MIX BUS2 (HALL)",
                                 "type": "radio2",
                                 "data": {
                                     "version": 1,
@@ -2324,7 +2400,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "HALL BUS2 seg 0",
+                                "name": "REVERB MIX BUS2 (HALL) seg 0",
                                 "type": "Label",
                                 "data": {
                                     "version": 1,
@@ -2365,7 +2441,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "HALL BUS2 seg 1",
+                                "name": "REVERB MIX BUS2 (HALL) seg 1",
                                 "type": "Label",
                                 "data": {
                                     "version": 1,
@@ -2406,7 +2482,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "ROM02 BUS1",
+                                "name": "REVERB MIX BUS1 (44KHZ)",
                                 "type": "radio2",
                                 "data": {
                                     "version": 1,
@@ -2438,7 +2514,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "ROM02 BUS1 seg 0",
+                                "name": "REVERB MIX BUS1 (44KHZ) seg 0",
                                 "type": "Label",
                                 "data": {
                                     "version": 1,
@@ -2479,7 +2555,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "ROM02 BUS1 seg 1",
+                                "name": "REVERB MIX BUS1 (44KHZ) seg 1",
                                 "type": "Label",
                                 "data": {
                                     "version": 1,
@@ -2520,7 +2596,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "ROM02 BUS2",
+                                "name": "REVERB MIX BUS2 (44KHZ)",
                                 "type": "radio2",
                                 "data": {
                                     "version": 1,
@@ -2552,7 +2628,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "ROM02 BUS2 seg 0",
+                                "name": "REVERB MIX BUS2 (44KHZ) seg 0",
                                 "type": "Label",
                                 "data": {
                                     "version": 1,
@@ -2593,7 +2669,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "ROM02 BUS2 seg 1",
+                                "name": "REVERB MIX BUS2 (44KHZ) seg 1",
                                 "type": "Label",
                                 "data": {
                                     "version": 1,

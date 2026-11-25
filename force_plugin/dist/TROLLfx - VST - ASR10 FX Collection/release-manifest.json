@@ -6,9 +6,9 @@
   "release_state": "playable",
   "playable": true,
   "playable_marker_required": "INTEGRATION_STATUS",
-  "built_utc": "2026-11-24T22:41:16.296956+00:00",
-  "source_commit": "c4d3d7b531b4c8ba516036318423d928b8342b90",
-  "source_inputs_sha256": "74c804b2cb3138deac6a621b30315f43fba0e063b56f4e2d267fcd47059ccab1",
+  "built_utc": "2026-11-25T00:06:45.741569+00:00",
+  "source_commit": "77895655392c1308b81f6a8f926f3595cb96a0bd",
+  "source_inputs_sha256": "a8298874b4a385324704cdd135d0d8b8e56d4c6c7ffef30df1330fe850e140fa",
   "sdk": {
     "path": "/mnt/c/Users/Gamer/research/AkaiForceSDK",
     "origin": "https://github.com/420troll/AkaiForceSDK.git",
@@ -32,14 +32,14 @@
     "provider_api": "IValidatedFactoryPackageProvider",
     "production_provider": "local trusted-import index; missing or invalid packages fail closed",
     "binary_bound_native_vst_test": "PASS",
-    "binary_test_report_sha256": "768d6e189a79bdc2c07e8a4bd7177bd97e5b6e50948926fc72b24efa79428091",
+    "binary_test_report_sha256": "d6704af9cb4cfc3cbf63e6c4bacf3393de495ecdee210587956c527bbdc5c8d4",
     "packaged_binary_bound_audio_test": "PASS",
     "playable_release_gate": "MET"
   },
   "targets": {
     "native": {
       "host": "x86_64",
-      "binary_sha256": "48fd2f6a0a946f933a2b7121cb364e50cf8f69a8c0836b38ebd57c169178da49",
+      "binary_sha256": "c5bb9a8e6906126d820e4785667fbcba31cb2470236e70fe6812f6a4dc4944fa",
       "host_sim_parameter_dump": "PASS"
     },
     "arm32": {
@@ -68,8 +68,8 @@
     }
   },
   "binaries": {
-    "arm32_sha256": "a7ae1752ec99cd40c98ea41dda94b91031aa219f240ef0205f4a1752514a8c56",
-    "arm64_sha256": "c2e6279d59a3150d11279583d026dd4b3f767b2ee89386fcff082929bd3e73be"
+    "arm32_sha256": "fec8a0ccdbb8fbaa717a288d94b0b32ead63c5ba6b76c97a22661c6ce138f473",
+    "arm64_sha256": "2b743bb7ffb171a657e99b5db9d7ce506b22234fba2d7f987d17f14fb336a9ee"
   },
   "build_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
   "package_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
@@ -137,5 +137,5 @@
     49,
     50
   ],
-  "verification_report_sha256": "768d6e189a79bdc2c07e8a4bd7177bd97e5b6e50948926fc72b24efa79428091"
+  "verification_report_sha256": "d6704af9cb4cfc3cbf63e6c4bacf3393de495ecdee210587956c527bbdc5c8d4"
 }

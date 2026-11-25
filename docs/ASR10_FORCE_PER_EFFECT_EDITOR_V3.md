@@ -71,12 +71,42 @@ missing packages.
 
 ## Verification
 
-The V3 validation command and the exact ARM32/native binary hashes are recorded
-in the release handoff appended during final packaging. Automated checks cover
-all 50 slot identities, 16 verified mappings, 40 unmapped effects, generated
-registry freshness, conditional control-slot bindings, preserved indices,
-Q-Link maps, native package playback, chunk restore, SDK host simulation, and
-ARMv7 package validation.
+The verified release candidate is
+`force_plugin/dist/TROLLfx - VST - ASR10 FX Collection`. It was built from
+source commit `77895655392c1308b81f6a8f926f3595cb96a0bd` with source-input
+SHA-256 `a8298874b4a385324704cdd135d0d8b8e56d4c6c7ffef30df1330fe850e140fa`,
+using SDK commit `4521c247a2deae30efb9e93d53fc8f9390c51e81` and Zig 0.17.1.
+
+| Binary/report | SHA-256 | Verification |
+|---|---|---|
+| Native x86_64 VST2 | `c5bb9a8e6906126d820e4785667fbcba31cb2470236e70fe6812f6a4dc4944fa` | Binary-bound VST harness and SDK host simulator passed |
+| ARMv7 hard-float VST2 | `fec8a0ccdbb8fbaa717a288d94b0b32ead63c5ba6b76c97a22661c6ce138f473` | ELF32 ARMv7/hard-float and SDK package validation passed |
+| ARM64 VST2 | `2b743bb7ffb171a657e99b5db9d7ce506b22234fba2d7f987d17f14fb336a9ee` | ELF64 AArch64 and SDK package validation passed |
+| Binary playback report | `d6704af9cb4cfc3cbf63e6c4bacf3393de495ecdee210587956c527bbdc5c8d4` | Native VST bound to 50 eligible packages; zero audio-callback allocations |
+
+The binary test verified the VST2 entry point, 24-parameter ABI, all 50
+factory packages, both verified points for the twelve appended controls,
+stereo non-silent output, missing-package silence, host wet/dry/gain/bypass,
+effect switching, and chunk restore for effect selection, host parameters,
+BUS parameters, and a V2 control. It reported all 50 slots `PASS`, the 5 ms
+fade contract, `state_roundtrip: PASS`, and `callback_allocations: 0`. The
+generated Q-Link map remains Q1–Q16 → parameter indices 8–23. SDK validation
+reported zero errors and zero warnings; generated TUI contains three tabs with
+parameter handles in 0–23.
+
+The build command was:
+
+```sh
+AKAI_FORCE_SDK=/mnt/c/Users/Gamer/research/AkaiForceSDK \
+TROLLFX_FACTORY_PACKAGE_COLLECTION=/home/gamer/research/private-results/asr10-all-50-effects/validated-packages \
+  sh force_plugin/tools/build_candidate.sh --toolchain auto --no-zip
+```
+
+Final regression results: 80 repository unit tests passed; 14 parameter
+registry/discovery tests passed; 5 release-infrastructure tests passed; the
+native VST, SDK host simulator, all-50 package playback, Q-Link mapping, and
+ARM target validation passed. Package checksums and the read-only installer
+verification passed.
 
 No screenshot is included: the local SDK build/host simulator generates and
 validates the Force skin JSON but does not render the touchscreen. No Force
