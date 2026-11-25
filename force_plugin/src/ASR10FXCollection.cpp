@@ -5,6 +5,7 @@
 #include "ES5510FactoryPackageProvider.h"
 #include "trollfx/es5510_factory_parameter_control_v01.hpp"
 #include "trollfx/es5510_factory_parameter_discovery_v02.hpp"
+#include "trollfx/es5510_factory_editor_v03.hpp"
 
 #include <algorithm>
 #include <array>
@@ -14,29 +15,19 @@
 #include <vector>
 
 namespace {
-constexpr const char* kEffectNames[] = {
-    "01 HALL REVERB", "02 44KHZ REVERB", "03 ROOM REVERB", "04 DUAL DELAYS",
-    "05 44KHZ DELAYS", "06 CHORUS+REVRB", "07 PHASER+REVRB", "08 FLANGER+REV",
-    "09 ROT.SPKR+REV", "10 CHOR+REV+DDL", "11 CMP+DIST+REV", "12 DIST+CHO+REV",
-    "13 WAH+DIST+REV", "14 SMALL ROOM", "15 LARGE ROOM", "16 HALL REVERB2",
-    "17 SMALL PLATE", "18 LARGE PLATE", "19 REVRSE REVRB", "20 REVRSE REVB2",
-    "21 GATED REVERB", "22 NLIN REVRB 1", "23 NLIN REVRB 2", "24 NLIN REVRB 3",
-    "25 MULTITAP DDL", "26 EQ+DELAY LFO", "27 VCF+DISTORT", "28 GUITAR AMP1",
-    "29 GUITAR AMP2", "30 GUITAR AMP3", "31 SPKR CABINET", "32 TUNABLE SPKR",
-    "33 EQ+CHOR+DDL", "34 EQ+VIBR+DDL", "35 EQ+FLNGR+DDL", "36 EQ+TREM+DDL",
-    "37 PHASER+DDL", "38 8-VOICE CHOR", "39 PITCH SHIFT", "40 PITCH+DDL",
-    "41 FAST PITCHSH", "42 EQ+CMPRESSOR", "43 EXPANDER", "44 KEYED EXPNDR",
-    "45 INVRS EXPNDR", "46 DE-ESSER", "47 DUCKER", "48 RUMBLE FILTR",
-    "49 PARAM EQ", "50 VAN DER POL"
-};
+constexpr const auto& kEffectNames = trollfx::es5510::factory_editor_v03::kEffectNames;
+
+std::size_t verifiedControlCount(std::uint8_t slot) noexcept;
 
 std::vector<std::string> effectChoices(const IValidatedFactoryPackageProvider* provider) {
     std::vector<std::string> choices;
     choices.reserve(50);
     for (std::uint8_t slot = 1; slot <= 50; ++slot) {
         const bool available = provider && provider->package_for_slot(slot);
+        const auto controls = verifiedControlCount(slot);
         choices.emplace_back(std::string(kEffectNames[slot - 1]) +
-                             (available ? "  [READY]" : "  [UNAVAILABLE]"));
+                             (available ? "  [READY]" : "  [UNAVAILABLE]") +
+                             (controls ? "  [" + std::to_string(controls) + " EDIT]" : "  [NO EDIT]"));
     }
     return choices;
 }
@@ -54,33 +45,16 @@ int choiceAt(const mpc::Plugin& plugin, int index) noexcept {
     return plugin.getInt(index);
 }
 
-struct FactoryControl {
-    int parameter_index;
-    std::uint8_t slot;
-    const char* id;
-    const char* label;
-};
+using trollfx::es5510::factory_editor_v03::FactoryControl;
+constexpr const auto& kFactoryControls = trollfx::es5510::factory_editor_v03::kControls;
+constexpr std::size_t kLegacyControlCount = trollfx::es5510::factory_editor_v03::kLegacyControlCount;
+constexpr std::size_t kV2ControlCount = std::size(kFactoryControls) - kLegacyControlCount;
 
-constexpr FactoryControl kFactoryControls[] = {
-    {8, 1, "reverb_mix_bus1", "HALL BUS1"},
-    {9, 1, "reverb_mix_bus2", "HALL BUS2"},
-    {10, 2, "reverb_mix_bus1", "ROM02 BUS1"},
-    {11, 2, "reverb_mix_bus2", "ROM02 BUS2"},
-    {12, 1, "decay_time", "DECAY TIME (HALL)"},
-    {13, 1, "hi_freq_damping", "HI FREQ DAMPING (HALL)"},
-    {14, 3, "decay_time", "DECAY TIME (ROOM)"},
-    {15, 3, "diffusion", "DIFFUSION"},
-    {16, 3, "hi_freq_damping", "HI FREQ DAMPING (ROOM)"},
-    {17, 4, "delay_time_l", "BS1 TIME L"},
-    {18, 6, "chorus_rate", "CHORUS RATE"},
-    {19, 7, "phase_rate", "PHASE RATE"},
-    {20, 28, "preamp_gain", "PREAMP GAIN"},
-    {21, 41, "voice1_fine", "VOICE1 FINE"},
-    {22, 42, "comp_ratio", "COMP RATIO"},
-    {23, 49, "bass_fc", "BASS FC"}
-};
-constexpr std::size_t kLegacyControlCount = 4;
-constexpr std::size_t kV2ControlCount = sizeof(kFactoryControls) / sizeof(kFactoryControls[0]) - kLegacyControlCount;
+std::size_t verifiedControlCount(std::uint8_t slot) noexcept {
+    std::size_t count = 0;
+    for (const auto& control : kFactoryControls) count += control.slot == slot ? 1u : 0u;
+    return count;
+}
 
 const trollfx::es5510::VerifiedParameterDefinition* findParameter(
     const IValidatedFactoryPackageProvider* provider, std::uint8_t slot, const char* id) noexcept {
@@ -154,10 +128,10 @@ public:
             {"HALL 28", "HALL 29", "ROM02 25", "ROM02 26"}, 0));
         addParam(choiceParam("reverb_bus2", "Reverb BUS2",
             {"HALL 28", "HALL 29", "ROM02 25", "ROM02 26"}, 0));
-        addParam(choiceParam("hall_bus1", "HALL BUS1", numericChoices(28, 29), 0));
-        addParam(choiceParam("hall_bus2", "HALL BUS2", numericChoices(28, 29), 0));
-        addParam(choiceParam("rom02_bus1", "ROM02 BUS1", numericChoices(25, 26), 0));
-        addParam(choiceParam("rom02_bus2", "ROM02 BUS2", numericChoices(25, 26), 0));
+        addParam(choiceParam("hall_bus1", "REVERB MIX BUS1 (HALL)", numericChoices(28, 29), 0));
+        addParam(choiceParam("hall_bus2", "REVERB MIX BUS2 (HALL)", numericChoices(28, 29), 0));
+        addParam(choiceParam("rom02_bus1", "REVERB MIX BUS1 (44KHZ)", numericChoices(25, 26), 0));
+        addParam(choiceParam("rom02_bus2", "REVERB MIX BUS2 (44KHZ)", numericChoices(25, 26), 0));
         for (std::size_t i = kLegacyControlCount; i < std::size(kFactoryControls); ++i) {
             const auto& control = kFactoryControls[i];
             bool supported = false;
@@ -204,6 +178,7 @@ public:
             state = "READY";
         else state = "SELECTED";
         out = std::string(kEffectNames[slot_index]) + " / " + state;
+        out += verifiedControlCount(slot) ? " / VERIFIED EDIT" : " / NO VERIFIED EDIT";
         return true;
     }
 

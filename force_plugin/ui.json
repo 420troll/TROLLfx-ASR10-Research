@@ -13,47 +13,233 @@
     {
       "name": "BROWSE",
       "controls": [
-        {"widget": "text", "text": "TROLLfx / ASR-10 FACTORY FX"},
-        {"widget": "text", "text": "50 FACTORY SLOTS / AVAILABILITY TAGGED"},
-        "empty", "empty", "empty", "empty", "empty", "empty",
-        {"param": "Host Bypass", "widget": "switch"}, "empty", "empty", "empty",
-        "Wet / Dry", "Input Gain", "Output Gain",
-        {"param": "FX Slot", "widget": "slider", "overlay": "menu"}
+        {
+          "widget": "text",
+          "text": "TROLLfx / ASR-10 FACTORY FX"
+        },
+        {
+          "widget": "text",
+          "text": "50 SLOTS / STATUS IN EFFECT LABEL"
+        },
+        {
+          "widget": "text",
+          "text": "EDIT SHOWS VERIFIED CONTROLS ONLY"
+        },
+        {
+          "widget": "text",
+          "text": "NO VERIFIED EDIT? AUDIO STILL LOADS"
+        },
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        {
+          "param": "Host Bypass",
+          "widget": "switch"
+        },
+        "empty",
+        "empty",
+        "empty",
+        "Wet / Dry",
+        "Input Gain",
+        "Output Gain",
+        {
+          "param": "FX Slot",
+          "widget": "slider",
+          "overlay": "menu"
+        }
       ]
     },
     {
       "name": "MIX",
       "controls": [
-        {"widget": "text", "text": "STEREO / NATIVE ES5510 / EXPERIMENTAL 48 kHz"},
-        {"widget": "text", "text": "HOST MIX CONTROLS"},
-        "empty", "empty", "empty", "empty", "empty", "empty",
-        {"param": "Host Bypass", "widget": "switch"},
-        "empty", "empty", "empty",
-        {"param": "Wet / Dry", "widget": "fader"},
-        {"param": "Input Gain", "widget": "knob"},
-        {"param": "Output Gain", "widget": "knob"},
-        {"param": "FX Slot", "widget": "slider", "overlay": "menu"}
+        {
+          "widget": "text",
+          "text": "STEREO / NATIVE ES5510 / EXPERIMENTAL 48 kHz"
+        },
+        {
+          "widget": "text",
+          "text": "HOST MIX CONTROLS"
+        },
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        {
+          "param": "Host Bypass",
+          "widget": "switch"
+        },
+        "empty",
+        "empty",
+        "empty",
+        {
+          "param": "Wet / Dry",
+          "widget": "fader"
+        },
+        {
+          "param": "Input Gain",
+          "widget": "knob"
+        },
+        {
+          "param": "Output Gain",
+          "widget": "knob"
+        },
+        {
+          "param": "FX Slot",
+          "widget": "slider",
+          "overlay": "menu"
+        }
       ]
     },
     {
       "name": "EDIT",
       "controls": [
-        {"param": "PREAMP GAIN", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 27}},
-        {"param": "VOICE1 FINE", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 40}},
-        {"param": "COMP RATIO", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 41}},
-        {"param": "BASS FC", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 48}},
-        {"param": "HI FREQ DAMPING (ROOM)", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 2}},
-        {"param": "BS1 TIME L", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 3}},
-        {"param": "CHORUS RATE", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 5}},
-        {"param": "PHASE RATE", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 6}},
-        {"param": "DECAY TIME (HALL)", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 0}},
-        {"param": "HI FREQ DAMPING (HALL)", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 0}},
-        {"param": "DECAY TIME (ROOM)", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 2}},
-        {"param": "DIFFUSION", "widget": "slider", "overlay": "menu", "visibleWhen": {"param": "FX Slot", "index": 2}},
-        {"param": "HALL BUS1", "widget": "switch", "visibleWhen": {"param": "FX Slot", "index": 0}},
-        {"param": "HALL BUS2", "widget": "switch", "visibleWhen": {"param": "FX Slot", "index": 0}},
-        {"param": "ROM02 BUS1", "widget": "switch", "visibleWhen": {"param": "FX Slot", "index": 1}},
-        {"param": "ROM02 BUS2", "widget": "switch", "visibleWhen": {"param": "FX Slot", "index": 1}}
+        {
+          "param": "PREAMP GAIN",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 27
+          }
+        },
+        {
+          "param": "VOICE1 FINE",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 40
+          }
+        },
+        {
+          "param": "COMP RATIO",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 41
+          }
+        },
+        {
+          "param": "BASS FC",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 48
+          }
+        },
+        {
+          "param": "HI FREQ DAMPING (ROOM)",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 2
+          }
+        },
+        {
+          "param": "BS1 TIME L",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 3
+          }
+        },
+        {
+          "param": "CHORUS RATE",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 5
+          }
+        },
+        {
+          "param": "PHASE RATE",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 6
+          }
+        },
+        {
+          "param": "DECAY TIME (HALL)",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 0
+          }
+        },
+        {
+          "param": "HI FREQ DAMPING (HALL)",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 0
+          }
+        },
+        {
+          "param": "DECAY TIME (ROOM)",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 2
+          }
+        },
+        {
+          "param": "DIFFUSION",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 2
+          }
+        },
+        {
+          "param": "REVERB MIX BUS1 (HALL)",
+          "widget": "switch",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 0
+          }
+        },
+        {
+          "param": "REVERB MIX BUS2 (HALL)",
+          "widget": "switch",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 0
+          }
+        },
+        {
+          "param": "REVERB MIX BUS1 (44KHZ)",
+          "widget": "switch",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 1
+          }
+        },
+        {
+          "param": "REVERB MIX BUS2 (44KHZ)",
+          "widget": "switch",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 1
+          }
+        }
       ]
     }
   ]

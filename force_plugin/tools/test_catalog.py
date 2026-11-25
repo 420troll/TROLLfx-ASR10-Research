@@ -20,9 +20,10 @@ for page in ui["pages"]:
     assert len(page["controls"]) == 16
 
 src = (ROOT / "src/ASR10FXCollection.cpp").read_text()
+control_header = (ROOT.parent / "include/trollfx/es5510_factory_editor_v03.hpp").read_text()
 provider_src = (ROOT / "src/ES5510FactoryPackageProvider.cpp").read_text()
 for label in expected:
-    assert f'"{label[0]:02d} {label[1]}"' in src
+    assert f'"{label[0]:02d} {label[1]}"' in control_header
 assert "provider->package_for_slot(slot)" in src
 assert "[UNAVAILABLE]" in src and "[READY]" in src
 assert '#include "ES5510FactoryPackageProvider.h"' in src
@@ -34,12 +35,15 @@ assert "append_verified_parameters(d)" in provider_src
 assert "backend_.request_effect" in src and "backend_.process" in src
 assert "not a factory default/reset" in src
 assert "visibleWhen" in (ROOT / "ui.json").read_text()
+assert "NO VERIFIED EDIT" in (ROOT / "ui.json").read_text()
 editor_controls = ui["pages"][2]["controls"]
 assert [x["param"] for x in editor_controls] == [
     "PREAMP GAIN", "VOICE1 FINE", "COMP RATIO", "BASS FC",
     "HI FREQ DAMPING (ROOM)", "BS1 TIME L", "CHORUS RATE", "PHASE RATE",
     "DECAY TIME (HALL)", "HI FREQ DAMPING (HALL)", "DECAY TIME (ROOM)",
-    "DIFFUSION", "HALL BUS1", "HALL BUS2", "ROM02 BUS1", "ROM02 BUS2"]
+    "DIFFUSION",
+    "REVERB MIX BUS1 (HALL)", "REVERB MIX BUS2 (HALL)",
+    "REVERB MIX BUS1 (44KHZ)", "REVERB MIX BUS2 (44KHZ)"]
 catalog_v2 = json.loads((ROOT.parent / "docs/ASR10_FACTORY_PARAMETER_MAPPINGS_V02.json").read_text())
 assert sum(len(effect["parameters"]) for effect in catalog_v2["effects"]) == 16
 release_skin = ROOT / "dist" / "TROLLfx - VST - ASR10 FX Collection" / "Plugin Skins"
