@@ -27,7 +27,7 @@ int main() {
             Parameter::ReverbMixBus1,26)==EncodeStatus::Encoded);
     }
     ASR10FXCollection plugin;
-    assert(plugin.numParams()==27); // legacy/V2 IDs 0..23 retained; V3 controls append at 24..26
+    assert(plugin.numParams()==46); // legacy/V2/V3 IDs 0..26 retained; V4 controls append at 27..45
     plugin.set(0,0.0f); // factory slot 1: HALL
     plugin.set(1,100.0f); plugin.set(2,0.0f); plugin.set(3,0.0f);
     plugin.prepare(48000.0,256);
@@ -40,6 +40,10 @@ int main() {
     assert(plugin.displayText(12)=="41");
     plugin.set(8,1.0f); // verified HALL BUS1 28 -> 29
     plugin.set(9,1.0f); // verified HALL BUS2 28 -> 29
+    assert(plugin.param(29).id=="factory_v4_slot1_decay_time");
+    assert(plugin.displayText(29)=="40");
+    plugin.set(29,1.0f); // V4 Q-Link path: exactly the verified 40 -> 41 point, no UNCHANGED detent
+    assert(plugin.displayText(29)=="41");
     ASR10FXCollection hall_default;
     hall_default.set(0,0.0f); hall_default.set(1,100.0f); hall_default.set(2,0.0f); hall_default.set(3,0.0f);
     hall_default.prepare(48000.0,256);
@@ -55,6 +59,16 @@ int main() {
         for(int i=0;i<N;++i){hall_energy+=ol[i]*ol[i]+orr[i]*orr[i];hall_parameter_delta+=std::abs(ol[i]-default_l[i])+std::abs(orr[i]-default_r[i]);}
     }
     assert(hall_energy>1e-8 && hall_parameter_delta>1e-8);
+    ASR10FXCollection hall_v4_default;
+    hall_v4_default.set(0,0.0f); hall_v4_default.set(1,100.0f); hall_v4_default.set(2,0.0f); hall_v4_default.set(3,0.0f);
+    hall_v4_default.prepare(48000.0,256);
+    double v4_delta=0.0;
+    for(int block=0;block<24;++block) {
+        for(int i=0;i<N;++i){const float x=0.25f*std::sin(float((block*N+i)*0.03125));l[i]=x;r[i]=-x;}
+        plugin.process(ctx); hall_v4_default.process(default_ctx);
+        for(int i=0;i<N;++i)v4_delta+=std::abs(ol[i]-default_l[i])+std::abs(orr[i]-default_r[i]);
+    }
+    assert(v4_delta>1e-8); // host parameter change reaches ordered DSP writes
     plugin.set(0,1.0f); // select ROM-02 44KHZ REVERB through the plugin parameter
     double switched_energy=0.0;
     for(int block=0;block<5000;++block) {

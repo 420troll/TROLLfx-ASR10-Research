@@ -6,10 +6,13 @@
 #include "trollfx/es5510_factory_parameter_control_v01.hpp"
 #include "trollfx/es5510_factory_parameter_discovery_v02.hpp"
 #include "trollfx/es5510_factory_editor_v03.hpp"
+#include "trollfx/es5510_factory_editor_v04.hpp"
 
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <cstdint>
+#include <cstdlib>
 #include <iterator>
 #include <string>
 #include <vector>
@@ -49,6 +52,8 @@ using trollfx::es5510::factory_editor_v03::FactoryControl;
 constexpr const auto& kFactoryControls = trollfx::es5510::factory_editor_v03::kControls;
 constexpr std::size_t kLegacyControlCount = trollfx::es5510::factory_editor_v03::kLegacyControlCount;
 constexpr std::size_t kV2ControlCount = std::size(kFactoryControls) - kLegacyControlCount;
+constexpr const auto& kV4Controls = trollfx::es5510::factory_editor_v04::kControls;
+constexpr std::size_t kV4ControlCount = std::size(kV4Controls);
 
 std::size_t verifiedControlCount(std::uint8_t slot) noexcept {
     std::size_t count = 0;
@@ -143,6 +148,16 @@ public:
             id += std::to_string(control.slot);
             addParam(choiceParam(id.c_str(), control.label, std::move(choices), 0));
         }
+        // V4 controls are append-only, have stable effect-qualified IDs, and
+        // expose only directly verified display points. Existing IDs/order
+        // remain intact for VST automation and saved host chunks.
+        for (const auto& control : kV4Controls) {
+            std::vector<std::string> choices;
+            choices.reserve(control.point_count);
+            for (std::size_t p = 0; p < control.point_count; ++p) choices.emplace_back(control.labels[p]);
+            addParam(choiceParam(control.parameter_id, control.host_name, std::move(choices), 0));
+        }
+        for (auto& changed : v4_control_changed_) changed.store(false, std::memory_order_relaxed);
     }
 
     void prepare(double rate, int) override {
@@ -152,6 +167,15 @@ public:
     }
 
     void reset() override { applied_slot_ = 0; }
+
+    void parameterChanged(int index, float) override {
+        for (std::size_t i = 0; i < kV4ControlCount; ++i) {
+            if (kV4Controls[i].parameter_index == index) {
+                v4_control_changed_[i].store(true, std::memory_order_release);
+                return;
+            }
+        }
+    }
 
     bool formatValue(int index, float plain, std::string& out) override {
         const auto status = backend_.status();
@@ -196,6 +220,7 @@ public:
             applied_control_values_.fill(-1);
         }
         applyVerifiedControls(active);
+        applyV4Controls(active);
 
         const float* inputs[2] = {context.inputs ? context.inputs[0] : nullptr,
                                   context.inputs ? context.inputs[1] : nullptr};
@@ -227,11 +252,25 @@ private:
         }
     }
 
+    void applyV4Controls(std::uint8_t active) noexcept {
+        for (std::size_t i = 0; i < kV4ControlCount; ++i) {
+            const auto& control = kV4Controls[i];
+            if (control.slot != active || !v4_control_changed_[i].exchange(false, std::memory_order_acq_rel)) continue;
+            const auto selected = static_cast<std::size_t>(std::max(0, choiceAt(*this, control.parameter_index)));
+            if (selected >= control.point_count) continue;
+            if (backend_.set_verified_parameter(active, control.id, control.values[selected])) continue;
+            // Keep the change pending until the selected package is active and
+            // the bounded runtime write is accepted.
+            v4_control_changed_[i].store(true, std::memory_order_release);
+        }
+    }
+
     const IValidatedFactoryPackageProvider* provider_ = nullptr;
     ES5510DSPBackend backend_;
     std::uint8_t applied_slot_ = 0; // audio thread only
     std::array<int, sizeof(kFactoryControls) / sizeof(kFactoryControls[0])> applied_control_values_{};
     std::array<bool, kV2ControlCount> control_supported_{};
+    std::array<std::atomic<bool>, kV4ControlCount> v4_control_changed_{};
 };
 
 #ifndef TROLLFX_FORCE_PLUGIN_TEST

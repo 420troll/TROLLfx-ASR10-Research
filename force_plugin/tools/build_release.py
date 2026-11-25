@@ -32,12 +32,21 @@ def source_digest() -> str:
             "include/trollfx/es5510_factory_parameter_discovery_v02.hpp",
             "include/trollfx/es5510_factory_parameter_discovery_v03.hpp",
             "include/trollfx/es5510_factory_editor_v03.hpp",
+            "include/trollfx/es5510_factory_editor_v04.hpp",
             "docs/ASR10_FACTORY_EDITOR_REGISTRY_V03.json",
+            "docs/ASR10_FACTORY_EDITOR_REGISTRY_V04.json",
+            "docs/ASR10_FORCE_DYNAMIC_EDITOR_V04.md",
             "docs/ASR10_FACTORY_PARAMETER_RECOVERY_V03.json",
             "tests/force_vst_binary_audio_test.cpp",
+            "tests/force_vst_wrapper_audio_test.cpp",
             "force_plugin/tools/test_packaged_vst.py",
             "force_plugin/tools/test_arm32_vst_qemu.py",
-            "tools/parameter_controls/build_editor_registry_v03.py")
+            "force_plugin/tools/test_catalog.py",
+            "force_plugin/tests/test_release_infrastructure.py",
+            "force_plugin/tools/build_release.py",
+            "tools/parameter_controls/build_editor_registry_v03.py",
+            "tools/parameter_controls/build_editor_v04.py",
+            "tests/parameter_controls/test_editor_v04.py")
     inputs += tuple(str(p.relative_to(ROOT)) for p in sorted((ROOT/"force_plugin/assets").rglob("*")) if p.is_file())
     inputs += ("force_plugin/graphics/v3/asset-manifest.json",)
     for rel in inputs:
@@ -144,7 +153,7 @@ def main():
     ap.add_argument("--toolchain",choices=("auto","zig","gcc"),default="auto")
     ap.add_argument("--no-zip",action="store_true",help="build validated folder only")
     a=ap.parse_args()
-    generated=run([sys.executable,ROOT/"tools/parameter_controls/build_editor_registry_v03.py"],cwd=ROOT)
+    generated=run([sys.executable,ROOT/"tools/parameter_controls/build_editor_v04.py"],cwd=ROOT)
     print(generated.stdout,end="")
     sdk=discover_sdk(a.sdk); tc=discover_toolchain(sdk,a.toolchain)
     plugins=sdk/"plugins"
@@ -166,7 +175,8 @@ def main():
                     "include/trollfx/es5510_factory_parameter_control_v01.hpp",
                     "include/trollfx/es5510_factory_parameter_discovery_v02.hpp",
                     "include/trollfx/es5510_factory_parameter_discovery_v03.hpp",
-                    "include/trollfx/es5510_factory_editor_v03.hpp"):
+                    "include/trollfx/es5510_factory_editor_v03.hpp",
+                    "include/trollfx/es5510_factory_editor_v04.hpp"):
             dest=stage/"src"/Path(rel).name if rel.startswith("src/") else stage/"src"/"trollfx"/Path(rel).name
             dest.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(ROOT/rel,dest)
         # Native audio verification uses the actual SDK plugin wrapper and the
@@ -180,6 +190,19 @@ def main():
         print(built.stdout,end="")
         staged_out=stage/"build"/PLUGIN_FOLDER
         if not staged_out.is_dir(): raise RuntimeError(f"SDK builder output not found: {staged_out}")
+        staged_skins=staged_out/"Plugin Skins"
+        staged_tui=staged_skins/"TUI.json"
+        staged_qlinks=staged_skins/"Q-Links.json"
+        if not staged_tui.is_file() or not staged_qlinks.is_file():
+            raise RuntimeError("SDK did not generate the required V4 TUI.json and Q-Links.json; refusing release packaging")
+        tui_data=json.loads(staged_tui.read_text())
+        qlink_data=json.loads(staged_qlinks.read_text())
+        tabs=tui_data.get("pageData",{}).get("tabs",[])
+        maps=qlink_data.get("Screen Mode Q-Links",{}).get("map",[])
+        editor_registry=json.loads((ROOT/"docs/ASR10_FACTORY_EDITOR_REGISTRY_V04.json").read_text())
+        expected_pages=2+sum((e["runtime_ready_count"]+7)//8 for e in editor_registry["effects"] if e["runtime_ready_count"])
+        if len(tabs)!=expected_pages or len(maps)!=expected_pages:
+            raise RuntimeError(f"V4 expected {expected_pages} pages from current 8-control banks; got {len(tabs)} / {len(maps)}")
         readelf=shutil.which("arm-linux-gnueabihf-readelf") or shutil.which("readelf")
         if not readelf: raise RuntimeError("readelf is required for explicit architecture/ABI verification")
         native=stage/"build/native/asr10-fx-collection.so"
@@ -235,15 +258,19 @@ def main():
                 "binary_bound_native_vst_test":binary_test_status,
                 "binary_test_report_sha256":digest(integration_report) if binary_test_status=="PASS" else None,
                 "packaged_binary_bound_audio_test":"PASS" if binary_test_status=="PASS" else binary_test_status,
-                "playable_release_gate":"MET" if binary_test_status=="PASS" else "NOT_MET"},
+                "playable_release_gate":"BLOCKED_ON_FORCE_EDITOR_VALIDATION" if binary_test_status=="PASS" else "NOT_MET",
+                "force_editor_hardware_validation":{"status":"NOT_RUN","required":"Verify navigation beyond six tabs, touch layout, physical Q-Link dispatch, and project state recall on an Akai Force"}},
               "targets":{"native":{"host":platform.machine(),"binary_sha256":digest(native),"host_sim_parameter_dump":"PASS"},**abi},"binaries":{"arm32_sha256":digest(arm32),"arm64_sha256":digest(arm64)},
               "build_command":"force_plugin/tools/build_candidate.sh --toolchain auto","package_command":"force_plugin/tools/build_candidate.sh --toolchain auto","sdk_validation":{"result":"PASS","errors":int(summary.group(1)),"warnings":int(summary.group(2)),"command":"tools/validate.py"},
               "licensing":{"project":"GPL-3.0-only","sdk_framework":"MIT","proprietary_factory_payloads_included":False}}
             (out/"release-manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
+            if binary_report is not None:
+                (out/"binary-validation-report.json").write_text(json.dumps(binary_report,indent=2)+"\n")
             (out/"INSTALL.txt").write_text("BUILD CANDIDATE ONLY — NOT PLAYABLE / DO NOT INSTALL.\nThis package has no approved DSP integration verification marker. Use the repository's opt-in installer only for a playable package.\n")
             create_checksums(out)
-            if binary_test_status=="PASS" and binary_report is not None:
-                run([sys.executable,ROOT/"force_plugin/tools/mark_playable.py","--package",out,"--report",integration_report],cwd=ROOT)
+            # A 15-tab skin exceeds the SDK's six tested function-key tabs.
+            # Keep this as a release candidate until Force hardware confirms
+            # page navigation, touch layout and physical Q-Link dispatch.
             final=ROOT/"force_plugin/dist"/PLUGIN_FOLDER
             backup=None
             if final.exists():

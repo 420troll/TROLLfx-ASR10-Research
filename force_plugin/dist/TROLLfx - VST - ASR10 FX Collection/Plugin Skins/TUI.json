@@ -720,167 +720,6 @@
                     }
                 },
                 {
-                    "key": "radio2",
-                    "value": {
-                        "version": 2,
-                        "actions": [
-                            {
-                                "version": 1,
-                                "onAction": "Mouse Down",
-                                "handler": "Q-Link",
-                                "handleName": "Data",
-                                "additionalData": ""
-                            },
-                            {
-                                "version": 1,
-                                "onAction": "Enter Pressed",
-                                "handler": "Show Overlay",
-                                "handleName": "Data",
-                                "additionalData": "knob overlay"
-                            }
-                        ],
-                        "backgroundData": {
-                            "version": 1,
-                            "focussed": {
-                                "version": 1,
-                                "colour": "00000000",
-                                "image": "panel_background.png"
-                            },
-                            "unfocussed": {
-                                "version": 1,
-                                "colour": "00000000",
-                                "image": "panel_background.png"
-                            }
-                        },
-                        "ignoreMousePresses": false,
-                        "disableCoarseDataWheel": false,
-                        "componentsData": [
-                            {
-                                "version": 2,
-                                "componentData": {
-                                    "version": 1,
-                                    "name": "focus",
-                                    "type": "Focus",
-                                    "data": {
-                                        "version": 1,
-                                        "backgroundColour": "19ffffff",
-                                        "outlineColour": "ff00c7c2",
-                                        "backgroundInset": 4.0,
-                                        "outlineThickness": 1.0
-                                    }
-                                },
-                                "handle remapping": {
-                                    "version": 1,
-                                    "map": []
-                                },
-                                "bounds": {
-                                    "version": 1,
-                                    "acceptsHWFocus": "No",
-                                    "showWhenDataModelInvalid": "Show",
-                                    "whenVisible": "WhenFocussed",
-                                    "boundsType": "Absolute",
-                                    "bounds": "0 0 278 107"
-                                }
-                            },
-                            {
-                                "version": 2,
-                                "componentData": {
-                                    "version": 1,
-                                    "name": "name",
-                                    "type": "Label",
-                                    "data": {
-                                        "version": 1,
-                                        "textStyle": {
-                                            "version": 1,
-                                            "font": {
-                                                "version": 1,
-                                                "name": "Titillium Web",
-                                                "style": "Regular",
-                                                "height": 24.0
-                                            },
-                                            "colour": "ff85949a",
-                                            "justification": "left",
-                                            "case": "Original"
-                                        },
-                                        "type": "Name",
-                                        "handleName": "Data"
-                                    }
-                                },
-                                "handle remapping": {
-                                    "version": 1,
-                                    "map": []
-                                },
-                                "bounds": {
-                                    "version": 1,
-                                    "acceptsHWFocus": "No",
-                                    "showWhenDataModelInvalid": "Show",
-                                    "whenVisible": "Always",
-                                    "boundsType": "Absolute",
-                                    "bounds": "15 8 248 34"
-                                }
-                            },
-                            {
-                                "version": 2,
-                                "componentData": {
-                                    "version": 1,
-                                    "name": "seg 0",
-                                    "type": "Button",
-                                    "data": {
-                                        "version": 2,
-                                        "onImage": "seg2_on.png",
-                                        "offImage": "seg2_off.png",
-                                        "buttonId": 0,
-                                        "numButtonsInGroup": 2,
-                                        "handleName": "Data",
-                                        "gestureBehaviour": "Instant"
-                                    }
-                                },
-                                "handle remapping": {
-                                    "version": 1,
-                                    "map": []
-                                },
-                                "bounds": {
-                                    "version": 1,
-                                    "acceptsHWFocus": "No",
-                                    "showWhenDataModelInvalid": "Show",
-                                    "whenVisible": "Always",
-                                    "boundsType": "Absolute",
-                                    "bounds": "15 54 122 40"
-                                }
-                            },
-                            {
-                                "version": 2,
-                                "componentData": {
-                                    "version": 1,
-                                    "name": "seg 1",
-                                    "type": "Button",
-                                    "data": {
-                                        "version": 2,
-                                        "onImage": "seg2_on.png",
-                                        "offImage": "seg2_off.png",
-                                        "buttonId": 1,
-                                        "numButtonsInGroup": 2,
-                                        "handleName": "Data",
-                                        "gestureBehaviour": "Instant"
-                                    }
-                                },
-                                "handle remapping": {
-                                    "version": 1,
-                                    "map": []
-                                },
-                                "bounds": {
-                                    "version": 1,
-                                    "acceptsHWFocus": "No",
-                                    "showWhenDataModelInvalid": "Show",
-                                    "whenVisible": "Always",
-                                    "boundsType": "Absolute",
-                                    "bounds": "141 54 122 40"
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
                     "key": "knob overlay",
                     "value": {
                         "version": 2,
@@ -1129,127 +968,17 @@
                 ]
             },
             {
-                "key": "Parameter 8",
+                "key": "Parameter 42",
                 "value": [
-                    "28 BUS",
-                    "29 BUS"
+                    "LONG/SMOOTHER",
+                    "SHORT/COARSER"
                 ]
             },
             {
-                "key": "Parameter 9",
+                "key": "Parameter 44",
                 "value": [
-                    "28 BUS",
-                    "29 BUS"
-                ]
-            },
-            {
-                "key": "Parameter 10",
-                "value": [
-                    "25 BUS",
-                    "26 BUS"
-                ]
-            },
-            {
-                "key": "Parameter 11",
-                "value": [
-                    "25 BUS",
-                    "26 BUS"
-                ]
-            },
-            {
-                "key": "Parameter 12",
-                "value": [
-                    "UNCHANGED",
-                    "40",
-                    "41"
-                ]
-            },
-            {
-                "key": "Parameter 13",
-                "value": [
-                    "UNCHANGED",
-                    "31",
-                    "32"
-                ]
-            },
-            {
-                "key": "Parameter 14",
-                "value": [
-                    "UNCHANGED",
-                    "64",
-                    "65"
-                ]
-            },
-            {
-                "key": "Parameter 15",
-                "value": [
-                    "UNCHANGED",
-                    "50",
-                    "51"
-                ]
-            },
-            {
-                "key": "Parameter 16",
-                "value": [
-                    "UNCHANGED",
-                    "9",
-                    "10"
-                ]
-            },
-            {
-                "key": "Parameter 17",
-                "value": [
-                    "UNCHANGED",
-                    "350",
-                    "351"
-                ]
-            },
-            {
-                "key": "Parameter 18",
-                "value": [
-                    "UNCHANGED",
-                    "24",
-                    "25"
-                ]
-            },
-            {
-                "key": "Parameter 19",
-                "value": [
-                    "UNCHANGED",
-                    "20",
-                    "21"
-                ]
-            },
-            {
-                "key": "Parameter 20",
-                "value": [
-                    "UNCHANGED",
-                    "+12",
-                    "+13"
-                ]
-            },
-            {
-                "key": "Parameter 21",
-                "value": [
-                    "UNCHANGED",
-                    "-11",
-                    "-10"
-                ]
-            },
-            {
-                "key": "Parameter 22",
-                "value": [
-                    "UNCHANGED",
                     "4/1",
                     "5/1"
-                ]
-            },
-            {
-                "key": "Parameter 23",
-                "value": [
-                    "UNCHANGED",
-                    "100",
-                    "101"
                 ]
             }
         ],
@@ -1342,7 +1071,7 @@
                                     },
                                     "type": "Text",
                                     "handleName": "Data",
-                                    "text": "50 SLOTS / STATUS IN EFFECT LABEL"
+                                    "text": "50 SLOTS / PROVIDER STATUS"
                                 }
                             },
                             "handle remapping": {
@@ -1380,7 +1109,7 @@
                                     },
                                     "type": "Text",
                                     "handleName": "Data",
-                                    "text": "EDIT SHOWS VERIFIED CONTROLS ONLY"
+                                    "text": "SELECT AN EFFECT TO LOAD"
                                 }
                             },
                             "handle remapping": {
@@ -1418,7 +1147,7 @@
                                     },
                                     "type": "Text",
                                     "handleName": "Data",
-                                    "text": "NO VERIFIED EDIT? AUDIO STILL LOADS"
+                                    "text": "EDIT PAGES ARE FIXED Q-LINK MAPS"
                                 }
                             },
                             "handle remapping": {
@@ -1634,7 +1363,7 @@
                                     },
                                     "type": "Text",
                                     "handleName": "Data",
-                                    "text": "STEREO / NATIVE ES5510 / EXPERIMENTAL 48 kHz"
+                                    "text": "STEREO / NATIVE ES5510"
                                 }
                             },
                             "handle remapping": {
@@ -1672,7 +1401,7 @@
                                     },
                                     "type": "Text",
                                     "handleName": "Data",
-                                    "text": "HOST MIX CONTROLS"
+                                    "text": "PROCESSING: EXPERIMENTAL 48 kHz"
                                 }
                             },
                             "handle remapping": {
@@ -1686,6 +1415,82 @@
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
                                 "bounds": "343 45 278 107"
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "text 2",
+                                "type": "Label",
+                                "data": {
+                                    "version": 1,
+                                    "textStyle": {
+                                        "version": 1,
+                                        "font": {
+                                            "version": 1,
+                                            "name": "Titillium Web",
+                                            "style": "Regular",
+                                            "height": 30.0
+                                        },
+                                        "colour": "fff4f8fa",
+                                        "justification": "left",
+                                        "case": "Original"
+                                    },
+                                    "type": "Text",
+                                    "handleName": "Data",
+                                    "text": "HOST CONTROLS / FIXED IDs"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": []
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "No",
+                                "showWhenDataModelInvalid": "Show",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "663 45 278 107"
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "text 3",
+                                "type": "Label",
+                                "data": {
+                                    "version": 1,
+                                    "textStyle": {
+                                        "version": 1,
+                                        "font": {
+                                            "version": 1,
+                                            "name": "Titillium Web",
+                                            "style": "Regular",
+                                            "height": 30.0
+                                        },
+                                        "colour": "fff4f8fa",
+                                        "justification": "left",
+                                        "case": "Original"
+                                    },
+                                    "type": "Text",
+                                    "handleName": "Data",
+                                    "text": "Q-LINKS: WET, INPUT, OUTPUT"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": []
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "No",
+                                "showWhenDataModelInvalid": "Show",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "983 45 278 107"
                             }
                         },
                         {
@@ -1844,7 +1649,7 @@
             },
             {
                 "version": 1,
-                "tabName": "EDIT",
+                "tabName": "01 EDIT",
                 "fnKeyIndex": 2,
                 "fnKeySubIndex": 0,
                 "componentDefinition": {
@@ -1870,7 +1675,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "PREAMP GAIN",
+                                "name": "REVERB MIX BUS1 @ 01",
                                 "type": "sliderWithFocusMenu",
                                 "data": {
                                     "version": 1,
@@ -1882,27 +1687,24 @@
                                 "map": [
                                     {
                                         "key": "Data",
-                                        "value": "Parameter 20"
+                                        "value": "Parameter 27"
                                     }
                                 ]
                             },
                             "bounds": {
-                                "version": 2,
+                                "version": 1,
                                 "acceptsHWFocus": "Yes",
                                 "showWhenDataModelInvalid": "Hide",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "23 45 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/27/50/Parameter 0"
-                                ]
+                                "bounds": "23 497 278 107"
                             }
                         },
                         {
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "VOICE1 FINE",
+                                "name": "REVERB MIX BUS2 @ 01",
                                 "type": "sliderWithFocusMenu",
                                 "data": {
                                     "version": 1,
@@ -1914,27 +1716,24 @@
                                 "map": [
                                     {
                                         "key": "Data",
-                                        "value": "Parameter 21"
+                                        "value": "Parameter 28"
                                     }
                                 ]
                             },
                             "bounds": {
-                                "version": 2,
+                                "version": 1,
                                 "acceptsHWFocus": "Yes",
                                 "showWhenDataModelInvalid": "Hide",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "343 45 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/40/50/Parameter 0"
-                                ]
+                                "bounds": "343 497 278 107"
                             }
                         },
                         {
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "COMP RATIO",
+                                "name": "DECAY TIME @ 01",
                                 "type": "sliderWithFocusMenu",
                                 "data": {
                                     "version": 1,
@@ -1946,27 +1745,24 @@
                                 "map": [
                                     {
                                         "key": "Data",
-                                        "value": "Parameter 22"
+                                        "value": "Parameter 29"
                                     }
                                 ]
                             },
                             "bounds": {
-                                "version": 2,
+                                "version": 1,
                                 "acceptsHWFocus": "Yes",
                                 "showWhenDataModelInvalid": "Hide",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "663 45 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/41/50/Parameter 0"
-                                ]
+                                "bounds": "663 497 278 107"
                             }
                         },
                         {
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "BASS FC",
+                                "name": "HI FREQ DAMPING @ 01",
                                 "type": "sliderWithFocusMenu",
                                 "data": {
                                     "version": 1,
@@ -1978,732 +1774,17 @@
                                 "map": [
                                     {
                                         "key": "Data",
-                                        "value": "Parameter 23"
+                                        "value": "Parameter 30"
                                     }
                                 ]
                             },
                             "bounds": {
-                                "version": 2,
+                                "version": 1,
                                 "acceptsHWFocus": "Yes",
                                 "showWhenDataModelInvalid": "Hide",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "983 45 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/48/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "HI FREQ DAMPING (ROOM)",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 16"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 196 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/2/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "BS1 TIME L",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 17"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "343 196 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/3/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "CHORUS RATE",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 18"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "663 196 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/5/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "PHASE RATE",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 19"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "983 196 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/6/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "DECAY TIME (HALL)",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 12"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 346 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/0/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "HI FREQ DAMPING (HALL)",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 13"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "343 346 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/0/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "DECAY TIME (ROOM)",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 14"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "663 346 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/2/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "DIFFUSION",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 15"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "983 346 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/2/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS1 (HALL)",
-                                "type": "radio2",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 8"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/0/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS1 (HALL) seg 0",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 22.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "horizontallyCentred verticallyCentred",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "28 BUS"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "38 551 122 40",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/0/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS1 (HALL) seg 1",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 22.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "horizontallyCentred verticallyCentred",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "29 BUS"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "164 551 122 40",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/0/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS2 (HALL)",
-                                "type": "radio2",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 9"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "343 497 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/0/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS2 (HALL) seg 0",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 22.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "horizontallyCentred verticallyCentred",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "28 BUS"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "358 551 122 40",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/0/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS2 (HALL) seg 1",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 22.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "horizontallyCentred verticallyCentred",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "29 BUS"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "484 551 122 40",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/0/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS1 (44KHZ)",
-                                "type": "radio2",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 10"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "663 497 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/1/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS1 (44KHZ) seg 0",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 22.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "horizontallyCentred verticallyCentred",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "25 BUS"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "678 551 122 40",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/1/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS1 (44KHZ) seg 1",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 22.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "horizontallyCentred verticallyCentred",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "26 BUS"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "804 551 122 40",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/1/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS2 (44KHZ)",
-                                "type": "radio2",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 11"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "983 497 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/1/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS2 (44KHZ) seg 0",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 22.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "horizontallyCentred verticallyCentred",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "25 BUS"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "998 551 122 40",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/1/50/Parameter 0"
-                                ]
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS2 (44KHZ) seg 1",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 22.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "horizontallyCentred verticallyCentred",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "26 BUS"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 2,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "1124 551 122 40",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/1/50/Parameter 0"
-                                ]
+                                "bounds": "983 497 278 107"
                             }
                         }
                     ]
@@ -2717,7 +1798,7 @@
             },
             {
                 "version": 1,
-                "tabName": "EDIT 2",
+                "tabName": "02 EDIT",
                 "fnKeyIndex": 3,
                 "fnKeySubIndex": 0,
                 "componentDefinition": {
@@ -2743,45 +1824,7 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "text 0",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 30.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "left",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "LCD READOUT / VERIFIED POINTS ONLY"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Show",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 45 278 107"
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "BS1 TIME L (44KHZ DELAYS)",
+                                "name": "REVERB MIX BUS1 @ 02",
                                 "type": "sliderWithFocusMenu",
                                 "data": {
                                     "version": 1,
@@ -2793,27 +1836,24 @@
                                 "map": [
                                     {
                                         "key": "Data",
-                                        "value": "Parameter 24"
+                                        "value": "Parameter 31"
                                     }
                                 ]
                             },
                             "bounds": {
-                                "version": 2,
+                                "version": 1,
                                 "acceptsHWFocus": "Yes",
                                 "showWhenDataModelInvalid": "Hide",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "23 497 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/4/50/Parameter 0"
-                                ]
+                                "bounds": "23 497 278 107"
                             }
                         },
                         {
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "FLANGE RATE",
+                                "name": "REVERB MIX BUS2 @ 02",
                                 "type": "sliderWithFocusMenu",
                                 "data": {
                                     "version": 1,
@@ -2825,27 +1865,57 @@
                                 "map": [
                                     {
                                         "key": "Data",
-                                        "value": "Parameter 25"
+                                        "value": "Parameter 32"
                                     }
                                 ]
                             },
                             "bounds": {
-                                "version": 2,
+                                "version": 1,
                                 "acceptsHWFocus": "Yes",
                                 "showWhenDataModelInvalid": "Hide",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "343 497 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/7/50/Parameter 0"
-                                ]
+                                "bounds": "343 497 278 107"
                             }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "03 EDIT",
+                "fnKeyIndex": 4,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
                         },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
                         {
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "QUALITY",
+                                "name": "DECAY TIME @ 03",
                                 "type": "sliderWithFocusMenu",
                                 "data": {
                                     "version": 1,
@@ -2857,20 +1927,695 @@
                                 "map": [
                                     {
                                         "key": "Data",
-                                        "value": "Parameter 26"
+                                        "value": "Parameter 33"
                                     }
                                 ]
                             },
                             "bounds": {
-                                "version": 2,
+                                "version": 1,
                                 "acceptsHWFocus": "Yes",
                                 "showWhenDataModelInvalid": "Hide",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "663 497 278 107",
-                                "additionalInvalidatingHandles": [
-                                    "IndexedEnabling/38/50/Parameter 0"
+                                "bounds": "23 497 278 107"
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "DIFFUSION @ 03",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 34"
+                                    }
                                 ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "343 497 278 107"
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "HI FREQ DAMPING @ 03",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 35"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "663 497 278 107"
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "04 EDIT",
+                "fnKeyIndex": 5,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "BS1 TIME L @ 04",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 36"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107"
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "05 EDIT",
+                "fnKeyIndex": 6,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "BS1 TIME L @ 05",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 37"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107"
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "06 EDIT",
+                "fnKeyIndex": 7,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "CHORUS RATE @ 06",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 38"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107"
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "07 EDIT",
+                "fnKeyIndex": 8,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "PHASE RATE @ 07",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 39"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107"
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "08 EDIT",
+                "fnKeyIndex": 9,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "FLANGE RATE @ 08",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 40"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107"
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "28 EDIT",
+                "fnKeyIndex": 10,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "PREAMP GAIN @ 28",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 41"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107"
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "39 EDIT",
+                "fnKeyIndex": 11,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "QUALITY @ 39",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 42"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107"
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "41 EDIT",
+                "fnKeyIndex": 12,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "VOICE1 FINE @ 41",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 43"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107"
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "42 EDIT",
+                "fnKeyIndex": 13,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "COMP RATIO @ 42",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 44"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107"
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "49 EDIT",
+                "fnKeyIndex": 14,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "BASS FC @ 49",
+                                "type": "sliderWithFocusMenu",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 45"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 1,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107"
                             }
                         }
                     ]

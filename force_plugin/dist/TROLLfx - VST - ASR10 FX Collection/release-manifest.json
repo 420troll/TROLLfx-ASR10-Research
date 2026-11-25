@@ -3,12 +3,12 @@
   "product": "TROLLfx - VST - ASR10 FX Collection",
   "version": "1.0.0",
   "release_channel": "experimental",
-  "release_state": "playable",
-  "playable": true,
+  "release_state": "candidate",
+  "playable": false,
   "playable_marker_required": "INTEGRATION_STATUS",
-  "built_utc": "2026-11-25T00:52:28.591062+00:00",
-  "source_commit": "a9c0255e628eb82516c7ac192a83361afaec656e",
-  "source_inputs_sha256": "e0e72abfbf2adeb2bcb36c8ec60beb854acfeae68f6b55a8f9e1813a1c473d4d",
+  "built_utc": "2026-11-25T02:15:22.527828+00:00",
+  "source_commit": "3466ad2ff72908dba94f1fa2512fe6a73a020bd6",
+  "source_inputs_sha256": "41683352a56c0bdc0c2a6e3e917fbd220582ead0dd9fa5326344fd2c0a37c095",
   "sdk": {
     "path": "/mnt/c/Users/Gamer/research/AkaiForceSDK",
     "origin": "https://github.com/420troll/AkaiForceSDK.git",
@@ -32,14 +32,18 @@
     "provider_api": "IValidatedFactoryPackageProvider",
     "production_provider": "local trusted-import index; missing or invalid packages fail closed",
     "binary_bound_native_vst_test": "PASS",
-    "binary_test_report_sha256": "85d00fb0bec75363cc504d49cbfd36a1e8c046f8e91f02774049a9ba8e20ed39",
+    "binary_test_report_sha256": "c0832bc1351373b7ac033e3ea8d71d5abde9e76baa3c3f4e9a17cee6662f5cc8",
     "packaged_binary_bound_audio_test": "PASS",
-    "playable_release_gate": "MET"
+    "playable_release_gate": "BLOCKED_ON_FORCE_EDITOR_VALIDATION",
+    "force_editor_hardware_validation": {
+      "status": "NOT_RUN",
+      "required": "Verify navigation beyond six tabs, touch layout, physical Q-Link dispatch, and project state recall on an Akai Force"
+    }
   },
   "targets": {
     "native": {
       "host": "x86_64",
-      "binary_sha256": "16b498db14369f8e7f5b03dd63d5d7d5a9f500f1f43ec14441b407efa55d8362",
+      "binary_sha256": "0d36469a95e4de22a3802b731435dcda067f571bc4a9648bd9105673aeca7799",
       "host_sim_parameter_dump": "PASS"
     },
     "arm32": {
@@ -68,8 +72,8 @@
     }
   },
   "binaries": {
-    "arm32_sha256": "18b5272b5c0b5656bb1f81a24d81490b0283b5c7a4397142375595685d0f771c",
-    "arm64_sha256": "53e1732f017440afa471fb876ed4a5c0999d02f696591ff54393b7a6c7e123d0"
+    "arm32_sha256": "f4d21c09a83f13554107cfd3b73aaf19836aad13414ed8c646c3e7114084ff28",
+    "arm64_sha256": "2d10aa7b46115837a35a835cddc81c6ce43fc38756950e1ef6dd74664a3de0f6"
   },
   "build_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
   "package_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
@@ -83,67 +87,5 @@
     "project": "GPL-3.0-only",
     "sdk_framework": "MIT",
     "proprietary_factory_payloads_included": false
-  },
-  "playable_marker": "INTEGRATION_STATUS",
-  "verified_slots": [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24,
-    25,
-    26,
-    27,
-    28,
-    29,
-    30,
-    31,
-    32,
-    33,
-    34,
-    35,
-    36,
-    37,
-    38,
-    39,
-    40,
-    41,
-    42,
-    43,
-    44,
-    45,
-    46,
-    47,
-    48,
-    49,
-    50
-  ],
-  "verification_report_sha256": "85d00fb0bec75363cc504d49cbfd36a1e8c046f8e91f02774049a9ba8e20ed39",
-  "arm32_qemu_validation": {
-    "result": "PASS",
-    "emulator": "qemu-arm version 8.2.2 (Debian 1:8.2.2+ds-0ubuntu1.18)",
-    "hardware_validation": false,
-    "report": "arm32-qemu-validation.json",
-    "plugin_sha256": "18b5272b5c0b5656bb1f81a24d81490b0283b5c7a4397142375595685d0f771c",
-    "output_sha256": "752704e0f7a95fc0b6b555083d4219709b9d4b24c7cdaf56b06779f1d7e55946"
   }
 }
