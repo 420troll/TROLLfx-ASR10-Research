@@ -8,6 +8,7 @@ from bridge import VSTBridge
 from render import layout_report, render_page
 from skin_model import load_skin
 from build import SIM_DIR, PLUGIN, HOST
+from parameter_registry import load_registry
 
 ROOT=Path(__file__).resolve().parents[2]
 PACKAGE=ROOT/"force_plugin/dist/TROLLfx - VST - ASR10 FX Collection"
@@ -30,13 +31,14 @@ CONTROL_ROWS={}
 for line in (ROOT/"include/trollfx/es5510_factory_editor_v04.hpp").read_text().splitlines():
     m=re.search(r'\{\s*(\d+),\s*"([^"]+)",\s*"([^"]+)",\s*"[^"]+",\s*"[^"]+",\s*(\d+),\s*kPoint',line)
     if m: CONTROL_ROWS.setdefault(int(m.group(1)),[]).append({"id":m.group(2),"label":m.group(3),"canonical":int(m.group(4))})
-ROUTES={slot:[(c["id"],c["canonical"],REGISTER_GROUPS[slot][i]) for i,c in enumerate(rows)]
-        for slot,rows in CONTROL_ROWS.items() if slot in REGISTER_GROUPS}
+ROUTES={slot:[(c["id"],c["canonical"],REGISTER_GROUPS.get(slot,[])[i] if i<len(REGISTER_GROUPS.get(slot,[])) else [])
+        for i,c in enumerate(rows)] for slot,rows in CONTROL_ROWS.items()}
 
 class Simulator:
     def __init__(self, assets: Path):
         self.model=load_skin(SKIN)
         self.model["effect_names"]=[str(x) for x in EFFECT_NAMES]
+        self.model["factory_effects"] = load_registry()
         self.assets=assets
         self.host=VSTBridge(HOST,PLUGIN,assets)
         if self.host.num_params != 64: raise RuntimeError(f"expected 64 VST parameters, got {self.host.num_params}")
@@ -47,6 +49,7 @@ class Simulator:
         self.log_path.parent.mkdir(parents=True,exist_ok=True)
         self.ui_page=0
         self.last_trace=self.host.trace_latest()
+        self.inspector_values = {}
 
     def slot(self): return max(1,min(50,int(math.floor(self.host.get(0)*49+0.5))+1))
     def effect_name(self,slot):
@@ -57,8 +60,69 @@ class Simulator:
         params=[]
         for i in range(self.host.num_params):
             params.append({"index":i,"normalized":values[str(i)],"name":self.host.text(i,True),"display":self.host.text(i)})
+        effect=self.model["factory_effects"][self.slot()-1]
+        current=self.inspector_values.setdefault(str(effect["slot"]), {})
+        controls=[]
+        for c in effect["controls"]:
+            v=current.get(c["id"])
+            if v is None:
+                if c["route"]:
+                    v=c["route"]["point_values"][0]
+                elif c["type"] in ("enumerated", "discrete") and c.get("observed_choices"):
+                    v=c["observed_choices"][0]
+                else:
+                    v=c["range"][0] if c["range"] else 0
+                current[c["id"]]=v
+            controls.append({**c,"value":v})
         return {"params":params,"values":values,"selected_effect":self.selected(),"page":self.model["pages"][self.ui_page]["name"],
+                "inspector_controls":controls,
                 "status":self.host.text(5),"trace_available":self.host.has_trace}
+
+    def set_control(self, control_id, value, qlink=None, bank=0):
+        """Set an inspector value; send only exact factory-VST points to the host."""
+        with self.lock:
+            slot=self.slot(); effect=self.model["factory_effects"][slot-1]
+            control=next((x for x in effect["controls"] if x["id"]==control_id), None)
+            if control is None: raise ValueError("control is not part of the selected effect")
+            if control["type"] in ("enumerated", "discrete"):
+                try: candidate=str(value)
+                except Exception: candidate=""
+                options=control.get("observed_choices") or []
+                if not options: raise ValueError("no verified editor choices are available")
+                if candidate not in [str(x) for x in options]: raise ValueError("choice is not in the observed editor list")
+                stored=candidate
+            else:
+                stored=float(value)
+                if not math.isfinite(stored): raise ValueError("value must be finite")
+                if control["range"]:
+                    lo,hi=control["range"]
+                    if stored<lo or stored>hi: raise ValueError("value is outside the documented editor range")
+            self.inspector_values.setdefault(str(slot), {})[control_id]=stored
+            event={"schema":"trollfx-force-simulator-event-v1","event_type":"inspector_edit",
+                "selected_effect":{"slot":slot,"name":self.effect_name(slot)},"control_id":control_id,
+                "parameter_name":control["name"],"original_editor_value":stored,
+                "normalized_vst_value":None,"host_parameter_index":None,
+                "canonical_identity":control["route"]["canonical_identity"] if control["route"] else None,
+                "dsp_status":control["status"],"dsp_sent":False,"dsp_register_writes_applied":[],
+                "physical_equivalent_qlink":int(qlink) if qlink else None,"bank":int(bank)}
+            route=control.get("route")
+            point_index=None
+            if route:
+                if stored in route["point_values"]:
+                    point_index=route["point_values"].index(stored)
+                elif str(stored) in [str(x) for x in route["point_labels"]]:
+                    point_index=[str(x) for x in route["point_labels"]].index(str(stored))
+            if route and point_index is not None:
+                ordinal=point_index
+                norm=ordinal/max(1,len(route["point_values"])-1)
+                if self.host.num_params>54: self.host.set(54,float(route.get("bank",0)))
+                applied=self.set_param(route["host_parameter_index"],norm,"PC EDITOR",qlink)
+                event.update({"normalized_vst_value":norm,"host_parameter_index":route["host_parameter_index"],
+                    "canonical_identity":route["canonical_identity"],"dsp_sent":True,
+                    "dsp_register_writes_applied":applied["dsp_register_writes_applied"],
+                    "resolved_control_register_group_verified":applied["resolved_control_register_group_verified"]})
+            with self.log_path.open("a",encoding="utf-8") as f: f.write(json.dumps(event,separators=(",",":"))+"\n")
+            return {"event":event,"state":self.state()}
     def _wait_effect(self, slot):
         deadline=time.monotonic()+5.0
         while time.monotonic()<deadline:
@@ -70,10 +134,11 @@ class Simulator:
         return False
     def _route(self,slot,host_index):
         if not 46<=host_index<=53: return None
-        controls=ROUTES.get(slot,[]); ordinal=host_index-46
+        controls=ROUTES.get(slot,[]); bank=int(round(self.host.get(54))) if self.host.num_params>54 else 0
+        ordinal=bank*8+host_index-46
         if ordinal>=len(controls): return None
         cid,canonical,gprs=controls[ordinal]
-        return {"id":cid,"canonical_parameter_index":canonical,"registers":[f"0x{x:02X}" for x in gprs],"gpr_ints":gprs}
+        return {"id":cid,"canonical_parameter_index":canonical,"bank":bank,"registers":[f"0x{x:02X}" for x in gprs],"gpr_ints":gprs}
     @staticmethod
     def _matching_group(rows, slot, expected_gprs):
         # A parameter group is applied atomically at one ES5510 frame. Only a contiguous
@@ -210,6 +275,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 x=json.loads(raw);self.sim.ui_page=max(0,min(int(x.get("page",self.sim.ui_page)),len(self.sim.model["pages"])-1))
                 event=self.sim.set_param(x["param"],x["normalized"],x.get("page_name"),x.get("qlink"))
                 return self.send_json({"event":event,"state":self.sim.state()})
+            if path=="/api/control":
+                x=json.loads(raw); result=self.sim.set_control(x["control_id"],x["value"],x.get("qlink"),x.get("bank",0))
+                return self.send_json(result)
             if path=="/api/page":
                 x=json.loads(raw);event=self.sim.select_page(x["page"])
                 return self.send_json({"event":event,"state":self.sim.state()})

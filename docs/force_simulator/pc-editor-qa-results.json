@@ -1,0 +1,85 @@
+{
+  "schema": "trollfx-pc-full-parameter-editor-qa-v1",
+  "generated_utc": "2026-11-25T06:58:41.679835+00:00",
+  "branch": "feature/asr10-force-pc-gui-simulator",
+  "base_commit": "9639f2bdc5d68bcea23ee3491589ab80e974a0ae",
+  "results": {
+    "factory_registry": {
+      "status": "PASS",
+      "effects": 50,
+      "catalog_descriptors": 594,
+      "runtime_only_additions": 6,
+      "editor_controls": 600,
+      "native_vst_routed_controls": 19
+    },
+    "playwright_browser": {
+      "status": "PASS",
+      "tests": 11,
+      "command": "TROLLFX_SIM_PORT=8766 npm run test:browser",
+      "coverage": [
+        "range inspection and exact values",
+        "enumerated controls",
+        "no unsupported DSP writes",
+        "effect switching and per-effect draft retention",
+        "bank switching and mouse Q-Link gestures",
+        "native VST parameter/register trace",
+        "card text overflow and overlap",
+        "generated SDK page preview"
+      ]
+    },
+    "python_simulator": {
+      "status": "PASS",
+      "tests": 14,
+      "native_vst_integration_tests": 8,
+      "registry_tests": 4,
+      "skin_layout_tests": 2,
+      "command": "python3 -m unittest discover -s tools/force_simulator/tests -v"
+    },
+    "sdk_catalog_checks": {
+      "status": "PASS",
+      "commands": [
+        "python3 tools/parameter_controls/build_editor_v04.py --check",
+        "python3 tests/parameter_controls/test_editor_v04.py",
+        "python3 force_plugin/tools/test_catalog.py"
+      ]
+    },
+    "armv7_qemu": {
+      "recorded_report_status": "PASS",
+      "recorded_processed_slots": 50,
+      "report_plugin_sha256": "badefa8fa322b812adbf82166d9782e17d770d4453cb06f428b2f9ed98a3cab4",
+      "current_binary_sha256": "badefa8fa322b812adbf82166d9782e17d770d4453cb06f428b2f9ed98a3cab4",
+      "digest_matches": true,
+      "rerun_this_session": false,
+      "rerun_limit": "qemu-arm executable is not installed in this environment"
+    },
+    "physical_force": {
+      "installed_or_tested": false,
+      "status": "NOT VERIFIED"
+    }
+  },
+  "screenshots": [
+    {
+      "path": "docs/force_simulator/screenshots/pc-editor-hall-bank-1.png",
+      "sha256": "f48812d8aa56a508add820554985dee213cbee1948a61ac532c7db5bde3067ff"
+    },
+    {
+      "path": "docs/force_simulator/screenshots/pc-editor-pitch-bank-1.png",
+      "sha256": "9effc21ec4bde1e50fb12ee6bfb9bbf4824479fa929cc6e5b4047984478ef0bf"
+    },
+    {
+      "path": "docs/force_simulator/screenshots/pc-editor-pitch-bank-2.png",
+      "sha256": "667bdba5870042c4874894f0bc95ce36bac132fb3aa7ce68712358ebaf9fce9f"
+    },
+    {
+      "path": "docs/force_simulator/screenshots/pc-editor-room-bank-1.png",
+      "sha256": "cba764d77b732b9f0c640479ac68fa9baf758780bc8ae483f37bbb9cf4668c99"
+    }
+  ],
+  "mapping_matrix": "docs/force_simulator/factory-control-mapping-matrix.csv",
+  "notes": [
+    "Only exact values in current effect-qualified VST routes send host updates.",
+    "Documented full ranges outside those exact points are local inspection drafts.",
+    "V05 audio mappings not attached to the current VST GUI bridge are visible as pending and are not sent through an unrelated parameter.",
+    "PC-only drafts are session-local and are not added to the existing VST state chunk."
+  ]
+}

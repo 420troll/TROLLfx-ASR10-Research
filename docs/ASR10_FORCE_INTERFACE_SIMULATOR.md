@@ -2,6 +2,8 @@
 
 The simulator previews the V4.1 generated Akai skin and drives the plugin's **actual native VST2 entry point**. It is for fast PC layout and control iteration. It does not emulate MPC/Force firmware or prove hardware behavior.
 
+The current data-driven PC full-parameter editor, inspection/write safety rules, effect banks, screenshots, and refreshed QA are documented in [ASR-10 full-parameter PC editor](ASR10_PC_FULL_PARAMETER_EDITOR.md). That guide is the source of truth for PC editor behavior.
+
 ## Launch
 
 From the `feature/asr10-force-effect-dependent-editor-v4.1` worktree:
@@ -54,13 +56,13 @@ Known differences and limitations:
 
 The generated TUI now uses a compact text profile: 20 px page headings, 18 px control names, and 15 px values, with the value column widened within the existing knob cell. The title strings are concise. The SDK-generated control positions, parameter indices, and Q-Link maps are unchanged. The screenshot/layout report should show no clipping or label/widget overlap warnings. Empty card artwork and disabled EDIT slots remain part of the generated skin and are not simulator-created controls.
 
-After installing the simulator's npm development dependencies, run `npm run test:browser` from `tools/force_simulator/`. Playwright uses real browser mouse input to verify all three tabs, HALL/ROOM selection, HALL Q3 and ROOM Q1 rotations, and their native VST event/register traces. Browser automation is desktop evidence only and does not emulate Force firmware.
+After installing the simulator's npm development dependencies, run `npm run test:browser` from `tools/force_simulator/`. The current Playwright suite exercises range inspection, VST-safe values, effect-dependent banks, mouse Q-Links, state retention, native event/register traces, and the fixed SDK preview. The current results are in [pc-editor-qa-results.json](force_simulator/pc-editor-qa-results.json). Browser automation is desktop evidence only and does not emulate Force firmware.
 
 ## Independent native evidence
 
 [`verification-report.json`](force_simulator/verification-report.json) records hashes of the V4.1 skin and screenshot outputs, plus the redacted focused test results. Its `tested_q_link_dsp_routes` section lists the physical-equivalent EDIT Q-Link, actual VST parameter index, canonical control resolved from the C++ registry, and observed same-frame GPR group for each tested route. Raw GPR values and per-event logs stay outside Git. At the captured run the local provider reported 50/50 packages validated, but this task's runtime coverage is focused on HALL (slot 1), ROOM REVERB (slot 3), PITCH SHIFT (slot 39), and an effect with no verified controls.
 
-Eight focused native integration tests and four Playwright browser interaction tests passed. They exercise the actual plugin callback; HALL → ROOM → PITCH SHIFT → HALL routing; verified same-frame GPR groups; no change to unrelated HALL controls; state save/restore to the discrete canonical value; `NO VERIFIED CONTROL` behavior; finite wet audio; stereo 48 kHz WAV output; page navigation; effect selection; mouse-operated HALL Q3 and ROOM Q1; and audit event logging. Register values, firmware payloads, audio files, checkpoints, provider files, and detailed event logs are excluded from Git; raw test logs remain local.
+Earlier focused native and browser results remain in the historical verification report. For this PC editor change, use the refreshed counts and screenshot captures in [pc-editor-qa-results.json](force_simulator/pc-editor-qa-results.json); raw private package values and per-event logs stay local.
 
 This proves that these host parameter updates can reach the runtime and apply verified DSP writes under the desktop VST host. It does **not** prove an encoder on the Force invokes the same VST parameter index.
 
