@@ -26,7 +26,7 @@ The scanner selected each effect, entered EDIT/EFFECTS, and traversed four varia
 | Register mappings newly verified in V4 | 0 |
 | Audio mappings newly verified in V4 | 0 |
 
-The machine-readable, redacted scan is [ASR10_FACTORY_EFFECT_EDITOR_INVENTORY_V04.json](ASR10_FACTORY_EFFECT_EDITOR_INVENTORY_V04.json). It preserves the original slot ordering and includes slot 02 with a `deferred` status. For scanned effects, each page stores the exact LCD string, variation and ordinal, cursor-attribute spans, parsed display fields and values, selected-field observations, and a summary of GPR activity between page timestamps.
+The machine-readable, redacted scan is [ASR10_FACTORY_EFFECT_EDITOR_INVENTORY_V04.json](ASR10_FACTORY_EFFECT_EDITOR_INVENTORY_V04.json). It preserves the original slot ordering and includes slot 02 with a `deferred` status. For scanned effects, each page stores the exact LCD string, variation and ordinal, cursor-attribute spans, parsed display fields and values, selected-field observations, and a summary of GPR activity between page timestamps. Manual-catalog comparison rows point to matching observed labels; the values and per-variation observations are stored once in `os_observed_fields` and page records.
 
 Raw emulator logs and ordered GPR events are private and remain outside Git at:
 

@@ -251,8 +251,9 @@ def build_summary(progress, catalog):
                                 "status": ("OS_OBSERVED_LABEL_MATCH" if exact else
                                            "OS_OBSERVED_LABEL_ALIAS_OR_EXPANSION" if observed_keys else
                                            "DOCUMENTED_NOT_LABEL_MATCHED_REVIEW"),
-                                "observed_labels": [labels[k]["label"] for k in observed_keys],
-                                "factory_value": {labels[k]["label"]: labels[k]["observations"] for k in observed_keys} if observed_keys else None})
+                                # Values are held once under os_observed_fields;
+                                # avoid duplicating every variation/page record.
+                                "observed_labels": [labels[k]["label"] for k in observed_keys]})
         # Keep all UI pages, but omit raw ordered GPR events from the public
         # inventory; they remain in the private progress/log package.
         public_pages = []
