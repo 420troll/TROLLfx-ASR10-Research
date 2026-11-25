@@ -6,9 +6,9 @@
   "release_state": "playable",
   "playable": true,
   "playable_marker_required": "INTEGRATION_STATUS",
-  "built_utc": "2026-11-25T00:40:37.533851+00:00",
-  "source_commit": "ef6d185a428881863ba5ab308319feba58e9b715",
-  "source_inputs_sha256": "167a3f83a109e49582c75b9fae097ae3b59451ca2ca685bbd42341498376c1c8",
+  "built_utc": "2026-11-25T00:52:28.591062+00:00",
+  "source_commit": "a9c0255e628eb82516c7ac192a83361afaec656e",
+  "source_inputs_sha256": "e0e72abfbf2adeb2bcb36c8ec60beb854acfeae68f6b55a8f9e1813a1c473d4d",
   "sdk": {
     "path": "/mnt/c/Users/Gamer/research/AkaiForceSDK",
     "origin": "https://github.com/420troll/AkaiForceSDK.git",
@@ -32,14 +32,14 @@
     "provider_api": "IValidatedFactoryPackageProvider",
     "production_provider": "local trusted-import index; missing or invalid packages fail closed",
     "binary_bound_native_vst_test": "PASS",
-    "binary_test_report_sha256": "beb707af51882062e7e6a346638b70422de20a0b2edb52bfcd23610c97e1d85f",
+    "binary_test_report_sha256": "85d00fb0bec75363cc504d49cbfd36a1e8c046f8e91f02774049a9ba8e20ed39",
     "packaged_binary_bound_audio_test": "PASS",
     "playable_release_gate": "MET"
   },
   "targets": {
     "native": {
       "host": "x86_64",
-      "binary_sha256": "fa4f514c38a441438516415e21f1cd92742fe8364a2b7b583950927608b8fdf6",
+      "binary_sha256": "16b498db14369f8e7f5b03dd63d5d7d5a9f500f1f43ec14441b407efa55d8362",
       "host_sim_parameter_dump": "PASS"
     },
     "arm32": {
@@ -137,13 +137,13 @@
     49,
     50
   ],
-  "verification_report_sha256": "beb707af51882062e7e6a346638b70422de20a0b2edb52bfcd23610c97e1d85f",
+  "verification_report_sha256": "85d00fb0bec75363cc504d49cbfd36a1e8c046f8e91f02774049a9ba8e20ed39",
   "arm32_qemu_validation": {
     "result": "PASS",
     "emulator": "qemu-arm version 8.2.2 (Debian 1:8.2.2+ds-0ubuntu1.18)",
     "hardware_validation": false,
     "report": "arm32-qemu-validation.json",
     "plugin_sha256": "18b5272b5c0b5656bb1f81a24d81490b0283b5c7a4397142375595685d0f771c",
-    "output_sha256": "49230c16023982b0955e9863c98a35946c56097b2c0c06452f27fdbcfe5fef23"
+    "output_sha256": "752704e0f7a95fc0b6b555083d4219709b9d4b24c7cdaf56b06779f1d7e55946"
   }
 }

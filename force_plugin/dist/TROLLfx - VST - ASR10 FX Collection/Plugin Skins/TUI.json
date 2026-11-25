@@ -30,12 +30,12 @@
                             "focussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             },
                             "unfocussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             }
                         },
                         "ignoreMousePresses": false,
@@ -50,7 +50,7 @@
                                     "data": {
                                         "version": 1,
                                         "backgroundColour": "19ffffff",
-                                        "outlineColour": "ff00d4d8",
+                                        "outlineColour": "ff00c7c2",
                                         "backgroundInset": 4.0,
                                         "outlineThickness": 1.0
                                     }
@@ -206,12 +206,12 @@
                             "focussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             },
                             "unfocussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             }
                         },
                         "ignoreMousePresses": false,
@@ -226,7 +226,7 @@
                                     "data": {
                                         "version": 1,
                                         "backgroundColour": "19ffffff",
-                                        "outlineColour": "ff00d4d8",
+                                        "outlineColour": "ff00c7c2",
                                         "backgroundInset": 4.0,
                                         "outlineThickness": 1.0
                                     }
@@ -303,12 +303,12 @@
                             "focussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             },
                             "unfocussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             }
                         },
                         "ignoreMousePresses": false,
@@ -323,7 +323,7 @@
                                     "data": {
                                         "version": 1,
                                         "backgroundColour": "19ffffff",
-                                        "outlineColour": "ff00d4d8",
+                                        "outlineColour": "ff00c7c2",
                                         "backgroundInset": 4.0,
                                         "outlineThickness": 1.0
                                     }
@@ -400,12 +400,12 @@
                             "focussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             },
                             "unfocussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             }
                         },
                         "ignoreMousePresses": false,
@@ -420,7 +420,7 @@
                                     "data": {
                                         "version": 1,
                                         "backgroundColour": "19ffffff",
-                                        "outlineColour": "ff00d4d8",
+                                        "outlineColour": "ff00c7c2",
                                         "backgroundInset": 4.0,
                                         "outlineThickness": 1.0
                                     }
@@ -576,12 +576,12 @@
                             "focussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             },
                             "unfocussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             }
                         },
                         "ignoreMousePresses": false,
@@ -596,7 +596,7 @@
                                     "data": {
                                         "version": 1,
                                         "backgroundColour": "19ffffff",
-                                        "outlineColour": "ff00d4d8",
+                                        "outlineColour": "ff00c7c2",
                                         "backgroundInset": 4.0,
                                         "outlineThickness": 1.0
                                     }
@@ -744,12 +744,12 @@
                             "focussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             },
                             "unfocussed": {
                                 "version": 1,
                                 "colour": "00000000",
-                                "image": ""
+                                "image": "panel_background.png"
                             }
                         },
                         "ignoreMousePresses": false,
@@ -764,7 +764,7 @@
                                     "data": {
                                         "version": 1,
                                         "backgroundColour": "19ffffff",
-                                        "outlineColour": "ff00d4d8",
+                                        "outlineColour": "ff00c7c2",
                                         "backgroundInset": 4.0,
                                         "outlineThickness": 1.0
                                     }
@@ -889,13 +889,13 @@
                             "version": 1,
                             "focussed": {
                                 "version": 1,
-                                "colour": "ff15191c",
-                                "image": ""
+                                "colour": "ff12171a",
+                                "image": "panel_background.png"
                             },
                             "unfocussed": {
                                 "version": 1,
-                                "colour": "ff15191c",
-                                "image": ""
+                                "colour": "ff12171a",
+                                "image": "panel_background.png"
                             }
                         },
                         "ignoreMousePresses": true,
@@ -951,13 +951,13 @@
                             "version": 1,
                             "focussed": {
                                 "version": 1,
-                                "colour": "ff15191c",
-                                "image": ""
+                                "colour": "ff12171a",
+                                "image": "panel_background.png"
                             },
                             "unfocussed": {
                                 "version": 1,
-                                "colour": "ff15191c",
-                                "image": ""
+                                "colour": "ff12171a",
+                                "image": "panel_background.png"
                             }
                         },
                         "ignoreMousePresses": true,
@@ -1013,13 +1013,13 @@
                             "version": 1,
                             "focussed": {
                                 "version": 1,
-                                "colour": "ff15191c",
-                                "image": ""
+                                "colour": "ff12171a",
+                                "image": "panel_background.png"
                             },
                             "unfocussed": {
                                 "version": 1,
-                                "colour": "ff15191c",
-                                "image": ""
+                                "colour": "ff12171a",
+                                "image": "panel_background.png"
                             }
                         },
                         "ignoreMousePresses": true,
@@ -1270,13 +1270,13 @@
                         "version": 1,
                         "focussed": {
                             "version": 1,
-                            "colour": "ff15191c",
-                            "image": ""
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
                         },
                         "unfocussed": {
                             "version": 1,
-                            "colour": "ff15191c",
-                            "image": ""
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
                         }
                     },
                     "ignoreMousePresses": false,
@@ -1600,13 +1600,13 @@
                         "version": 1,
                         "focussed": {
                             "version": 1,
-                            "colour": "ff15191c",
-                            "image": ""
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
                         },
                         "unfocussed": {
                             "version": 1,
-                            "colour": "ff15191c",
-                            "image": ""
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
                         }
                     },
                     "ignoreMousePresses": false,
@@ -1854,13 +1854,13 @@
                         "version": 1,
                         "focussed": {
                             "version": 1,
-                            "colour": "ff15191c",
-                            "image": ""
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
                         },
                         "unfocussed": {
                             "version": 1,
-                            "colour": "ff15191c",
-                            "image": ""
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
                         }
                     },
                     "ignoreMousePresses": false,
@@ -2727,13 +2727,13 @@
                         "version": 1,
                         "focussed": {
                             "version": 1,
-                            "colour": "ff15191c",
-                            "image": ""
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
                         },
                         "unfocussed": {
                             "version": 1,
-                            "colour": "ff15191c",
-                            "image": ""
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
                         }
                     },
                     "ignoreMousePresses": false,
