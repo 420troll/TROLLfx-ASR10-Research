@@ -78,7 +78,9 @@ CPU-attributed host-write evidence for the observed HALL edit includes:
 
 The three derived coefficients are consistent with the original 68000 helper arithmetic for raw coefficient `c` stored in A6: `x = c << 8`; `GPR03 = x << 8`; `GPR04 = -GPR03` in 24-bit form; and `GPR05 = (0x3fffffff - x*x) arithmetic-shift-right 7`, masked to 24 bits. At `c=0x34`, this gives `0x340000`, `0xCC0000`, and `0x6ADFFF`. This is a conversion from the internal coefficient to three DSP coefficients. It is not the missing conversion from displayed 0–99 to the internal coefficient.
 
-## HALL DECAY TIME 0–99 status
+## HALL DECAY TIME 0–99 status — historical V2 snapshot
+
+**Superseded by [ASR10_ORIGINAL_PARAMETER_ENGINE_RECONSTRUCTION.md](ASR10_ORIGINAL_PARAMETER_ENGINE_RECONSTRUCTION.md).** This subsection preserves the earlier uncertainty record; the new bounded instruction/RAM trace identifies the lookup-table neighbor check at `F8AE98..F8AECA`, proves the 28 duplicate display buckets cause the one-code path difference, and validates the Variation 1 five-register group over the full captured domain. The unresolved-cause statements below were true when V2 was written and are no longer current.
 
 The latest UI range run visited 0 through 99 and returned to the starting displayed value, with 200 one-step transitions in variation 1. After correcting the host-event parser to accept the optional `caller=...` field introduced by the CPU tracing instrumentation, the existing raw range log was reparsed without repeating the OS run. That restored the actual per-step GPR event windows and confirmed direction-dependent raw coefficients at 28 of the 98 interior displayed values. At every differing point, the descending route's GPR `0x6E` coefficient is exactly one code above the ascending route. The differing display values are `1, 4, 8, 12, 15, 19, 22, 26, 29, 33, 36, 40, 44, 47, 51, 54, 58, 62, 65, 69, 72, 76, 79, 83, 86, 90, 94, 97`. The other 70 interior values match. For example, display 40 has raw codes `0x33` (ascending) and `0x34` (descending); display 65 has `0x53` and `0x54`. This is now event-level measurement, not stale full-register snapshots.
 

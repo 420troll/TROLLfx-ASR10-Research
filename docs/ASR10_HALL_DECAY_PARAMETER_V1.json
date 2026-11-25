@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "controls": [
+    {
+      "id": "asr10:rom01.hall.decay_time",
+      "factory_effect": {"slot": 1, "name": "HALL REVERB", "variation_context": [1]},
+      "identity": {
+        "stable_name": "DECAY TIME",
+        "group": "reverb_decay",
+        "channel_scope": "shared",
+        "conditions": ["Variation 1 confirmed", "Control must retain current raw code; editing is a one-step state transition"],
+        "modulation_assignment_constraints": ["Sweep used the factory-loaded modulation state; disabling both destinations was not verified"]
+      },
+      "manual": {
+        "status": "documented", "label": "DECAY TIME", "minimum": 0, "maximum": 99, "step": 1,
+        "choices": [], "units": "display units",
+        "provenance": {"classification": "manual_documentation", "references": ["ASR-10 Musician's Manual, Section 6; prior local audit recorded in docs/ASR10_ORIGINAL_OS_PARAMETER_RECOVERY_AND_MONITOR_V2.md"], "confidence": "high", "limitations": ["This change reuses the prior manual audit and does not claim a fresh PDF transcription"]}
+      },
+      "os_observation": {
+        "status": "observed", "lcd_labels": ["DECAY TIME=00..99"], "cursor_order": null, "variation_context": [1],
+        "provenance": {"classification": "direct_measurement", "references": ["Private OS 3.53 full-range sweep v4; aggregate validation in docs/ASR10_FULL_FACTORY_PARAMETER_RECOVERY_V1.md"], "confidence": "high", "limitations": ["LCD inventory cursor ordinal not included in this coefficient experiment"]}
+      },
+      "storage": {
+        "identity": "OS editor structure A6+0 raw 7-bit coefficient; A6+3 displayed value observed stale during update",
+        "scope": "per_variation",
+        "conditions": ["The raw coefficient must persist across edits to preserve the OS direction-dependent choice"]
+      },
+      "dsp_mapping": {
+        "status": "verified", "kind": "stateful_transition",
+        "supported_domain": [{"raw_minimum": 0, "raw_maximum": 127}, {"display_minimum": 0, "display_maximum": 99}],
+        "formula": "d(r)=r-count(k<=r for k in duplicate_codes); on an up/down key, skip a neighboring raw code when the lookup returns the same display. q=clamp(r,12,76); GPR6E=(r<<16); GPR5B=(min(8,127-r)<<16)|r; x=q<<8; GPR03=(x<<8)&0xffffff; GPR04=(-GPR03)&0xffffff; GPR05=((signed32(-x*x+0x3fffffff) arithmetic_shift_right 7)&0xffffff). Ordered writes: 6E,5B,03,04,05.",
+        "registers": [
+          {"order": 1, "gpr": "0x6E", "value_rule": "raw_code << 16"},
+          {"order": 2, "gpr": "0x5B", "value_rule": "(min(8,127-raw_code)<<16)|raw_code"},
+          {"order": 3, "gpr": "0x03", "value_rule": "clamp(raw_code,12,76)<<16"},
+          {"order": 4, "gpr": "0x04", "value_rule": "two's-complement negation of GPR03 in 24 bits"},
+          {"order": 5, "gpr": "0x05", "value_rule": "68000 signed-word multiply and arithmetic-shift expression using q=clamp(raw_code,12,76)"}
+        ],
+        "provenance": {"classification": "direct_measurement", "references": ["Private OS 3.53 full-range sweep v4: 198 captured transitions; 28 one-code pairs", "Private bounded CPU/memory trace: F8AEC8 lookup-neighbor test, 00DBBA/00DB8E raw increment/decrement, writer FFF97792", "Transformed duplicate-code list in include/trollfx/es5510_hall_decay_control.hpp", "tools/parameter_controls/analyze_hall_decay_sweep.py"], "confidence": "high", "limitations": ["Variation 1 only is fully checked for the five-register group", "Directly setting a displayed value from a cold state is not equivalent to replaying OS key steps", "No claim that this register model is loaded into the production FactoryRuntime API"]}
+      },
+      "audio_validation": {
+        "status": "partial", "tested_values": [40, 41],
+        "provenance": {"classification": "direct_measurement", "references": ["Existing native HALL runtime comparison, 144000 frames; finite nonzero stereo difference between values 40 and 41"], "confidence": "medium", "limitations": ["No full 0..99 impulse-response comparison against OS reference audio", "Audio difference is not a substitute for original-OS register match"]}
+      },
+      "runtime": {"status": "partial", "implementation": "include/trollfx/es5510_hall_decay_control.hpp (state transition and write-group encoder only; not wired to FactoryRuntime::setParameter)", "legacy_vst_parameter_id": null}
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trollfx.invalid/schemas/asr10-factory-parameter-contract-v1.json",
+  "title": "TROLLfx ASR-10 Factory Parameter Contract",
+  "description": "Layered, provenance-preserving parameter metadata. This proposal does not replace current VST IDs or package schemas.",
+  "type": "object",
+  "required": ["schema_version", "controls"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "factory_effect", "identity", "manual", "os_observation", "dsp_mapping", "audio_validation", "runtime"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^asr10:[a-z0-9_.-]+$"},
+          "factory_effect": {
+            "type": "object", "required": ["slot", "name", "variation_context"],
+            "properties": {
+              "slot": {"type": "integer", "minimum": 1, "maximum": 50},
+              "name": {"type": "string"},
+              "variation_context": {"type": "array", "items": {"type": "integer", "minimum": 1, "maximum": 4}}
+            }
+          },
+          "identity": {
+            "type": "object", "required": ["stable_name", "group", "channel_scope", "conditions"],
+            "properties": {
+              "stable_name": {"type": "string"},
+              "group": {"type": ["string", "null"]},
+              "channel_scope": {"enum": ["stereo", "bus1", "bus2", "left", "right", "shared", "unknown"]},
+              "conditions": {"type": "array", "items": {"type": "string"}},
+              "modulation_assignment_constraints": {"type": "array", "items": {"type": "string"}}
+            }
+          },
+          "manual": {
+            "type": "object", "required": ["status", "label", "minimum", "maximum", "provenance"],
+            "properties": {
+              "status": {"enum": ["documented", "not_found", "unresolved"]},
+              "label": {"type": ["string", "null"]},
+              "minimum": {"type": ["number", "null"]},
+              "maximum": {"type": ["number", "null"]},
+              "step": {"type": ["number", "null"]},
+              "choices": {"type": "array"},
+              "units": {"type": ["string", "null"]},
+              "provenance": {"$ref": "#/$defs/evidence"}
+            }
+          },
+          "os_observation": {
+            "type": "object", "required": ["status", "lcd_labels", "cursor_order", "variation_context", "provenance"],
+            "properties": {
+              "status": {"enum": ["observed", "partial", "unobserved"]},
+              "lcd_labels": {"type": "array", "items": {"type": "string", "maxLength": 22}},
+              "cursor_order": {"type": ["integer", "null"]},
+              "variation_context": {"type": "array", "items": {"type": "integer"}},
+              "provenance": {"$ref": "#/$defs/evidence"}
+            }
+          },
+          "storage": {
+            "type": "object", "properties": {
+              "identity": {"type": ["string", "null"]},
+              "scope": {"enum": ["per_variation", "shared", "bus_specific", "channel_specific", "unknown"]},
+              "conditions": {"type": "array", "items": {"type": "string"}}
+            }
+          },
+          "dsp_mapping": {
+            "type": "object", "required": ["status", "kind", "supported_domain", "registers", "provenance"],
+            "properties": {
+              "status": {"enum": ["verified", "partial", "inferred", "unresolved", "not_applicable"]},
+              "kind": {"enum": ["formula", "lookup_table", "stateful_transition", "ordered_writes", "none"]},
+              "supported_domain": {"type": "array", "items": {}},
+              "formula": {"type": ["string", "null"]},
+              "registers": {"type": "array", "items": {"type": "object", "required": ["order", "gpr", "value_rule"], "properties": {"order": {"type": "integer"}, "gpr": {"type": "string"}, "value_rule": {"type": "string"}}}},
+              "provenance": {"$ref": "#/$defs/evidence"}
+            }
+          },
+          "audio_validation": {
+            "type": "object", "required": ["status", "tested_values", "provenance"],
+            "properties": {
+              "status": {"enum": ["verified", "partial", "not_tested", "failed"]},
+              "tested_values": {"type": "array", "items": {}},
+              "provenance": {"$ref": "#/$defs/evidence"}
+            }
+          },
+          "runtime": {
+            "type": "object", "required": ["status", "implementation"],
+            "properties": {
+              "status": {"enum": ["ready", "partial", "metadata_only", "unavailable"]},
+              "implementation": {"type": ["string", "null"]},
+              "legacy_vst_parameter_id": {"type": ["integer", "string", "null"]}
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object", "required": ["classification", "references", "confidence", "limitations"],
+      "properties": {
+        "classification": {"enum": ["direct_measurement", "manual_documentation", "emulator_source", "disassembly", "inference", "hypothesis"]},
+        "references": {"type": "array", "items": {"type": "string"}},
+        "confidence": {"enum": ["high", "medium", "low"]},
+        "limitations": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

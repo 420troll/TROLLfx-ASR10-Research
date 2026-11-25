@@ -121,5 +121,20 @@ class CpuTraceParserTests(unittest.TestCase):
         self.assertEqual(out["summary"]["cpu_snapshots"], 1)
         self.assertIsNone(out["writes"][0]["cpu_trace"]["a6_memory_window_hex"])
 
+    def test_parses_bounded_instruction_and_parameter_memory_window(self):
+        text = (
+            'PANELLCD cycles=90 frame=1 lcd="DECAY TIME=40         " underline="                      " cursor="                      "\n'
+            "ESPTRACE_BEGIN cycles=150 frame=2 gpr=6e value_before=330000 a6=02a44d\n"
+            "ESPINS cycles=149 pc=fff97998 d=00000034:00000000 a=00000000:0002a44d\n"
+            "ESPMEM cycles=148 pc=fff91000 address=02a44d size=1 before=33 after=34\n"
+            "ESPTRACE_END cycles=150 instruction_count=1 memory_write_count=1\n"
+        )
+        out = extract_os_cpu_parameter_trace.parse_log(text)
+        self.assertEqual(out["summary"]["parameter_cpu_windows"], 1)
+        window = out["parameter_cpu_windows"][0]
+        self.assertEqual(window["instructions"][0]["pc"], "0xfff97998")
+        self.assertEqual(window["memory_writes"][0]["address"], "0x02a44d")
+        self.assertEqual(window["lcd_snapshot_before"]["lcd"], "DECAY TIME=40         ")
+
 if __name__ == "__main__":
     unittest.main()

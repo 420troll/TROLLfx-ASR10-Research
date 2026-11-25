@@ -15,6 +15,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <algorithm>
+#include <array>
 #include <map>
 #include <string>
 
@@ -28,6 +29,61 @@ Asr10 *g_machine = nullptr;
 
 namespace {
 const bool trace_host_callers = std::getenv("ESP_CALLER_TRACE") != nullptr;
+struct ParameterInstructionTrace {
+    uint64_t cycles = 0;
+    uint32_t pc = 0;
+    uint32_t registers[16]{};
+};
+struct ParameterMemoryWriteTrace {
+    uint64_t cycles = 0;
+    uint32_t pc = 0, address = 0, before = 0, after = 0;
+    uint8_t size = 0;
+};
+std::array<ParameterInstructionTrace, 4096> parameter_instruction_trace{};
+std::array<ParameterMemoryWriteTrace, 2048> parameter_memory_write_trace{};
+uint64_t parameter_instruction_sequence = 0, parameter_memory_write_sequence = 0;
+
+void dump_parameter_trace_window(uint64_t cycles, uint64_t frame, uint8_t gpr,
+                                 uint32_t value, uint32_t a6) {
+    fprintf(stderr, "ESPTRACE_BEGIN cycles=%llu frame=%llu gpr=%02x value_before=%06x a6=%06x\n",
+            (unsigned long long)cycles, (unsigned long long)frame, gpr, value & 0xffffff, a6);
+    const uint64_t first_instruction = parameter_instruction_sequence > parameter_instruction_trace.size()
+        ? parameter_instruction_sequence - parameter_instruction_trace.size() : 0;
+    std::array<ParameterInstructionTrace, 512> selected_instructions{};
+    unsigned selected_count = 0;
+    for (uint64_t seq = first_instruction; seq < parameter_instruction_sequence; ++seq) {
+        const auto &row = parameter_instruction_trace[seq % parameter_instruction_trace.size()];
+        if (row.cycles + 12000 < cycles || row.cycles > cycles) continue;
+        selected_instructions[selected_count % selected_instructions.size()] = row;
+        ++selected_count;
+    }
+    const unsigned instruction_count = std::min<unsigned>(selected_count, selected_instructions.size());
+    const unsigned instruction_start = selected_count > selected_instructions.size()
+        ? selected_count % selected_instructions.size() : 0;
+    for (unsigned i = 0; i < instruction_count; ++i) {
+        const auto &row = selected_instructions[(instruction_start + i) % selected_instructions.size()];
+        fprintf(stderr, "ESPINS cycles=%llu pc=%06x d=",
+                (unsigned long long)row.cycles, row.pc);
+        for (int i = 0; i < 8; ++i) fprintf(stderr, "%s%08x", i ? ":" : "", row.registers[i]);
+        fprintf(stderr, " a=");
+        for (int i = 8; i < 16; ++i) fprintf(stderr, "%s%08x", i == 8 ? "" : ":", row.registers[i]);
+        fputc('\n', stderr);
+    }
+    const uint64_t first_write = parameter_memory_write_sequence > parameter_memory_write_trace.size()
+        ? parameter_memory_write_sequence - parameter_memory_write_trace.size() : 0;
+    unsigned memory_count = 0;
+    for (uint64_t seq = first_write; seq < parameter_memory_write_sequence; ++seq) {
+        const auto &row = parameter_memory_write_trace[seq % parameter_memory_write_trace.size()];
+        if (row.cycles + 100000 < cycles || row.cycles > cycles) continue;
+        if (row.address + row.size < a6 || row.address > a6 + 16) continue;
+        fprintf(stderr, "ESPMEM cycles=%llu pc=%06x address=%06x size=%u before=%08x after=%08x\n",
+                (unsigned long long)row.cycles, row.pc, row.address, row.size, row.before, row.after);
+        if (++memory_count >= 64) break;
+    }
+    fprintf(stderr, "ESPTRACE_END cycles=%llu instruction_count=%u memory_write_count=%u\n",
+            (unsigned long long)cycles, instruction_count, memory_count);
+}
+
 struct HostPcmTrace {
     FILE *file = nullptr;
     uint64_t first_frame = 0, frame_count = 0;
@@ -303,6 +359,16 @@ void Asr10::digital_frame() {
 
 uint32_t Asr10::last_pc() const { return m68k_get_reg(NULL, M68K_REG_PPC); }
 
+void Asr10::record_parameter_instruction(uint32_t pc) {
+    if (!trace_host_callers) return;
+    auto &row = parameter_instruction_trace[parameter_instruction_sequence % parameter_instruction_trace.size()];
+    row.cycles = total_cycles;
+    row.pc = pc & 0xffffff;
+    for (int reg = 0; reg < 16; ++reg)
+        row.registers[reg] = m68k_get_reg(nullptr, static_cast<m68k_register_t>(M68K_REG_D0 + reg));
+    ++parameter_instruction_sequence;
+}
+
 void Asr10::rebuild_map() {
     for (int p = 0; p < 2048; p++) {
         uint32_t a = (uint32_t)p << 13;
@@ -430,6 +496,9 @@ void Asr10::io_write(PageType t, uint32_t a, uint32_t v, int sz) {
                         for (int offset = -8; offset < 24; ++offset)
                             fprintf(stderr, "%s%02x", offset == -8 ? "" : ":", read(a6 + offset, 1) & 0xff);
                         fputc('\n', stderr);
+                        if (gpr == 0x6e && a6 >= 0x10000 && a6 < 0x40000)
+                            dump_parameter_trace_window(total_cycles, esp.host_frame_count(), gpr,
+                                                        esp.register_value(gpr), a6);
                     }
                 }
                 esp.set_host_context(total_cycles, last_pc(), caller_pc);
@@ -521,6 +590,13 @@ void Asr10::write(uint32_t a, uint32_t v, int sz) {
     PageType t = wmap[a >> 13];
     if (t == P_RAM) {
         uint32_t o = a & ram_mask;
+        if (trace_host_callers) {
+            uint32_t before = 0;
+            for (int i = 0; i < sz; ++i) before = (before << 8) | ram[(o + i) & ram_mask];
+            auto &row = parameter_memory_write_trace[parameter_memory_write_sequence % parameter_memory_write_trace.size()];
+            row = {total_cycles, last_pc() & 0xffffff, a, before, v, static_cast<uint8_t>(sz)};
+            ++parameter_memory_write_sequence;
+        }
         if (sz == 1) ram[o] = v;
         else if (sz == 2) { ram[o] = v >> 8; ram[(o + 1) & ram_mask] = v; }
         else { ram[o] = v >> 24; ram[(o + 1) & ram_mask] = v >> 16; ram[(o + 2) & ram_mask] = v >> 8; ram[(o + 3) & ram_mask] = v; }

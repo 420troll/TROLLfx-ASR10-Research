@@ -54,6 +54,8 @@ struct VerifiedParameterDefinition {
 struct EffectDescriptor {
     EffectSlot slot = 0;
     std::string factory_name;
+    // 0 means not established; 1..4 are the ASR-10 stored factory variations.
+    std::uint8_t factory_variation = 0;
     std::uint32_t active_program_words = 0;
     std::uint32_t end_word = 0;
     std::string program_sha256;
@@ -94,6 +96,8 @@ public:
             return fail("package validation evidence is incomplete");
         if (d.slot < 1 || d.slot > 50 || d.factory_name.empty())
             return fail("effect slot/name is outside the ASR-10 factory registry");
+        if (d.factory_variation > 4)
+            return fail("factory variation must be unknown (0) or one of 1..4");
         if (!d.active_program_words || d.active_program_words > 160 ||
             d.end_word + 1 != d.active_program_words || d.program_sha256.size() != 64)
             return fail("program identity or variable program geometry is invalid");

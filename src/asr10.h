@@ -151,6 +151,10 @@ public:
 
     // diagnostic hooks
     std::function<void(uint32_t)> on_instr;
+    // Optional, bounded CPU context capture used by the OS parameter probes.
+    // This records into an in-memory ring and emits nothing unless the caller
+    // explicitly requests ESP_CALLER_TRACE diagnostics.
+    void record_parameter_instruction(uint32_t pc);
 
 private:
     enum PageType : uint8_t { P_RAM, P_ROM, P_INT, P_OTTO, P_IO3, P_CS1, P_NONE };

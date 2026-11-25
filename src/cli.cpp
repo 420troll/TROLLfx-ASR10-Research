@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
     std::vector<std::pair<double, std::pair<int,int>>> buttons;  // time, (code, down)
     std::vector<std::pair<double, std::string>> parameter_marks;
     struct PanelAction {
-        enum class Kind { TapOnChange, TapOnDisplay, MarkOnDisplay, WalkRight, SearchRight, ProbeControl, ProbeField, ProbeRange, ScanEffectPages } kind;
+        enum class Kind { TapOnChange, TapOnDisplay, MarkOnDisplay, WalkRight, SearchRight, ProbeControl, ProbeField, ProbeRange, ScanEffectPages, StepSequence } kind;
         double after = 0.0, timeout = 0.0, pressed_at = 0.0, phase_time = 0.0;
         double range_settle_seconds = 0.25;
         std::string needle, id, target, last_match, before_display, control_baseline;
@@ -72,6 +72,7 @@ int main(int argc, char **argv) {
         int target_page_ordinal = -1, target_underline_start = -1, target_variation = 1;
         int selected_variation = 1, variation_steps = 0;
         std::string scan_variation_display, scan_before_signature;
+        std::vector<int> sequence_buttons;
         bool down_sent = false, started = false, done = false, probe_key_released = false;
     };
     std::vector<PanelAction> panel_actions;
@@ -84,6 +85,7 @@ int main(int argc, char **argv) {
     std::vector<std::pair<double, std::pair<int,int>>> raws;
     double trace_after = 0;
     uint32_t trace_pc = 0xffffffff; int trace_cnt = 0; bool tracing = false;
+    const bool trace_parameter_cpu = std::getenv("ESP_CALLER_TRACE") != nullptr;
     std::string dump_ram; bool rack_panel = false;
     bool esp_list = false, otto_dump = false;
     uint32_t dis_addr = 0; int dis_n = 0;
@@ -180,7 +182,7 @@ int main(int argc, char **argv) {
         } else if (a == "--param-mark") { // time:label
             std::string v = next(); size_t c = v.find(':');
             if (c != std::string::npos) parameter_marks.push_back({atof(v.substr(0, c).c_str()), v.substr(c + 1)});
-        } else if (a == "--panel-tap-on-change" || a == "--panel-tap-on-display" || a == "--panel-mark-on-display" || a == "--panel-walk-right" || a == "--panel-search-right" || a == "--panel-probe-control" || a == "--panel-probe-field" || a == "--panel-probe-range" || a == "--panel-scan-effects") {
+        } else if (a == "--panel-tap-on-change" || a == "--panel-tap-on-display" || a == "--panel-mark-on-display" || a == "--panel-walk-right" || a == "--panel-search-right" || a == "--panel-probe-control" || a == "--panel-probe-field" || a == "--panel-probe-range" || a == "--panel-scan-effects" || a == "--panel-step-sequence") {
             const bool tap = a == "--panel-tap-on-change" || a == "--panel-tap-on-display";
             const bool walk = a == "--panel-walk-right";
             const bool search = a == "--panel-search-right";
@@ -188,18 +190,19 @@ int main(int argc, char **argv) {
             const bool field_probe = a == "--panel-probe-field";
             const bool range = a == "--panel-probe-range";
             const bool scan_effects = a == "--panel-scan-effects";
+            const bool step_sequence = a == "--panel-step-sequence";
             std::stringstream fields(next()); std::vector<std::string> part; std::string field;
             while (std::getline(fields, field, ',')) part.push_back(field);
             const size_t expected = field_probe ? 10 : scan_effects ? 6 : probe ? (part.size() == 6 ? 6 : 5) :
                                     range ? ((part.size() == 4 || part.size() == 5) ? part.size() : 0) :
-                                    (tap || walk) ? 5 : search ? 6 : 4;
+                                    step_sequence ? 5 : (tap || walk) ? 5 : search ? 6 : 4;
             if (part.size() != expected) { fprintf(stderr, "invalid %s field count\n", a.c_str()); return 2; }
             PanelAction action; action.kind = a == "--panel-tap-on-change" ? PanelAction::Kind::TapOnChange :
                 a == "--panel-tap-on-display" ? PanelAction::Kind::TapOnDisplay :
                 a == "--panel-walk-right" ? PanelAction::Kind::WalkRight :
                 search ? PanelAction::Kind::SearchRight :
                 probe ? PanelAction::Kind::ProbeControl : field_probe ? PanelAction::Kind::ProbeField : range ? PanelAction::Kind::ProbeRange :
-                scan_effects ? PanelAction::Kind::ScanEffectPages : PanelAction::Kind::MarkOnDisplay;
+                scan_effects ? PanelAction::Kind::ScanEffectPages : step_sequence ? PanelAction::Kind::StepSequence : PanelAction::Kind::MarkOnDisplay;
             action.after = atof(part[0].c_str()); action.timeout = atof(part[1].c_str());
             if (action.after < 0.0 || action.timeout <= 0.0) { fprintf(stderr, "invalid %s time\n", a.c_str()); return 2; }
             if (tap) {
@@ -225,6 +228,21 @@ int main(int argc, char **argv) {
                     action.scan_variations < 1 || action.scan_variations > 4) {
                     fprintf(stderr, "invalid panel effect scan page/variation limits\n"); return 2;
                 }
+            } else if (step_sequence) {
+                action.needle = part[2]; action.id = part[4];
+                std::stringstream sequence(part[3]); std::string token;
+                while (std::getline(sequence, token, ';')) {
+                    if (token.size() < 2 || (token[0] != 'U' && token[0] != 'D')) {
+                        fprintf(stderr, "invalid panel step-sequence token: %s\n", token.c_str()); return 2;
+                    }
+                    char *end = nullptr;
+                    long count = strtol(token.c_str() + 1, &end, 10);
+                    if (!end || *end || count < 1 || count > 99 || action.sequence_buttons.size() + count > 4096) {
+                        fprintf(stderr, "invalid panel step-sequence count: %s\n", token.c_str()); return 2;
+                    }
+                    action.sequence_buttons.insert(action.sequence_buttons.end(), static_cast<size_t>(count), token[0] == 'U' ? 10 : 11);
+                }
+                if (action.sequence_buttons.empty()) { fprintf(stderr, "empty panel step sequence\n"); return 2; }
             } else if (field_probe) {
                 action.target_variation = atoi(part[2].c_str());
                 action.target_page_ordinal = atoi(part[3].c_str());
@@ -306,7 +324,8 @@ int main(int argc, char **argv) {
     }
     std::map<uint32_t, uint64_t> hist;
     static uint32_t ring[64]; static int rp = 0;
-    if (trap_log || pc_hist || !breaks.empty() || trace_cnt) m.on_instr = [&](uint32_t pc) {
+    if (trap_log || pc_hist || !breaks.empty() || trace_cnt || trace_parameter_cpu) m.on_instr = [&](uint32_t pc) {
+        if (trace_parameter_cpu) m.record_parameter_instruction(pc);
         pc &= 0xffffff;
         if ((pc == trace_pc || trace_pc == 1) && m.cycles() / m.cpu_clock >= trace_after) tracing = true;
         if (tracing && trace_cnt > 0) {
@@ -485,10 +504,62 @@ int main(int argc, char **argv) {
                         action.kind == PanelAction::Kind::ProbeControl ? "probe" :
                         action.kind == PanelAction::Kind::ProbeField ? "field-probe" :
                         action.kind == PanelAction::Kind::ProbeRange ? "range" :
-                        action.kind == PanelAction::Kind::ScanEffectPages ? "inventory" : "tap",
+                        action.kind == PanelAction::Kind::ScanEffectPages ? "inventory" :
+                        action.kind == PanelAction::Kind::StepSequence ? "step-sequence" : "tap",
                         action.needle.c_str(), d0.c_str(), now, (unsigned long long)m.cycles(),
                         (unsigned long long)m.esp.host_frame_count());
                 action.done = true; panel_action_failed = true; continue;
+            }
+            if (action.kind == PanelAction::Kind::StepSequence) {
+                if (action.phase == 0) {
+                    const bool matches = d0.find(action.needle) != std::string::npos;
+                    if (matches && d0 == action.last_match) ++action.match_stable;
+                    else { action.match_stable = matches ? 1 : 0; action.last_match = matches ? d0 : std::string(); }
+                    if (action.match_stable < 20) continue;
+                    action.phase = 1;
+                    fprintf(stderr, "PANEL_SEQUENCE_FOUND id=%s display=\"%.22s\" count=%zu cycles=%llu frame=%llu\n",
+                            action.id.c_str(), d0.c_str(), action.sequence_buttons.size(),
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                }
+                if (action.phase == 1) {
+                    if (action.step_index >= static_cast<int>(action.sequence_buttons.size())) {
+                        fprintf(stderr, "PANEL_SEQUENCE_DONE id=%s steps=%d display=\"%.22s\" cycles=%llu frame=%llu\n",
+                                action.id.c_str(), action.step_index, d0.c_str(),
+                                (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                        action.done = true;
+                        continue;
+                    }
+                    action.code = action.sequence_buttons[action.step_index];
+                    action.before_display = d0;
+                    action.change_stable = 0;
+                    action.probe_key_released = false;
+                    action.pressed_at = now;
+                    action.phase = 2;
+                    m.panel.button(action.code, true);
+                    fprintf(stderr, "PANEL_SEQUENCE_STEP_BEGIN id=%s step=%d direction=%s before=\"%.22s\" cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.step_index + 1, action.code == 10 ? "up" : "down",
+                            d0.c_str(), (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                    continue;
+                }
+                if (!action.probe_key_released) {
+                    m.panel.button(action.code, false);
+                    action.probe_key_released = true;
+                }
+                if (d0 != action.before_display) ++action.change_stable;
+                else action.change_stable = 0;
+                if (action.change_stable >= 20) {
+                    fprintf(stderr, "PANEL_SEQUENCE_STEP_DONE id=%s step=%d before=\"%.22s\" after=\"%.22s\" cycles=%llu frame=%llu\n",
+                            action.id.c_str(), action.step_index + 1, action.before_display.c_str(), d0.c_str(),
+                            (unsigned long long)m.cycles(), (unsigned long long)m.esp.host_frame_count());
+                    ++action.step_index;
+                    action.phase = 1;
+                } else if (now - action.pressed_at > 0.5 && d0 == action.before_display) {
+                    fprintf(stderr, "PANEL_SEQUENCE_STEP_FAILED id=%s step=%d display=\"%.22s\"\n",
+                            action.id.c_str(), action.step_index + 1, d0.c_str());
+                    action.done = true;
+                    panel_action_failed = true;
+                }
+                continue;
             }
             if (action.kind == PanelAction::Kind::WalkRight || action.kind == PanelAction::Kind::SearchRight) {
                 if (!action.started) {

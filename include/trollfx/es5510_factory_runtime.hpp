@@ -30,6 +30,9 @@ struct EffectPackage {
     bool pipeline_reset_acknowledged = false;
     bool package_provenance_validated = false;
     bool serial_route_validated = false;
+    // Zero means unknown. Set to 1 only when the private checkpoint manifest
+    // validates the HALL variation; required by the stateful HALL decay editor.
+    std::uint8_t factory_variation = 0;
 };
 
 struct RuntimeStatus {
@@ -42,6 +45,9 @@ struct RuntimeStatus {
     std::uint64_t scheduled_writes_applied = 0;
     std::uint32_t active_program_words = 0;
     std::uint32_t algorithmic_latency_host_frames = 0;
+    bool hall_decay_step_available = false;
+    std::uint8_t hall_decay_raw_code = 0;
+    std::int16_t hall_decay_display_value = -1;
     const char* message = "not loaded"; // static storage; valid until next API call
 };
 
@@ -72,6 +78,12 @@ public:
     bool setRegister(std::uint8_t index, std::uint32_t value, std::uint64_t scheduled_frame);
     bool setParameter(const EffectDescriptor& descriptor, const std::string& parameter_id,
                       std::int32_t display_value, std::uint64_t scheduled_frame);
+    // Applies one authentic OS 3.53 ROM-01 HALL Variation 1 decay editor step.
+    // direction is -1 (Down) or +1 (Up); the current raw GPR 6E code is retained
+    // across calls so duplicate LCD buckets preserve the original route behavior.
+    // This is not a direct display-value setter and is not supported for other
+    // effects/variations. Call between processStereo blocks on the owning thread.
+    bool stepHallDecayTime(int direction, std::uint64_t scheduled_frame);
 
     // Interleaved stereo float PCM, [-1,+1] nominal. Input/output serial lanes
     // are selected by the validated effect descriptor. Host sample rate is

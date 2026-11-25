@@ -53,8 +53,8 @@ static std::string make_checkpoint(unsigned words) {
 
 static EffectPackage package(EffectId id, const std::string& path) {
     if (id == EffectId::Rom01Hall)
-        return {id, path, 89, 29761.89453125, true, true, true};
-    return {id, path, 60, 44100.0, true, true, true};
+        return {id, path, 89, 29761.89453125, true, true, true, 1};
+    return {id, path, 60, 44100.0, true, true, true, 1};
 }
 
 static ValidatedEffectPackage generic_package(std::uint8_t slot, unsigned words, const std::string& path) {
@@ -261,6 +261,7 @@ int main() {
     }
     {
         auto hall = generic_package(1,3,short_path);
+        hall.descriptor.factory_variation=1;
         assert(parameter_discovery_v02::append_verified_parameters(hall.descriptor));
         auto decay = std::find_if(hall.descriptor.parameters.begin(),hall.descriptor.parameters.end(),
             [](const auto& p){return p.id=="decay_time";});
@@ -292,6 +293,60 @@ int main() {
         assert(fine!=pitch.descriptor.parameters.end());
         assert(fine->verified_points[0].display_text=="-11");
         assert(fine->verified_points[1].display_value==-10);
+    }
+    {
+        auto hall = generic_package(1,3,short_path);
+        hall.descriptor.factory_variation=1;
+        EffectRegistry registry;
+        assert(registry.register_validated(hall));
+        FactoryRuntime fx;
+        assert(fx.loadEffect(*registry.find(1),RateMode::FactoryReference));
+        auto status=fx.getStatus();
+        assert(status.hall_decay_step_available && status.hall_decay_raw_code==0 &&
+               status.hall_decay_display_value==0);
+        assert(!fx.stepHallDecayTime(0,0));
+        assert(fx.stepHallDecayTime(+1,0)); // raw 0 -> 1, LCD 0 -> 1
+        status=fx.getStatus();
+        assert(status.hall_decay_raw_code==1 && status.hall_decay_display_value==1);
+        assert(fx.stepHallDecayTime(+1,0)); // skip duplicate raw 2; LCD 1 -> 2
+        status=fx.getStatus();
+        assert(status.hall_decay_raw_code==3 && status.hall_decay_display_value==2);
+        assert(fx.stepHallDecayTime(-1,0)); // raw 3 -> 2, LCD 2 -> 1
+        status=fx.getStatus();
+        assert(status.hall_decay_raw_code==2 && status.hall_decay_display_value==1);
+        std::array<float,8> step_in{},step_out{};
+        assert(fx.processStereo(step_in.data(),step_out.data(),4,48000.0));
+        assert(fx.getStatus().scheduled_writes_applied==16); // package init + three atomic five-write groups
+        assert(fx.setRegister(0x6e,0x010000,fx.getStatus().processed_dsp_frames));
+        assert(!fx.getStatus().hall_decay_step_available);
+        assert(!fx.stepHallDecayTime(+1,fx.getStatus().processed_dsp_frames));
+        assert(fx.reset());
+        assert(fx.getStatus().hall_decay_step_available && fx.getStatus().hall_decay_raw_code==0);
+    }
+    {
+        auto hall = generic_package(1,3,short_path); // variation deliberately unknown
+        EffectRegistry registry;
+        assert(registry.register_validated(hall));
+        FactoryRuntime fx;
+        assert(fx.loadEffect(*registry.find(1),RateMode::FactoryReference));
+        assert(!fx.getStatus().hall_decay_step_available);
+        assert(!fx.stepHallDecayTime(+1,0)); // no guessing variation from slot identity
+    }
+    {
+        auto hall = generic_package(1,3,short_path);
+        hall.descriptor.factory_variation=1;
+        hall.descriptor.firmware_event_schedule.clear();
+        for (std::uint64_t i=0;i<1020;++i)
+            hall.descriptor.firmware_event_schedule.push_back({0,static_cast<std::uint8_t>(i%0x40),0});
+        EffectRegistry registry;
+        assert(registry.register_validated(hall));
+        FactoryRuntime fx;
+        assert(fx.loadEffect(*registry.find(1),RateMode::FactoryReference));
+        assert(!fx.stepHallDecayTime(+1,0)); // five-write group must be all-or-none
+        assert(fx.getStatus().hall_decay_raw_code==0);
+        std::array<float,4> in{},out{};
+        assert(fx.processStereo(in.data(),out.data(),2,48000.0));
+        assert(fx.getStatus().scheduled_writes_applied==1020);
     }
     std::filesystem::remove(hall_path);
     std::filesystem::remove(rom02_path);
