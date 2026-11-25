@@ -24,8 +24,8 @@
     {
       "id": "R4_full_range_runtime_coverage",
       "status": "PASS_WITH_LIMITS",
-      "criteria": "Runtime traverses all 128 raw states both directions, covering display 0-99 and duplicate routes, against independent raw/display/register expectations; rejects unsupported states and restores its checkpoint.",
-      "evidence": "Temporary instrumented runtime harness passed 254/254 raw steps and 1270/1270 parameter writes against per-raw values from two OS-derived sweeps using a synthetic package; no authentic-package full-range replay was performed."
+      "criteria": "Runtime traverses display 0-99 and 99-0 across all 128 raw codes and duplicate routes against independent raw/display/register expectations; rejects unsupported states and restores its checkpoint.",
+      "evidence": "Temporary instrumented runtime harness passed 198/198 UI steps and 990/990 parameter writes against OS-observed raw/register values from two sweeps using a synthetic package; all 128 raw codes were visited. No authentic-package full-range replay was performed."
     },
     {
       "id": "R5_audio_behavior",

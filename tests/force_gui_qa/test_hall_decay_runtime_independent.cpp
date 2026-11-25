@@ -44,6 +44,7 @@ int main(int argc, char** argv) {
     assert(argc == 2);
     std::array<std::array<std::uint32_t, 5>, 128> os_expected{};
     std::array<bool, 128> os_seen{};
+    std::array<bool, 128> runtime_raw_seen{};
     std::ifstream expected_file(argv[1]);
     assert(expected_file.good());
     std::string line;
@@ -68,6 +69,7 @@ int main() {
     assert(status.hall_decay_step_available && status.hall_decay_raw_code == 0 &&
            status.hall_decay_display_value == 0);
     assert(!runtime.stepHallDecayTime(0, 0));
+    runtime_raw_seen[status.hall_decay_raw_code] = true;
 
     std::array<float, 128> in{}, out{};
     std::size_t accepted = 0;
@@ -78,6 +80,7 @@ int main() {
         status = runtime.getStatus();
         assert(status.hall_decay_step_available);
         assert(status.hall_decay_display_value == display_from_os_table_route(status.hall_decay_raw_code));
+        runtime_raw_seen[status.hall_decay_raw_code] = true;
         assert(runtime.processStereo(in.data(), out.data(), in.size()/2, 48000.0));
         assert(runtime.getStatus().scheduled_writes_applied == accepted * 5);
 #ifdef TROLLFX_QA_REGISTER_ACCESS
@@ -98,6 +101,7 @@ int main() {
     for (int i = 0; i < 99; ++i) step(-1);
     assert(runtime.getStatus().hall_decay_raw_code == 0);
     assert(runtime.getStatus().hall_decay_display_value == 0);
+    for (bool seen : runtime_raw_seen) assert(seen);
 
     // Unknown raw state fails closed after any direct GPR 6E write.
     assert(runtime.setRegister(0x6e, 0x010000, runtime.getStatus().processed_dsp_frames));
