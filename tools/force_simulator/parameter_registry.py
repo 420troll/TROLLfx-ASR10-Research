@@ -87,6 +87,8 @@ def load_registry():
     full_by_slot={int(e["slot"]):e for e in full.get("effects",[])}
     ui_schema=json.loads((SIM / "data/ASR10_PC_EDITOR_PARAMETER_SCHEMA_V1.json").read_text())
     ui_by_slot={int(e["slot"]):e for e in ui_schema.get("effects",[])}
+    qa_contract=json.loads((SIM / "data/ASR10_EDITOR_EVIDENCE_ADAPTER_V1.json").read_text())
+    qa_by_slot={int(e["slot"]):e for e in qa_contract.get("effects",[])}
     inventory = json.loads((SIM / "data/ASR10_FACTORY_EFFECT_EDITOR_INVENTORY_V04.json").read_text())
     mappings = json.loads((SIM / "data/ASR10_FACTORY_DSP_PARAMETER_MAPPINGS_V05.json").read_text())
     vst = _load_vst_controls()
@@ -102,6 +104,14 @@ def load_registry():
         full_params={_key(p["id"]):p for p in full_effect.get("parameters",[])}
         ui_effect=ui_by_slot.get(int(effect["slot"]),{})
         ui_params={_key(p["id"]):p.get("manual",{}) for p in ui_effect.get("parameters",[])}
+        qa_effect=qa_by_slot.get(int(effect["slot"]),{})
+        qa_params={p["id"]:p for p in qa_effect.get("parameters",[])}
+        qa_additional=qa_effect.get("additional_recovered_controls",[])
+        qa_additional_by_id={ident:x for x in qa_additional for ident in x.get("parameter_ids",[])}
+        normalization_by_source={}
+        for normalization in qa_effect.get("normalizations",[]):
+            for source_id in normalization.get("source_descriptor_ids",[]):
+                normalization_by_source[source_id]=normalization
         catalog_keys=set()
         for p in sorted(effect["parameters"], key=lambda x: x.get("display_order", 0)):
             ident = _key(p["id"])
@@ -207,6 +217,11 @@ def load_registry():
                 if c["key"]==parent:c["editor_visible"]=False
             for n in range(1,count+1):
                 controls.append({"id":f"manual_{parent.rsplit('_1',1)[0]}_{n}","key":f"manual_{parent.rsplit('_1',1)[0]}_{n}","name":f"{label} {n}","order":650+n,"range_text":f"{limits[0]} to {limits[1]}","range":limits,"type":"numeric_or_continuous","format":"integer","domain":"integer steps documented","range_variants":[],"display_scale_curve":[],"group":"Reverb" if parent.startswith(("positn","er_lev")) else "Main effect","units":None,"evidence":"ASR-10 Musician's Manual Section 6; explicitly plural independent parameter group.","description":description,"manual_confidence":"direct manual statement","default_value":None,"observed_variation_values":[],"documented_choices":[],"supported_values":[],"observed_choices":[],"status":"UNMAPPED","route":None,"v05_runtime_ready":False,"v05_points":[],"catalog_descriptor":False,"manual_subparameter":True,"editor_visible":True})
+            if int(effect["slot"]) in (22,23,24):
+                for c in controls:
+                    m=re.fullmatch(r"manual_env_lev_(\d+)",c.get("id",""))
+                    if m and int(m.group(1))>5:
+                        c.update({"editor_visible":False,"input_disabled":True,"identity_confidence":"manual-documented; original OS subfield not located"})
         # Reverb groups share one control whose manual range varies by algorithm.
         slot=int(effect["slot"])
         if 14<=slot<=16:
@@ -356,9 +371,96 @@ def load_registry():
             if int(effect["slot"]) in (4,5) and control.get("key")=="delay_time_l":
                 high=1300 if int(effect["slot"])==5 else 2000
                 control.update({"name":"BUS1 DELAY TIME L","range_text":f"0 to {high} ms","range":[0,high],"type":"numeric_or_continuous","format":"integer","domain":"integer steps documented","group":"Delay","units":"ms","description":"BUS1 left-channel delay time; the manual states left and right channels are independently adjustable.","editor_visible":True})
+            # Stable identities are scoped by factory slot. The QA matrix is a
+            # read-only overlay and never grants DSP write permission.
+            qa=qa_params.get(control.get("id"))
+            if qa is None and control.get("original_parameter_id"):
+                qa=qa_params.get(control["original_parameter_id"])
+            parent_id=control.get("parent_parameter_id")
+            if qa is None and parent_id:
+                qa=qa_params.get(parent_id if str(parent_id).endswith("_1") else f"{parent_id}_1")
+            normalization=normalization_by_source.get(control.get("id")) or normalization_by_source.get(control.get("parent_parameter_id"))
+            if qa is None and normalization:
+                source_id=normalization["source_descriptor_ids"][0]
+                qa=qa_params.get(source_id)
+            if qa is None and control.get("id","").startswith("manual_env_lev_"):
+                qa=qa_params.get("env_lev_1_to_9_1")
+            if qa is None and control.get("id","").startswith("manual_positn_bal_"):
+                qa=qa_params.get("positn_bal_1_to_3_1")
+            if qa is None and control.get("id","").startswith("manual_er_lev_"):
+                qa=qa_params.get("er_lev_1_to_4_1")
+            if qa is None and control.get("id","").startswith("manual_dist_gain_"):
+                qa=qa_params.get("dist_gain_in_out_in_and_out_1")
+            if qa is None and int(effect["slot"]) in (4,5):
+                control_id=control.get("id","")
+                parent_for={"dual_bus1_delay_mix":"bus1_and_2_delay_mix_1","dual_bus2_delay_mix":"bus1_and_2_delay_mix_1",
+                    "dual_bus1_feedback":"bus1_and_2_feedback_1","dual_bus2_feedback":"bus1_and_2_feedback_1",
+                    "dual_bus1_delay_time_r":"delay_time_1","dual_bus2_delay_time_l":"delay_time_1","dual_bus2_delay_time_r":"delay_time_1"}
+                qa=qa_params.get(parent_for.get(control_id,""))
+            if qa is None and control.get("id","").startswith("ddl_time_") and int(effect["slot"])==10:
+                qa=qa_params.get("ddl_time_l_r_1")
+            extra=qa_additional_by_id.get(control.get("id"))
+            if extra is None and int(effect["slot"]) in (4,5):
+                extra_id={"dual_bus1_delay_time_r":"dual_bs1_time_r","dual_bus2_delay_time_l":"dual_bs2_time_l","dual_bus2_delay_time_r":"dual_bs2_time_r"}.get(control.get("id"))
+                extra=qa_additional_by_id.get(extra_id)
+            if extra is None:
+                extra=next((x for x in qa_additional if _label_key(x.get("control_label",""))==_label_key(control.get("name",""))),None)
+            if extra is None and int(effect["slot"])==6 and control.get("name")=="REVERB DIFFUSION":
+                extra=next((x for x in qa_additional if x.get("control_label")=="DIFFUSION"),None)
+            if extra:
+                if qa is None:
+                    control["original_parameter_id"]=(extra.get("parameter_ids") or [None])[0]
+                control["independent_classification"]=extra.get("classification","UNKNOWN")
+                if extra.get("original_os",{}).get("observed"):
+                    control["original_os_evidence"]=extra["original_os"]
+                control["dsp_evidence"]=extra.get("dsp_evidence",{"classification":"UNKNOWN","mapping":{},"vst_mappings":[],"full_range_implemented":False,"audio_status":"NOT_VALIDATED"})
+            control["canonical_identity"]=f"ASR10:ROM-{int(effect['slot']):02}:{control.get('id')}"
+            control["original_parameter_id"]=qa.get("id") if qa else control.get("original_parameter_id")
+            control["canonical_manual_control_id"]=(normalization or {}).get("canonical_control_id",qa.get("id") if qa else control.get("original_parameter_id") or control.get("id"))
+            if qa:
+                control["independent_classification"]=qa.get("classification","UNKNOWN")
+                control["original_os_evidence"]=qa.get("original_os",{"association_status":"UNKNOWN","observed":False,"labels":[],"values_by_variation":[]})
+            if not qa and control.get("group")=="Modulation":
+                normalized=_label_key(control.get("name",""))
+                os_field=next((f for f in qa_effect.get("os_observed_fields",[]) if _label_key(f.get("label",""))==normalized),None)
+                if os_field:
+                    control["original_os_evidence"]={"association_status":"OS_OBSERVED_LABEL_MATCH","observed":True,"labels":[os_field["label"]],
+                        "values_by_variation":[{"variation":v.get("variation"),"value":v.get("value")} for v in os_field.get("values",[])]}
+            if qa:
+                control["dsp_evidence"]=qa.get("dsp",{"classification":"UNKNOWN","mapping":{},"vst_mappings":[],"full_range_implemented":False,"audio_status":"NOT_VALIDATED"})
+            if extra:
+                control["independent_classification"]=extra.get("classification","UNKNOWN")
+                if extra.get("original_os",{}).get("observed"):
+                    control["original_os_evidence"]=extra["original_os"]
+                control["dsp_evidence"]=extra.get("dsp_evidence",control["dsp_evidence"])
+            control.setdefault("independent_classification","UNKNOWN")
+            control.setdefault("original_os_evidence",{"association_status":"UNKNOWN","observed":False,"labels":[],"values_by_variation":[]})
+            control.setdefault("dsp_evidence",{"classification":"UNKNOWN","mapping":{},"vst_mappings":[],"full_range_implemented":False,"audio_status":"NOT_VALIDATED"})
+            control["os_scan_status"]=qa_effect.get("os_scan_status","UNKNOWN")
+            matrix_routes=control["dsp_evidence"].get("vst_mappings",[])
+            matrix_points=next((x.get("point_values",[]) for x in matrix_routes if x.get("point_values")),[])
+            control["mapping_evidence_mismatch"]=bool(control.get("route") and matrix_points and list(control["route"].get("point_values",[]))!=list(matrix_points))
+            if control.get("route"):
+                control["runtime_state"]="EXACT_POINTS_AVAILABLE"
+                control["runtime_reason"]="Native VST route is limited to its listed exact display points; other values remain pending PC drafts."
+                if control["mapping_evidence_mismatch"]:
+                    control["runtime_reason"]+=f" Independent matrix VST points {matrix_points} differ from this route {control['route'].get('point_values')}; the route was not changed."
+            elif control["dsp_evidence"].get("mapping",{}).get("observed_setting_points"):
+                control["runtime_state"]="PENDING_HOST_ROUTE"
+                control["runtime_reason"]="Register evidence is partial and has no accepted native VST route in this editor."
+            else:
+                control["runtime_state"]="UNMAPPED"
+                control["runtime_reason"]="No accepted native VST route is available for this parameter."
         controls.sort(key=lambda c:(c["order"],not c["catalog_descriptor"],c["name"]))
         result.append({"slot": effect["slot"], "name": effect["factory_name"],
             "manual_parameter_count":full_effect.get("parameter_count"),
             "modulation_note":full_effect.get("modulation_controls", ""),
+            "os_scan_status":qa_effect.get("os_scan_status","UNKNOWN"),
+            "variations_evidence":qa_effect.get("variations",{}),
+            "modulation_evidence":qa_effect.get("modulation",{}),
+            "os_observed_fields":qa_effect.get("os_observed_fields",[]),
+            "normalizations":qa_effect.get("normalizations",[]),
+            "additional_recovered_controls":qa_effect.get("additional_recovered_controls",[]),
+            "manual_group_warnings":(["Section 6 documents ENV LEV 1–9, but the captured original OS row presents five values. Components 6–9 remain in the manual schema and are hidden from editing until their LCD/page identities are established."] if int(effect["slot"]) in (22,23,24) else []),
             "controls": controls})
     return result

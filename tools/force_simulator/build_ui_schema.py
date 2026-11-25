@@ -110,7 +110,9 @@ def main():
     for x in catalog.get('shared_documented_controls',[]):
         shared.append({'id':x['id'],'name':x['name'],'documented_range':x['range'],'kind':x['kind'],'availability':x['status']})
     modulation_pages={14:109,15:109,16:109,17:111,18:111,19:112,20:113,21:115,22:117,23:117,24:117,25:118,26:120,28:122,29:122,30:124,31:126,32:126,33:127,34:129,37:134,38:136,39:137,40:139,41:140,42:141,44:145,45:148,46:149,47:151,48:152,49:153}
-    result={'schema':'trollfx-asr10-pc-editor-parameter-schema-v1','source_registry':{'path':'ASR10_FULL_FACTORY_PARAMETER_REGISTRY_V1.json','sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),'commit':'7d38ec2bc3369ecd16f9e284ba85ccfd6fe46b55'},'manual_source':pdf_source or {'filename':None,'note':'PDF not supplied to schema generator; ranges come from existing manual-derived catalog.'},'coverage':{'factory_effects':50,'manual_registry_parameters':sum(len(e['parameters']) for e in registry['effects']),'shared_documented_modulation_controls':len(shared),'description_labels_matched':len(descriptions),'manual_paraphrase_labels':len(MANUAL_PARAPHRASES),'manual_section6_has_rom50_entry':False},'shared_controls':shared,'effects':[]}
+    adapter=HERE/'data/ASR10_EDITOR_EVIDENCE_ADAPTER_V1.json'
+    adapter_data=json.loads(adapter.read_text()) if adapter.is_file() else {}
+    result={'schema':'trollfx-asr10-pc-editor-parameter-schema-v1','source_registry':{'path':'ASR10_FULL_FACTORY_PARAMETER_REGISTRY_V1.json','sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),'commit':'7d38ec2bc3369ecd16f9e284ba85ccfd6fe46b55'},'independent_evidence_adapter':{'path':adapter.name,'sha256':hashlib.sha256(adapter.read_bytes()).hexdigest() if adapter.is_file() else None,'schema':adapter_data.get('schema'),'provenance':adapter_data.get('provenance',{})},'manual_source':pdf_source or {'filename':None,'note':'PDF not supplied to schema generator; ranges come from existing manual-derived catalog.'},'coverage':{'factory_effects':50,'manual_registry_parameters':sum(len(e['parameters']) for e in registry['effects']),'shared_documented_modulation_controls':len(shared),'description_labels_matched':len(descriptions),'manual_paraphrase_labels':len(MANUAL_PARAPHRASES),'manual_section6_has_rom50_entry':False,'independent_validation':adapter_data.get('coverage',{})},'shared_controls':shared,'effects':[]}
     for effect in registry['effects']:
         controls=[]
         for p in effect['parameters']:
@@ -138,7 +140,7 @@ def main():
     import sys
     sys.path.insert(0,str(HERE))
     from parameter_registry import load_registry
-    effects=load_registry(); presentation_keys=('id','name','order','range_text','range','type','format','domain','range_variants','units','description','description_source','manual_confidence','default_value','observed_choices','documented_choices','evidence','group','catalog_descriptor','manual_subparameter','editor_visible','input_disabled')
+    effects=load_registry(); presentation_keys=('id','name','order','range_text','range','type','format','domain','range_variants','units','description','description_source','manual_confidence','default_value','observed_choices','documented_choices','evidence','group','catalog_descriptor','manual_subparameter','editor_visible','input_disabled','canonical_identity','original_parameter_id','canonical_manual_control_id','independent_classification','original_os_evidence','dsp_evidence','runtime_state','runtime_reason','os_scan_status','identity_confidence','mapping_evidence_mismatch')
     effect_rows={int(e['slot']):e for e in result['effects']}
     edit_count=0
     for runtime_effect in effects:
@@ -149,6 +151,8 @@ def main():
         schema_effect['available_sections']=sorted({c.get('group','Main effect') for c in runtime_effect['controls'] if c.get('editor_visible',True)})
         edit_count+=sum(c.get('editor_visible',True) for c in runtime_effect['controls'])
     result['coverage']['editable_controls_including_manual_subparameters']=edit_count
+    result['coverage']['displayed_editor_field_instances']=edit_count
+    result['coverage']['count_semantics']='Generated PC editor fields across effects; not a count of independently OS-confirmed original controls.'
     output.write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n')
     print(f"wrote {args.output}; descriptions {len(descriptions)}/{len(labels)} labels; manual descriptors {result['coverage']['manual_registry_parameters']}; editable controls {edit_count}")
 if __name__=='__main__': main()

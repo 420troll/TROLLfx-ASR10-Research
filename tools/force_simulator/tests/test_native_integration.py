@@ -1,5 +1,5 @@
 """Focused real-VST2 integration tests; requires local validated factory packages."""
-import os, sys, unittest, math, hashlib, struct, io, wave, json
+import os, sys, unittest, math, hashlib, struct, io, wave, json, threading, http.server
 from pathlib import Path
 HERE=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(HERE))
@@ -66,6 +66,17 @@ class NativePluginIntegration(unittest.TestCase):
   slot=10;self.select(slot);self.v.reset_trace();self.v.set(46,.91);self.v.pump(256)
   self.assertIn('NO VERIFIED CONTROL',self.v.text(46))
   self.assertIsNone(ROUTES.get(slot))
+ def test_codex1_runtime_ready_flag_is_not_a_native_vst_route(self):
+  sim=Simulator(ASSETS)
+  try:
+   sim.set_param(0,0,page='BROWSE');trace=sim.host.trace_latest()
+   control=next(c for c in sim.model['factory_effects'][0]['controls'] if c['id']=='low_freq_decay_1')
+   self.assertTrue(control['v05_runtime_ready']);self.assertIsNone(control['route'])
+   event=sim.set_control('low_freq_decay_1',6)['event']
+   self.assertFalse(event['dsp_sent']);self.assertEqual(event['runtime_state'],'PENDING_HOST_ROUTE')
+   self.assertEqual(event['dsp_register_writes_applied'],[])
+   self.assertEqual(sim.host.trace_latest(),trace)
+  finally:sim.close()
  def test_state_save_restore_preserves_effect_and_control(self):
   self.select(1);self.v.set(48,.99);self.v.pump(256);saved=self.v.save_state(); expected_canonical=self.v.get(29)
   self.select(3);self.v.pump(512);self.v.restore_state(saved);self.v.pump(512)
@@ -100,6 +111,11 @@ class NativePluginIntegration(unittest.TestCase):
   try:
    sim.set_param(0,0,page='BROWSE')
    sim.select_variation(2)
+   trace_before=sim.host.trace_latest()
+   exact_in_pc_variation=sim.set_control('decay_time_1',41)['event']
+   self.assertFalse(exact_in_pc_variation['dsp_sent'])
+   self.assertEqual(exact_in_pc_variation['runtime_state'],'PC_ONLY_VARIATION')
+   self.assertEqual(sim.host.trace_latest(),trace_before)
    first=sim.set_control('decay_time_1',42)['event']
    self.assertFalse(first['dsp_sent'])
    sim.select_variation(3)
@@ -107,13 +123,72 @@ class NativePluginIntegration(unittest.TestCase):
    sim.select_variation(2)
    self.assertEqual(next(c['value'] for c in sim.state()['inspector_controls'] if c['id']=='decay_time_1'),42)
    sim.undo_draft()
-   self.assertEqual(next(c['value'] for c in sim.state()['inspector_controls'] if c['id']=='decay_time_1'),40)
+   self.assertEqual(next(c['value'] for c in sim.state()['inspector_controls'] if c['id']=='decay_time_1'),41)
    sim.set_control('decay_time_1',45)
    result=sim.reset_draft()
    self.assertFalse(result['event']['dsp_sent'])
    self.assertEqual(result['event']['dsp_register_writes_applied'],[])
    self.assertEqual(next(c['value'] for c in result['state']['inspector_controls'] if c['id']=='decay_time_1'),40)
   finally: sim.close()
+
+ def test_pc_draft_schema_migrates_stable_id_without_changing_vst_state(self):
+  first=Simulator(ASSETS);second=Simulator(ASSETS)
+  try:
+   first.set_param(0,0,page='BROWSE');first.select_variation(2);first.set_control('decay_time_1',47)
+   document=first.export_pc_drafts()
+   self.assertEqual(document['schema_version'],1)
+   # Version 0 was the prior unversioned slot:variation draft dictionary.
+   legacy={'schema_version':0,'drafts':{**document['drafts'],'1:2':{**document['drafts']['1:2'],'removed_manual_widget':9}}}
+   second.set_param(0,0,page='BROWSE')
+   trace_before=second.host.trace_since(0)
+   result=second.import_pc_drafts(legacy)
+   self.assertGreaterEqual(result['drafts_restored'],1);self.assertFalse(result['dsp_sent'])
+   self.assertEqual(result['orphaned'][0]['control_id'],'removed_manual_widget')
+   self.assertEqual(result['orphaned'][0]['value'],9)
+   second.select_variation(2)
+   control=next(c for c in second.state()['inspector_controls'] if c['id']=='decay_time_1')
+   self.assertEqual(control['value'],47)
+   self.assertEqual(control['canonical_identity'],'ASR10:ROM-01:decay_time_1')
+   self.assertEqual(second.host.get(29),first.host.get(29))
+   self.assertEqual(second.host.trace_since(0),trace_before)
+  finally:first.close();second.close()
+
+ def test_unresolved_envelope_components_do_not_accept_pc_edits(self):
+  sim=Simulator(ASSETS)
+  try:
+   sim.set_param(0,21/49,page='BROWSE')
+   with self.assertRaisesRegex(ValueError,'not part of the selected effect'):
+    sim.set_control('manual_env_lev_6',60)
+   effect=sim.model['factory_effects'][21]
+   self.assertTrue(any('five values' in x for x in effect['manual_group_warnings']))
+   self.assertEqual(effect['os_scan_status'],'complete')
+  finally:sim.close()
+
+ def test_original_os_monitor_proxy_is_local_and_read_only(self):
+  requests=[]
+  class Handler(http.server.BaseHTTPRequestHandler):
+   def log_message(self,*args):pass
+   def do_GET(self):
+    requests.append(('GET',self.path))
+    if self.path=='/api/status':payload={'selected_slot':4,'selected_name':'DUAL DELAYS','variation':1,'parameter':'BS1 TIME R','display_value':'700','lcd':'DUAL DELAYS BS1 TIME R 700','recovery_status':'PARTIAL','register_count':2}
+    else:payload={'events':[{'id':1,'type':'gpr','gpr':'0x0C','value':'0x520900','frame':12,'pc':'0xFFF0'}]}
+    raw=json.dumps(payload).encode();self.send_response(200);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(raw)));self.end_headers();self.wfile.write(raw)
+   def do_POST(self):requests.append(('POST',self.path));self.send_error(405)
+  upstream=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler)
+  thread=threading.Thread(target=upstream.serve_forever,daemon=True);thread.start()
+  old=os.environ.get('TROLLFX_OS_MONITOR_URL');os.environ['TROLLFX_OS_MONITOR_URL']=f'http://127.0.0.1:{upstream.server_port}'
+  sim=Simulator(ASSETS)
+  try:
+   data=sim.os_monitor_snapshot()
+   self.assertTrue(data['connected']);self.assertEqual(data['selected_slot'],4)
+   self.assertEqual(data['register_writes'][0]['gpr'],'0x0C')
+   self.assertEqual([x[0] for x in requests],['GET','GET'])
+   with self.assertRaisesRegex(ValueError,'localhost HTTP'):
+    os.environ['TROLLFX_OS_MONITOR_URL']='https://example.com';Simulator.__new__(Simulator).__init__(ASSETS)
+  finally:
+   sim.close();upstream.shutdown();upstream.server_close();thread.join(timeout=1)
+   if old is None:os.environ.pop('TROLLFX_OS_MONITOR_URL',None)
+   else:os.environ['TROLLFX_OS_MONITOR_URL']=old
 
  def test_audit_event_logs_page_qlink_vst_canonical_and_dsp(self):
   sim=Simulator(ASSETS)

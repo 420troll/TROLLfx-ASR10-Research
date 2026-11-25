@@ -13,12 +13,12 @@ test('renders catalog ranges, states, and controls for the selected effect', asy
   await chooseEffect(page,1,'HALL REVERB');
   const decay=page.locator('[data-control="decay_time_1"]');
   await expect(decay).toContainText('0 to 99');
-  await expect(decay.locator('.badge')).toHaveText('PARTIAL');
+  await expect(decay.locator('.badge').first()).toHaveText('DSP PARTIAL');
   await expect(decay.locator('input[type=range]')).toHaveAttribute('min','0');
   await expect(decay.locator('input[type=range]')).toHaveAttribute('max','99');
   await chooseEffect(page,39,'PITCH SHIFT');
   await expect(page.locator('#editorEffect')).toContainText('PITCH SHIFT');
-  await expect(page.locator('#controlCount')).toContainText('manual registry descriptors');
+  await expect(page.locator('#controlCount')).toContainText('base descriptors');
   await expect(page.locator('[data-control="vc_1_semi_1"]')).toHaveCount(1);
 });
 
@@ -40,6 +40,38 @@ test('exact verified VST point routes to native host and register trace', async 
   await expect(page.locator('.event').first()).toContainText('DSP WRITE');
   await expect(page.locator('.event').first()).toContainText('host 48');
   await expect(page.locator('.event').first()).toContainText('factory_v4_slot1_decay_time');
+});
+
+test('mapped to unmapped value transition preserves applied VST state', async ({ page }) => {
+  await chooseEffect(page,1,'HALL REVERB');
+  const decay=page.locator('[data-control="decay_time_1"] input.numeric');
+  await decay.fill('41');await decay.press('Tab');
+  await expect(page.locator('.event').first()).toContainText('DSP WRITE');
+  const applied=await page.request.get('/api/state');
+  expect((await applied.json()).values['48']).toBeCloseTo(1,6);
+  await decay.fill('42');await decay.press('Tab');
+  await expect(page.locator('.event').first()).toContainText('INSPECT ONLY');
+  await expect(page.locator('.event').first()).toContainText('No DSP register writes sent');
+  const pending=await page.request.get('/api/state');
+  expect((await pending.json()).values['48']).toBeCloseTo(1,6);
+});
+
+test('Codex 1 runtime_ready evidence cannot substitute for a native VST route', async ({ page }) => {
+  await chooseEffect(page,1,'HALL REVERB');
+  const field=page.locator('[data-control="low_freq_decay_1"] input.numeric');
+  await field.fill('6');await field.press('Tab');
+  await expect(page.locator('.event').first()).toContainText('PENDING_HOST_ROUTE');
+  await expect(page.locator('.event').first()).toContainText('No DSP register writes sent');
+});
+
+test('diagnostic panel reports original OS identity and keeps the monitor read-only', async ({ page }) => {
+  await chooseEffect(page,4,'DUAL DELAYS');
+  await page.getByRole('button',{name:'Delay',exact:true}).click();
+  await page.locator('[data-control="dual_bus1_delay_time_r"]').click();
+  await expect(page.locator('#diagContent')).toContainText('ASR10:ROM-04:dual_bus1_delay_time_r');
+  await expect(page.locator('#diagContent')).toContainText('BS1 TIME R');
+  await expect(page.locator('#osMonitor')).toContainText(/read-only/i);
+  await expect(page.locator('#osMonitor')).toContainText('disconnected');
 });
 
 test('preserves the existing verified HALL bus control identity and exact points', async ({ page }) => {
@@ -143,6 +175,19 @@ test('variation buffers remain independent and draft reset/undo are PC-only', as
   await expect(page.locator('.event').first()).toContainText('No DSP register writes sent');
 });
 
+test('exact mapped value in a non-native PC variation stays pending', async ({ page }) => {
+  await chooseEffect(page,1,'HALL REVERB');
+  await page.locator('#variation').selectOption({index:1});
+  const before=(await (await page.request.get('/api/state')).json()).values['48'];
+  const input=page.locator('[data-control="decay_time_1"] input.numeric');
+  await input.fill('41');await input.press('Tab');
+  await expect(page.locator('.event').first()).toContainText('PC_ONLY_VARIATION');
+  await expect(page.locator('.event').first()).toContainText('No DSP register writes sent');
+  const state=await (await page.request.get('/api/state')).json();
+  expect(state.values['48']).toBe(before);
+  await expect(page.locator('#diagContent')).toContainText('PC-only variation');
+});
+
 test('manual-derived DUAL DELAYS has independent BUS1/BUS2 and left/right controls', async ({ page }) => {
   await chooseEffect(page,4,'DUAL DELAYS');
   await page.getByRole('button',{name:'Delay',exact:true}).click();
@@ -153,6 +198,22 @@ test('manual-derived DUAL DELAYS has independent BUS1/BUS2 and left/right contro
   await expect(page.locator('#controls .control-card')).toHaveCount(4);
   await expect(page.locator('[data-control="dual_bus1_delay_mix"]')).toBeVisible();
   await expect(page.locator('[data-control="dual_bus2_delay_mix"]')).toBeVisible();
+});
+
+test('nonlinear reverb displays five captured envelope values and flags four unresolved manual fields', async ({ page }) => {
+  await chooseEffect(page,22,'NLIN REVRB 1');
+  const response=await page.request.get('/api/state'),state=await response.json(),ids=state.inspector_controls.map(x=>x.id);
+  for(let n=1;n<=5;n++)expect(ids).toContain(`manual_env_lev_${n}`);
+  for(let n=6;n<=9;n++)expect(ids).not.toContain(`manual_env_lev_${n}`);
+  await expect(page.locator('#controlCount')).toContainText('five values');
+  await page.getByRole('button',{name:'Main effect',exact:true}).click();
+  const banks=page.locator('#banks button');
+  for(let i=0;i<await banks.count();i++){
+    await banks.nth(i).click();
+    if(await page.locator('[data-control="manual_env_lev_1"]').count())break;
+  }
+  await page.locator('[data-control="manual_env_lev_1"]').click();
+  await expect(page.locator('#diagContent')).toContainText('ENV LEV');
 });
 
 test('modulation is shown only for algorithms with an explicit Section 6 block', async ({ page }) => {

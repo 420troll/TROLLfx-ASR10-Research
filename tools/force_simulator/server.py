@@ -1,6 +1,6 @@
 """Local browser simulator using the generated TUI and actual native VST2 API."""
 from __future__ import annotations
-import base64, hashlib, http.server, io, json, math, os, re, struct, threading, time, wave
+import base64, hashlib, http.server, io, json, math, os, re, struct, threading, time, wave, urllib.error, urllib.parse, urllib.request
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -9,6 +9,7 @@ from render import layout_report, render_page
 from skin_model import load_skin
 from build import SIM_DIR, PLUGIN, HOST
 from parameter_registry import load_registry
+from draft_state import migrate_drafts, SCHEMA as PC_DRAFT_SCHEMA
 
 ROOT=Path(__file__).resolve().parents[2]
 PACKAGE=ROOT/"force_plugin/dist/TROLLfx - VST - ASR10 FX Collection"
@@ -40,6 +41,12 @@ class Simulator:
         self.model["effect_names"]=[str(x) for x in EFFECT_NAMES]
         self.model["factory_effects"] = load_registry()
         self.assets=assets
+        self.os_monitor_url=os.environ.get("TROLLFX_OS_MONITOR_URL","").rstrip("/")
+        self.os_monitor_cursor=0
+        if self.os_monitor_url:
+            monitor_host=urlparse(self.os_monitor_url).hostname
+            if urlparse(self.os_monitor_url).scheme!="http" or monitor_host not in ("localhost","127.0.0.1","::1"):
+                raise ValueError("TROLLFX_OS_MONITOR_URL must use localhost HTTP")
         self.host=VSTBridge(HOST,PLUGIN,assets)
         if self.host.num_params != 64: raise RuntimeError(f"expected 64 VST parameters, got {self.host.num_params}")
         if not self.host.has_trace: raise RuntimeError("simulator VST lacks test-only applied-GPR trace API")
@@ -53,6 +60,8 @@ class Simulator:
         self.inspector_values = {}
         self.selected_variations = {}
         self.undo_stacks = {}
+        self.applied_control_values={}
+        self.legacy_draft_orphans=[]
 
     def slot(self): return max(1,min(50,int(math.floor(self.host.get(0)*49+0.5))+1))
     def effect_name(self,slot):
@@ -62,7 +71,8 @@ class Simulator:
         return int(self.selected_variations.setdefault(str(slot),1))
     def _variation_options(self,effect):
         c=next((x for x in effect["controls"] if x["key"]=="effect_variation"),None)
-        labels=(c or {}).get("observed_choices") or (c or {}).get("documented_choices") or []
+        evidence=self.model["factory_effects"][int(effect["slot"])-1].get("variations_evidence",{}).get("os_variation_labels_observed",[])
+        labels=evidence or (c or {}).get("observed_choices") or (c or {}).get("documented_choices") or []
         if len(labels)>=4:return [{"value":i+1,"label":str(label)} for i,label in enumerate(labels[:4])]
         return [{"value":i,"label":f"Variation {i}"} for i in range(1,5)]
     def _draft_key(self,slot,variation): return f"{slot}:{variation}"
@@ -82,12 +92,48 @@ class Simulator:
             if not c.get("editor_visible",True): continue
             v=current.get(c["id"])
             if v is None: v=self._initial_value(c); current[c["id"]]=v
-            controls.append({**c,"value":v})
+            runtime_state=c.get("runtime_state","UNMAPPED")
+            runtime_reason=c.get("runtime_reason", "No accepted native VST route is available.")
+            if variation!=1 and c.get("route"):
+                runtime_state="PC_ONLY_VARIATION"
+                runtime_reason="This variation is a PC-only draft; native VST variation routing is unavailable, so edits stay pending."
+            applied=self.applied_control_values.get(f"{slot}:{c['id']}")
+            controls.append({**c,"value":v,"runtime_state":runtime_state,"runtime_reason":runtime_reason,
+                "applied_value":applied.get("value") if applied else None,"last_applied":applied})
         return {"params":params,"values":values,"selected_effect":self.selected(),"page":self.model["pages"][self.ui_page]["name"],
             "inspector_controls":controls,"selected_variation":variation,"variation_options":self._variation_options(effect),
             "variation_support":"PC-only independent draft buffer; native VST variation routing is not implemented.",
             "draft_undo_available":bool(self.undo_stacks.get(self._draft_key(slot,variation))),
             "status":self.host.text(5),"trace_available":self.host.has_trace}
+    def export_pc_drafts(self):
+        with self.lock:
+            return {"schema":PC_DRAFT_SCHEMA,"schema_version":1,"drafts":self.inspector_values}
+    def import_pc_drafts(self,document):
+        valid={int(e["slot"]):{c["id"] for c in e["controls"]} for e in self.model["factory_effects"]}
+        result=migrate_drafts(document,valid)
+        with self.lock:
+            self.inspector_values=dict(result["drafts"])
+            self.legacy_draft_orphans=list(result["orphaned"])
+            self.undo_stacks.clear()
+        return {"drafts_restored":sum(len(v) for v in result["drafts"].values()),"orphaned":result["orphaned"],"dsp_sent":False}
+    def os_monitor_snapshot(self):
+        """Read Codex 1's local monitor API; never sends panel or DSP events."""
+        if not self.os_monitor_url:
+            return {"connected":False,"reason":"Optional original-OS monitor is not configured."}
+        try:
+            req=urllib.request.Request(self.os_monitor_url+"/api/status",headers={"Accept":"application/json"})
+            with urllib.request.urlopen(req,timeout=.35) as response: status=json.loads(response.read())
+            query=urllib.parse.urlencode({"after":self.os_monitor_cursor})
+            req=urllib.request.Request(self.os_monitor_url+"/api/events?"+query,headers={"Accept":"application/json"})
+            with urllib.request.urlopen(req,timeout=.35) as response: event_data=json.loads(response.read())
+            rows=event_data.get("events",[])
+            if rows:self.os_monitor_cursor=max(int(x.get("id",0)) for x in rows)
+            writes=[{"gpr":x.get("gpr"),"value":x.get("value"),"frame":x.get("frame"),"pc":x.get("pc")} for x in rows if x.get("type")=="gpr"][-12:]
+            return {"connected":True,"lcd":status.get("lcd"),"selected_slot":status.get("selected_slot"),"selected_name":status.get("selected_name"),
+                "variation":status.get("variation"),"parameter":status.get("parameter"),"display_value":status.get("display_value"),
+                "recovery_status":status.get("recovery_status"),"register_count":status.get("register_count"),"register_writes":writes}
+        except (OSError,ValueError,urllib.error.URLError,json.JSONDecodeError) as exc:
+            return {"connected":False,"reason":f"Original-OS monitor unavailable: {type(exc).__name__}."}
     def select_variation(self,variation):
         with self.lock:
             slot=self.slot(); effect=self.model["factory_effects"][slot-1]
@@ -137,18 +183,21 @@ class Simulator:
             current[control_id]=stored
             event={"schema":"trollfx-force-simulator-event-v1","event_type":"inspector_edit","selected_effect":{"slot":slot,"name":self.effect_name(slot)},"selected_variation":variation,"control_id":control_id,
                 "parameter_name":control["name"],"original_editor_value":stored,"normalized_vst_value":None,"host_parameter_index":None,
-                "canonical_identity":control["route"]["canonical_identity"] if control.get("route") else None,
-                "dsp_status":control["status"],"dsp_sent":False,"dsp_register_writes_applied":[],"physical_equivalent_qlink":int(qlink) if qlink else None,"bank":int(bank)}
+                "canonical_identity":control.get("canonical_identity",f"ASR10:ROM-{slot:02}:{control_id}"),
+                "vst_canonical_identity":control["route"]["canonical_identity"] if control.get("route") else None,
+                "dsp_status":control["independent_classification"],"runtime_state":"PC_ONLY_VARIATION" if variation!=1 and control.get("route") else control.get("runtime_state","UNMAPPED"),
+                "dsp_sent":False,"dsp_register_writes_applied":[],"physical_equivalent_qlink":int(qlink) if qlink else None,"bank":int(bank)}
             route=control.get("route"); point_index=None
-            if route and allow_vst:
+            if route and allow_vst and variation==1:
                 if stored in route["point_values"]: point_index=route["point_values"].index(stored)
                 elif str(stored) in [str(x) for x in route["point_labels"]]: point_index=[str(x) for x in route["point_labels"]].index(str(stored))
             if route and point_index is not None:
                 norm=point_index/max(1,len(route["point_values"])-1)
                 if self.host.num_params>54:self.host.set(54,float(route.get("bank",0)))
                 applied=self.set_param(route["host_parameter_index"],norm,"PC EDITOR",qlink)
-                event.update({"normalized_vst_value":norm,"host_parameter_index":route["host_parameter_index"],"canonical_identity":route["canonical_identity"],"dsp_sent":True,
+                event.update({"normalized_vst_value":norm,"host_parameter_index":route["host_parameter_index"],"vst_canonical_identity":route["canonical_identity"],"dsp_sent":True,
                     "dsp_register_writes_applied":applied["dsp_register_writes_applied"],"resolved_control_register_group_verified":applied["resolved_control_register_group_verified"]})
+                self.applied_control_values[f"{slot}:{control_id}"]={"value":stored,"normalized_vst_value":norm,"host_parameter_index":route["host_parameter_index"],"writes":applied["dsp_register_writes_applied"]}
             with self.log_path.open("a",encoding="utf-8") as f:f.write(json.dumps(event,separators=(",",":"))+"\n")
             return {"event":event,"state":self.state()}
     def _wait_effect(self, slot):
@@ -283,6 +332,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if path=="/font/semibold": return self.send_bytes((Path(__file__).parent/"fonts/TitilliumWeb-SemiBold.ttf").read_bytes(),"font/ttf")
         if path=="/api/model": return self.send_json(self.sim.model)
         if path=="/api/state": return self.send_json(self.sim.state())
+        if path=="/api/os-monitor": return self.send_json(self.sim.os_monitor_snapshot())
+        if path=="/api/drafts/export": return self.send_json(self.sim.export_pc_drafts())
         if path=="/api/layout-report":
             st=self.sim.state(); names={p["index"]:p["name"] for p in st["params"]}; displays={p["index"]:p["display"] for p in st["params"]}
             return self.send_json(layout_report(self.sim.model,{int(k):v for k,v in st["values"].items()},displays.get,names.get))
@@ -313,6 +364,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 x=json.loads(raw);return self.send_json(self.sim.select_variation(x["variation"]))
             if path=="/api/draft/reset":
                 return self.send_json(self.sim.reset_draft())
+            if path=="/api/drafts/import":
+                return self.send_json(self.sim.import_pc_drafts(json.loads(raw)))
             if path=="/api/draft/undo":
                 return self.send_json(self.sim.undo_draft())
             if path=="/api/process":

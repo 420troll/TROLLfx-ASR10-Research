@@ -59,9 +59,51 @@ class FactoryParameterRegistryTests(unittest.TestCase):
         self.assertEqual(visible['delay_time_l']['range'],[0,2000])
         self.assertEqual(visible['dual_bus2_delay_time_l']['range'],[0,150])
         self.assertEqual(visible['delay_time_l']['route']['canonical_identity'],'factory_v4_slot4_delay_time_l')
-        self.assertEqual(sum(c.get('editor_visible',True) for c in effects[22]['controls'] if c['name'].startswith('ENV LEVEL')),9)
+        self.assertEqual(visible['dual_bus1_delay_time_r']['independent_classification'],'PARTIAL')
+        self.assertEqual(visible['dual_bus1_delay_time_r']['dsp_evidence']['mapping']['observed_setting_points'][0]['display_value'],700)
+        env={c['name']:c for c in effects[22]['controls'] if c['name'].startswith('ENV LEVEL')}
+        self.assertEqual(sum(c.get('editor_visible',True) for c in env.values()),5)
+        self.assertTrue(all(not env[f'ENV LEVEL {n}']['editor_visible'] for n in range(6,10)))
+        self.assertIn('five values',effects[22]['manual_group_warnings'][0])
         self.assertEqual(sum(c.get('editor_visible',True) for c in effects[14]['controls'] if c['name'].startswith('POSITN BAL')),3)
         self.assertEqual(sum(c.get('editor_visible',True) for c in effects[17]['controls'] if c['name'].startswith('ER LEVEL')),4)
+
+    def test_independent_qa_crosswalk_preserves_ids_and_separates_evidence_layers(self):
+        import json
+        adapter=json.loads((HERE/'data/ASR10_EDITOR_EVIDENCE_ADAPTER_V1.json').read_text())
+        self.assertEqual(adapter['schema'],'trollfx-asr10-pc-editor-evidence-adapter-v1')
+        self.assertEqual(adapter['coverage']['manual_descriptors'],594)
+        self.assertEqual(adapter['coverage']['additional_recovered_controls'],13)
+        self.assertEqual(adapter['coverage']['dsp_classification'],{'UNKNOWN':51,'PARTIAL':36,'UNMAPPED':507})
+        self.assertEqual(adapter['coverage']['full_range_implemented'],0)
+        self.assertEqual(len(adapter['provenance']['validation_matrix_sha256']),64)
+        for effect in self.effects:
+            ids=[c['id'] for c in effect['controls']]
+            identities=[c['canonical_identity'] for c in effect['controls']]
+            self.assertEqual(len(ids),len(set(ids)),f"duplicate editor IDs in slot {effect['slot']}")
+            self.assertEqual(len(identities),len(set(identities)),f"duplicate stable identities in slot {effect['slot']}")
+            self.assertTrue(all('original_os_evidence' in c and 'dsp_evidence' in c for c in effect['controls']))
+            audited={p['id'] for p in next(e for e in adapter['effects'] if e['slot']==effect['slot'])['parameters']}
+            attached={c.get('original_parameter_id') for c in effect['controls']}
+            self.assertTrue(audited.issubset(attached),f"unattached manual identities in slot {effect['slot']}: {audited-attached}")
+        hall=self.effects[0]
+        self.assertEqual(next(c for c in hall['controls'] if c['id']=='decay_time_1')['canonical_identity'],'ASR10:ROM-01:decay_time_1')
+        self.assertEqual(next(c for c in hall['controls'] if c['id']=='decay_time_1')['route']['canonical_identity'],'factory_v4_slot1_decay_time')
+        mix=next(c for c in hall['controls'] if c['id']=='reverb_mix_bus1')
+        self.assertEqual(mix['independent_classification'],'PARTIAL')
+        self.assertEqual(mix['original_os_evidence']['labels'],['REVERB MIX BUS1'])
+        self.assertTrue(mix['dsp_evidence']['mapping']['observed_setting_points'])
+        self.assertFalse(mix['mapping_evidence_mismatch'])
+        self.assertEqual(mix['route']['point_values'],[28,29])
+
+    def test_os_inventory_deferred_and_corrected_composite_groups_are_explicit(self):
+        byslot={e['slot']:e for e in self.effects}
+        self.assertEqual(byslot[2]['os_scan_status'],'deferred')
+        self.assertFalse(next(c for c in byslot[2]['controls'] if c['id']=='decay_time_1')['original_os_evidence']['observed'])
+        for slot in (14,15,16):
+            effect=byslot[slot]
+            self.assertEqual(sum(c.get('editor_visible',True) for c in effect['controls'] if c['name']=='DECAY TIME'),1)
+        self.assertTrue(all(c['original_parameter_id']=='positn_bal_1_to_3_1' for c in byslot[14]['controls'] if c['id'].startswith('manual_positn_bal_')))
 
     def test_manual_range_exceptions_follow_selected_room_or_plate_algorithm(self):
         for slot,expected in [(14,[.2,100.0]),(15,[.2,150.0]),(16,[.7,250.0]),(17,[.2,100.0]),(18,[.4,140.0])]:
