@@ -1,0 +1,645 @@
+{
+  "schema": "force-skin-independent-inspection-v1",
+  "canvas": {
+    "width": 1280,
+    "height": 628
+  },
+  "renderer": "approximate preview only; no genuine SDK screenshot produced",
+  "inputs": {
+    "ui": {
+      "file": "ui.json",
+      "sha256": "5ef9b599f95cd92d82e1b4a3f40982f17479e9e8c8297daf45d24e11b0cf4dbf"
+    },
+    "tui": {
+      "file": "TUI.json",
+      "sha256": "5afc7be6a265dfaed2e3132cdadb635af1b1993529580c69fde0046eb2adaa84"
+    },
+    "qlinks": {
+      "file": "Q-Links.json",
+      "sha256": "206400c0a756eaee6fdddb4211756649cf83e50c3288e777d43294efe8e57f2a"
+    },
+    "asset_directory_name": "Plugin Skins",
+    "asset_tree_sha256": "f0237d6c13acb8a7c7c1e9cd2596a424e5a5f66f64c3fa79ab87b9b8a95eba58",
+    "parameter_descriptors": null
+  },
+  "pages": [
+    {
+      "page": "BROWSE",
+      "tab_index": 1,
+      "widget_count": 6,
+      "text_widget_count": 1,
+      "qlink_assignments": {
+        "Q-Link 1": 1,
+        "Q-Link 2": 2,
+        "Q-Link 3": 3,
+        "Q-Link 4": 0,
+        "Q-Link 5": 4
+      },
+      "parameter_widgets": {
+        "4": [
+          {
+            "name": "Host Bypass",
+            "when_visible": "Always"
+          }
+        ],
+        "1": [
+          {
+            "name": "Wet / Dry",
+            "when_visible": "Always"
+          }
+        ],
+        "2": [
+          {
+            "name": "Input Gain",
+            "when_visible": "Always"
+          }
+        ],
+        "3": [
+          {
+            "name": "Output Gain",
+            "when_visible": "Always"
+          }
+        ],
+        "0": [
+          {
+            "name": "FX Slot",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "EDIT",
+      "tab_index": 2,
+      "widget_count": 10,
+      "text_widget_count": 1,
+      "qlink_assignments": {
+        "Q-Link 1": 46,
+        "Q-Link 2": 47,
+        "Q-Link 3": 48,
+        "Q-Link 4": 49,
+        "Q-Link 5": 50,
+        "Q-Link 6": 51,
+        "Q-Link 7": 52,
+        "Q-Link 8": 53,
+        "Q-Link 9": 54
+      },
+      "parameter_widgets": {
+        "54": [
+          {
+            "name": "EDIT BANK",
+            "when_visible": "IndexedEnabling/1/2/Parameter 63"
+          }
+        ],
+        "50": [
+          {
+            "name": "EDIT SLOT 5",
+            "when_visible": "IndexedEnabling/1/2/Parameter 59"
+          }
+        ],
+        "51": [
+          {
+            "name": "EDIT SLOT 6",
+            "when_visible": "IndexedEnabling/1/2/Parameter 60"
+          }
+        ],
+        "52": [
+          {
+            "name": "EDIT SLOT 7",
+            "when_visible": "IndexedEnabling/1/2/Parameter 61"
+          }
+        ],
+        "53": [
+          {
+            "name": "EDIT SLOT 8",
+            "when_visible": "IndexedEnabling/1/2/Parameter 62"
+          }
+        ],
+        "46": [
+          {
+            "name": "EDIT SLOT 1",
+            "when_visible": "IndexedEnabling/1/2/Parameter 55"
+          }
+        ],
+        "47": [
+          {
+            "name": "EDIT SLOT 2",
+            "when_visible": "IndexedEnabling/1/2/Parameter 56"
+          }
+        ],
+        "48": [
+          {
+            "name": "EDIT SLOT 3",
+            "when_visible": "IndexedEnabling/1/2/Parameter 57"
+          }
+        ],
+        "49": [
+          {
+            "name": "EDIT SLOT 4",
+            "when_visible": "IndexedEnabling/1/2/Parameter 58"
+          }
+        ]
+      }
+    },
+    {
+      "page": "MIX",
+      "tab_index": 3,
+      "widget_count": 6,
+      "text_widget_count": 1,
+      "qlink_assignments": {
+        "Q-Link 1": 1,
+        "Q-Link 2": 2,
+        "Q-Link 3": 3,
+        "Q-Link 4": 0,
+        "Q-Link 5": 4
+      },
+      "parameter_widgets": {
+        "4": [
+          {
+            "name": "Host Bypass",
+            "when_visible": "Always"
+          }
+        ],
+        "1": [
+          {
+            "name": "Wet / Dry",
+            "when_visible": "Always"
+          }
+        ],
+        "2": [
+          {
+            "name": "Input Gain",
+            "when_visible": "Always"
+          }
+        ],
+        "3": [
+          {
+            "name": "Output Gain",
+            "when_visible": "Always"
+          }
+        ],
+        "0": [
+          {
+            "name": "FX Slot",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    }
+  ],
+  "controls": [
+    {
+      "page": "BROWSE",
+      "widget": "text 0",
+      "type": "Label",
+      "parameter_index": null,
+      "bounds": [
+        23.0,
+        45.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": "TROLLfx / ASR-10 FACTORY FX"
+    },
+    {
+      "page": "BROWSE",
+      "widget": "Host Bypass",
+      "type": "toggle",
+      "parameter_index": 4,
+      "bounds": [
+        23.0,
+        346.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "BROWSE",
+      "widget": "Wet / Dry",
+      "type": "sliderWithFocus",
+      "parameter_index": 1,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "BROWSE",
+      "widget": "Input Gain",
+      "type": "sliderWithFocus",
+      "parameter_index": 2,
+      "bounds": [
+        343.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "BROWSE",
+      "widget": "Output Gain",
+      "type": "sliderWithFocus",
+      "parameter_index": 3,
+      "bounds": [
+        663.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "BROWSE",
+      "widget": "FX Slot",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 0,
+      "bounds": [
+        983.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "EDIT",
+      "widget": "text 0",
+      "type": "Label",
+      "parameter_index": null,
+      "bounds": [
+        23.0,
+        45.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": "ACTIVE FACTORY PARAMETERS"
+    },
+    {
+      "page": "EDIT",
+      "widget": "EDIT BANK",
+      "type": "knobUni",
+      "parameter_index": 54,
+      "bounds": [
+        23.0,
+        196.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "IndexedEnabling/1/2/Parameter 63",
+      "text": null
+    },
+    {
+      "page": "EDIT",
+      "widget": "EDIT SLOT 5",
+      "type": "knobUni",
+      "parameter_index": 50,
+      "bounds": [
+        23.0,
+        346.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "IndexedEnabling/1/2/Parameter 59",
+      "text": null
+    },
+    {
+      "page": "EDIT",
+      "widget": "EDIT SLOT 6",
+      "type": "knobUni",
+      "parameter_index": 51,
+      "bounds": [
+        343.0,
+        346.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "IndexedEnabling/1/2/Parameter 60",
+      "text": null
+    },
+    {
+      "page": "EDIT",
+      "widget": "EDIT SLOT 7",
+      "type": "knobUni",
+      "parameter_index": 52,
+      "bounds": [
+        663.0,
+        346.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "IndexedEnabling/1/2/Parameter 61",
+      "text": null
+    },
+    {
+      "page": "EDIT",
+      "widget": "EDIT SLOT 8",
+      "type": "knobUni",
+      "parameter_index": 53,
+      "bounds": [
+        983.0,
+        346.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "IndexedEnabling/1/2/Parameter 62",
+      "text": null
+    },
+    {
+      "page": "EDIT",
+      "widget": "EDIT SLOT 1",
+      "type": "knobUni",
+      "parameter_index": 46,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "IndexedEnabling/1/2/Parameter 55",
+      "text": null
+    },
+    {
+      "page": "EDIT",
+      "widget": "EDIT SLOT 2",
+      "type": "knobUni",
+      "parameter_index": 47,
+      "bounds": [
+        343.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "IndexedEnabling/1/2/Parameter 56",
+      "text": null
+    },
+    {
+      "page": "EDIT",
+      "widget": "EDIT SLOT 3",
+      "type": "knobUni",
+      "parameter_index": 48,
+      "bounds": [
+        663.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "IndexedEnabling/1/2/Parameter 57",
+      "text": null
+    },
+    {
+      "page": "EDIT",
+      "widget": "EDIT SLOT 4",
+      "type": "knobUni",
+      "parameter_index": 49,
+      "bounds": [
+        983.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "IndexedEnabling/1/2/Parameter 58",
+      "text": null
+    },
+    {
+      "page": "MIX",
+      "widget": "text 0",
+      "type": "Label",
+      "parameter_index": null,
+      "bounds": [
+        23.0,
+        45.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": "EFFECT MIX"
+    },
+    {
+      "page": "MIX",
+      "widget": "Host Bypass",
+      "type": "toggle",
+      "parameter_index": 4,
+      "bounds": [
+        23.0,
+        346.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "MIX",
+      "widget": "Wet / Dry",
+      "type": "faderUni",
+      "parameter_index": 1,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "MIX",
+      "widget": "Input Gain",
+      "type": "knobBi",
+      "parameter_index": 2,
+      "bounds": [
+        343.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "MIX",
+      "widget": "Output Gain",
+      "type": "knobBi",
+      "parameter_index": 3,
+      "bounds": [
+        663.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "MIX",
+      "widget": "FX Slot",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 0,
+      "bounds": [
+        983.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "WARN",
+      "code": "TEXT_MAY_OVERFLOW",
+      "page": "BROWSE",
+      "widget": "text 0",
+      "text": "TROLLfx / ASR-10 FACTORY FX",
+      "estimated_width": 453.6,
+      "available_width": 278.0,
+      "metric": "approximate 0.56em; not SDK-rendered"
+    },
+    {
+      "severity": "WARN",
+      "code": "TEXT_MAY_OVERFLOW",
+      "page": "EDIT",
+      "widget": "text 0",
+      "text": "ACTIVE FACTORY PARAMETERS",
+      "estimated_width": 420.0,
+      "available_width": 278.0,
+      "metric": "approximate 0.56em; not SDK-rendered"
+    },
+    {
+      "severity": "WARN",
+      "code": "STATIC_QLINK_CONDITIONAL_WIDGET",
+      "page": "EDIT",
+      "qlink": "Q-Link 1",
+      "parameter_index": 46,
+      "widgets": [
+        "EDIT SLOT 1"
+      ],
+      "detail": "Q-Link map remains assigned regardless of widget visibility"
+    },
+    {
+      "severity": "WARN",
+      "code": "STATIC_QLINK_CONDITIONAL_WIDGET",
+      "page": "EDIT",
+      "qlink": "Q-Link 2",
+      "parameter_index": 47,
+      "widgets": [
+        "EDIT SLOT 2"
+      ],
+      "detail": "Q-Link map remains assigned regardless of widget visibility"
+    },
+    {
+      "severity": "WARN",
+      "code": "STATIC_QLINK_CONDITIONAL_WIDGET",
+      "page": "EDIT",
+      "qlink": "Q-Link 3",
+      "parameter_index": 48,
+      "widgets": [
+        "EDIT SLOT 3"
+      ],
+      "detail": "Q-Link map remains assigned regardless of widget visibility"
+    },
+    {
+      "severity": "WARN",
+      "code": "STATIC_QLINK_CONDITIONAL_WIDGET",
+      "page": "EDIT",
+      "qlink": "Q-Link 4",
+      "parameter_index": 49,
+      "widgets": [
+        "EDIT SLOT 4"
+      ],
+      "detail": "Q-Link map remains assigned regardless of widget visibility"
+    },
+    {
+      "severity": "WARN",
+      "code": "STATIC_QLINK_CONDITIONAL_WIDGET",
+      "page": "EDIT",
+      "qlink": "Q-Link 5",
+      "parameter_index": 50,
+      "widgets": [
+        "EDIT SLOT 5"
+      ],
+      "detail": "Q-Link map remains assigned regardless of widget visibility"
+    },
+    {
+      "severity": "WARN",
+      "code": "STATIC_QLINK_CONDITIONAL_WIDGET",
+      "page": "EDIT",
+      "qlink": "Q-Link 6",
+      "parameter_index": 51,
+      "widgets": [
+        "EDIT SLOT 6"
+      ],
+      "detail": "Q-Link map remains assigned regardless of widget visibility"
+    },
+    {
+      "severity": "WARN",
+      "code": "STATIC_QLINK_CONDITIONAL_WIDGET",
+      "page": "EDIT",
+      "qlink": "Q-Link 7",
+      "parameter_index": 52,
+      "widgets": [
+        "EDIT SLOT 7"
+      ],
+      "detail": "Q-Link map remains assigned regardless of widget visibility"
+    },
+    {
+      "severity": "WARN",
+      "code": "STATIC_QLINK_CONDITIONAL_WIDGET",
+      "page": "EDIT",
+      "qlink": "Q-Link 8",
+      "parameter_index": 53,
+      "widgets": [
+        "EDIT SLOT 8"
+      ],
+      "detail": "Q-Link map remains assigned regardless of widget visibility"
+    },
+    {
+      "severity": "WARN",
+      "code": "STATIC_QLINK_CONDITIONAL_WIDGET",
+      "page": "EDIT",
+      "qlink": "Q-Link 9",
+      "parameter_index": 54,
+      "widgets": [
+        "EDIT BANK"
+      ],
+      "detail": "Q-Link map remains assigned regardless of widget visibility"
+    },
+    {
+      "severity": "INFO",
+      "code": "UNREFERENCED_SKIN_FILES",
+      "files": [
+        "button_off.png",
+        "button_on.png",
+        "fader_h_bi.png",
+        "fader_h_uni.png",
+        "knob_bi.png",
+        "knob_small_bi.png",
+        "knob_small_uni.png",
+        "knob_uni.png",
+        "seg2_off.png",
+        "seg2_on.png",
+        "seg3_off.png",
+        "seg3_on.png",
+        "seg4_off.png",
+        "seg4_on.png"
+      ]
+    }
+  ],
+  "summary": {
+    "WARN": 11,
+    "INFO": 1
+  }
+}

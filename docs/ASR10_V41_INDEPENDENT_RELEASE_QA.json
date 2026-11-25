@@ -1,0 +1,86 @@
+{
+  "schema": "trollfx-asr10-v41-independent-release-qa-v1",
+  "candidate_commit": "f159cde7daa7ba91b5aac8c93999b6a32835bf3f",
+  "overall": "PASS_WITH_HARDWARE_GATES_OPEN",
+  "checks": {
+    "generated_pages": {
+      "status": "PASS",
+      "pages": [
+        "BROWSE",
+        "EDIT",
+        "MIX"
+      ]
+    },
+    "edit_qlink_static_map": {
+      "status": "PASS",
+      "q1_q8_parameter_indices": [
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ],
+      "q9_parameter_index": 54
+    },
+    "verified_control_points": {
+      "status": "PASS",
+      "count": 19,
+      "points": 38
+    },
+    "effect_dependent_routing": {
+      "status": "PASS_PARTIAL",
+      "coverage": [
+        "HALL",
+        "ROOM"
+      ],
+      "unmapped_effects_fail_closed": true
+    },
+    "hall_room_pitch_hall_dedicated_route_cycle": {
+      "status": "NOT_TESTED"
+    },
+    "host_state_and_automation_ids": {
+      "status": "PASS_SIMULATED",
+      "previous_indices_0_45_preserved": true,
+      "chunk_roundtrip": true
+    },
+    "layout": {
+      "status": "PASS_WITH_WARNING",
+      "widget_out_of_bounds": 0,
+      "invalid_qlink_targets": 0,
+      "duplicate_parameter_widgets": 0,
+      "potential_text_fit_warnings": 2,
+      "genuine_sdk_screenshot": false
+    },
+    "sdk_validator": {
+      "status": "PASS",
+      "errors": 0,
+      "warnings": 0
+    },
+    "native_binary_bound_vst": {
+      "status": "PASS_SIMULATED",
+      "package_slots": 50,
+      "missing_package_silence": true,
+      "callback_allocations": 0,
+      "sdk_host_simulator": true,
+      "native_sha256": "c012bc0c86cecabb564370494bfbbb706225e273219d6715059f326c6cf0e128"
+    },
+    "armv7_qemu_binary": {
+      "status": "PASS_SIMULATED",
+      "package_slots": 50,
+      "sha256": "badefa8fa322b812adbf82166d9782e17d770d4453cb06f428b2f9ed98a3cab4"
+    },
+    "force_touchscreen_and_physical_qlinks": {
+      "status": "NOT_TESTED"
+    },
+    "playable_release": {
+      "status": "BLOCKED",
+      "candidate_manifest_playable": false
+    }
+  },
+  "private_assets_in_git": false,
+  "force_modified": false,
+  "v1_rollback_modified": false
+}
