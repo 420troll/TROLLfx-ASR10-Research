@@ -1,0 +1,111 @@
+{
+  "schema": "trollfx-asr10-factory-parameter-range-recovery-v1",
+  "policy": "A UI endpoint sweep does not establish a DSP mapping. Register curves are promoted only from stable, reversible, value-correlated GPR evidence.",
+  "completed_scans": [
+    {
+      "slot": 1,
+      "factory_name": "HALL REVERB",
+      "variation": 1,
+      "parameter_label": "DECAY TIME",
+      "observed_domain": {
+        "minimum": 0,
+        "maximum": 99,
+        "step": 1
+      },
+      "ui_range_status": "OS_RANGE_VERIFIED",
+      "endpoint_capture": "OS 3.53 display-driven sweep reached DECAY TIME=99 and DECAY TIME=0, then returned exactly to the starting DECAY TIME=40.",
+      "register_mapping_status": "UNRESOLVED_DIRECTION_DISAGREEMENT",
+      "register_mapping_note": "Several GPRs change with DECAY TIME, but captured state for a repeated LCD value was not consistent in both directions across the complete sweep. Preserve the pre-existing V2/V5 exact points (40 and 41) only; do not promote the sweep into a full DSP table.",
+      "probe": "tools/parameter_controls/run_full_parameter_range_sweep.py",
+      "private_raw_capture": "private-results/asr10-full-factory-parameter-recovery/range-sweeps-final/slot-01-var1-decay-time-range.log",
+      "observed_lcd_change_steps": 198,
+      "no_change_endpoint_checks": 2,
+      "total_step_attempts": 200
+    },
+    {
+      "slot": 3,
+      "factory_name": "ROOM REVERB",
+      "variation": 1,
+      "parameter_label": "DECAY TIME",
+      "observed_domain": {
+        "minimum": 0,
+        "maximum": 99,
+        "step": 1
+      },
+      "ui_range_status": "OS_RANGE_VERIFIED",
+      "endpoint_capture": "OS 3.53 display-driven sweep reached DECAY TIME=99 and DECAY TIME=0, then returned exactly to the OS-loaded DECAY TIME=64.",
+      "observed_lcd_change_steps": 198,
+      "no_change_endpoint_checks": 2,
+      "total_step_attempts": 200,
+      "register_mapping_status": "UNRESOLVED_DIRECTION_DISAGREEMENT",
+      "register_mapping_note": "The sweep reached both bounds and restored the initial LCD but did not produce complete reversible per-value GPR agreement. No full DSP table was promoted.",
+      "probe": "tools/parameter_controls/run_full_parameter_range_sweep.py",
+      "private_raw_capture": "private-results/asr10-full-factory-parameter-recovery/priority-room/slot-03-var1-decay-time-range.log"
+    },
+    {
+      "slot": 4,
+      "factory_name": "DUAL DELAYS",
+      "variation": 1,
+      "parameter_label": "BUS1 FEEDBACK",
+      "observed_domain": {
+        "minimum": 0,
+        "maximum": 99,
+        "step": 1
+      },
+      "ui_range_status": "OS_RANGE_VERIFIED",
+      "endpoint_capture": "OS 3.53 display-driven sweep observed BUS1 FEEDBACK=99 and =0 and restored exactly to the loaded value 19. A legacy phase-boundary event omits one STEP_DONE line; parser closes that step only from ORIGIN_RESTORED plus the following matching LCD transition.",
+      "register_mapping_status": "UNRESOLVED_DIRECTION_DISAGREEMENT",
+      "register_mapping_note": "GPR 0x06 changed with the field, but its up/down state agreed at only 70 of 97 compared numeric points (72.2%). No full DSP table promoted.",
+      "observed_lcd_change_steps": 198,
+      "no_change_endpoint_checks": 2,
+      "total_step_attempts": 200,
+      "probe": "tools/parameter_controls/run_full_parameter_range_sweep.py",
+      "private_capture_reference": "priority-dual-delay-final/slot-04-var1-bus1-feedback-range.log"
+    },
+    {
+      "slot": 6,
+      "factory_name": "CHORUS+REVRB",
+      "variation": 1,
+      "parameter_label": "CHORUS FEEDBACK",
+      "observed_domain": {
+        "minimum": -99,
+        "maximum": 99,
+        "step": 1
+      },
+      "ui_range_status": "OS_RANGE_VERIFIED",
+      "endpoint_capture": "OS 3.53 reached CHORUS FEEDBACK=+99 and CHORUS FEEDBACK=-99, then returned exactly to the OS-loaded +9.",
+      "observed_lcd_change_steps": 396,
+      "no_change_endpoint_checks": 2,
+      "total_step_attempts": 398,
+      "register_mapping_status": "UNRESOLVED_DIRECTION_DISAGREEMENT",
+      "register_mapping_note": "GPR 0x86 varied with the control but agreed in both directions for only 141/197 repeated numeric values (71.6%). Existing exact points are preserved; no full curve is promoted.",
+      "probe": "tools/parameter_controls/run_full_parameter_range_sweep.py",
+      "private_raw_capture": "private-results/asr10-full-factory-parameter-recovery/priority-chorus-retry/slot-06-var1-chorus-feedback-range.log"
+    },
+    {
+      "slot": 8,
+      "factory_name": "FLANGER+REV",
+      "variation": 1,
+      "parameter_label": "FLANGE DEPTH",
+      "observed_domain": {
+        "minimum": 0,
+        "maximum": 99,
+        "step": 1
+      },
+      "ui_range_status": "OS_RANGE_VERIFIED",
+      "endpoint_capture": "OS 3.53 display-driven sweep started at 99, observed all steps down to 0, and restored exactly to the loaded value 99.",
+      "register_mapping_status": "UNRESOLVED_DIRECTION_DISAGREEMENT",
+      "register_mapping_note": "GPR 0x88 changed with the field, but the up/down state agreed at only 70 of 98 compared numeric points (71.4%). No full DSP table promoted.",
+      "observed_lcd_change_steps": 198,
+      "no_change_endpoint_checks": 2,
+      "total_step_attempts": 200,
+      "probe": "tools/parameter_controls/run_full_parameter_range_sweep.py",
+      "private_capture_reference": "priority-flanger-fixed/slot-08-var1-flange-depth-range.log"
+    }
+  ],
+  "coverage": {
+    "controls_with_os_endpoint_sweep": 5,
+    "controls_with_full_bidirectionally_verified_dsp_mapping": 0,
+    "note": "UI range coverage does not constitute a DSP mapping; all captured complete sweeps still show direction-dependent GPR state."
+  }
+}
