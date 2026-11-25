@@ -73,34 +73,26 @@ def build_ui(reg):
     pages=[]
     pages.append({"name":"BROWSE","controls":[
         {"widget":"text","text":"TROLLfx / ASR-10 FACTORY FX"},
-        {"widget":"text","text":"50 SLOTS / PROVIDER STATUS"},
-        {"widget":"text","text":"SELECT AN EFFECT TO LOAD"},
-        {"widget":"text","text":"EDIT PAGES ARE FIXED Q-LINK MAPS"},
+        "empty","empty","empty",
         "empty","empty","empty","empty",
         {"param":"Host Bypass","widget":"switch"},"empty","empty","empty",
         "Wet / Dry","Input Gain","Output Gain",{"param":"FX Slot","widget":"slider","overlay":"menu"}]})
+    edit_cells=["empty"]*16
+    edit_cells[0]={"widget":"text","text":"ACTIVE FACTORY PARAMETERS"}
+    edit_cells[4]={"param":"EDIT BANK","widget":"knob","overlay":"knob",
+        "visibleWhen":{"param":"BANK SELECT ON","choice":"On"}}
+    edit_positions=[12,13,14,15,8,9,10,11]
+    for i,pos in enumerate(edit_positions,1):
+        edit_cells[pos]={"param":f"EDIT SLOT {i}","widget":"knob","overlay":"knob",
+            "visibleWhen":{"param":f"SLOT {i} ON","choice":"On"}}
+    pages.append({"name":"EDIT","controls":edit_cells})
     pages.append({"name":"MIX","controls":[
-        {"widget":"text","text":"STEREO / NATIVE ES5510"},
-        {"widget":"text","text":"PROCESSING: EXPERIMENTAL 48 kHz"},
-        {"widget":"text","text":"HOST CONTROLS / FIXED IDs"},
-        {"widget":"text","text":"Q-LINKS: WET, INPUT, OUTPUT"},
+        {"widget":"text","text":"EFFECT MIX"},
+        "empty","empty","empty",
         "empty","empty","empty","empty",
         {"param":"Host Bypass","widget":"switch"},"empty","empty","empty",
         {"param":"Wet / Dry","widget":"fader"},{"param":"Input Gain","widget":"knob"},
         {"param":"Output Gain","widget":"knob"},{"param":"FX Slot","widget":"slider","overlay":"menu"}]})
-    for effect in reg["effects"]:
-        controls=effect["runtime_ready_parameters"]
-        if not controls: continue
-        # The SDK maps the bottom row to Q1-Q4 and the row above it to Q5-Q8.
-        # Each per-effect bank has a static, truthful map; there are no hidden
-        # controls with stale Q-Link targets.
-        q_positions=[12,13,14,15,8,9,10,11]
-        for bank,start in enumerate(range(0,len(controls),8),start=1):
-            cells=["empty"]*16
-            for c,position in zip(controls[start:start+8],q_positions):
-                cells[position]={"param":c["host_parameter_name"],"widget":"slider","overlay":"menu"}
-            page_name=f"{effect['slot']:02d} EDIT" if bank==1 else f"{effect['slot']:02d} E{bank}"
-            pages.append({"name":page_name,"controls":cells})
     return {"backgroundImage":"panel_background.png","kit":{"theme":"cyan","accent":"ff00c7c2"},
         "style":{"background":"ff12171a","accent":"ff00c7c2","text":"fff4f8fa","muted":"ff85949a"},"pages":pages}
 

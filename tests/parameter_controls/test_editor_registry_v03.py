@@ -1,6 +1,5 @@
 import json
-import subprocess
-import sys
+import importlib.util
 import unittest
 from pathlib import Path
 
@@ -45,21 +44,15 @@ class EditorRegistryV03Tests(unittest.TestCase):
                               else control["plugin_parameter_index"] - 23)
             self.assertEqual(control["qlink"], expected_qlink)
         pages = self.ui["pages"]
-        self.assertEqual([p["name"] for p in pages], ["BROWSE", "MIX", "EDIT", "EDIT 2"])
-        edit = pages[2]["controls"]
-        self.assertEqual(len(edit), 16)
-        layout = (list(range(20, 24)) + list(range(16, 20)) +
-                  list(range(12, 16)) + list(range(8, 12)))
-        control_by_index = {c["plugin_parameter_index"]: c for c in controls}
-        expected = [control_by_index[index] for index in layout]
-        self.assertEqual([c["param"] for c in edit], [c["plugin_parameter_name"] for c in expected])
-        for item, control in zip(edit, expected):
-            self.assertEqual(item["visibleWhen"], {"param": "FX Slot", "index": control["slot"] - 1})
-        edit_v3 = pages[3]["controls"]
-        self.assertEqual(len(edit_v3), 16)
-        self.assertEqual([c["param"] for c in edit_v3[12:15]], [
-            "BS1 TIME L (44KHZ DELAYS)", "FLANGE RATE", "QUALITY"])
-        self.assertEqual([c["visibleWhen"]["index"] for c in edit_v3[12:15]], [4, 7, 38])
+        self.assertEqual([p["name"] for p in pages], ["BROWSE", "EDIT", "MIX"])
+        edit = pages[1]["controls"]
+        positions = [12, 13, 14, 15, 8, 9, 10, 11]
+        self.assertEqual([edit[i]["param"] for i in positions],
+                         [f"EDIT SLOT {i}" for i in range(1, 9)])
+        self.assertEqual([edit[i]["visibleWhen"]["param"] for i in positions],
+                         [f"SLOT {i} ON" for i in range(1, 9)])
+        self.assertFalse(any(c.get("param") in {x["plugin_parameter_name"] for x in controls}
+                             for page in pages for c in page["controls"] if isinstance(c, dict)))
 
     def test_v3_ranges_do_not_expand_writable_register_points(self):
         effects = {e["slot"]: e for e in self.registry["effects"]}
@@ -79,11 +72,13 @@ class EditorRegistryV03Tests(unittest.TestCase):
                          ["reverb_mix_bus1", "reverb_mix_bus2"])
 
     def test_generation_is_reproducible(self):
-        result = subprocess.run(
-            [sys.executable, str(ROOT / "tools/parameter_controls/build_editor_registry_v03.py"), "--check"],
-            cwd=ROOT, capture_output=True, text=True,
-        )
-        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        spec = importlib.util.spec_from_file_location(
+            "editor_registry_v03", ROOT / "tools/parameter_controls/build_editor_registry_v03.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertEqual(self.registry, module.build_registry())
+        self.assertEqual((ROOT / "include/trollfx/es5510_factory_editor_v03.hpp").read_text(),
+                         module.make_header(self.registry))
 
 
 if __name__ == "__main__":

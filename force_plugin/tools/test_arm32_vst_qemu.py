@@ -88,7 +88,8 @@ def main():
             "output_renders_sha256": output_hash.hexdigest(), "accepted_packages": prep["eligible_slots"],
             "processed_slots": len(slots), "frames_per_slot": 8192, "callback_allocations": 0,
             "binary_assertions": ["VSTPluginMain entry", "stereo finite output", "all 50 validated packages",
-                "19 verified parameter points", "effect switching", "wet/dry and gain", "bypass", "host chunk state roundtrip"],
+                "19 verified parameter points", "Hall/Room effect-dependent EDIT routing", "dynamic formatted labels",
+                "effect-specific state isolation", "effect switching", "wet/dry and gain", "bypass", "host chunk state roundtrip"],
             "aggregate_result": "BINARY_PASS", "slots": slots}
     a.report.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps({"status": "PASS", "slots": len(report["slots"]), "plugin_sha256": report["plugin_sha256"],

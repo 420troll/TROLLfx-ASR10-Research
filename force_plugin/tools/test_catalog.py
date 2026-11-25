@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused checks for the Force collection labels, V4 metadata and static Q-Link maps."""
+"""Focused checks for factory labels, V4 metadata and V4.1 routed Q-Link maps."""
 import json
 import re
 from pathlib import Path
@@ -13,7 +13,7 @@ expected=[x for x in expected if 1<=x[0]<=50]
 assert [(x["slot"],x["name"]) for x in effects]==expected
 ui=json.loads((ROOT/"ui.json").read_text())
 assert ui["kit"]["theme"]=="cyan" and ui["backgroundImage"]=="panel_background.png"
-assert [p["name"] for p in ui["pages"][:2]]==["BROWSE","MIX"]
+assert [p["name"] for p in ui["pages"]]==["BROWSE","EDIT","MIX"]
 assert all(len(p["controls"])==16 for p in ui["pages"])
 src=(ROOT/"src/ASR10FXCollection.cpp").read_text()
 header=(ROOT.parent/"include/trollfx/es5510_factory_editor_v04.hpp").read_text()
@@ -24,34 +24,24 @@ assert "parameterChanged(int index" in src and "v4_control_changed_" in src
 assert "append_verified_parameters(d)" in provider
 registry=json.loads((ROOT.parent/"docs/ASR10_FACTORY_EDITOR_REGISTRY_V04.json").read_text())
 assert registry["documented_parameter_count"]==594 and registry["runtime_ready_control_count"]==19
-slot_index=27
-ready=[e for e in registry["effects"] if e["runtime_ready_parameters"]]
-expected_pages=[]
-for effect in registry["effects"]:
-    controls=effect["runtime_ready_parameters"]
-    for bank,start in enumerate(range(0,len(controls),8),start=1):
-        expected_pages.append((effect,bank,controls[start:start+8]))
-assert len(ui["pages"])==2+len(expected_pages)
-for page,(effect,bank,controls) in zip(ui["pages"][2:],expected_pages):
-    assert page["name"]==(f'{effect["slot"]:02d} EDIT' if bank==1 else f'{effect["slot"]:02d} E{bank}')
-    names=[page["controls"][i]["param"] for i in [12,13,14,15,8,9,10,11]
-           if isinstance(page["controls"][i],dict) and "param" in page["controls"][i]]
-    assert names==[c["host_parameter_name"] for c in controls]
-    slot_index+=len(controls)
-assert slot_index==46
+edit=ui["pages"][1]
+positions=[12,13,14,15,8,9,10,11]
+names=[edit["controls"][i]["param"] for i in positions]
+assert names==[f"EDIT SLOT {i}" for i in range(1,9)]
+assert edit["controls"][4]["visibleWhen"]["param"]=="BANK SELECT ON"
+assert edit["controls"][4]["widget"]=="knob"
+assert all(edit["controls"][i]["visibleWhen"]["param"]==f"SLOT {n} ON"
+           for n,i in enumerate(positions,1))
 release_skin=ROOT/"dist"/"TROLLfx - VST - ASR10 FX Collection"/"Plugin Skins"
 if release_skin.is_dir():
     tui=json.loads((release_skin/"TUI.json").read_text())
     qlinks=json.loads((release_skin/"Q-Links.json").read_text())
     tabs=tui["pageData"]["tabs"]; maps=qlinks["Screen Mode Q-Links"]["map"]
-    assert len(tabs)==len(maps)==len(expected_pages)+2
+    assert len(tabs)==len(maps)==3
     first=maps[0]["Q-Links"]
     assert [first[f"Q-Link {n}"] for n in range(1,6)]==[1,2,3,0,4]
-    index=27
-    for (effect,bank,controls),entry in zip(expected_pages,maps[2:]):
-        count=len(controls); q=entry["Q-Links"]
-        assert [q[f"Q-Link {n}"] for n in range(1,count+1)]==list(range(index,index+count))
-        assert all(q[f"Q-Link {n}"]==-1 for n in range(count+1,17))
-        index+=count
-    assert index==46
-print("50 effect labels, 594 descriptors, 19 controls and static effect Q-Link maps: PASS")
+    q=maps[1]["Q-Links"]
+    assert [q[f"Q-Link {n}"] for n in range(1,9)]==list(range(46,54))
+    assert q["Q-Link 9"]==54
+    assert sum(q[f"Q-Link {n}"]!=-1 for n in range(1,17))==9
+print("50 effect labels, 594 descriptors, 19 verified controls and one routed EDIT map: PASS")

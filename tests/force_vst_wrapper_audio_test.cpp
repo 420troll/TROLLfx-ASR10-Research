@@ -1,33 +1,28 @@
 #define TROLLFX_FORCE_PLUGIN_TEST
 #include "../force_plugin/src/ASR10FXCollection.cpp"
-#include "validated_test_packages.hpp"
+#include "../force_plugin/src/ES5510FactoryPackageProvider.h"
 #include <array>
 #include <cassert>
 #include <cmath>
 #include <cstdio>
 
 int main() {
-    auto provider=trollfx_test::make_provider();
-    TROLLfx_InstallValidatedFactoryPackageProvider(nullptr);
-    ASR10FXCollection missing_plugin;
-    missing_plugin.prepare(48000.0,256);
-    assert(missing_plugin.displayText(5)=="UNAVAIL"); // status is rendered from backend state, not serialized parameter state
+    assert(editBankCountForControls(1)==1 && editBankCountForControls(8)==1);
+    assert(editBankCountForControls(9)==2 && editBankCountForControls(17)==3);
     constexpr int N=256; std::array<float,N> l{},r{},ol{},orr{};
     l.fill(0.25f); r.fill(-0.25f);
     const float* inputs[2]={l.data(),r.data()}; float* outputs[2]={ol.data(),orr.data()};
     mpc::ProcessContext ctx; ctx.inputs=inputs; ctx.outputs=outputs; ctx.numInputs=2; ctx.numOutputs=2; ctx.numFrames=N; ctx.sampleRate=48000.0;
-    missing_plugin.process(ctx);
-    for(int i=0;i<N;++i)assert(ol[i]==0.0f&&orr[i]==0.0f);
-    TROLLfx_InstallValidatedFactoryPackageProvider(&provider);
+    const auto* provider=TROLLfx_GetProductionFactoryPackageProvider();
     {
-        ES5510DSPBackend parameter_backend(&provider);
+        ES5510DSPBackend parameter_backend(provider);
         assert(parameter_backend.prepare(2,48000.0));
         using namespace trollfx::es5510::factory_parameters_v01;
         assert(parameter_backend.set_verified_bus(FactoryEffect::Rom02Reverb44k,
             Parameter::ReverbMixBus1,26)==EncodeStatus::Encoded);
     }
     ASR10FXCollection plugin;
-    assert(plugin.numParams()==46); // legacy/V2/V3 IDs 0..26 retained; V4 controls append at 27..45
+    assert(plugin.numParams()==64); // old IDs 0..26, V4 controls 27..45, V4.1 routing/visibility parameters 46..63
     plugin.set(0,0.0f); // factory slot 1: HALL
     plugin.set(1,100.0f); plugin.set(2,0.0f); plugin.set(3,0.0f);
     plugin.prepare(48000.0,256);
@@ -42,8 +37,14 @@ int main() {
     plugin.set(9,1.0f); // verified HALL BUS2 28 -> 29
     assert(plugin.param(29).id=="factory_v4_slot1_decay_time");
     assert(plugin.displayText(29)=="40");
-    plugin.set(29,1.0f); // V4 Q-Link path: exactly the verified 40 -> 41 point, no UNCHANGED detent
+    assert(plugin.param(46).id=="factory_edit_slot_1");
+    assert(plugin.param(54).id=="factory_edit_bank" && plugin.getInt(63)==0);
+    assert(plugin.displayText(48)=="DECAY TIME: 40"); // Hall's third active EDIT slot
+    plugin.set(48,1.0f); // fixed Q3 route: HALL DECAY TIME, exact verified point only
+    plugin.process(ctx);
+    assert(plugin.getInt(29)==1);
     assert(plugin.displayText(29)=="41");
+    assert(plugin.displayText(48)=="DECAY TIME: 41");
     ASR10FXCollection hall_default;
     hall_default.set(0,0.0f); hall_default.set(1,100.0f); hall_default.set(2,0.0f); hall_default.set(3,0.0f);
     hall_default.prepare(48000.0,256);
@@ -68,7 +69,39 @@ int main() {
         plugin.process(ctx); hall_v4_default.process(default_ctx);
         for(int i=0;i<N;++i)v4_delta+=std::abs(ol[i]-default_l[i])+std::abs(orr[i]-default_r[i]);
     }
-    assert(v4_delta>1e-8); // host parameter change reaches ordered DSP writes
+    assert(v4_delta>1e-8); // routed Q3 reaches the verified ordered DSP writes
+
+    plugin.set(0,2.0f); // ROOM REVERB: Q1..Q3 now route to ROOM's three controls
+    assert(plugin.getInt(55)==1 && plugin.getInt(56)==1 && plugin.getInt(57)==1);
+    assert(plugin.getInt(58)==0 && plugin.getInt(63)==0);
+    assert(plugin.displayText(46)=="DECAY TIME: 64");
+    plugin.set(46,1.0f); // same Q1 now routes to ROOM DECAY TIME, not HALL BUS1
+    for(int block=0;block<5000 && !(plugin.displayText(5)=="READY" && plugin.getInt(33)==1);++block) {
+        plugin.process(ctx);
+    }
+    assert(plugin.getInt(33)==1);
+    assert(plugin.displayText(46)=="DECAY TIME: 65");
+    assert(plugin.getInt(29)==1); // switching effects did not overwrite HALL's saved setting
+    ASR10FXCollection room_default;
+    room_default.set(0,2.0f); room_default.set(1,100.0f); room_default.set(2,0.0f); room_default.set(3,0.0f);
+    room_default.set(33,0.0f); // schedule the lower verified ROOM decay point
+    room_default.prepare(48000.0,256);
+    std::array<float,N> room_default_l{},room_default_r{};
+    float* room_default_outputs[2]={room_default_l.data(),room_default_r.data()};
+    mpc::ProcessContext room_default_ctx=ctx; room_default_ctx.outputs=room_default_outputs;
+    double room_energy=0.0,room_parameter_delta=0.0;
+    for(int block=0;block<24;++block) {
+        for(int i=0;i<N;++i){const float x=0.25f*std::sin(float((block*N+i)*0.03125));l[i]=x;r[i]=-x;}
+        plugin.process(ctx); room_default.process(room_default_ctx);
+        for(int i=0;i<N;++i){room_energy+=ol[i]*ol[i]+orr[i]*orr[i];room_parameter_delta+=std::abs(ol[i]-room_default_l[i])+std::abs(orr[i]-room_default_r[i]);}
+    }
+    assert(room_energy>1e-8 && room_parameter_delta>1e-8); // ROOM Q1 mapping reached ROOM's validated package write path
+    const auto saved_state=plugin.internalSaveState();
+    ASR10FXCollection restored;
+    assert(restored.internalLoadState(saved_state.data(),saved_state.size()));
+    assert(restored.getInt(0)==2 && restored.getInt(29)==1 && restored.getInt(33)==1);
+    assert(restored.displayText(46)=="DECAY TIME: 65");
+
     plugin.set(0,1.0f); // select ROM-02 44KHZ REVERB through the plugin parameter
     double switched_energy=0.0;
     for(int block=0;block<5000;++block) {
@@ -93,5 +126,5 @@ int main() {
         for(int i=0;i<N;++i){rom02_energy+=ol[i]*ol[i]+orr[i]*orr[i];rom02_parameter_delta+=std::abs(ol[i]-default_l[i])+std::abs(orr[i]-default_r[i]);}
     }
     assert(rom02_energy>1e-8);
-    std::printf("VST wrapper HALL energy %.9g (BUS delta %.9g); ROM-02 energy %.9g (BUS1 observation delta %.9g); selection and audio paths PASS\n",hall_energy,hall_parameter_delta,rom02_energy,rom02_parameter_delta);
+    std::printf("VST wrapper HALL energy %.9g (Q3 decay delta %.9g); ROOM energy %.9g (Q1 decay delta %.9g); ROM-02 energy %.9g; selection, register routing, and audio paths PASS\n",hall_energy,v4_delta,room_energy,room_parameter_delta,rom02_energy);
 }

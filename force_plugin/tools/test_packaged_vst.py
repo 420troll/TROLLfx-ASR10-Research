@@ -52,6 +52,8 @@ def main():
         if len(slot_lines)!=50 or 'BINARY_PASS ' not in result.stdout:raise RuntimeError('binary-bound host did not report all 50 package results')
         if 'v4_controls=19 v4_verified_points=38' not in result.stdout or 'callbacks_allocations=0' not in result.stdout:
             raise RuntimeError('packaged VST did not verify all V4 points with an allocation-free callback')
+        if 'v4_1_routing_slots=8 dynamic_edit_bank=PASS' not in result.stdout:
+            raise RuntimeError('packaged VST did not verify the effect-dependent EDIT router')
         slot_results=[];output_hash=hashlib.sha256();non_silent=0
         for line in slot_lines:
             parts=line.split();slot=int(parts[1]);metrics={}
@@ -76,11 +78,12 @@ def main():
           'mock_backend':False,'binary_bound_native_vst':True,'native_binary_sha256':sha(plugin),'arm32_binary_sha256':sha(arm),
           'test_command':'force_plugin/tools/test_packaged_vst.py','input_sha256':input_hash,'output_sha256':output_hash.hexdigest(),
           'asset_index_sha256':index_hash,'asset_collection_slots':audit_result['eligible_slots'],'verified_slots':list(range(1,51)),
-          'plugin_parameter_count':46,
+          'plugin_parameter_count':64,
           'verified_factory_parameter_points':19,
           'processed_dsp_frames':50*8192,'non_silent_output_frames':non_silent,'callback_allocations':0,
           'passed_tests':['factory_processing','effect_switching','no_mock_fallback','initialization_validation','stereo_routing',
-            'verified_factory_parameter_points','all_19_v4_controls_both_verified_points','missing_package_silence','state_roundtrip_including_v4_parameter','sdk_host_simulator'],
+            'verified_factory_parameter_points','all_19_v4_controls_both_verified_points','hall_room_effect_dependent_edit_routing',
+            'effect_specific_state_isolation','missing_package_silence','state_roundtrip_including_v4_1_router','sdk_host_simulator'],
           'slot_results':slot_results,'switch_contract':{'fade_out_frames_at_48k':240,'fade_in_frames_at_48k':240,
             'measured_selection_to_ready_frames_are_including_worker_preparation':True},
           'sdk_host_simulator':{'result':'PASS','wav_sha256':sha(wav)},

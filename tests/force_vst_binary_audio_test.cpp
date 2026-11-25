@@ -73,7 +73,7 @@ int main(int argc,char**argv)try{
  if(argc<5||argc>6){std::cerr<<"usage: vst_binary_test PLUGIN ASSET_ROOT STIMULUS OUTPUT_DIR [missing]\n";return 2;}
  if(setenv("TROLLFX_FACTORY_PACKAGES_DIR",argv[2],1)!=0)throw std::runtime_error("cannot set local factory asset root");
  Stimulus stimulus(argv[3]);std::filesystem::create_directories(argv[4]);
- Plugin plugin(argv[1]);if(plugin.effect->numParams!=46)throw std::runtime_error("unexpected plugin parameter ABI");
+ Plugin plugin(argv[1]);if(plugin.effect->numParams!=64)throw std::runtime_error("unexpected plugin parameter ABI");
  if(argc==6&&std::string(argv[5])=="missing"){
   std::size_t cursor=0;BlockResult render;process_frames(plugin,stimulus,2048,cursor,nullptr,&render);
   if(plugin.plain_status()!=1||!plugin.selected_effect_unavailable())throw std::runtime_error("empty local collection was not reported unavailable");
@@ -92,7 +92,8 @@ int main(int argc,char**argv)try{
   std::size_t elapsed=0;if(!wait_ready(plugin,slot,stimulus,cursor,elapsed))throw std::runtime_error("VST could not prepare selected factory slot "+std::to_string(slot));
   if(slot>1&&elapsed<480)throw std::runtime_error("effect switch completed before the required 5 ms fade-out/fade-in span");
   transition_frames+=elapsed;
-  if(slot==1){plugin.set(8,1.0f);plugin.set(9,1.0f);plugin.set(29,1.0f);process_frames(plugin,stimulus,256,cursor,nullptr,nullptr);if(plugin.get(8)<0.999f||plugin.get(9)<0.999f||plugin.display(29)!="41")throw std::runtime_error("HALL Q-Link parameter values did not round-trip");}
+  if(slot==1){plugin.set(8,1.0f);plugin.set(9,1.0f);plugin.set(48,1.0f);process_frames(plugin,stimulus,256,cursor,nullptr,nullptr);if(plugin.get(8)<0.999f||plugin.get(9)<0.999f||plugin.get(29)<0.999f||plugin.display(48)!="DECAY TIME: 41")throw std::runtime_error("HALL dynamic Q3 route did not reach its verified decay control");}
+  if(slot==3){plugin.set(46,1.0f);plugin.set(47,1.0f);process_frames(plugin,stimulus,256,cursor,nullptr,nullptr);if(plugin.get(33)<0.999f||plugin.get(34)<0.999f||plugin.get(29)<0.999f||plugin.display(46)!="DECAY TIME: 65"||plugin.display(47)!="DIFFUSION: 51")throw std::runtime_error("ROOM Q1/Q2 routing, formatted labels, or HALL state isolation failed");}
   if(slot==2){plugin.set(10,1.0f);plugin.set(11,1.0f);if(plugin.get(10)<0.999f||plugin.get(11)<0.999f)throw std::runtime_error("ROM-02 BUS parameter values did not round-trip");}
   for(const auto& probe:kVerifiedParameters)if(probe.slot==slot){
    for(const auto& point:std::array<std::pair<float,const char*>,2>{{{0.5f,probe.lower},{1.0f,probe.upper}}}){
@@ -139,8 +140,8 @@ int main(int argc,char**argv)try{
  std::vector<unsigned char> saved(static_cast<unsigned char*>(chunk),static_cast<unsigned char*>(chunk)+bytes);
  plugin.select(1);plugin.set(10,0.0f);plugin.set(11,1.0f);plugin.set(12,0.0f);plugin.set(26,0.0f);plugin.set(29,0.0f);plugin.set(1,0.0f);plugin.set(2,0.5f);plugin.set(3,0.5f);plugin.set(4,0.0f);
  plugin.effect->dispatcher(plugin.effect,effSetChunk,0,bytes,saved.data(),0);
- if(std::abs(plugin.get(kEffectParam)-float(1.0/49.0))>1e-4f||std::abs(plugin.get(10)-1.0f)>1e-4f||std::abs(plugin.get(11))>1e-4f||std::abs(plugin.get(12)-1.0f)>1e-4f||plugin.display(12)!="41"||std::abs(plugin.get(26)-1.0f)>1e-4f||plugin.display(26)!="SHORT/COARSER"||std::abs(plugin.get(29)-1.0f)>1e-4f||plugin.display(29)!="41"||std::abs(plugin.get(1)-0.75f)>1e-4f||std::abs(plugin.get(2)-0.6f)>1e-4f||std::abs(plugin.get(3)-0.4f)>1e-4f||std::abs(plugin.get(4)-1.0f)>1e-4f)throw std::runtime_error("state restore missed effect, host, or verified parameter values");
- std::cout<<"BINARY_PASS entry=VSTPluginMain slots=50 v4_controls=19 v4_verified_points=38 callbacks_allocations="<<callback_allocations.load()<<" transition_frames="<<transition_frames<<" wet_dry=gain=bypass=PASS state_roundtrip=PASS\n";
+ if(std::abs(plugin.get(kEffectParam)-float(1.0/49.0))>1e-4f||std::abs(plugin.get(10)-1.0f)>1e-4f||std::abs(plugin.get(11))>1e-4f||std::abs(plugin.get(12)-1.0f)>1e-4f||plugin.display(12)!="41"||std::abs(plugin.get(26)-1.0f)>1e-4f||plugin.display(26)!="SHORT/COARSER"||std::abs(plugin.get(29)-1.0f)>1e-4f||plugin.display(29)!="41"||std::abs(plugin.get(31)-1.0f)>1e-4f||std::abs(plugin.get(32)-1.0f)>1e-4f||std::abs(plugin.get(33)-1.0f)>1e-4f||std::abs(plugin.get(34)-1.0f)>1e-4f||std::abs(plugin.get(46)-1.0f)>1e-4f||std::abs(plugin.get(47)-1.0f)>1e-4f||plugin.display(46)!="REVERB MIX BUS1: 26"||plugin.display(47)!="REVERB MIX BUS2: 26"||std::abs(plugin.get(1)-0.75f)>1e-4f||std::abs(plugin.get(2)-0.6f)>1e-4f||std::abs(plugin.get(3)-0.4f)>1e-4f||std::abs(plugin.get(4)-1.0f)>1e-4f)throw std::runtime_error("state restore missed effect, host, router, or effect-specific verified values");
+ std::cout<<"BINARY_PASS entry=VSTPluginMain slots=50 v4_controls=19 v4_verified_points=38 v4_1_routing_slots=8 dynamic_edit_bank=PASS callbacks_allocations="<<callback_allocations.load()<<" transition_frames="<<transition_frames<<" wet_dry=gain=bypass=PASS state_roundtrip=PASS\n";
 #if defined(TROLLFX_ARM_QEMU_NO_STATIC_EXIT)
  // QEMU user-mode 8.2 faults in host-side C++ static teardown after the VST
  // has been closed and dlclose has completed. Explicitly close the plugin,

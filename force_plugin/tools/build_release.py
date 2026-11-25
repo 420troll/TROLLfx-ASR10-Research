@@ -36,17 +36,23 @@ def source_digest() -> str:
             "docs/ASR10_FACTORY_EDITOR_REGISTRY_V03.json",
             "docs/ASR10_FACTORY_EDITOR_REGISTRY_V04.json",
             "docs/ASR10_FORCE_DYNAMIC_EDITOR_V04.md",
+            "docs/ASR10_FORCE_DYNAMIC_EDITOR_V41.md",
+            "docs/ASR10_FORCE_DYNAMIC_EDITOR_V41_ARMV7_QEMU.json",
             "docs/ASR10_FACTORY_PARAMETER_RECOVERY_V03.json",
             "tests/force_vst_binary_audio_test.cpp",
             "tests/force_vst_wrapper_audio_test.cpp",
+            "tests/parameter_controls/test_editor_v04.py",
+            "tests/parameter_controls/test_editor_registry_v03.py",
+            "force_plugin/tools/test_catalog.py",
             "force_plugin/tools/test_packaged_vst.py",
             "force_plugin/tools/test_arm32_vst_qemu.py",
-            "force_plugin/tools/test_catalog.py",
+            "force_plugin/tools/test_es5510_backend.sh",
+            "force_plugin/tools/prepare_native_test_packages.py",
+            "force_plugin/tools/prepare_force_assets.py",
             "force_plugin/tests/test_release_infrastructure.py",
             "force_plugin/tools/build_release.py",
             "tools/parameter_controls/build_editor_registry_v03.py",
-            "tools/parameter_controls/build_editor_v04.py",
-            "tests/parameter_controls/test_editor_v04.py")
+            "tools/parameter_controls/build_editor_v04.py")
     inputs += tuple(str(p.relative_to(ROOT)) for p in sorted((ROOT/"force_plugin/assets").rglob("*")) if p.is_file())
     inputs += ("force_plugin/graphics/v3/asset-manifest.json",)
     for rel in inputs:
@@ -199,10 +205,13 @@ def main():
         qlink_data=json.loads(staged_qlinks.read_text())
         tabs=tui_data.get("pageData",{}).get("tabs",[])
         maps=qlink_data.get("Screen Mode Q-Links",{}).get("map",[])
-        editor_registry=json.loads((ROOT/"docs/ASR10_FACTORY_EDITOR_REGISTRY_V04.json").read_text())
-        expected_pages=2+sum((e["runtime_ready_count"]+7)//8 for e in editor_registry["effects"] if e["runtime_ready_count"])
-        if len(tabs)!=expected_pages or len(maps)!=expected_pages:
-            raise RuntimeError(f"V4 expected {expected_pages} pages from current 8-control banks; got {len(tabs)} / {len(maps)}")
+        if len(tabs)!=3 or len(maps)!=3 or [t.get("tabName") for t in tabs] != ["BROWSE","EDIT","MIX"]:
+            raise RuntimeError(f"V4.1 requires one BROWSE / EDIT / MIX workspace; got {[t.get('tabName') for t in tabs]}")
+        edit_map=maps[1].get("Q-Links",{})
+        if [edit_map.get(f"Q-Link {n}") for n in range(1,9)] != list(range(46,54)):
+            raise RuntimeError("V4.1 EDIT Q1-Q8 must bind stable appended routing parameters 46..53")
+        if edit_map.get("Q-Link 9") != 54:
+            raise RuntimeError("V4.1 EDIT Q9 must bind the appended effect-specific EDIT BANK selector")
         readelf=shutil.which("arm-linux-gnueabihf-readelf") or shutil.which("readelf")
         if not readelf: raise RuntimeError("readelf is required for explicit architecture/ABI verification")
         native=stage/"build/native/asr10-fx-collection.so"
@@ -230,6 +239,16 @@ def main():
         else:
             print("Binary-bound package test not run: set TROLLFX_FACTORY_PACKAGE_COLLECTION to a trusted 50-slot collection.",file=sys.stderr)
         abi={"arm32":readelf_info(readelf,arm32,"arm32"),"arm64":readelf_info(readelf,arm64,"arm64")}
+        qemu_report_path=ROOT/"docs/ASR10_FORCE_DYNAMIC_EDITOR_V41_ARMV7_QEMU.json"
+        arm_qemu_validation={"result":"NOT_RUN"}
+        if qemu_report_path.is_file():
+            qemu_report=json.loads(qemu_report_path.read_text())
+            if (qemu_report.get("status")!="PASS" or qemu_report.get("processed_slots")!=50 or
+                qemu_report.get("plugin_sha256")!=digest(arm32)):
+                raise RuntimeError("V4.1 ARMv7 QEMU evidence is stale or does not match this ARM32 binary")
+            arm_qemu_validation={"result":"PASS","report":"docs/ASR10_FORCE_DYNAMIC_EDITOR_V41_ARMV7_QEMU.json",
+                "report_sha256":digest(qemu_report_path),"qemu_version":qemu_report.get("qemu_version"),
+                "processed_slots":qemu_report.get("processed_slots"),"binary_sha256":qemu_report.get("plugin_sha256")}
         # Build a fresh sibling, validate it, then replace the old candidate atomically.
         temp_pkg=Path(tempfile.mkdtemp(prefix=".force-dist-",dir=ROOT/"force_plugin"))
         try:
@@ -259,8 +278,9 @@ def main():
                 "binary_test_report_sha256":digest(integration_report) if binary_test_status=="PASS" else None,
                 "packaged_binary_bound_audio_test":"PASS" if binary_test_status=="PASS" else binary_test_status,
                 "playable_release_gate":"BLOCKED_ON_FORCE_EDITOR_VALIDATION" if binary_test_status=="PASS" else "NOT_MET",
-                "force_editor_hardware_validation":{"status":"NOT_RUN","required":"Verify navigation beyond six tabs, touch layout, physical Q-Link dispatch, and project state recall on an Akai Force"}},
+                "force_editor_hardware_validation":{"status":"NOT_RUN","required":"Verify the single EDIT workspace, effect-conditioned control visibility, dynamic formatted labels, physical Q-Link routing, and project state recall on an Akai Force"}},
               "targets":{"native":{"host":platform.machine(),"binary_sha256":digest(native),"host_sim_parameter_dump":"PASS"},**abi},"binaries":{"arm32_sha256":digest(arm32),"arm64_sha256":digest(arm64)},
+              "arm32_qemu_validation":arm_qemu_validation,
               "build_command":"force_plugin/tools/build_candidate.sh --toolchain auto","package_command":"force_plugin/tools/build_candidate.sh --toolchain auto","sdk_validation":{"result":"PASS","errors":int(summary.group(1)),"warnings":int(summary.group(2)),"command":"tools/validate.py"},
               "licensing":{"project":"GPL-3.0-only","sdk_framework":"MIT","proprietary_factory_payloads_included":False}}
             (out/"release-manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
@@ -268,9 +288,9 @@ def main():
                 (out/"binary-validation-report.json").write_text(json.dumps(binary_report,indent=2)+"\n")
             (out/"INSTALL.txt").write_text("BUILD CANDIDATE ONLY — NOT PLAYABLE / DO NOT INSTALL.\nThis package has no approved DSP integration verification marker. Use the repository's opt-in installer only for a playable package.\n")
             create_checksums(out)
-            # A 15-tab skin exceeds the SDK's six tested function-key tabs.
-            # Keep this as a release candidate until Force hardware confirms
-            # page navigation, touch layout and physical Q-Link dispatch.
+            # The SDK map is static; runtime routing is plugin-side. Keep this
+            # as a candidate until hardware confirms visibility, display text,
+            # physical Q-Link dispatch and project recall.
             final=ROOT/"force_plugin/dist"/PLUGIN_FOLDER
             backup=None
             if final.exists():

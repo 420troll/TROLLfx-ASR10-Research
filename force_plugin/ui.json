@@ -18,18 +18,9 @@
           "widget": "text",
           "text": "TROLLfx / ASR-10 FACTORY FX"
         },
-        {
-          "widget": "text",
-          "text": "50 SLOTS / PROVIDER STATUS"
-        },
-        {
-          "widget": "text",
-          "text": "SELECT AN EFFECT TO LOAD"
-        },
-        {
-          "widget": "text",
-          "text": "EDIT PAGES ARE FIXED Q-LINK MAPS"
-        },
+        "empty",
+        "empty",
+        "empty",
         "empty",
         "empty",
         "empty",
@@ -52,24 +43,111 @@
       ]
     },
     {
+      "name": "EDIT",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "ACTIVE FACTORY PARAMETERS"
+        },
+        "empty",
+        "empty",
+        "empty",
+        {
+          "param": "EDIT BANK",
+          "widget": "knob",
+          "overlay": "knob",
+          "visibleWhen": {
+            "param": "BANK SELECT ON",
+            "choice": "On"
+          }
+        },
+        "empty",
+        "empty",
+        "empty",
+        {
+          "param": "EDIT SLOT 5",
+          "widget": "knob",
+          "overlay": "knob",
+          "visibleWhen": {
+            "param": "SLOT 5 ON",
+            "choice": "On"
+          }
+        },
+        {
+          "param": "EDIT SLOT 6",
+          "widget": "knob",
+          "overlay": "knob",
+          "visibleWhen": {
+            "param": "SLOT 6 ON",
+            "choice": "On"
+          }
+        },
+        {
+          "param": "EDIT SLOT 7",
+          "widget": "knob",
+          "overlay": "knob",
+          "visibleWhen": {
+            "param": "SLOT 7 ON",
+            "choice": "On"
+          }
+        },
+        {
+          "param": "EDIT SLOT 8",
+          "widget": "knob",
+          "overlay": "knob",
+          "visibleWhen": {
+            "param": "SLOT 8 ON",
+            "choice": "On"
+          }
+        },
+        {
+          "param": "EDIT SLOT 1",
+          "widget": "knob",
+          "overlay": "knob",
+          "visibleWhen": {
+            "param": "SLOT 1 ON",
+            "choice": "On"
+          }
+        },
+        {
+          "param": "EDIT SLOT 2",
+          "widget": "knob",
+          "overlay": "knob",
+          "visibleWhen": {
+            "param": "SLOT 2 ON",
+            "choice": "On"
+          }
+        },
+        {
+          "param": "EDIT SLOT 3",
+          "widget": "knob",
+          "overlay": "knob",
+          "visibleWhen": {
+            "param": "SLOT 3 ON",
+            "choice": "On"
+          }
+        },
+        {
+          "param": "EDIT SLOT 4",
+          "widget": "knob",
+          "overlay": "knob",
+          "visibleWhen": {
+            "param": "SLOT 4 ON",
+            "choice": "On"
+          }
+        }
+      ]
+    },
+    {
       "name": "MIX",
       "controls": [
         {
           "widget": "text",
-          "text": "STEREO / NATIVE ES5510"
+          "text": "EFFECT MIX"
         },
-        {
-          "widget": "text",
-          "text": "PROCESSING: EXPERIMENTAL 48 kHz"
-        },
-        {
-          "widget": "text",
-          "text": "HOST CONTROLS / FIXED IDs"
-        },
-        {
-          "widget": "text",
-          "text": "Q-LINKS: WET, INPUT, OUTPUT"
-        },
+        "empty",
+        "empty",
+        "empty",
         "empty",
         "empty",
         "empty",
@@ -98,355 +176,6 @@
           "widget": "slider",
           "overlay": "menu"
         }
-      ]
-    },
-    {
-      "name": "01 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "REVERB MIX BUS1 @ 01",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        {
-          "param": "REVERB MIX BUS2 @ 01",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        {
-          "param": "DECAY TIME @ 01",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        {
-          "param": "HI FREQ DAMPING @ 01",
-          "widget": "slider",
-          "overlay": "menu"
-        }
-      ]
-    },
-    {
-      "name": "02 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "REVERB MIX BUS1 @ 02",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        {
-          "param": "REVERB MIX BUS2 @ 02",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty",
-        "empty"
-      ]
-    },
-    {
-      "name": "03 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "DECAY TIME @ 03",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        {
-          "param": "DIFFUSION @ 03",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        {
-          "param": "HI FREQ DAMPING @ 03",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty"
-      ]
-    },
-    {
-      "name": "04 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "BS1 TIME L @ 04",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty",
-        "empty",
-        "empty"
-      ]
-    },
-    {
-      "name": "05 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "BS1 TIME L @ 05",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty",
-        "empty",
-        "empty"
-      ]
-    },
-    {
-      "name": "06 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "CHORUS RATE @ 06",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty",
-        "empty",
-        "empty"
-      ]
-    },
-    {
-      "name": "07 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "PHASE RATE @ 07",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty",
-        "empty",
-        "empty"
-      ]
-    },
-    {
-      "name": "08 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "FLANGE RATE @ 08",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty",
-        "empty",
-        "empty"
-      ]
-    },
-    {
-      "name": "28 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "PREAMP GAIN @ 28",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty",
-        "empty",
-        "empty"
-      ]
-    },
-    {
-      "name": "39 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "QUALITY @ 39",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty",
-        "empty",
-        "empty"
-      ]
-    },
-    {
-      "name": "41 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "VOICE1 FINE @ 41",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty",
-        "empty",
-        "empty"
-      ]
-    },
-    {
-      "name": "42 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "COMP RATIO @ 42",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty",
-        "empty",
-        "empty"
-      ]
-    },
-    {
-      "name": "49 EDIT",
-      "controls": [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        {
-          "param": "BASS FC @ 49",
-          "widget": "slider",
-          "overlay": "menu"
-        },
-        "empty",
-        "empty",
-        "empty"
       ]
     }
   ]
