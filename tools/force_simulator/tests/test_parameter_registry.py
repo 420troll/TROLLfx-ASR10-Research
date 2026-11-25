@@ -111,6 +111,43 @@ class FactoryParameterRegistryTests(unittest.TestCase):
             decay=next(c for c in effect['controls'] if c['name']=='DECAY TIME' and c.get('editor_visible',True))
             self.assertEqual(decay['range'],expected)
 
+    def test_corrected_manual_reverb_decay_boundaries_and_precision(self):
+        expected={15:([.20,150.0],"0.20 to 150.0 sec."),
+                  16:([.70,250.0],"0.70 to 250.0 sec."),
+                  18:([.4,140.0],"0.4 to 140.0 sec.")}
+        for slot,(bounds,source_format) in expected.items():
+            effect=self.effects[slot-1]
+            decay=next(c for c in effect['controls'] if c['name']=='DECAY TIME' and c.get('editor_visible',True))
+            self.assertEqual(decay['range'],bounds)
+            self.assertEqual(decay['range_text'],source_format)
+            self.assertEqual(decay['units'],'sec')
+            self.assertEqual(decay['range'][0],bounds[0])
+            self.assertEqual(decay['range'][1],bounds[1])
+
+    def test_generated_schema_exposes_corrected_ranges_as_manual_metadata(self):
+        import json
+        schema=json.loads((HERE/'data/ASR10_PC_EDITOR_PARAMETER_SCHEMA_V1.json').read_text())
+        expected={15:([.20,150.0],"0.20 to 150.0 sec."),
+                  16:([.70,250.0],"0.70 to 250.0 sec."),
+                  18:([.4,140.0],"0.4 to 140.0 sec.")}
+        for slot,(bounds,range_text) in expected.items():
+            effect=next(e for e in schema['effects'] if e['slot']==slot)
+            decay=next(c for c in effect['editable_controls'] if c['name']=='DECAY TIME' and c.get('editor_visible',True))
+            self.assertEqual(decay['range'],bounds)
+            self.assertEqual(decay['range_text'],range_text)
+            self.assertEqual(decay['units'],'sec')
+
+    def test_os2_44khz_appendix_stays_in_separate_manual_namespace(self):
+        import json
+        schema=json.loads((HERE/'data/ASR10_PC_EDITOR_PARAMETER_SCHEMA_V1.json').read_text())
+        ns=next(x for x in schema['separate_manual_namespaces'] if x['namespace']=='OS2_44KHZ_APPENDIX')
+        self.assertEqual(ns['algorithm_count'],12)
+        self.assertFalse(ns['integrated_into_50_factory_effects'])
+        self.assertEqual(ns['runtime_relationship'],'unverified; manual-only appendix namespace')
+        appendix=json.loads((HERE/'data'/ns['path']).read_text())
+        self.assertEqual(len(appendix['effects']),12)
+        self.assertEqual(len(schema['effects']),50)
+
     def test_modulation_controls_only_exist_where_section6_lists_them(self):
         byslot={e['slot']:e for e in self.effects}
         self.assertFalse(any(c['group']=='Modulation' for c in byslot[1]['controls']))

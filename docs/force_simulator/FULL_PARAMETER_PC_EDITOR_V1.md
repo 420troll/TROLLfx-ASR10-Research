@@ -19,6 +19,9 @@ The 594 catalog entries are retained as source descriptors. The UI expands only 
 - ROM-09: the composite distortion gain heading is represented as distinct input and output controls.
 - ROM-10: DDL left/right time controls are separate.
 - Multi-unit ranges such as `1 ms to 10 s` and `50 µs to 100 ms` are converted to a common PC display unit without claiming a DSP coefficient curve.
+- ROM-15 LARGE ROOM DECAY TIME: `0.20 to 150.0 sec.`; ROM-16 HALL REVERB2: `0.70 to 250.0 sec.`; ROM-18 LARGE PLATE: `0.4 to 140.0 sec.`. The original precision and units are preserved.
+
+The twelve OS2 44 kHz appendix algorithms are stored separately in [ASR10_OS2_44KHZ_APPENDIX_PARAMETER_CATALOG_V1.json](../../tools/force_simulator/data/ASR10_OS2_44KHZ_APPENDIX_PARAMETER_CATALOG_V1.json). The presentation schema records that namespace and its source hash but does not add those algorithms to the 50 factory effect slots. Their runtime relationship remains unverified; they are manual-only.
 
 The supplied PDF was found at `C:\Users\Gamer\Downloads\23583406.pdf` (SHA-256 `e8ab5100904caf91fe355065ed9646aff197761b0663a7d452dc98af1f9a29dc`). Section 5 is PDF pages 87–97 and Section 6 is PDF pages 98–153. Text extraction supplied descriptions for 590 of the 594 catalog entries. The four ROM-50 entries remain undocumented in this copy because Section 6 ends after ROM-49. ROM-02 is explicitly marked OS-inventory deferred; its manual controls are not presented as OS-observed.
 
@@ -31,6 +34,14 @@ A modulation section appears only for algorithms where the manual lists that blo
 ## DSP and Force boundaries
 
 The PC display range is separate from DSP support. The simulator sends an edit only when (1) the selected effect has an existing native VST route, (2) the value matches one of that route's exact points, and (3) the selected variation is the VST's default variation. It does not extrapolate a register curve or use the Codex 1 registry's `runtime_ready` flag as authorization. Existing VST parameter IDs, indices and saved-state behavior are retained.
+
+### HALL DECAY TIME runtime integration status
+
+Codex 1's `FactoryRuntime::stepHallDecayTime(direction, frame)` API is available at research commit `6779dc8`. It exposes the raw 7-bit GPR `0x6E` code and displayed `0..99` value, requires explicitly validated HALL Variation 1 metadata and known raw state, and schedules the ordered five-register group `0x6E, 0x5B, 0x03, 0x04, 0x05` atomically after checking queue capacity. A direct `setRegister(0x6E, ...)` invalidates its remembered raw state. The 128 raw codes map to 100 LCD values; 28 duplicate codes share the preceding LCD value, so a display value alone cannot recover the current raw code. The API supports directional stepping, not a direct display-value setter.
+
+Codex 3's independent reparse currently classifies full-range HALL DECAY as PARTIAL. It found direction-dependent raw codes, inconclusive independent-run provenance, and a mismatch between the helper's computed GPR `0x03..0x05` group and 94 of 196 interior directional groups. Consequently the simulator does not call this runtime API or promote it to a native route. The isolated contract in `hall_decay_adapter.py` is fail-closed by default: it retains raw state from runtime status, stages numeric entry as pending without guessing a raw destination, enforces slot 1 / Variation 1, and only delegates a directional step when explicit independent QA acceptance is supplied. Its contract tests use a fake runtime and are not evidence of runtime integration. The existing VST IDs and 40/41 exact points remain unchanged.
+
+Mouse wheel, drag and numeric entry are display-value edits. Until a validated display-to-raw transition is approved, edits outside the pre-existing exact 40/41 VST points stay PC-only. Runtime step buttons are not activated in the editor. This prevents a normalized slider or numeric jump from collapsing two distinct raw states into one guessed destination.
 
 Codex 1's registry and Codex 3's independent matrix remain descriptive inputs. Codex 1's registry reports merge discrepancies in `runtime_ready`, so that field is not used as a write allowlist. To activate a future recovered control without a GUI rewrite, Codex 1's accepted semantic mapping must be associated with the control's stable slot-scoped identity, then the native VST bridge must publish an append-only route and exact supported points. `parameter_registry.py` discovers those route descriptors from the VST registry header on startup; the route is the only write authorization. The independent matrix alone cannot enable DSP writes. The current native VST bridge still exposes 19 routes; no newly recovered full-range mapping was promoted.
 

@@ -2,27 +2,131 @@
   "schema": "trollfx-asr10-pc-editor-qa-v1",
   "date_utc": "2026-11-25",
   "branch_at_test": "feature/asr10-force-pc-gui-simulator",
-  "base_commit": "4d4a0d4704d33bb43dbc70131e0ba2c925c30ef3",
+  "base_commit": "08cc6002283c755a0264bda94bc81b8fb20ce5db",
   "results": {
     "python_unittest": {
-      "passed": 27,
+      "passed": 36,
       "failed": 0,
-      "coverage": ["50-effect catalog, QA crosswalk and stable control identities", "manual versus OS versus DSP evidence separation", "all documented numeric ranges and unit normalization", "signed ranges, enums and independent stereo controls", "bus and delay expansions", "room/plate effect-specific range normalization", "ROM-14/17 composite groups", "ROM-22..24 five observed ENV values and unresolved remainder", "variation-specific draft migration and no-write policy", "read-only localhost original-OS monitor proxy", "Codex 1 runtime_ready is not a VST route", "modulation applicability and OS association", "existing 19 VST identities and exact routes", "VST state save/restore", "audio callback and wet/bypass processing", "unmapped control no-write behavior", "generated skin overlap and clipping"]
+      "coverage": [
+        "50-effect catalog, QA crosswalk and stable control identities",
+        "manual versus OS versus DSP evidence separation",
+        "all documented numeric ranges and unit normalization",
+        "signed ranges, enums and independent stereo controls",
+        "bus and delay expansions",
+        "room/plate effect-specific range normalization",
+        "ROM-14/17 composite groups",
+        "ROM-22..24 five observed ENV values and unresolved remainder",
+        "variation-specific draft migration and no-write policy",
+        "read-only localhost original-OS monitor proxy",
+        "Codex 1 runtime_ready is not a VST route",
+        "modulation applicability and OS association",
+        "existing 19 VST identities and exact routes",
+        "VST state save/restore",
+        "audio callback and wet/bypass processing",
+        "unmapped control no-write behavior",
+        "generated skin overlap and clipping",
+        "Codex 1 HALL stateful runtime adapter contract uses raw status and direction rather than inferring raw code from display value",
+        "HALL direct numeric drafts, pre-QA rejection, Variation 1 gate, atomic failure and scheduled-frame delegation",
+        "ROM-15/16/18 corrected manual range boundaries and precision",
+        "OS2 44 kHz appendix remains a separate 12-algorithm manual-only namespace",
+        "fractional and out-of-range HALL display entry rejection"
+      ]
     },
     "playwright": {
       "passed": 21,
       "failed": 0,
       "flaky": 0,
-      "coverage": ["all 50 factory effect selections", "documented value ranges and banks", "mouse-driven Q-Link gestures", "mapped-to-unmapped value transition preserves applied VST value", "Codex 1 runtime_ready without route remains no-write", "variation-specific PC draft retention", "exact points in non-native variation remain pending", "reset and undo PC drafts", "DUAL DELAYS independent buses and L/R values", "five observed ENV values and unresolved group warning", "OS comparison panel and read-only monitor state", "modulation availability and unknown destinations", "mixed-unit precision with no unsupported DSP write", "HALL/ROOM/PITCH transitions", "control clipping across all 50 selected effects", "generated BROWSE/EDIT/MIX preview navigation", "native VST parameter and register traces"]
+      "coverage": [
+        "all 50 factory effect selections",
+        "documented value ranges and banks",
+        "mouse-driven Q-Link gestures",
+        "mapped-to-unmapped value transition preserves applied VST value",
+        "Codex 1 runtime_ready without route remains no-write",
+        "variation-specific PC draft retention",
+        "exact points in non-native variation remain pending",
+        "reset and undo PC drafts",
+        "DUAL DELAYS independent buses and L/R values",
+        "five observed ENV values and unresolved group warning",
+        "OS comparison panel and read-only monitor state",
+        "modulation availability and unknown destinations",
+        "mixed-unit precision with no unsupported DSP write",
+        "HALL/ROOM/PITCH transitions",
+        "control clipping across all 50 selected effects",
+        "generated BROWSE/EDIT/MIX preview navigation",
+        "native VST parameter and register traces"
+      ]
     },
-    "factory_package_and_sdk_asset_validation": {"validated_packages": 50, "expected_packages": 50, "result": "passed"},
-    "native_vst_and_register_trace": {"existing_vst_routes": 19, "identity_registry_changed": false, "state_save_restore": "passed", "unsupported_value_no_write": "passed"},
-    "armv7": {"result": "not run", "reason": "The PC simulator's native VST test binary is x86-64 and this GUI branch has no ARMv7 cross-build/test target. No Force binary or installation was produced."},
-    "physical_force": {"result": "not run", "reason": "No Force installation or physical-device test was performed."}
+    "factory_package_and_sdk_asset_validation": {
+      "validated_packages": 50,
+      "expected_packages": 50,
+      "result": "passed"
+    },
+    "native_vst_and_register_trace": {
+      "existing_vst_routes": 19,
+      "identity_registry_changed": false,
+      "state_save_restore": "passed",
+      "unsupported_value_no_write": "passed"
+    },
+    "armv7": {
+      "result": "not run",
+      "reason": "The PC simulator's native VST test binary is x86-64 and this GUI branch has no ARMv7 cross-build/test target. No Force binary or installation was produced."
+    },
+    "physical_force": {
+      "result": "not run",
+      "reason": "No Force installation or physical-device test was performed."
+    }
   },
-  "independent_matrix": {"source_commit": "3e66bfd8e164a3557e1d35cfa668ff8c30c90ba0", "manual_descriptors": 594, "additional_recovered_control_records": 13, "os_field_associations": 1040, "os_observations": 5484, "dsp_classification": {"UNKNOWN": 51, "PARTIAL": 36, "UNMAPPED": 507}, "full_ranges_implemented": 0},
-  "presentation_schema": {"factory_effects": 50, "catalog_descriptors": 594, "displayed_editor_field_instances": 895, "count_semantics": "Generated editor fields, not distinct OS-verified controls.", "manual_described_entries": 590, "manual_description_gap_entries": 4, "manual_gap_effect": "ROM-50 VAN DER POL is absent from Section 6 of the supplied PDF.", "rom22_24_env_correction": "Five captured OS values editable; manual entries 6–9 retained but hidden pending field identity evidence."},
-  "screenshots": ["screenshots/pc-editor-hall-bank-1.png", "screenshots/pc-editor-room-bank-1.png", "screenshots/pc-editor-dual-delays.png", "screenshots/pc-editor-chorus-reverb.png", "screenshots/pc-editor-flanger-reverb.png", "screenshots/pc-editor-pitch-bank-1.png", "screenshots/pc-editor-pitch-bank-2.png"],
+  "independent_matrix": {
+    "source_commit": "3e66bfd8e164a3557e1d35cfa668ff8c30c90ba0",
+    "manual_descriptors": 594,
+    "additional_recovered_control_records": 13,
+    "os_field_associations": 1040,
+    "os_observations": 5484,
+    "dsp_classification": {
+      "UNKNOWN": 51,
+      "PARTIAL": 36,
+      "UNMAPPED": 507
+    },
+    "full_ranges_implemented": 0
+  },
+  "presentation_schema": {
+    "factory_effects": 50,
+    "catalog_descriptors": 594,
+    "displayed_editor_field_instances": 895,
+    "count_semantics": "Generated editor fields, not distinct OS-verified controls.",
+    "manual_described_entries": 590,
+    "manual_description_gap_entries": 4,
+    "manual_gap_effect": "ROM-50 VAN DER POL is absent from Section 6 of the supplied PDF.",
+    "rom22_24_env_correction": "Five captured OS values editable; manual entries 6\u20139 retained but hidden pending field identity evidence.",
+    "os2_44khz_appendix": {
+      "algorithm_count": 12,
+      "namespace": "OS2_44KHZ_APPENDIX",
+      "included_in_50_factory_effects": false,
+      "runtime_relationship": "unverified"
+    }
+  },
+  "screenshots": [
+    "screenshots/pc-editor-hall-bank-1.png",
+    "screenshots/pc-editor-room-bank-1.png",
+    "screenshots/pc-editor-dual-delays.png",
+    "screenshots/pc-editor-chorus-reverb.png",
+    "screenshots/pc-editor-flanger-reverb.png",
+    "screenshots/pc-editor-pitch-bank-1.png",
+    "screenshots/pc-editor-pitch-bank-2.png"
+  ],
   "dsp_policy": "Only existing exact VST points write for the native VST variation. Other variation drafts and unsupported values remain pending. Codex 1 runtime_ready flags and the QA matrix are evidence only, not write permission. No full-range DSP mapping was activated.",
-  "original_os_monitor": {"interface": "Optional read-only localhost proxy to Codex 1 /api/status and /api/events", "configured_for_test": false, "writes_or_front_panel_events_sent": false}
+  "original_os_monitor": {
+    "interface": "Optional read-only localhost proxy to Codex 1 /api/status and /api/events",
+    "configured_for_test": false,
+    "writes_or_front_panel_events_sent": false
+  },
+  "hall_decay_runtime_integration": {
+    "codex1_source_commit": "6779dc8",
+    "codex1_api": "FactoryRuntime::stepHallDecayTime(direction, scheduled_frame)",
+    "codex3_independent_status": "PARTIAL; not accepted for full-range native promotion",
+    "reason": "Independent audit found direction-dependent GPR 0x6E codes, inconclusive independent-run provenance, and 94/196 interior computed GPR 0x03..0x05 groups mismatched.",
+    "pc_adapter": "hall_decay_adapter.py; contract tests use a fake runtime; no production binding is connected",
+    "native_route": "existing 40/41 exact VST points and IDs unchanged; no full-range HALL route enabled",
+    "direct_numeric_value": "PC draft only for stateful path; no raw destination is guessed"
+  }
 }

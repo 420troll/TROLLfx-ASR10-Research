@@ -235,7 +235,9 @@ def load_registry():
             ranges={17:(0.2,100.0,0,500),18:(0.4,140.0,0,430)};decay_lo,decay_hi,pre_lo,pre_hi=ranges[slot]
             decay=next((c for c in controls if c["key"]=="decay_time_small_plate"),None)
             pre=next((c for c in controls if c["key"]=="predelay_time_small_plate"),None)
-            if decay:decay.update({"name":"DECAY TIME","range":[decay_lo,decay_hi],"range_text":f"{decay_lo} to {decay_hi} sec","units":"sec"})
+            if decay:
+                range_text="0.4 to 140.0 sec." if slot==18 else "0.2 to 100.0 sec."
+                decay.update({"name":"DECAY TIME","range":[decay_lo,decay_hi],"range_text":range_text,"units":"sec"})
             if pre:pre.update({"name":"PREDELAY TIME","range":[pre_lo,pre_hi],"range_text":f"{pre_lo} to {pre_hi} ms","units":"ms"})
             for c in controls:
                 if c["name"]=="Large Plate":c["editor_visible"]=False

@@ -59,6 +59,19 @@
     "displayed_editor_field_instances": 895,
     "count_semantics": "Generated PC editor fields across effects; not a count of independently OS-confirmed original controls."
   },
+  "separate_manual_namespaces": [
+    {
+      "namespace": "OS2_44KHZ_APPENDIX",
+      "path": "ASR10_OS2_44KHZ_APPENDIX_PARAMETER_CATALOG_V1.json",
+      "sha256": "eabcac49a16d5dc5b997c634a6067e2a10d17908d7883d7fcdc94092380e1685",
+      "source_commit": "6779dc8",
+      "schema": "trollfx-asr10-os2-44khz-appendix-catalog-v1",
+      "algorithm_count": 12,
+      "scope_note": "Twelve additional OS2 44 kHz effect algorithms; these are not additional numbered ROM effect slots.",
+      "integrated_into_50_factory_effects": false,
+      "runtime_relationship": "unverified; manual-only appendix namespace"
+    }
+  ],
   "shared_controls": [
     {
       "id": "mod_src_1",
@@ -27210,7 +27223,7 @@
           "id": "decay_time_small_plate_1",
           "name": "DECAY TIME",
           "order": 1,
-          "range_text": "0.2 to 100.0 sec",
+          "range_text": "0.2 to 100.0 sec.",
           "range": [
             0.2,
             100.0
@@ -29102,7 +29115,7 @@
           "id": "decay_time_small_plate_1",
           "name": "DECAY TIME",
           "order": 1,
-          "range_text": "0.4 to 140.0 sec",
+          "range_text": "0.4 to 140.0 sec.",
           "range": [
             0.4,
             140.0

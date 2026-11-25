@@ -12,6 +12,7 @@ ROOT=HERE.parents[1]
 SOURCE=HERE/'data/ASR10_FULL_FACTORY_PARAMETER_REGISTRY_V1.json'
 CATALOG=ROOT/'docs/ASR10_FACTORY_PARAMETER_CATALOG_V1.json'
 OUT=HERE/'data/ASR10_PC_EDITOR_PARAMETER_SCHEMA_V1.json'
+APPENDIX_44KHZ=HERE/'data/ASR10_OS2_44KHZ_APPENDIX_PARAMETER_CATALOG_V1.json'
 
 def norm(s): return re.sub(r'[^a-z0-9]+',' ',s.casefold()).strip()
 def extract_manual(pdf_path, labels):
@@ -112,7 +113,15 @@ def main():
     modulation_pages={14:109,15:109,16:109,17:111,18:111,19:112,20:113,21:115,22:117,23:117,24:117,25:118,26:120,28:122,29:122,30:124,31:126,32:126,33:127,34:129,37:134,38:136,39:137,40:139,41:140,42:141,44:145,45:148,46:149,47:151,48:152,49:153}
     adapter=HERE/'data/ASR10_EDITOR_EVIDENCE_ADAPTER_V1.json'
     adapter_data=json.loads(adapter.read_text()) if adapter.is_file() else {}
-    result={'schema':'trollfx-asr10-pc-editor-parameter-schema-v1','source_registry':{'path':'ASR10_FULL_FACTORY_PARAMETER_REGISTRY_V1.json','sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),'commit':'7d38ec2bc3369ecd16f9e284ba85ccfd6fe46b55'},'independent_evidence_adapter':{'path':adapter.name,'sha256':hashlib.sha256(adapter.read_bytes()).hexdigest() if adapter.is_file() else None,'schema':adapter_data.get('schema'),'provenance':adapter_data.get('provenance',{})},'manual_source':pdf_source or {'filename':None,'note':'PDF not supplied to schema generator; ranges come from existing manual-derived catalog.'},'coverage':{'factory_effects':50,'manual_registry_parameters':sum(len(e['parameters']) for e in registry['effects']),'shared_documented_modulation_controls':len(shared),'description_labels_matched':len(descriptions),'manual_paraphrase_labels':len(MANUAL_PARAPHRASES),'manual_section6_has_rom50_entry':False,'independent_validation':adapter_data.get('coverage',{})},'shared_controls':shared,'effects':[]}
+    appendix_data=json.loads(APPENDIX_44KHZ.read_text()) if APPENDIX_44KHZ.is_file() else {}
+    appendix_namespace={'namespace':'OS2_44KHZ_APPENDIX','path':APPENDIX_44KHZ.name if appendix_data else None,
+        'sha256':hashlib.sha256(APPENDIX_44KHZ.read_bytes()).hexdigest() if appendix_data else None,
+        'source_commit':'6779dc8','schema':appendix_data.get('schema'),
+        'algorithm_count':len(appendix_data.get('effects',[])),
+        'scope_note':appendix_data.get('scope_note'),
+        'integrated_into_50_factory_effects':False,
+        'runtime_relationship':'unverified; manual-only appendix namespace'}
+    result={'schema':'trollfx-asr10-pc-editor-parameter-schema-v1','source_registry':{'path':'ASR10_FULL_FACTORY_PARAMETER_REGISTRY_V1.json','sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),'commit':'7d38ec2bc3369ecd16f9e284ba85ccfd6fe46b55'},'independent_evidence_adapter':{'path':adapter.name,'sha256':hashlib.sha256(adapter.read_bytes()).hexdigest() if adapter.is_file() else None,'schema':adapter_data.get('schema'),'provenance':adapter_data.get('provenance',{})},'manual_source':pdf_source or {'filename':None,'note':'PDF not supplied to schema generator; ranges come from existing manual-derived catalog.'},'coverage':{'factory_effects':50,'manual_registry_parameters':sum(len(e['parameters']) for e in registry['effects']),'shared_documented_modulation_controls':len(shared),'description_labels_matched':len(descriptions),'manual_paraphrase_labels':len(MANUAL_PARAPHRASES),'manual_section6_has_rom50_entry':False,'independent_validation':adapter_data.get('coverage',{})},'separate_manual_namespaces':[appendix_namespace],'shared_controls':shared,'effects':[]}
     for effect in registry['effects']:
         controls=[]
         for p in effect['parameters']:
