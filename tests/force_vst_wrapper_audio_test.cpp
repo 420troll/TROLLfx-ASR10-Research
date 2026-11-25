@@ -27,7 +27,7 @@ int main() {
             Parameter::ReverbMixBus1,26)==EncodeStatus::Encoded);
     }
     ASR10FXCollection plugin;
-    assert(plugin.numParams()==24); // legacy IDs 0..11 retained; V2 controls append at 12..23
+    assert(plugin.numParams()==27); // legacy/V2 IDs 0..23 retained; V3 controls append at 24..26
     plugin.set(0,0.0f); // factory slot 1: HALL
     plugin.set(1,100.0f); plugin.set(2,0.0f); plugin.set(3,0.0f);
     plugin.prepare(48000.0,256);

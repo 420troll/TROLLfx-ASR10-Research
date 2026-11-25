@@ -74,5 +74,8 @@ inline constexpr FactoryControl kControls[] = {
     {21, 41, "voice1_fine", "VOICE1 FINE"},
     {22, 42, "comp_ratio", "COMP RATIO"},
     {23, 49, "bass_fc", "BASS FC"},
+    {24, 5, "delay_time_l", "BS1 TIME L (44KHZ DELAYS)"},
+    {25, 8, "flange_rate", "FLANGE RATE"},
+    {26, 39, "quality", "QUALITY"},
 };
 } // namespace trollfx::es5510::factory_editor_v03

@@ -10,12 +10,12 @@ uses its native `IndexedEnabling` control for the `FX Slot` visibility tests.
 The implementation adds no custom graphics engine, conditional widget type,
 or unbound touchscreen control.
 
-The skin has distinct BROWSE, MIX, and EDIT views. EDIT contains only verified
-controls and uses the existing parameter positions and Q-Link map. Q1–Q4 stay
-bound to the existing HALL/ROM-02 BUS parameter IDs; Q5–Q16 stay bound to the
-twelve V2 controls. The 16 positions are documented in the registry as two
-logical eight-control groups (Q1–Q8 and Q9–Q16). Effects with fewer controls
-show only the controls whose `visibleWhen` condition matches the selected slot.
+The skin has distinct BROWSE, MIX, EDIT, and EDIT 2 views. EDIT retains the
+existing V2 parameter positions and Q-Link map: Q1–Q16 still bind to indices
+8–23 in the same order. The two eight-control groups are recorded in the
+registry. EDIT 2 adds V3 controls at indices 24–26 on Q1–Q3; remaining Q-Links
+are unassigned. Effects show only controls whose SDK-supported `visibleWhen`
+condition matches the selected slot.
 
 The browser retains all 50 original slot names. Its selection list shows the
 package-provider availability and either the number of verified controls or
@@ -29,9 +29,9 @@ created for them.
 
 `docs/ASR10_FACTORY_EDITOR_REGISTRY_V03.json` is the data source for the
 50-slot editor inventory, verified controls, effect-specific conditions,
-parameter indices, Q-Link positions, and generated skin. It joins the public
-effect list and V1 manual catalog with V2’s 16 independently verified
-controls. `tools/parameter_controls/build_editor_registry_v03.py` generates:
+parameter indices, Q-Link positions, display range evidence, and generated
+skin. It joins the public effect list and V1 manual catalog with V2’s 16 and
+V3’s three independently verified controls. `tools/parameter_controls/build_editor_registry_v03.py` generates:
 
 - the V3 JSON registry;
 - `force_plugin/ui.json`; and
@@ -47,19 +47,30 @@ python3 tools/parameter_controls/build_editor_registry_v03.py --check
 
 Each verified control retains its original Ensoniq label and exact observed
 display text/points in the JSON registry. Duplicate labels use an effect
-qualifier for the host-visible parameter name. Only the listed discrete
-points are selectable; `UNCHANGED` remains a no-write state for V2 controls.
-The runtime continues to schedule the verified ordered DSP register writes on
-the audio thread through the existing bounded API. No filesystem access,
-locking, or allocation was added to `process()`.
+qualifier for the host-visible parameter name. Only explicitly mapped
+discrete points are selectable; `UNCHANGED` remains a no-write state. The
+three confirmed live display ranges—HALL DECAY TIME 0–99, ROOM DIFFUSION
+0–99, and ROOM HI FREQ DAMPING 0–99—are stored separately from their two
+verified register-write points. Those ranges do not imply a register curve or
+enable interpolation. V3 adds 44KHZ DELAYS BS1 TIME L, FLANGER+REV FLANGE RATE,
+and PITCH SHIFT QUALITY. ROM-02 is unchanged and receives no new V3 claim.
+
+The inspected SDK has no dedicated LCD widget. Its supported parameter value
+labels and choice-menu overlays display the exact Ensoniq text and values,
+including `LONG/SMOOTHER` and `SHORT/COARSER`; EDIT 2 identifies the readout
+area as LCD-style. No unsupported widget or custom renderer was added. The
+runtime schedules only the observed ordered DSP register writes through the
+existing bounded API. No filesystem access, locking, or allocation was added
+to `process()`.
 
 ## State and compatibility
 
-No plugin parameter ID, parameter index, effect slot, package validation rule,
-factory program, DSP arithmetic, or 5 ms switching behavior changed. The V2
-parameter range remains indices 0–23 and all V2 host chunk values remain
-addressable by the same IDs. Host chunk serialization continues to use the
-existing SDK mechanism; factory program data is not included in chunks.
+No existing plugin parameter ID, parameter index, effect slot, package
+validation rule, factory program, DSP arithmetic, or 5 ms switching behavior
+changed. V2 indices 0–23 and their host chunk IDs remain stable. The three V3
+choices append at indices 24–26 with new IDs. Host chunk serialization
+continues to use the existing SDK mechanism; factory program data is not
+included in chunks.
 Existing global Wet/Dry, Input Gain, Output Gain, Host Bypass, and FX Slot
 controls remain on BROWSE/MIX.
 
@@ -71,28 +82,13 @@ missing packages.
 
 ## Verification
 
-The verified release candidate is
-`force_plugin/dist/TROLLfx - VST - ASR10 FX Collection`. It was built from
-source commit `77895655392c1308b81f6a8f926f3595cb96a0bd` with source-input
-SHA-256 `a8298874b4a385324704cdd135d0d8b8e56d4c6c7ffef30df1330fe850e140fa`,
-using SDK commit `4521c247a2deae30efb9e93d53fc8f9390c51e81` and Zig 0.17.1.
-
-| Binary/report | SHA-256 | Verification |
-|---|---|---|
-| Native x86_64 VST2 | `c5bb9a8e6906126d820e4785667fbcba31cb2470236e70fe6812f6a4dc4944fa` | Binary-bound VST harness and SDK host simulator passed |
-| ARMv7 hard-float VST2 | `fec8a0ccdbb8fbaa717a288d94b0b32ead63c5ba6b76c97a22661c6ce138f473` | ELF32 ARMv7/hard-float and SDK package validation passed |
-| ARM64 VST2 | `2b743bb7ffb171a657e99b5db9d7ce506b22234fba2d7f987d17f14fb336a9ee` | ELF64 AArch64 and SDK package validation passed |
-| Binary playback report | `d6704af9cb4cfc3cbf63e6c4bacf3393de495ecdee210587956c527bbdc5c8d4` | Native VST bound to 50 eligible packages; zero audio-callback allocations |
-
-The binary test verified the VST2 entry point, 24-parameter ABI, all 50
-factory packages, both verified points for the twelve appended controls,
-stereo non-silent output, missing-package silence, host wet/dry/gain/bypass,
-effect switching, and chunk restore for effect selection, host parameters,
-BUS parameters, and a V2 control. It reported all 50 slots `PASS`, the 5 ms
-fade contract, `state_roundtrip: PASS`, and `callback_allocations: 0`. The
-generated Q-Link map remains Q1–Q16 → parameter indices 8–23. SDK validation
-reported zero errors and zero warnings; generated TUI contains three tabs with
-parameter handles in 0–23.
+The V3 metadata and editor changes have passed focused registry generation,
+parameter mapping, synthetic runtime, and native plugin-wrapper tests. The
+release candidate is being rebuilt from the resulting source commit. Its exact
+native, ARMv7, and ARM64 binary hashes, binary-bound playback report, SDK
+validation, and independent Codex 3 review are recorded here after that build;
+older V3 artifact hashes are intentionally not presented as evidence for this
+updated 19-control candidate.
 
 The build command was:
 
@@ -102,11 +98,11 @@ TROLLFX_FACTORY_PACKAGE_COLLECTION=/home/gamer/research/private-results/asr10-al
   sh force_plugin/tools/build_candidate.sh --toolchain auto --no-zip
 ```
 
-Final regression results: 80 repository unit tests passed; 14 parameter
-registry/discovery tests passed; 5 release-infrastructure tests passed; the
-native VST, SDK host simulator, all-50 package playback, Q-Link mapping, and
-ARM target validation passed. Package checksums and the read-only installer
-verification passed.
+The updated binary-bound test is expected to verify the 27-parameter ABI,
+all 50 factory packages, all 19 controls' exact verified points, stereo
+non-silent output, missing-package silence, host wet/dry/gain/bypass, effect
+switching, and host chunk restoration. No claim for this binary is made until
+the new build and tests complete.
 
 No screenshot is included: the local SDK build/host simulator generates and
 validates the Force skin JSON but does not render the touchscreen. No Force
@@ -116,7 +112,7 @@ independent release validation.
 
 ## Known limitations
 
-- Only 16 controls across 10 effects have verified live mappings. The other 40
+- Only 19 controls across 13 effects have verified live mappings. The other 37
   effects remain playable, but their factory parameters are not exposed as
   editable controls.
 - The SDK JSON supports selection-dependent visibility, but does not expose a
@@ -126,4 +122,5 @@ independent release validation.
 - The local SDK validates schema and parameter bindings; final Force touch
   sizing and conditional visibility still require visual confirmation on the
   device. The user reports the installed V1 package already loads and produces
-  wet audio; this branch has not been installed over that working package.
+  wet audio; this branch has not been installed over that working package and
+  remains gated on Codex 3's independent release validation.

@@ -1,5 +1,6 @@
 #include "trollfx/es5510_factory_runtime.hpp"
 #include "trollfx/es5510_factory_parameter_discovery_v02.hpp"
+#include "trollfx/es5510_factory_parameter_discovery_v03.hpp"
 #include "es5510.h"
 
 #include <array>
@@ -236,11 +237,15 @@ int main() {
         assert(full_runtime.getStatus().scheduled_writes_applied==1024);
     }
     {
-        const std::array<std::uint8_t,10> slots{{1,2,3,4,6,7,28,41,42,49}};
+        const std::array<std::uint8_t,13> slots{{1,2,3,4,5,6,7,8,28,39,41,42,49}};
         std::size_t supported_controls=0;
         for (auto slot : slots) {
             auto definition=generic_package(slot,3,short_path);
-            assert(parameter_discovery_v02::append_verified_parameters(definition.descriptor));
+            const bool has_v2 = parameter_discovery_v02::append_verified_parameters(definition.descriptor);
+            assert(has_v2 == (slot==1 || slot==2 || slot==3 || slot==4 || slot==6 ||
+                              slot==7 || slot==28 || slot==41 || slot==42 || slot==49));
+            assert(parameter_discovery_v03::append_verified_parameters(definition.descriptor) ==
+                   (slot==5 || slot==8 || slot==39));
             assert(!definition.descriptor.parameters.empty());
             for (const auto& parameter : definition.descriptor.parameters) {
                 if (parameter.id=="test" || parameter.id=="group") continue;
@@ -257,7 +262,7 @@ int main() {
                 assert(std::isfinite(out[0]) && std::isfinite(out[1]));
             }
         }
-        assert(supported_controls==16);
+        assert(supported_controls==19);
     }
     {
         auto hall = generic_package(1,3,short_path);

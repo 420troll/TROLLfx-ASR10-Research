@@ -1,9 +1,38 @@
 {
   "schema": "trollfx-asr10-factory-editor-registry-v03",
   "version": 3,
-  "parameter_ids": "unchanged; controls use existing V2 plugin indices 8..23",
+  "parameter_ids": "V2 indices 0..23 unchanged; V3 controls append at indices 24..26",
   "package_policy": "all effect availability is obtained from the trusted package provider; metadata never makes a package eligible",
-  "editing_policy": "only verified discrete display points are editable; no interpolation or guessed defaults",
+  "editing_policy": "only explicitly verified discrete display-to-register points are writable; live display ranges do not imply register curves",
+  "verified_display_ranges": [
+    {
+      "slot": 1,
+      "factory_name": "HALL REVERB",
+      "display_name": "DECAY TIME",
+      "baseline": "40",
+      "minimum": "0",
+      "maximum": "99",
+      "restored_exactly": true
+    },
+    {
+      "slot": 3,
+      "factory_name": "ROOM REVERB",
+      "display_name": "DIFFUSION",
+      "baseline": "50",
+      "minimum": "0",
+      "maximum": "99",
+      "restored_exactly": true
+    },
+    {
+      "slot": 3,
+      "factory_name": "ROOM REVERB",
+      "display_name": "HI FREQ DAMPING",
+      "baseline": "9",
+      "minimum": "0",
+      "maximum": "99",
+      "restored_exactly": true
+    }
+  ],
   "effects": [
     {
       "slot": 1,
@@ -95,6 +124,7 @@
           "plugin_parameter_name": "REVERB MIX BUS1 (HALL)",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 1,
           "verified_points": [
             {
@@ -118,6 +148,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 1,
@@ -132,6 +164,7 @@
           "plugin_parameter_name": "REVERB MIX BUS2 (HALL)",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 2,
           "verified_points": [
             {
@@ -155,6 +188,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 1,
@@ -169,6 +204,7 @@
           "plugin_parameter_name": "DECAY TIME (HALL)",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 4,
           "verified_points": [
             {
@@ -224,6 +260,14 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": {
+            "minimum": "0",
+            "maximum": "99",
+            "baseline": "40",
+            "restored_exactly": true,
+            "evidence": "separate live LCD range scan; does not extend register-write points"
+          },
           "editable": true,
           "interpolation": "unsupported",
           "bank": 1,
@@ -238,6 +282,7 @@
           "plugin_parameter_name": "HI FREQ DAMPING (HALL)",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 7,
           "verified_points": [
             {
@@ -269,6 +314,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 1,
@@ -369,6 +416,7 @@
           "plugin_parameter_name": "REVERB MIX BUS1 (44KHZ)",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 1,
           "verified_points": [
             {
@@ -392,6 +440,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 1,
@@ -406,6 +456,7 @@
           "plugin_parameter_name": "REVERB MIX BUS2 (44KHZ)",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 2,
           "verified_points": [
             {
@@ -429,6 +480,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 1,
@@ -529,6 +582,7 @@
           "plugin_parameter_name": "DECAY TIME (ROOM)",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 4,
           "verified_points": [
             {
@@ -552,6 +606,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 1,
@@ -566,6 +622,7 @@
           "plugin_parameter_name": "DIFFUSION",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 6,
           "verified_points": [
             {
@@ -629,6 +686,14 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": {
+            "minimum": "0",
+            "maximum": "99",
+            "baseline": "50",
+            "restored_exactly": true,
+            "evidence": "separate live LCD range scan; does not extend register-write points"
+          },
           "editable": true,
           "interpolation": "unsupported",
           "bank": 1,
@@ -643,6 +708,7 @@
           "plugin_parameter_name": "HI FREQ DAMPING (ROOM)",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 7,
           "verified_points": [
             {
@@ -674,6 +740,14 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": {
+            "minimum": "0",
+            "maximum": "99",
+            "baseline": "9",
+            "restored_exactly": true,
+            "evidence": "separate live LCD range scan; does not extend register-write points"
+          },
           "editable": true,
           "interpolation": "unsupported",
           "bank": 2,
@@ -734,6 +808,7 @@
           "plugin_parameter_name": "BS1 TIME L",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 3,
           "verified_points": [
             {
@@ -757,6 +832,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 2,
@@ -808,9 +885,50 @@
           "editable": false
         }
       ],
-      "verified_controls": [],
-      "verified_control_count": 0,
-      "editor_status": "unmapped-no-verified-controls"
+      "verified_controls": [
+        {
+          "slot": 5,
+          "id": "delay_time_l",
+          "original_ui_label": "BS1 TIME L",
+          "plugin_parameter_index": 24,
+          "plugin_parameter_name": "BS1 TIME L (44KHZ DELAYS)",
+          "display_units": "display steps",
+          "display_format": "integer",
+          "display_domain_evidence": null,
+          "display_order": 3,
+          "verified_points": [
+            {
+              "value": 350,
+              "text": "350",
+              "writes": [
+                [
+                  11,
+                  "0x3C2900"
+                ]
+              ]
+            },
+            {
+              "value": 351,
+              "text": "351",
+              "writes": [
+                [
+                  11,
+                  "0x3C5500"
+                ]
+              ]
+            }
+          ],
+          "mapping_source": "v3",
+          "verified_display_range": null,
+          "editable": true,
+          "interpolation": "unsupported",
+          "bank": 3,
+          "qlink": 1,
+          "evidence": "OS 3.53 repeated live UI adjustment, reversal, and ordered host GPR write observation"
+        }
+      ],
+      "verified_control_count": 1,
+      "editor_status": "verified-controls"
     },
     {
       "slot": 6,
@@ -894,6 +1012,7 @@
           "plugin_parameter_name": "CHORUS RATE",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 11,
           "verified_points": [
             {
@@ -933,6 +1052,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 2,
@@ -1025,6 +1146,7 @@
           "plugin_parameter_name": "PHASE RATE",
           "display_units": "display steps",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 12,
           "verified_points": [
             {
@@ -1048,6 +1170,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 2,
@@ -1131,9 +1255,58 @@
           "editable": false
         }
       ],
-      "verified_controls": [],
-      "verified_control_count": 0,
-      "editor_status": "unmapped-no-verified-controls"
+      "verified_controls": [
+        {
+          "slot": 8,
+          "id": "flange_rate",
+          "original_ui_label": "FLANGE RATE",
+          "plugin_parameter_index": 25,
+          "plugin_parameter_name": "FLANGE RATE",
+          "display_units": "display steps",
+          "display_format": "integer",
+          "display_domain_evidence": null,
+          "display_order": 4,
+          "verified_points": [
+            {
+              "value": 20,
+              "text": "20",
+              "writes": [
+                [
+                  132,
+                  "0x0003D7"
+                ],
+                [
+                  133,
+                  "0x0003D7"
+                ]
+              ]
+            },
+            {
+              "value": 21,
+              "text": "21",
+              "writes": [
+                [
+                  132,
+                  "0x00049C"
+                ],
+                [
+                  133,
+                  "0x00049C"
+                ]
+              ]
+            }
+          ],
+          "mapping_source": "v3",
+          "verified_display_range": null,
+          "editable": true,
+          "interpolation": "unsupported",
+          "bank": 3,
+          "qlink": 2,
+          "evidence": "OS 3.53 repeated live UI adjustment, reversal, and ordered host GPR write observation"
+        }
+      ],
+      "verified_control_count": 1,
+      "editor_status": "verified-controls"
     },
     {
       "slot": 9,
@@ -3472,6 +3645,7 @@
           "plugin_parameter_name": "PREAMP GAIN",
           "display_units": "dB display",
           "display_format": "signed integer",
+          "display_domain_evidence": null,
           "display_order": 3,
           "verified_points": [
             {
@@ -3495,6 +3669,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 2,
@@ -4828,9 +5004,90 @@
           "editable": false
         }
       ],
-      "verified_controls": [],
-      "verified_control_count": 0,
-      "editor_status": "unmapped-no-verified-controls"
+      "verified_controls": [
+        {
+          "slot": 39,
+          "id": "quality",
+          "original_ui_label": "QUALITY",
+          "plugin_parameter_index": 26,
+          "plugin_parameter_name": "QUALITY",
+          "display_units": "mode",
+          "display_format": "text",
+          "display_domain_evidence": null,
+          "display_order": 9,
+          "verified_points": [
+            {
+              "value": 0,
+              "text": "LONG/SMOOTHER",
+              "writes": [
+                [
+                  4,
+                  "0x0667DE"
+                ],
+                [
+                  7,
+                  "0x0667DE"
+                ],
+                [
+                  10,
+                  "0x002F1F"
+                ],
+                [
+                  97,
+                  "0x044446"
+                ],
+                [
+                  100,
+                  "0x044446"
+                ],
+                [
+                  160,
+                  "0x7FFFEE"
+                ]
+              ]
+            },
+            {
+              "value": 1,
+              "text": "SHORT/COARSER",
+              "writes": [
+                [
+                  4,
+                  "0x03CFE1"
+                ],
+                [
+                  7,
+                  "0x03CFE1"
+                ],
+                [
+                  10,
+                  "0x004F40"
+                ],
+                [
+                  97,
+                  "0x028978"
+                ],
+                [
+                  100,
+                  "0x028978"
+                ],
+                [
+                  160,
+                  "0x7FFFCF"
+                ]
+              ]
+            }
+          ],
+          "mapping_source": "v3",
+          "verified_display_range": null,
+          "editable": true,
+          "interpolation": "unsupported",
+          "bank": 3,
+          "qlink": 3,
+          "evidence": "OS 3.53 repeated live UI adjustment, reversal, and ordered host GPR write observation"
+        }
+      ],
+      "verified_control_count": 1,
+      "editor_status": "verified-controls"
     },
     {
       "slot": 40,
@@ -5047,6 +5304,7 @@
           "plugin_parameter_name": "VOICE1 FINE",
           "display_units": "display steps",
           "display_format": "signed integer",
+          "display_domain_evidence": null,
           "display_order": 3,
           "verified_points": [
             {
@@ -5070,6 +5328,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 2,
@@ -5210,6 +5470,7 @@
           "plugin_parameter_name": "COMP RATIO",
           "display_units": "ratio",
           "display_format": "N/1",
+          "display_domain_evidence": null,
           "display_order": 2,
           "verified_points": [
             {
@@ -5233,6 +5494,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 2,
@@ -6035,6 +6298,7 @@
           "plugin_parameter_name": "BASS FC",
           "display_units": "Hz display",
           "display_format": "integer",
+          "display_domain_evidence": null,
           "display_order": 1,
           "verified_points": [
             {
@@ -6066,6 +6330,8 @@
               ]
             }
           ],
+          "mapping_source": "v2",
+          "verified_display_range": null,
           "editable": true,
           "interpolation": "unsupported",
           "bank": 2,

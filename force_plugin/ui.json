@@ -241,6 +241,54 @@
           }
         }
       ]
+    },
+    {
+      "name": "EDIT 2",
+      "controls": [
+        {
+          "widget": "text",
+          "text": "LCD READOUT / VERIFIED POINTS ONLY"
+        },
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        {
+          "param": "BS1 TIME L (44KHZ DELAYS)",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 4
+          }
+        },
+        {
+          "param": "FLANGE RATE",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 7
+          }
+        },
+        {
+          "param": "QUALITY",
+          "widget": "slider",
+          "overlay": "menu",
+          "visibleWhen": {
+            "param": "FX Slot",
+            "index": 38
+          }
+        },
+        "empty"
+      ]
     }
   ]
 }

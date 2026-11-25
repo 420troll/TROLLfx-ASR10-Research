@@ -10,12 +10,13 @@ ROOT = Path(__file__).resolve().parents[2]
 EFFECTS = ROOT / "force_plugin/effects.json"
 CATALOG = ROOT / "docs/ASR10_FACTORY_PARAMETER_CATALOG_V1.json"
 MAPPINGS = ROOT / "docs/ASR10_FACTORY_PARAMETER_MAPPINGS_V02.json"
+RECOVERY_V03 = ROOT / "docs/ASR10_FACTORY_PARAMETER_RECOVERY_V03.json"
 REGISTRY = ROOT / "docs/ASR10_FACTORY_EDITOR_REGISTRY_V03.json"
 UI = ROOT / "force_plugin/ui.json"
 HEADER = ROOT / "include/trollfx/es5510_factory_editor_v03.hpp"
 
 # The first four indices are long-standing BUS controls. All later IDs are the
-# append-only V2 choice parameters. Keep this map explicit and tested.
+# append-only V2/V3 choice parameters. Keep this map explicit and tested.
 PARAMETER_BINDINGS = {
     (1, "reverb_mix_bus1"): (8, "REVERB MIX BUS1 (HALL)"),
     (1, "reverb_mix_bus2"): (9, "REVERB MIX BUS2 (HALL)"),
@@ -33,6 +34,9 @@ PARAMETER_BINDINGS = {
     (41, "voice1_fine"): (21, "VOICE1 FINE"),
     (42, "comp_ratio"): (22, "COMP RATIO"),
     (49, "bass_fc"): (23, "BASS FC"),
+    (5, "delay_time_l"): (24, "BS1 TIME L (44KHZ DELAYS)"),
+    (8, "flange_rate"): (25, "FLANGE RATE"),
+    (39, "quality"): (26, "QUALITY"),
 }
 
 
@@ -44,20 +48,43 @@ def build_registry() -> dict:
     effects = read_json(EFFECTS)
     catalog = read_json(CATALOG)
     mapping_source = read_json(MAPPINGS)
+    recovery_v03 = read_json(RECOVERY_V03)
     catalog_by_slot = {row["slot"]: row for row in catalog["effects"]}
     mapped_by_slot = {row["slot"]: row for row in mapping_source["effects"]}
+    v03_by_slot: dict[int, list[dict]] = {}
+    for parameter in recovery_v03["new_verified_controls"]:
+        v03_by_slot.setdefault(parameter["slot"], []).append(parameter)
+    ranges_by_slot = {
+        (row["slot"], row["display_name"]): row
+        for row in recovery_v03["range_scans"]
+    }
     registry_effects = []
     for effect in effects:
         slot = effect["slot"]
         catalog_effect = catalog_by_slot[slot]
         mapped = mapped_by_slot.get(slot, {"parameters": []})
-        verified_by_id = {p["id"]: p for p in mapped["parameters"]}
         verified = []
+        all_mappings = []
         for parameter in mapped["parameters"]:
+            all_mappings.append({
+                "id": parameter["id"], "ui_label": parameter["ui_label"],
+                "units": parameter.get("units"), "display_format": parameter.get("display_format"),
+                "display_order": parameter.get("live_display_order"), "points": parameter["points"],
+                "mapping_source": "v2",
+            })
+        for parameter in v03_by_slot.get(slot, []):
+            all_mappings.append({
+                "id": parameter["parameter_id"], "ui_label": parameter["display_name"],
+                "units": parameter.get("units"), "display_format": parameter.get("display_format"),
+                "display_order": parameter.get("display_order"), "points": parameter["points"],
+                "mapping_source": "v3",
+            })
+        for parameter in all_mappings:
             key = (slot, parameter["id"])
             if key not in PARAMETER_BINDINGS:
                 raise ValueError(f"No stable plugin parameter binding for slot {slot} {parameter['id']}")
             index, host_name = PARAMETER_BINDINGS[key]
+            range_scan = ranges_by_slot.get((slot, parameter["ui_label"]))
             verified.append({
                 "slot": slot,
                 "id": parameter["id"],
@@ -66,15 +93,22 @@ def build_registry() -> dict:
                 "plugin_parameter_name": host_name,
                 "display_units": parameter.get("units"),
                 "display_format": parameter.get("display_format"),
-                "display_order": parameter.get("live_display_order"),
+                "display_domain_evidence": parameter.get("display_domain"),
+                "display_order": parameter.get("display_order"),
                 "verified_points": parameter["points"],
+                "mapping_source": parameter["mapping_source"],
+                "verified_display_range": ({
+                    "minimum": range_scan["minimum"], "maximum": range_scan["maximum"],
+                    "baseline": range_scan["baseline"], "restored_exactly": range_scan["restored_exactly"],
+                    "evidence": "separate live LCD range scan; does not extend register-write points",
+                } if range_scan else None),
                 "editable": True,
                 "interpolation": "unsupported",
-                "bank": 1 if index <= 15 else 2,
-                "qlink": index - 7,
+                "bank": 1 if 8 <= index <= 15 else (2 if 16 <= index <= 23 else 3),
+                "qlink": (index - 7) if index <= 23 else (index - 23),
                 "evidence": "OS 3.53 repeated live UI adjustment, reversal, and ordered host GPR write observation",
             })
-        if len(verified) != len(mapped["parameters"]):
+        if len(verified) != len(mapped["parameters"]) + len(v03_by_slot.get(slot, [])):
             raise ValueError(f"Inconsistent verified mapping count for slot {slot}")
         registry_effects.append({
             "slot": slot,
@@ -100,14 +134,17 @@ def build_registry() -> dict:
         })
     if len(registry_effects) != 50:
         raise ValueError(f"Expected exactly 50 effects, got {len(registry_effects)}")
-    if sum(e["verified_control_count"] for e in registry_effects) != 16:
-        raise ValueError("Expected 16 V2 verified controls")
+    if sum(e["verified_control_count"] for e in registry_effects) != 19:
+        raise ValueError("Expected 16 V2 plus 3 V3 verified controls")
+    if len(recovery_v03["range_scans"]) != 3:
+        raise ValueError("Expected three separately verified live display ranges")
     return {
         "schema": "trollfx-asr10-factory-editor-registry-v03",
         "version": 3,
-        "parameter_ids": "unchanged; controls use existing V2 plugin indices 8..23",
+        "parameter_ids": "V2 indices 0..23 unchanged; V3 controls append at indices 24..26",
         "package_policy": "all effect availability is obtained from the trusted package provider; metadata never makes a package eligible",
-        "editing_policy": "only verified discrete display points are editable; no interpolation or guessed defaults",
+        "editing_policy": "only explicitly verified discrete display-to-register points are writable; live display ranges do not imply register curves",
+        "verified_display_ranges": recovery_v03["range_scans"],
         "effects": registry_effects,
     }
 
@@ -121,7 +158,7 @@ def make_ui(registry: dict) -> dict:
     # This preserves the existing Q1..Q16 -> parameter 8..23 mapping.
     qlink_layout = (list(range(20, 24)) + list(range(16, 20)) +
                     list(range(12, 16)) + list(range(8, 12)))
-    if set(by_index) != set(qlink_layout):
+    if set(range(8, 24)) - set(by_index):
         raise ValueError("The fixed V2 Q-Link contract requires parameter indices 8..23")
     editor_rows = [by_index[index] for index in qlink_layout]
     # Preserve the shipped V2 order: Q1-Q4 remain the four HALL/ROM02 BUS
@@ -136,6 +173,20 @@ def make_ui(registry: dict) -> dict:
         })
     if len(editor_controls) != 16:
         raise ValueError("UI must expose exactly the 16 verified controls")
+    v3_rows = sorted((c for e in registry["effects"] for c in e["verified_controls"]
+                      if c["plugin_parameter_index"] >= 24),
+                     key=lambda c: c["plugin_parameter_index"])
+    editor_v3 = [{"widget": "text", "text": "LCD READOUT / VERIFIED POINTS ONLY"}] + ["empty"] * 11
+    for control in v3_rows:
+        editor_v3.append({
+            "param": control["plugin_parameter_name"],
+            "widget": "slider",
+            "overlay": "menu",
+            "visibleWhen": {"param": "FX Slot", "index": control["slot"] - 1},
+        })
+    editor_v3.append("empty")
+    if len(editor_v3) != 16 or len(v3_rows) > 8:
+        raise ValueError("V3 editor bank must fit the supported eight-control Q-Link bank")
     return {
         "kit": {"theme": "cyan", "accent": "ff00d4d8"},
         "style": {"background": "ff15191c", "accent": "ff00d4d8",
@@ -162,6 +213,7 @@ def make_ui(registry: dict) -> dict:
                 {"param": "FX Slot", "widget": "slider", "overlay": "menu"},
             ]},
             {"name": "EDIT", "controls": editor_controls},
+            {"name": "EDIT 2", "controls": editor_v3},
         ],
     }
 

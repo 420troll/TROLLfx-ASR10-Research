@@ -30,8 +30,10 @@ def source_digest() -> str:
             "include/trollfx/es5510_factory_runtime.hpp","include/trollfx/es5510_factory_registry.hpp",
             "include/trollfx/es5510_factory_parameter_control_v01.hpp",
             "include/trollfx/es5510_factory_parameter_discovery_v02.hpp",
+            "include/trollfx/es5510_factory_parameter_discovery_v03.hpp",
             "include/trollfx/es5510_factory_editor_v03.hpp",
             "docs/ASR10_FACTORY_EDITOR_REGISTRY_V03.json",
+            "docs/ASR10_FACTORY_PARAMETER_RECOVERY_V03.json",
             "tools/parameter_controls/build_editor_registry_v03.py")
     for rel in inputs:
         h.update(rel.encode()+b"\0"); h.update((ROOT/rel).read_bytes())
@@ -157,6 +159,7 @@ def main():
                     "include/trollfx/es5510_factory_registry.hpp",
                     "include/trollfx/es5510_factory_parameter_control_v01.hpp",
                     "include/trollfx/es5510_factory_parameter_discovery_v02.hpp",
+                    "include/trollfx/es5510_factory_parameter_discovery_v03.hpp",
                     "include/trollfx/es5510_factory_editor_v03.hpp"):
             dest=stage/"src"/Path(rel).name if rel.startswith("src/") else stage/"src"/"trollfx"/Path(rel).name
             dest.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(ROOT/rel,dest)
