@@ -41,7 +41,7 @@ The A/B tool runs bypass and wet passes through one advancing plugin instance. I
 
 ## Preview fidelity and visible findings
 
-The screenshots in [`docs/force_simulator/screenshots`](force_simulator/screenshots/) are rendered from the generated V4.1 TUI and its actual PNG artwork. Pillow and the browser canvas renderer use the TUI coordinates, font names/sizes, labels, parameter display strings, knob filmstrip frames, button art, and Q-Link map. They are genuine previews of the generated skin assets, not captures of the Force renderer.
+The screenshots in [`docs/force_simulator/screenshots`](force_simulator/screenshots/) are rendered from the generated V4.1 TUI and its actual PNG artwork. Pillow and the browser canvas renderer use the TUI coordinates, font names/sizes, labels, parameter display strings, knob filmstrip frames, button art, and Q-Link map. They are genuine previews of the generated skin assets, not captures of the Force renderer. The plugin page is the SDK's 1280 × 628 tab content area within its documented 1280 × 800 display, starting 110 pixels below the top edge. The outer host/status region is intentionally omitted instead of replaced with guessed hardware chrome.
 
 Known differences and limitations:
 
@@ -56,7 +56,7 @@ The previews currently highlight text clipped by the widget bounds in BROWSE and
 
 ## Independent native evidence
 
-[`verification-report.json`](force_simulator/verification-report.json) records hashes of the V4.1 skin and screenshot outputs, plus the redacted focused test results. At the captured run the local provider reported 50/50 packages validated, but this task's runtime coverage is focused on HALL (slot 1), ROOM REVERB (slot 3), PITCH SHIFT (slot 39), and an effect with no verified controls.
+[`verification-report.json`](force_simulator/verification-report.json) records hashes of the V4.1 skin and screenshot outputs, plus the redacted focused test results. Its `tested_q_link_dsp_routes` section lists the physical-equivalent EDIT Q-Link, actual VST parameter index, canonical control resolved from the C++ registry, and observed same-frame GPR group for each tested route. Raw GPR values and per-event logs stay outside Git. At the captured run the local provider reported 50/50 packages validated, but this task's runtime coverage is focused on HALL (slot 1), ROOM REVERB (slot 3), PITCH SHIFT (slot 39), and an effect with no verified controls.
 
 Seven focused native integration tests passed. They exercised the actual plugin callback; HALL → ROOM → PITCH SHIFT → HALL routing; verified same-frame GPR groups; no change to unrelated HALL controls; state save/restore to the discrete canonical value; `NO VERIFIED CONTROL` behavior; finite wet audio; and stereo 48 kHz WAV output. Register values, firmware payloads, audio files, checkpoints, and provider files are excluded from Git and test logs remain local.
 

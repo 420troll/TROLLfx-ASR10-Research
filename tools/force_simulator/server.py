@@ -1,6 +1,6 @@
 """Local browser simulator using the generated TUI and actual native VST2 API."""
 from __future__ import annotations
-import base64, hashlib, http.server, io, json, math, os, struct, threading, time, wave
+import base64, hashlib, http.server, io, json, math, os, re, struct, threading, time, wave
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -18,18 +18,20 @@ EFFECT_ROWS=EFFECTS.get("effects",[]) if isinstance(EFFECTS,dict) else EFFECTS
 if isinstance(EFFECT_ROWS,dict): EFFECT_ROWS=[EFFECT_ROWS[str(i)] if str(i) in EFFECT_ROWS else EFFECT_ROWS[i] for i in range(1,51)]
 EFFECT_NAMES=[str(x.get("name",x)) if isinstance(x,dict) else str(x) for x in EFFECT_ROWS]
 
-# host canonical index and GPR group, taken from the verified append-only V4 registry.
-# Exact applied values are supplied by the traced VST, never synthesized by the GUI.
-ROUTES={
- 1:[("reverb_mix_bus1",27,[0x7c]),("reverb_mix_bus2",28,[0x7a]),("decay_time",29,[0x03,0x04,0x05,0x5b,0x6e]),("hi_freq_damping",30,[0x6c,0x6d])],
- 2:[("reverb_mix_bus1",31,[0x7c]),("reverb_mix_bus2",32,[0x7a])],
- 3:[("decay_time",33,[0x6e]),("diffusion",34,[0x07,0x09,0x0a,0x0b,0x0c,0x12]),("hi_freq_damping",35,[0x6c,0x6d])],
- 4:[("delay_time_l",36,[0x0b])],5:[("delay_time_l",37,[0x0b])],
- 6:[("chorus_rate",38,[0x90,0x91,0x92])],7:[("phase_rate",39,[0x8e])],
- 8:[("flange_rate",40,[0x84,0x85])],28:[("preamp_gain",41,[0x70])],
- 39:[("quality",42,[0x04,0x07,0x0a,0x61,0x64,0xa0])],
- 41:[("voice1_fine",43,[0x60])],42:[("comp_ratio",44,[0x8b])],49:[("bass_fc",45,[0x57,0x58])]
-}
+# Resolve canonical control IDs and indices from the plugin's append-only registry
+# header, so the UI/event log does not maintain a parallel parameter model. The
+# register sequence below is only an expectation used to recognize an applied group;
+# every reported write/value itself is read from the traced VST runtime.
+REGISTER_GROUPS={1:[[0x7c],[0x7a],[0x03,0x04,0x05,0x5b,0x6e],[0x6c,0x6d]],
+ 2:[[0x7c],[0x7a]],3:[[0x6e],[0x07,0x09,0x0a,0x0b,0x0c,0x12],[0x6c,0x6d]],
+ 4:[[0x0b]],5:[[0x0b]],6:[[0x90,0x91,0x92]],7:[[0x8e]],8:[[0x84,0x85]],
+ 28:[[0x70]],39:[[0x04,0x07,0x0a,0x61,0x64,0xa0]],41:[[0x60]],42:[[0x8b]],49:[[0x57,0x58]]}
+CONTROL_ROWS={}
+for line in (ROOT/"include/trollfx/es5510_factory_editor_v04.hpp").read_text().splitlines():
+    m=re.search(r'\{\s*(\d+),\s*"([^"]+)",\s*"([^"]+)",\s*"[^"]+",\s*"[^"]+",\s*(\d+),\s*kPoint',line)
+    if m: CONTROL_ROWS.setdefault(int(m.group(1)),[]).append({"id":m.group(2),"label":m.group(3),"canonical":int(m.group(4))})
+ROUTES={slot:[(c["id"],c["canonical"],REGISTER_GROUPS[slot][i]) for i,c in enumerate(rows)]
+        for slot,rows in CONTROL_ROWS.items() if slot in REGISTER_GROUPS}
 
 class Simulator:
     def __init__(self, assets: Path):

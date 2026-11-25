@@ -51,9 +51,106 @@
       "Q8": -1
     }
   },
+  "tested_q_link_dsp_routes": [
+    {
+      "effect_slot": 1,
+      "vst_parameter_index": 48,
+      "physical_equivalent_qlink": "3",
+      "resolved_canonical_control": "decay_time",
+      "canonical_parameter_index": 29,
+      "applied_register_group": [
+        "0x03",
+        "0x04",
+        "0x05",
+        "0x5B",
+        "0x6E"
+      ],
+      "same_frame_group_observed": true,
+      "display": "DECAY TIME: 41",
+      "test_passed": true
+    },
+    {
+      "effect_slot": 3,
+      "vst_parameter_index": 46,
+      "physical_equivalent_qlink": "1",
+      "resolved_canonical_control": "decay_time",
+      "canonical_parameter_index": 33,
+      "applied_register_group": [
+        "0x6E"
+      ],
+      "same_frame_group_observed": true,
+      "display": "DECAY TIME: 65",
+      "test_passed": true
+    },
+    {
+      "effect_slot": 3,
+      "vst_parameter_index": 47,
+      "physical_equivalent_qlink": "2",
+      "resolved_canonical_control": "diffusion",
+      "canonical_parameter_index": 34,
+      "applied_register_group": [
+        "0x07",
+        "0x09",
+        "0x0A",
+        "0x0B",
+        "0x0C",
+        "0x12"
+      ],
+      "same_frame_group_observed": true,
+      "display": "DIFFUSION: 51",
+      "test_passed": true
+    },
+    {
+      "effect_slot": 39,
+      "vst_parameter_index": 46,
+      "physical_equivalent_qlink": "1",
+      "resolved_canonical_control": "quality",
+      "canonical_parameter_index": 42,
+      "applied_register_group": [
+        "0x04",
+        "0x07",
+        "0x0A",
+        "0x61",
+        "0x64",
+        "0xA0"
+      ],
+      "same_frame_group_observed": true,
+      "display": "QUALITY: SHORT/COARSER",
+      "test_passed": true
+    },
+    {
+      "effect_slot": 1,
+      "vst_parameter_index": 48,
+      "physical_equivalent_qlink": "3",
+      "resolved_canonical_control": "decay_time",
+      "canonical_parameter_index": 29,
+      "applied_register_group": [
+        "0x03",
+        "0x04",
+        "0x05",
+        "0x5B",
+        "0x6E"
+      ],
+      "same_frame_group_observed": true,
+      "display": "DECAY TIME: 41",
+      "test_passed": true
+    },
+    {
+      "effect_slot": 10,
+      "vst_parameter_index": 46,
+      "physical_equivalent_qlink": "1",
+      "resolved_canonical_control": null,
+      "canonical_parameter_index": null,
+      "applied_register_group": [],
+      "same_frame_group_observed": false,
+      "display": "NO VERIFIED CONTROL",
+      "test_passed": true,
+      "test": "unmapped-control no-route behavior"
+    }
+  ],
   "native_tests": {
-    "total": 7,
-    "passed": 7,
+    "total": 8,
+    "passed": 8,
     "failed": 0,
     "coverage": [
       "real VST2 entry point and initialization",
@@ -63,8 +160,9 @@
       "discrete canonical value restoration",
       "unmapped effect returns NO VERIFIED CONTROL and no route",
       "unrelated HALL controls unchanged",
-      "finite audio and wet/bypass difference",
-      "stereo 48 kHz PCM WAV endpoint output"
+      "finite audio and wet/bypass difference for HALL and ROOM",
+      "stereo 48 kHz PCM WAV endpoint output",
+      "page and Q-Link JSONL audit logging"
     ]
   },
   "layout_findings": {

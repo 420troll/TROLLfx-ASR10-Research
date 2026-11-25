@@ -1,5 +1,5 @@
 """Focused real-VST2 integration tests; requires local validated factory packages."""
-import os, sys, unittest, math, hashlib, struct, io, wave
+import os, sys, unittest, math, hashlib, struct, io, wave, json
 from pathlib import Path
 HERE=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(HERE))
@@ -71,16 +71,16 @@ class NativePluginIntegration(unittest.TestCase):
   self.assertIn('HALL REVERB',self.v.text(0));self.assertAlmostEqual(self.v.get(29),expected_canonical,places=3)
   self.assertAlmostEqual(self.v.get(48),1.0,places=3) # router snaps to the verified discrete point after restoration
  def test_audio_callback_is_finite_and_effect_output_differs_from_bypass(self):
-  self.select(1);n=4096;data=[]
-  x=0x2468ace1
+  n=4096;data=[];x=0x2468ace1
   for i in range(n):
    x=(1664525*x+1013904223)&0xffffffff; l=((x>>8)/8388608)-1
    x=(1664525*x+1013904223)&0xffffffff; r=((x>>8)/8388608)-1
    data.extend((l*.08,r*.08))
-  self.v.set(4,1);dry=self.v.process(data,n,128)
-  self.v.set(4,0);wet=self.v.process(data,n,128)
-  self.assertTrue(all(math.isfinite(y) for y in wet+dry))
-  self.assertGreater(sum(abs(a-b) for a,b in zip(wet,dry))/len(wet),1e-5)
+  for slot in (1,3):
+   self.select(slot);self.v.set(4,1);dry=self.v.process(data,n,128)
+   self.v.set(4,0);wet=self.v.process(data,n,128)
+   self.assertTrue(all(math.isfinite(y) for y in wet+dry),f'effect {slot} non-finite')
+   self.assertGreater(sum(abs(a-b) for a,b in zip(wet,dry))/len(wet),1e-5,f'effect {slot} has no wet/bypass difference')
  def test_wav_endpoint_builds_wet_and_bypass_pcm_outputs(self):
   buf=io.BytesIO(); vals=[]
   for i in range(2048):
@@ -92,6 +92,19 @@ class NativePluginIntegration(unittest.TestCase):
    self.assertEqual(res['frames'],2048);self.assertEqual(res['sample_rate_hz'],48000)
    self.assertNotEqual(res['wet_sha256'],res['bypass_sha256'])
    self.assertTrue(res['wet_wav_base64'] and res['bypass_wav_base64'])
+  finally:sim.close()
+ def test_audit_event_logs_page_qlink_vst_canonical_and_dsp(self):
+  sim=Simulator(ASSETS)
+  try:
+   sim.select_page(1);event=sim.set_param(48,.9,page='EDIT',qlink=3)
+   self.assertEqual(event['physical_equivalent_qlink'],3)
+   self.assertEqual(event['vst_parameter_index'],48)
+   self.assertEqual(event['resolved_canonical_control']['id'],'decay_time')
+   self.assertTrue(event['matched_control_write_group'])
+   self.assertTrue(sim.log_path.is_file())
+   lines=sim.log_path.read_text().splitlines()
+   self.assertEqual(json.loads(lines[0])['event_type'],'page_navigation')
+   self.assertEqual(json.loads(lines[-1])['physical_equivalent_qlink'],3)
   finally:sim.close()
 
 if __name__=='__main__': unittest.main(verbosity=2)

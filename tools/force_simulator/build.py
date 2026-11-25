@@ -24,8 +24,17 @@ def sdk_path(override: str | None = None) -> Path:
 
 def build(sdk: Path, force=False):
     stamp = SIM_DIR / "build.sha256"
-    material = b"".join(p.read_bytes() for p in SOURCES) + (ROOT/"tools/force_simulator/vst_host.cpp").read_bytes()
-    digest = hashlib.sha256(material + str(sdk).encode()).hexdigest()
+    dependencies = list(SOURCES)
+    for directory in (ROOT/"include", ROOT/"src", ROOT/"force_plugin/src"):
+        dependencies.extend(sorted((*directory.glob("*.h"), *directory.glob("*.hpp"))))
+    dependencies.extend(p for p in (sdk/"framework").glob("*.h") if p.name in {
+        "mpc_plugin.h", "mpc_vst2_abi.h", "mpc_resources.h"})
+    dependencies.append(ROOT/"tools/force_simulator/vst_host.cpp")
+    digest_builder=hashlib.sha256(str(sdk).encode())
+    for path in sorted(set(dependencies)):
+        digest_builder.update(str(path.relative_to(ROOT) if path.is_relative_to(ROOT) else path.name).encode())
+        digest_builder.update(path.read_bytes())
+    digest=digest_builder.hexdigest()
     current = stamp.read_text().strip() if stamp.is_file() else ""
     rebuild = force or current != digest or not PLUGIN.is_file() or not HOST.is_file()
     if not shutil.which("g++"): raise RuntimeError("g++ is required to build the native VST simulator")
