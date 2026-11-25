@@ -1,0 +1,142 @@
+{
+  "schema": "trollfx-force-simulator-layout-report-v1",
+  "renderer": "Pillow preview from generated SDK TUI.json, Q-Links.json and PNGs; stock Slider is approximate",
+  "canvas": [
+    1280,
+    628
+  ],
+  "pages": [
+    {
+      "name": "BROWSE",
+      "items": 8,
+      "touch_targets": 5,
+      "qlink_map": {
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "4": 0,
+        "5": 4,
+        "6": -1,
+        "7": -1,
+        "8": -1,
+        "9": -1,
+        "10": -1,
+        "11": -1,
+        "12": -1,
+        "13": -1,
+        "14": -1,
+        "15": -1,
+        "16": -1
+      },
+      "fonts": [
+        "Titillium Web/Regular"
+      ],
+      "native_slider_approximations": 4
+    },
+    {
+      "name": "EDIT",
+      "items": 28,
+      "touch_targets": 9,
+      "qlink_map": {
+        "1": 46,
+        "2": 47,
+        "3": 48,
+        "4": 49,
+        "5": 50,
+        "6": 51,
+        "7": 52,
+        "8": 53,
+        "9": 54,
+        "10": -1,
+        "11": -1,
+        "12": -1,
+        "13": -1,
+        "14": -1,
+        "15": -1,
+        "16": -1
+      },
+      "fonts": [
+        "Titillium Web/Regular"
+      ],
+      "native_slider_approximations": 0
+    },
+    {
+      "name": "MIX",
+      "items": 14,
+      "touch_targets": 5,
+      "qlink_map": {
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "4": 0,
+        "5": 4,
+        "6": -1,
+        "7": -1,
+        "8": -1,
+        "9": -1,
+        "10": -1,
+        "11": -1,
+        "12": -1,
+        "13": -1,
+        "14": -1,
+        "15": -1,
+        "16": -1
+      },
+      "fonts": [
+        "Titillium Web/Regular"
+      ],
+      "native_slider_approximations": 1
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    {
+      "page": "BROWSE",
+      "issue": "text clipped by widget bounds",
+      "items": [
+        {
+          "text": "TROLLfx / ASR-10 FACTORY FX",
+          "rendered_width_px": 394,
+          "available_width_px": 278.0,
+          "overflow_px": 116.0
+        }
+      ]
+    },
+    {
+      "page": "EDIT",
+      "issue": "text clipped by widget bounds",
+      "items": [
+        {
+          "text": "ACTIVE FACTORY PARAMETERS",
+          "rendered_width_px": 402,
+          "available_width_px": 278.0,
+          "overflow_px": 124.0
+        },
+        {
+          "text": "REVERB MIX BUS1: 28",
+          "rendered_width_px": 286,
+          "available_width_px": 156.0,
+          "overflow_px": 130.0
+        },
+        {
+          "text": "REVERB MIX BUS2: 28",
+          "rendered_width_px": 286,
+          "available_width_px": 156.0,
+          "overflow_px": 130.0
+        },
+        {
+          "text": "DECAY TIME: 40",
+          "rendered_width_px": 203,
+          "available_width_px": 156.0,
+          "overflow_px": 47.0
+        },
+        {
+          "text": "HI FREQ DAMPING: 31",
+          "rendered_width_px": 284,
+          "available_width_px": 156.0,
+          "overflow_px": 128.0
+        }
+      ]
+    }
+  ]
+}

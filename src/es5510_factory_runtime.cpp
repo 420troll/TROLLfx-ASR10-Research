@@ -6,6 +6,9 @@
 #include <cmath>
 #include <cstdio>
 #include <limits>
+#if defined(TROLLFX_SIMULATOR_TRACE)
+#include <atomic>
+#endif
 
 namespace trollfx::es5510 {
 namespace {
@@ -21,6 +24,35 @@ std::uint32_t expected_words(EffectId id) {
     }
     return 0;
 }
+
+#if defined(TROLLFX_SIMULATOR_TRACE)
+// Optional, fixed-size audit ring for the desktop simulator only. Records are
+// written at the point where an event is applied to the ES5510 host GPR port.
+constexpr std::size_t kSimulatorTraceCapacity = 4096;
+struct SimulatorTraceCell {
+    std::atomic<std::uint64_t> sequence{0};
+    std::atomic<std::uint64_t> dsp_frame{0};
+    std::atomic<std::uint32_t> slot{0};
+    std::atomic<std::uint32_t> gpr{0};
+    std::atomic<std::uint32_t> value24{0};
+};
+std::array<SimulatorTraceCell, kSimulatorTraceCapacity> g_simulator_trace{};
+std::atomic<std::uint64_t> g_simulator_trace_latest{0};
+
+void simulator_trace_write(std::uint32_t slot, std::uint64_t frame,
+                           std::uint8_t gpr, std::uint32_t value24) noexcept {
+    const auto seq = g_simulator_trace_latest.fetch_add(1, std::memory_order_relaxed) + 1;
+    auto& cell = g_simulator_trace[(seq - 1) % kSimulatorTraceCapacity];
+    cell.dsp_frame.store(frame, std::memory_order_relaxed);
+    cell.slot.store(slot, std::memory_order_relaxed);
+    cell.gpr.store(gpr, std::memory_order_relaxed);
+    cell.value24.store(value24, std::memory_order_relaxed);
+    cell.sequence.store(seq, std::memory_order_release);
+}
+#else
+inline void simulator_trace_write(std::uint32_t, std::uint64_t,
+                                  std::uint8_t, std::uint32_t) noexcept {}
+#endif
 
 double expected_factory_rate(EffectId id) {
     switch (id) {
@@ -171,6 +203,7 @@ struct FactoryRuntime::Impl {
 
     void execute_dsp_frame(std::int16_t left, std::int16_t right, double time) noexcept {
         while (event_count && events[0].frame == dsp_frames) {
+            simulator_trace_write(descriptor.slot, dsp_frames, events[0].index, events[0].value);
             host_write_gpr(dsp, events[0].index, events[0].value);
             for (std::size_t i = 1; i < event_count; ++i) events[i - 1] = events[i];
             --event_count;
@@ -410,3 +443,45 @@ RuntimeStatus FactoryRuntime::getStatus() const noexcept {
 }
 
 } // namespace trollfx::es5510
+
+#if defined(TROLLFX_SIMULATOR_TRACE)
+struct TROLLfxSimTraceWrite {
+    std::uint64_t sequence;
+    std::uint64_t dsp_frame;
+    std::uint32_t slot;
+    std::uint32_t gpr;
+    std::uint32_t value24;
+};
+
+extern "C" __attribute__((visibility("default")))
+std::uint64_t TROLLfx_SimTraceLatest() noexcept {
+    return trollfx::es5510::g_simulator_trace_latest.load(std::memory_order_acquire);
+}
+
+extern "C" __attribute__((visibility("default")))
+std::size_t TROLLfx_SimTraceCopy(std::uint64_t after, TROLLfxSimTraceWrite* out,
+                                 std::size_t capacity) noexcept {
+    if (!out || !capacity) return 0;
+    using namespace trollfx::es5510;
+    const auto latest = g_simulator_trace_latest.load(std::memory_order_acquire);
+    const auto earliest = latest > kSimulatorTraceCapacity ? latest - kSimulatorTraceCapacity + 1 : 1;
+    const auto first = std::max(after + 1, earliest);
+    std::size_t copied = 0;
+    for (auto seq = first; seq <= latest && copied < capacity; ++seq) {
+        auto& cell = g_simulator_trace[(seq - 1) % kSimulatorTraceCapacity];
+        if (cell.sequence.load(std::memory_order_acquire) != seq) continue;
+        TROLLfxSimTraceWrite row{seq, cell.dsp_frame.load(std::memory_order_relaxed),
+            cell.slot.load(std::memory_order_relaxed), cell.gpr.load(std::memory_order_relaxed),
+            cell.value24.load(std::memory_order_relaxed)};
+        if (cell.sequence.load(std::memory_order_acquire) == seq) out[copied++] = row;
+    }
+    return copied;
+}
+
+extern "C" __attribute__((visibility("default")))
+void TROLLfx_SimTraceReset() noexcept {
+    for (auto& cell : trollfx::es5510::g_simulator_trace)
+        cell.sequence.store(0, std::memory_order_relaxed);
+    trollfx::es5510::g_simulator_trace_latest.store(0, std::memory_order_release);
+}
+#endif

@@ -1,0 +1,85 @@
+{
+  "schema": "trollfx-asr10-pc-simulator-independent-evidence-v1",
+  "test_instrumented_native_vst_sha256": "c939ef84865a754c381bb2f290db031ecebc02fe62541b9d6dc50b22cc5d38de",
+  "factory_packages_discovered_and_validated_by_provider": "50/50 (local private collection; no contents included)",
+  "generated_skin_sha256": {
+    "TUI.json": "5afc7be6a265dfaed2e3132cdadb635af1b1993529580c69fde0046eb2adaa84",
+    "Q-Links.json": "206400c0a756eaee6fdddb4211756649cf83e50c3288e777d43294efe8e57f2a",
+    "panel_background.png": "b33d76620163911169fc71a4006d56c7085e33b7eb8c4e2f5067ecd29a834d1d",
+    "knob_uni.png": "3ab20a30126075e377bcf7ad1234439f51e93d84d73c8385f335f235c8853e30",
+    "knob_bi.png": "7946da90382139d5eabfb5735869dca2e5f6b4e239a9b941054ef3d9f61ed975",
+    "fader_h_uni.png": "78e2ba979abc31312752cf0c177c751d01d53a1dee2dc494731f26fa13a1b86d",
+    "fader_h_bi.png": "195a064f2cfce377a91cc6c68130bc7cf36c3e6336d33b1c99e73b478f79cca2"
+  },
+  "preview_sha256": {
+    "hall-browse.png": "e6be61213c056e50aa81c158ecf9d80c90bdbbef5f9542a117aa507b663161f8",
+    "hall-edit.png": "087dbf30cb22169efc9f5034c40fedc2af5f080710d8afb91f8f93d2ef4df31d",
+    "hall-mix.png": "6353bc36455ea352466ec1feb37a92f1bbcce9b1e6d68b3c8b51bc349ee5d5c6",
+    "room-browse.png": "882594be56bc27353918a1d0c92675be015a7542c709c8ee734ccfc226305d0c",
+    "room-edit.png": "da89e5402ade7334f91d0e1dcf5bdb80822a7cf0c05c386c2f1631e1bc60ee87",
+    "room-mix.png": "cae8e114155a81428f5e638bfa052a26a10daa27bdb65222fd8e9fbdbf6ed46c"
+  },
+  "pages": {
+    "BROWSE": {
+      "Q1": 1,
+      "Q2": 2,
+      "Q3": 3,
+      "Q4": 0,
+      "Q5": 4,
+      "Q6": -1,
+      "Q7": -1,
+      "Q8": -1
+    },
+    "EDIT": {
+      "Q1": 46,
+      "Q2": 47,
+      "Q3": 48,
+      "Q4": 49,
+      "Q5": 50,
+      "Q6": 51,
+      "Q7": 52,
+      "Q8": 53
+    },
+    "MIX": {
+      "Q1": 1,
+      "Q2": 2,
+      "Q3": 3,
+      "Q4": 0,
+      "Q5": 4,
+      "Q6": -1,
+      "Q7": -1,
+      "Q8": -1
+    }
+  },
+  "native_tests": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0,
+    "coverage": [
+      "real VST2 entry point and initialization",
+      "HALL\u2192ROOM\u2192PITCH SHIFT\u2192HALL parameter routing",
+      "same-frame expected GPR write groups",
+      "state chunk effect/control restoration",
+      "discrete canonical value restoration",
+      "unmapped effect returns NO VERIFIED CONTROL and no route",
+      "unrelated HALL controls unchanged",
+      "finite audio and wet/bypass difference",
+      "stereo 48 kHz PCM WAV endpoint output"
+    ]
+  },
+  "layout_findings": {
+    "page_count": 3,
+    "canvas": [
+      1280,
+      628
+    ],
+    "out_of_bounds_errors": 0,
+    "current_text_clipping_warning_count": 2,
+    "native_slider_art_missing": true
+  },
+  "hardware": {
+    "physical_force_q_link_dispatch": "NOT_TESTED",
+    "hardware_accuracy": "NOT_CLAIMED"
+  },
+  "redaction": "No ROM, firmware, EFE, checkpoint, package manifest, captured state, input audio, or output audio is included. Register values and event logs remain user-local."
+}
