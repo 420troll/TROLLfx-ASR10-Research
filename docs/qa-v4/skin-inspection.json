@@ -1,0 +1,1006 @@
+{
+  "schema": "force-skin-independent-inspection-v1",
+  "canvas": {
+    "width": 1280,
+    "height": 628
+  },
+  "renderer": "approximate preview only; no genuine SDK screenshot produced",
+  "inputs": {
+    "ui": {
+      "file": "ui.json",
+      "sha256": "a02a30945d04fda046a84b35279377f56d800911ad8ab89abf990e574256eddb"
+    },
+    "tui": {
+      "file": "TUI.json",
+      "sha256": "74e91aa9aab8d2e4451d8f87a3434cdaf1b09408ec3947ee9d15720b2f89305e"
+    },
+    "qlinks": {
+      "file": "Q-Links.json",
+      "sha256": "acbfa5ad93a3524d31610ffb15946614b2d6d770df081d53105dc9eaadb481df"
+    },
+    "asset_directory_name": "Plugin Skins",
+    "asset_tree_sha256": "fbadcd3c562315cf8d04597d4eeb8490eb9722f3ff0910c1d368775326dcaf0f",
+    "parameter_descriptors": null
+  },
+  "pages": [
+    {
+      "page": "BROWSE",
+      "tab_index": 1,
+      "widget_count": 9,
+      "text_widget_count": 4,
+      "qlink_assignments": {
+        "Q-Link 1": 1,
+        "Q-Link 2": 2,
+        "Q-Link 3": 3,
+        "Q-Link 4": 0,
+        "Q-Link 5": 4
+      },
+      "parameter_widgets": {
+        "4": [
+          {
+            "name": "Host Bypass",
+            "when_visible": "Always"
+          }
+        ],
+        "1": [
+          {
+            "name": "Wet / Dry",
+            "when_visible": "Always"
+          }
+        ],
+        "2": [
+          {
+            "name": "Input Gain",
+            "when_visible": "Always"
+          }
+        ],
+        "3": [
+          {
+            "name": "Output Gain",
+            "when_visible": "Always"
+          }
+        ],
+        "0": [
+          {
+            "name": "FX Slot",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "MIX",
+      "tab_index": 2,
+      "widget_count": 9,
+      "text_widget_count": 4,
+      "qlink_assignments": {
+        "Q-Link 1": 1,
+        "Q-Link 2": 2,
+        "Q-Link 3": 3,
+        "Q-Link 4": 0,
+        "Q-Link 5": 4
+      },
+      "parameter_widgets": {
+        "4": [
+          {
+            "name": "Host Bypass",
+            "when_visible": "Always"
+          }
+        ],
+        "1": [
+          {
+            "name": "Wet / Dry",
+            "when_visible": "Always"
+          }
+        ],
+        "2": [
+          {
+            "name": "Input Gain",
+            "when_visible": "Always"
+          }
+        ],
+        "3": [
+          {
+            "name": "Output Gain",
+            "when_visible": "Always"
+          }
+        ],
+        "0": [
+          {
+            "name": "FX Slot",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "01 EDIT",
+      "tab_index": 3,
+      "widget_count": 4,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 27,
+        "Q-Link 2": 28,
+        "Q-Link 3": 29,
+        "Q-Link 4": 30
+      },
+      "parameter_widgets": {
+        "27": [
+          {
+            "name": "REVERB MIX BUS1 @ 01",
+            "when_visible": "Always"
+          }
+        ],
+        "28": [
+          {
+            "name": "REVERB MIX BUS2 @ 01",
+            "when_visible": "Always"
+          }
+        ],
+        "29": [
+          {
+            "name": "DECAY TIME @ 01",
+            "when_visible": "Always"
+          }
+        ],
+        "30": [
+          {
+            "name": "HI FREQ DAMPING @ 01",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "02 EDIT",
+      "tab_index": 4,
+      "widget_count": 2,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 31,
+        "Q-Link 2": 32
+      },
+      "parameter_widgets": {
+        "31": [
+          {
+            "name": "REVERB MIX BUS1 @ 02",
+            "when_visible": "Always"
+          }
+        ],
+        "32": [
+          {
+            "name": "REVERB MIX BUS2 @ 02",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "03 EDIT",
+      "tab_index": 5,
+      "widget_count": 3,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 33,
+        "Q-Link 2": 34,
+        "Q-Link 3": 35
+      },
+      "parameter_widgets": {
+        "33": [
+          {
+            "name": "DECAY TIME @ 03",
+            "when_visible": "Always"
+          }
+        ],
+        "34": [
+          {
+            "name": "DIFFUSION @ 03",
+            "when_visible": "Always"
+          }
+        ],
+        "35": [
+          {
+            "name": "HI FREQ DAMPING @ 03",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "04 EDIT",
+      "tab_index": 6,
+      "widget_count": 1,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 36
+      },
+      "parameter_widgets": {
+        "36": [
+          {
+            "name": "BS1 TIME L @ 04",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "05 EDIT",
+      "tab_index": 7,
+      "widget_count": 1,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 37
+      },
+      "parameter_widgets": {
+        "37": [
+          {
+            "name": "BS1 TIME L @ 05",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "06 EDIT",
+      "tab_index": 8,
+      "widget_count": 1,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 38
+      },
+      "parameter_widgets": {
+        "38": [
+          {
+            "name": "CHORUS RATE @ 06",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "07 EDIT",
+      "tab_index": 9,
+      "widget_count": 1,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 39
+      },
+      "parameter_widgets": {
+        "39": [
+          {
+            "name": "PHASE RATE @ 07",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "08 EDIT",
+      "tab_index": 10,
+      "widget_count": 1,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 40
+      },
+      "parameter_widgets": {
+        "40": [
+          {
+            "name": "FLANGE RATE @ 08",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "28 EDIT",
+      "tab_index": 11,
+      "widget_count": 1,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 41
+      },
+      "parameter_widgets": {
+        "41": [
+          {
+            "name": "PREAMP GAIN @ 28",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "39 EDIT",
+      "tab_index": 12,
+      "widget_count": 1,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 42
+      },
+      "parameter_widgets": {
+        "42": [
+          {
+            "name": "QUALITY @ 39",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "41 EDIT",
+      "tab_index": 13,
+      "widget_count": 1,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 43
+      },
+      "parameter_widgets": {
+        "43": [
+          {
+            "name": "VOICE1 FINE @ 41",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "42 EDIT",
+      "tab_index": 14,
+      "widget_count": 1,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 44
+      },
+      "parameter_widgets": {
+        "44": [
+          {
+            "name": "COMP RATIO @ 42",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    },
+    {
+      "page": "49 EDIT",
+      "tab_index": 15,
+      "widget_count": 1,
+      "text_widget_count": 0,
+      "qlink_assignments": {
+        "Q-Link 1": 45
+      },
+      "parameter_widgets": {
+        "45": [
+          {
+            "name": "BASS FC @ 49",
+            "when_visible": "Always"
+          }
+        ]
+      }
+    }
+  ],
+  "controls": [
+    {
+      "page": "BROWSE",
+      "widget": "text 0",
+      "type": "Label",
+      "parameter_index": null,
+      "bounds": [
+        23.0,
+        45.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": "TROLLfx / ASR-10 FACTORY FX"
+    },
+    {
+      "page": "BROWSE",
+      "widget": "text 1",
+      "type": "Label",
+      "parameter_index": null,
+      "bounds": [
+        343.0,
+        45.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": "50 SLOTS / PROVIDER STATUS"
+    },
+    {
+      "page": "BROWSE",
+      "widget": "text 2",
+      "type": "Label",
+      "parameter_index": null,
+      "bounds": [
+        663.0,
+        45.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": "SELECT AN EFFECT TO LOAD"
+    },
+    {
+      "page": "BROWSE",
+      "widget": "text 3",
+      "type": "Label",
+      "parameter_index": null,
+      "bounds": [
+        983.0,
+        45.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": "EDIT PAGES ARE FIXED Q-LINK MAPS"
+    },
+    {
+      "page": "BROWSE",
+      "widget": "Host Bypass",
+      "type": "toggle",
+      "parameter_index": 4,
+      "bounds": [
+        23.0,
+        346.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "BROWSE",
+      "widget": "Wet / Dry",
+      "type": "sliderWithFocus",
+      "parameter_index": 1,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "BROWSE",
+      "widget": "Input Gain",
+      "type": "sliderWithFocus",
+      "parameter_index": 2,
+      "bounds": [
+        343.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "BROWSE",
+      "widget": "Output Gain",
+      "type": "sliderWithFocus",
+      "parameter_index": 3,
+      "bounds": [
+        663.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "BROWSE",
+      "widget": "FX Slot",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 0,
+      "bounds": [
+        983.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "MIX",
+      "widget": "text 0",
+      "type": "Label",
+      "parameter_index": null,
+      "bounds": [
+        23.0,
+        45.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": "STEREO / NATIVE ES5510"
+    },
+    {
+      "page": "MIX",
+      "widget": "text 1",
+      "type": "Label",
+      "parameter_index": null,
+      "bounds": [
+        343.0,
+        45.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": "PROCESSING: EXPERIMENTAL 48 kHz"
+    },
+    {
+      "page": "MIX",
+      "widget": "text 2",
+      "type": "Label",
+      "parameter_index": null,
+      "bounds": [
+        663.0,
+        45.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": "HOST CONTROLS / FIXED IDs"
+    },
+    {
+      "page": "MIX",
+      "widget": "text 3",
+      "type": "Label",
+      "parameter_index": null,
+      "bounds": [
+        983.0,
+        45.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": "Q-LINKS: WET, INPUT, OUTPUT"
+    },
+    {
+      "page": "MIX",
+      "widget": "Host Bypass",
+      "type": "toggle",
+      "parameter_index": 4,
+      "bounds": [
+        23.0,
+        346.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "MIX",
+      "widget": "Wet / Dry",
+      "type": "faderUni",
+      "parameter_index": 1,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "MIX",
+      "widget": "Input Gain",
+      "type": "knobBi",
+      "parameter_index": 2,
+      "bounds": [
+        343.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "MIX",
+      "widget": "Output Gain",
+      "type": "knobBi",
+      "parameter_index": 3,
+      "bounds": [
+        663.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "MIX",
+      "widget": "FX Slot",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 0,
+      "bounds": [
+        983.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "01 EDIT",
+      "widget": "REVERB MIX BUS1 @ 01",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 27,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "01 EDIT",
+      "widget": "REVERB MIX BUS2 @ 01",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 28,
+      "bounds": [
+        343.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "01 EDIT",
+      "widget": "DECAY TIME @ 01",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 29,
+      "bounds": [
+        663.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "01 EDIT",
+      "widget": "HI FREQ DAMPING @ 01",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 30,
+      "bounds": [
+        983.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "02 EDIT",
+      "widget": "REVERB MIX BUS1 @ 02",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 31,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "02 EDIT",
+      "widget": "REVERB MIX BUS2 @ 02",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 32,
+      "bounds": [
+        343.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "03 EDIT",
+      "widget": "DECAY TIME @ 03",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 33,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "03 EDIT",
+      "widget": "DIFFUSION @ 03",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 34,
+      "bounds": [
+        343.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "03 EDIT",
+      "widget": "HI FREQ DAMPING @ 03",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 35,
+      "bounds": [
+        663.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "04 EDIT",
+      "widget": "BS1 TIME L @ 04",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 36,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "05 EDIT",
+      "widget": "BS1 TIME L @ 05",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 37,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "06 EDIT",
+      "widget": "CHORUS RATE @ 06",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 38,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "07 EDIT",
+      "widget": "PHASE RATE @ 07",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 39,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "08 EDIT",
+      "widget": "FLANGE RATE @ 08",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 40,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "28 EDIT",
+      "widget": "PREAMP GAIN @ 28",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 41,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "39 EDIT",
+      "widget": "QUALITY @ 39",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 42,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "41 EDIT",
+      "widget": "VOICE1 FINE @ 41",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 43,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "42 EDIT",
+      "widget": "COMP RATIO @ 42",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 44,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    },
+    {
+      "page": "49 EDIT",
+      "widget": "BASS FC @ 49",
+      "type": "sliderWithFocusMenu",
+      "parameter_index": 45,
+      "bounds": [
+        23.0,
+        497.0,
+        278.0,
+        107.0
+      ],
+      "when_visible": "Always",
+      "text": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "WARN",
+      "code": "TEXT_MAY_OVERFLOW",
+      "page": "BROWSE",
+      "widget": "text 0",
+      "text": "TROLLfx / ASR-10 FACTORY FX",
+      "estimated_width": 453.6,
+      "available_width": 278.0,
+      "metric": "approximate 0.56em; not SDK-rendered"
+    },
+    {
+      "severity": "WARN",
+      "code": "TEXT_MAY_OVERFLOW",
+      "page": "BROWSE",
+      "widget": "text 1",
+      "text": "50 SLOTS / PROVIDER STATUS",
+      "estimated_width": 436.8,
+      "available_width": 278.0,
+      "metric": "approximate 0.56em; not SDK-rendered"
+    },
+    {
+      "severity": "WARN",
+      "code": "TEXT_MAY_OVERFLOW",
+      "page": "BROWSE",
+      "widget": "text 2",
+      "text": "SELECT AN EFFECT TO LOAD",
+      "estimated_width": 403.2,
+      "available_width": 278.0,
+      "metric": "approximate 0.56em; not SDK-rendered"
+    },
+    {
+      "severity": "WARN",
+      "code": "TEXT_MAY_OVERFLOW",
+      "page": "BROWSE",
+      "widget": "text 3",
+      "text": "EDIT PAGES ARE FIXED Q-LINK MAPS",
+      "estimated_width": 537.6,
+      "available_width": 278.0,
+      "metric": "approximate 0.56em; not SDK-rendered"
+    },
+    {
+      "severity": "WARN",
+      "code": "TEXT_MAY_OVERFLOW",
+      "page": "MIX",
+      "widget": "text 0",
+      "text": "STEREO / NATIVE ES5510",
+      "estimated_width": 369.6,
+      "available_width": 278.0,
+      "metric": "approximate 0.56em; not SDK-rendered"
+    },
+    {
+      "severity": "WARN",
+      "code": "TEXT_MAY_OVERFLOW",
+      "page": "MIX",
+      "widget": "text 1",
+      "text": "PROCESSING: EXPERIMENTAL 48 kHz",
+      "estimated_width": 520.8,
+      "available_width": 278.0,
+      "metric": "approximate 0.56em; not SDK-rendered"
+    },
+    {
+      "severity": "WARN",
+      "code": "TEXT_MAY_OVERFLOW",
+      "page": "MIX",
+      "widget": "text 2",
+      "text": "HOST CONTROLS / FIXED IDs",
+      "estimated_width": 420.0,
+      "available_width": 278.0,
+      "metric": "approximate 0.56em; not SDK-rendered"
+    },
+    {
+      "severity": "WARN",
+      "code": "TEXT_MAY_OVERFLOW",
+      "page": "MIX",
+      "widget": "text 3",
+      "text": "Q-LINKS: WET, INPUT, OUTPUT",
+      "estimated_width": 453.6,
+      "available_width": 278.0,
+      "metric": "approximate 0.56em; not SDK-rendered"
+    },
+    {
+      "severity": "INFO",
+      "code": "UNREFERENCED_SKIN_FILES",
+      "files": [
+        "button_off.png",
+        "button_on.png",
+        "fader_h_bi.png",
+        "fader_h_uni.png",
+        "knob_bi.png",
+        "knob_small_bi.png",
+        "knob_small_uni.png",
+        "knob_uni.png",
+        "seg2_off.png",
+        "seg2_on.png",
+        "seg3_off.png",
+        "seg3_on.png",
+        "seg4_off.png",
+        "seg4_on.png"
+      ]
+    }
+  ],
+  "summary": {
+    "WARN": 8,
+    "INFO": 1
+  }
+}

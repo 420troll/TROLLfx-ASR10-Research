@@ -1,0 +1,35 @@
+{
+  "schema": "asr10-effect-dependent-navigation-feasibility-v1",
+  "candidate": {
+    "branch": "feature/asr10-force-dynamic-editor-v4",
+    "commit": "285123fe4d8759239edaa8663c69b10b6cbd9bb1",
+    "implementation_commit": "48ca618",
+    "sdk_commit": "4521c247a2deae30efb9e93d53fc8f9390c51e81",
+    "page_count": 15,
+    "page_names": ["BROWSE", "MIX", "01 EDIT", "02 EDIT", "03 EDIT", "04 EDIT", "05 EDIT", "06 EDIT", "07 EDIT", "08 EDIT", "28 EDIT", "39 EDIT", "41 EDIT", "42 EDIT", "49 EDIT"],
+    "force_editor_validation": "NOT_RUN"
+  },
+  "status_values": ["SUPPORTED", "UNSUPPORTED", "UNKNOWN"],
+  "capabilities": [
+    {"capability": "dynamic_tab_visibility_by_fx_slot", "status": "UNSUPPORTED", "scope": "inspected SDK TUI API", "evidence": ["gen_ui.py:332-347", "gen_ui.py:689-702", "TUI tabs have fixed names and function-key indices; conditional enabling applies to components"]},
+    {"capability": "automatic_navigation_to_selected_effect_edit_page", "status": "UNSUPPORTED", "scope": "inspected SDK plugin API", "evidence": ["plugin API has no tab-selection callback", "candidate parameterChanged does not navigate", "audioMasterUpdateDisplay is refresh only"]},
+    {"capability": "same_q_link_indices_dynamically_rebound_by_fx_slot", "status": "UNSUPPORTED", "scope": "inspected SDK Q-Link API", "evidence": ["gen_ui.py:705-721 emits static per-tab parameter indices"]},
+    {"capability": "effect_specific_static_q_link_map_per_page", "status": "SUPPORTED", "scope": "SDK generated TUI/Q-Link", "evidence": ["V4 HALL 01 EDIT: Q1-Q4 -> parameter indices 27-30", "V4 ROOM 03 EDIT: Q1-Q3 -> parameter indices 33-35", "independent static page test PASS"]},
+    {"capability": "dynamic_parameter_value_text", "status": "SUPPORTED", "scope": "SDK VST parameter display", "evidence": ["Plugin::formatValue", "effGetParamDisplay -> displayText"]},
+    {"capability": "dynamic_parameter_name_on_same_parameter_index", "status": "UNSUPPORTED", "scope": "stock SDK VST wrapper", "evidence": ["effGetParamName reads fixed Param.name"]},
+    {"capability": "generate_up_to_32_tabs", "status": "SUPPORTED", "scope": "SDK tooling", "evidence": ["gen_ui.py MAX_PAGES=32", "validate.py MAX_TABS=32"]},
+    {"capability": "physical_navigation_beyond_six_tabs", "status": "UNKNOWN", "scope": "original Akai Force", "evidence": ["generator explicitly marks tabs beyond six function keys untested", "no hardware test", "host_sim does not parse skin/navigation"]},
+    {"capability": "custom_vst_editor_in_stock_framework", "status": "UNSUPPORTED", "scope": "stock SDK dispatcher", "evidence": ["effEditGetRect/Open/Close/Idle return 0"]},
+    {"capability": "custom_editor_supported_by_force_host_outside_stock_framework", "status": "UNKNOWN", "scope": "MPC/Force host", "evidence": ["no inspected SDK or host-simulator evidence"]},
+    {"capability": "static_qlink_groups_of_four", "status": "SUPPORTED", "scope": "SDK generated skin", "evidence": ["SDK_COMPATIBILITY.md documents 16 Q-Links in groups of four", "fixed map per tab"]},
+    {"capability": "effect_aware_q_link_bank_reassignment_without_tab_change", "status": "UNSUPPORTED", "scope": "inspected SDK API", "evidence": ["no runtime Q-Link map callback", "generator emits static map and SubTab=1"]}
+  ],
+  "tests": {
+    "v4_static_hall_room_page_contract": "PASS",
+    "sdk_package_validation": "PASS: 15 tabs, 15 Q-Link maps, 0 errors, 0 warnings",
+    "sdk_host_sim_navigation": "NOT_AVAILABLE: simulator has no TUI parser or tab-navigation action",
+    "force_physical_navigation": "NOT_TESTED",
+    "candidate_playable": false
+  },
+  "recommendation": "Use static effect-specific pages and per-page Q-Link maps only if manual navigation to all 15 tabs is physically verified. Strict conditional visibility and automatic navigation require a supported host feature or separately validated custom editor."
+}
