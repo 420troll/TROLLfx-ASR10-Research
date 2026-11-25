@@ -1,0 +1,30 @@
+{
+  "schema": "asr10-qa-parameter-source-manifest-v1",
+  "sources": [
+    {
+      "file": "ASR10_FACTORY_PARAMETER_CATALOG_V1.json",
+      "commit": "ce4bfdaa6dba8b3787e013a3262bbdeb7ec4d3ab",
+      "sha256": "e65e7829a67076af74c584bf6718b37dfb2f9280b07b0efcef6995add099874b"
+    },
+    {
+      "file": "ASR10_FACTORY_PARAMETER_MAPPINGS_V02.json",
+      "commit": "ce4bfdaa6dba8b3787e013a3262bbdeb7ec4d3ab",
+      "sha256": "9dc708e0a91dcbc1ee21382d57a296a7588244b2c093fa461377453e98843688"
+    },
+    {
+      "file": "ASR10_FACTORY_PARAMETER_RECOVERY_V03.json",
+      "commit": "ce4bfdaa6dba8b3787e013a3262bbdeb7ec4d3ab",
+      "sha256": "4df389ecf904d4a7b91f54e0fcf293014fc832baf7e2118219e22bb0e198577f"
+    },
+    {
+      "file": "ASR10_FACTORY_DSP_PARAMETER_MAPPINGS_V05.json",
+      "commit": "ce4bfdaa6dba8b3787e013a3262bbdeb7ec4d3ab",
+      "sha256": "31fd75d16b187945ff9f267fc552343610786dea11b95512317e70323dd9ec27"
+    },
+    {
+      "file": "es5510_factory_editor_v04.hpp",
+      "commit": "28458b3a1fb8c1e12f5f1abbdb70772e40e129fa",
+      "sha256": "01eb7ab0040ef81a6ca129d637171759fbe6d1a53cfe64977db175fc6a56ded9"
+    }
+  ]
+}

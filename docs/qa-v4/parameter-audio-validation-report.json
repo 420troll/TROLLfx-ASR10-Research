@@ -1,0 +1,312 @@
+{
+  "schema": "asr10-independent-native-audio-parameter-validation-v1",
+  "test_source_commit": "ce4bfdaa6dba8b3787e013a3262bbdeb7ec4d3ab",
+  "source_mapping_commits": [
+    "ce4bfdaa6dba8b3787e013a3262bbdeb7ec4d3ab"
+  ],
+  "private_reference_assets_in_git": false,
+  "test_stimulus": "Existing comparator deterministic stereo 431 Hz / 997 Hz sustained sinusoids plus stereo impulse; 32,768-frame warmup and 65,536-frame measured tail.",
+  "results": [
+    {
+      "slot": 1,
+      "factory_effect": "HALL REVERB",
+      "parameter_id": "decay_time",
+      "evidence_source": "v2",
+      "tested_points": [
+        "40",
+        "41"
+      ],
+      "native_runtime": "FactoryRuntime 48 kHz, checkpoint + firmware schedule validated privately",
+      "frames_per_render": 65536,
+      "finite_stereo_samples_per_render": 131072,
+      "difference_rms": 0.000623683,
+      "difference_peak": 0.0017395,
+      "audio_change_observed": true,
+      "interpretation": "No measurable difference with this stimulus/window does not establish an ineffective parameter.",
+      "exact_factory_audio_match": "NOT_TESTED",
+      "private_wav_files": true
+    },
+    {
+      "slot": 1,
+      "factory_effect": "HALL REVERB",
+      "parameter_id": "hi_freq_damping",
+      "evidence_source": "v2",
+      "tested_points": [
+        "31",
+        "32"
+      ],
+      "native_runtime": "FactoryRuntime 48 kHz, checkpoint + firmware schedule validated privately",
+      "frames_per_render": 65536,
+      "finite_stereo_samples_per_render": 131072,
+      "difference_rms": 4.29466e-05,
+      "difference_peak": 0.000152588,
+      "audio_change_observed": true,
+      "interpretation": "No measurable difference with this stimulus/window does not establish an ineffective parameter.",
+      "exact_factory_audio_match": "NOT_TESTED",
+      "private_wav_files": true
+    },
+    {
+      "slot": 3,
+      "factory_effect": "ROOM REVERB",
+      "parameter_id": "decay_time",
+      "evidence_source": "v2",
+      "tested_points": [
+        "64",
+        "65"
+      ],
+      "native_runtime": "FactoryRuntime 48 kHz, checkpoint + firmware schedule validated privately",
+      "frames_per_render": 65536,
+      "finite_stereo_samples_per_render": 131072,
+      "difference_rms": 0.000252263,
+      "difference_peak": 0.000671387,
+      "audio_change_observed": true,
+      "interpretation": "No measurable difference with this stimulus/window does not establish an ineffective parameter.",
+      "exact_factory_audio_match": "NOT_TESTED",
+      "private_wav_files": true
+    },
+    {
+      "slot": 3,
+      "factory_effect": "ROOM REVERB",
+      "parameter_id": "diffusion",
+      "evidence_source": "v2",
+      "tested_points": [
+        "50",
+        "51"
+      ],
+      "native_runtime": "FactoryRuntime 48 kHz, checkpoint + firmware schedule validated privately",
+      "frames_per_render": 65536,
+      "finite_stereo_samples_per_render": 131072,
+      "difference_rms": 0.000850139,
+      "difference_peak": 0.0022583,
+      "audio_change_observed": true,
+      "interpretation": "No measurable difference with this stimulus/window does not establish an ineffective parameter.",
+      "exact_factory_audio_match": "NOT_TESTED",
+      "private_wav_files": true
+    },
+    {
+      "slot": 6,
+      "factory_effect": "CHORUS+REVRB",
+      "parameter_id": "chorus_rate",
+      "evidence_source": "v2",
+      "tested_points": [
+        "24",
+        "25"
+      ],
+      "native_runtime": "FactoryRuntime 48 kHz, checkpoint + firmware schedule validated privately",
+      "frames_per_render": 65536,
+      "finite_stereo_samples_per_render": 131072,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "No measurable difference with this stimulus/window does not establish an ineffective parameter.",
+      "exact_factory_audio_match": "NOT_TESTED",
+      "private_wav_files": true
+    },
+    {
+      "slot": 6,
+      "factory_effect": "CHORUS+REVRB",
+      "parameter_id": "chorus_rate_amount",
+      "evidence_source": "v5",
+      "tested_points": [
+        "39",
+        "40"
+      ],
+      "native_runtime": "FactoryRuntime 48 kHz, checkpoint + firmware schedule validated privately",
+      "frames_per_render": 65536,
+      "finite_stereo_samples_per_render": 131072,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "No measurable difference with this stimulus/window does not establish an ineffective parameter.",
+      "exact_factory_audio_match": "NOT_TESTED",
+      "private_wav_files": true
+    },
+    {
+      "slot": 8,
+      "factory_effect": "FLANGER+REV",
+      "parameter_id": "flange_rate",
+      "evidence_source": "v3",
+      "tested_points": [
+        "20",
+        "21"
+      ],
+      "native_runtime": "FactoryRuntime 48 kHz, checkpoint + firmware schedule validated privately",
+      "frames_per_render": 65536,
+      "finite_stereo_samples_per_render": 131072,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "No measurable difference with this stimulus/window does not establish an ineffective parameter.",
+      "exact_factory_audio_match": "NOT_TESTED",
+      "private_wav_files": true
+    },
+    {
+      "slot": 8,
+      "factory_effect": "FLANGER+REV",
+      "parameter_id": "flange_depth",
+      "evidence_source": "v5",
+      "tested_points": [
+        "99",
+        "98"
+      ],
+      "native_runtime": "FactoryRuntime 48 kHz, checkpoint + firmware schedule validated privately",
+      "frames_per_render": 65536,
+      "finite_stereo_samples_per_render": 131072,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "No measurable difference with this stimulus/window does not establish an ineffective parameter.",
+      "exact_factory_audio_match": "NOT_TESTED",
+      "private_wav_files": true
+    },
+    {
+      "slot": 4,
+      "factory_effect": "DUAL DELAYS",
+      "parameter_id": "dual_bs1_time_r",
+      "evidence_source": "v5",
+      "tested_points": [
+        "700",
+        "701"
+      ],
+      "native_runtime": "FactoryRuntime 48 kHz, checkpoint + firmware schedule validated privately",
+      "frames_per_render": 65536,
+      "finite_stereo_samples_per_render": 131072,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "No measurable difference with this stimulus/window does not establish an ineffective parameter.",
+      "exact_factory_audio_match": "NOT_TESTED",
+      "private_wav_files": true
+    },
+    {
+      "slot": 4,
+      "factory_effect": "DUAL DELAYS",
+      "parameter_id": "dual_bus2_feedback",
+      "evidence_source": "v5",
+      "tested_points": [
+        "25",
+        "26"
+      ],
+      "native_runtime": "FactoryRuntime 48 kHz, checkpoint + firmware schedule validated privately",
+      "frames_per_render": 65536,
+      "finite_stereo_samples_per_render": 131072,
+      "difference_rms": 0.000572237,
+      "difference_peak": 0.00106812,
+      "audio_change_observed": true,
+      "interpretation": "No measurable difference with this stimulus/window does not establish an ineffective parameter.",
+      "exact_factory_audio_match": "NOT_TESTED",
+      "private_wav_files": true
+    }
+  ],
+  "extended_stimulus_results": [
+    {
+      "slot": 6,
+      "parameter_id": "chorus_rate",
+      "stimulus": "noise",
+      "frames_per_render": 262144,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "Longer deterministic stimulus; zero difference remains inconclusive."
+    },
+    {
+      "slot": 6,
+      "parameter_id": "chorus_rate",
+      "stimulus": "sweep",
+      "frames_per_render": 262144,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "Longer deterministic stimulus; zero difference remains inconclusive."
+    },
+    {
+      "slot": 6,
+      "parameter_id": "chorus_rate_amount",
+      "stimulus": "noise",
+      "frames_per_render": 262144,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "Longer deterministic stimulus; zero difference remains inconclusive."
+    },
+    {
+      "slot": 6,
+      "parameter_id": "chorus_rate_amount",
+      "stimulus": "sweep",
+      "frames_per_render": 262144,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "Longer deterministic stimulus; zero difference remains inconclusive."
+    },
+    {
+      "slot": 8,
+      "parameter_id": "flange_rate",
+      "stimulus": "noise",
+      "frames_per_render": 262144,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "Longer deterministic stimulus; zero difference remains inconclusive."
+    },
+    {
+      "slot": 8,
+      "parameter_id": "flange_rate",
+      "stimulus": "sweep",
+      "frames_per_render": 262144,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "Longer deterministic stimulus; zero difference remains inconclusive."
+    },
+    {
+      "slot": 8,
+      "parameter_id": "flange_depth",
+      "stimulus": "noise",
+      "frames_per_render": 262144,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "Longer deterministic stimulus; zero difference remains inconclusive."
+    },
+    {
+      "slot": 8,
+      "parameter_id": "flange_depth",
+      "stimulus": "sweep",
+      "frames_per_render": 262144,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "Longer deterministic stimulus; zero difference remains inconclusive."
+    },
+    {
+      "slot": 4,
+      "parameter_id": "dual_bs1_time_r",
+      "stimulus": "noise",
+      "frames_per_render": 262144,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "Longer deterministic stimulus; zero difference remains inconclusive."
+    },
+    {
+      "slot": 4,
+      "parameter_id": "dual_bs1_time_r",
+      "stimulus": "sweep",
+      "frames_per_render": 262144,
+      "difference_rms": 0.0,
+      "difference_peak": 0.0,
+      "audio_change_observed": false,
+      "interpretation": "Longer deterministic stimulus; zero difference remains inconclusive."
+    }
+  ],
+  "summary": {
+    "pairs_tested": 10,
+    "audio_changes_observed": 5,
+    "no_difference_in_this_window": 5,
+    "extended_stimulus_pairs": 10,
+    "extended_changes_observed": 0,
+    "exact_factory_matches": 0,
+    "private_wav_directory": "user-local; not included in this report or Git"
+  }
+}

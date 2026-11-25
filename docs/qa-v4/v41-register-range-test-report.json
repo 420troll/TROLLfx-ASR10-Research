@@ -1,0 +1,1216 @@
+{
+  "schema": "asr10-v41-vst-parameter-range-independent-test-v1",
+  "test_binary_sha256": "c939ef84865a754c381bb2f290db031ecebc02fe62541b9d6dc50b22cc5d38de",
+  "test_host": "native VST2 VSTPluginMain/dispatcher/setParameter/processReplacing with trace-enabled same-source test build",
+  "factory_packages": "local private package provider; no contents included",
+  "route_count": 19,
+  "point_tests": [
+    {
+      "slot": 1,
+      "effect": "01 HALL REVERB",
+      "control_id": "decay_time",
+      "canonical_vst_index": 29,
+      "dynamic_router_vst_index": 48,
+      "physical_equivalent_q_link": 3,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "40",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "41",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "41",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "40",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "41",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 1,
+      "effect": "01 HALL REVERB",
+      "control_id": "hi_freq_damping",
+      "canonical_vst_index": 30,
+      "dynamic_router_vst_index": 49,
+      "physical_equivalent_q_link": 4,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "31",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "32",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "32",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "31",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "32",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 1,
+      "effect": "01 HALL REVERB",
+      "control_id": "reverb_mix_bus1",
+      "canonical_vst_index": 27,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "28",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "29",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "29",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "28",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "29",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 1,
+      "effect": "01 HALL REVERB",
+      "control_id": "reverb_mix_bus2",
+      "canonical_vst_index": 28,
+      "dynamic_router_vst_index": 47,
+      "physical_equivalent_q_link": 2,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "28",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "29",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "29",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "28",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "29",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 2,
+      "effect": "02 44KHZ REVERB",
+      "control_id": "reverb_mix_bus1",
+      "canonical_vst_index": 31,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "25",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "26",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "26",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "25",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "26",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 2,
+      "effect": "02 44KHZ REVERB",
+      "control_id": "reverb_mix_bus2",
+      "canonical_vst_index": 32,
+      "dynamic_router_vst_index": 47,
+      "physical_equivalent_q_link": 2,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "25",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "26",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "26",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "25",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "26",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 3,
+      "effect": "03 ROOM REVERB",
+      "control_id": "decay_time",
+      "canonical_vst_index": 33,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "64",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "65",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "65",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "64",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "65",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 3,
+      "effect": "03 ROOM REVERB",
+      "control_id": "diffusion",
+      "canonical_vst_index": 34,
+      "dynamic_router_vst_index": 47,
+      "physical_equivalent_q_link": 2,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "50",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "51",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "51",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "50",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "51",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 3,
+      "effect": "03 ROOM REVERB",
+      "control_id": "hi_freq_damping",
+      "canonical_vst_index": 35,
+      "dynamic_router_vst_index": 48,
+      "physical_equivalent_q_link": 3,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "9",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "10",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "10",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "9",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "10",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 4,
+      "effect": "04 DUAL DELAYS",
+      "control_id": "delay_time_l",
+      "canonical_vst_index": 36,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "350",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "351",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "351",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "350",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "351",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 5,
+      "effect": "05 44KHZ DELAYS",
+      "control_id": "delay_time_l",
+      "canonical_vst_index": 37,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "350",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "351",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "351",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "350",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "351",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 6,
+      "effect": "06 CHORUS+REVRB",
+      "control_id": "chorus_rate",
+      "canonical_vst_index": 38,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "24",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "25",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "25",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "24",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "25",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 7,
+      "effect": "07 PHASER+REVRB",
+      "control_id": "phase_rate",
+      "canonical_vst_index": 39,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "20",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "21",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "21",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "20",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "21",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 8,
+      "effect": "08 FLANGER+REV",
+      "control_id": "flange_rate",
+      "canonical_vst_index": 40,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "20",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "21",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "21",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "20",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "21",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 28,
+      "effect": "28 GUITAR AMP1",
+      "control_id": "preamp_gain",
+      "canonical_vst_index": 41,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "+12",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "+13",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "+13",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "+12",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "+13",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 39,
+      "effect": "39 PITCH SHIFT",
+      "control_id": "quality",
+      "canonical_vst_index": 42,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "LONG/SMOOTHER",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "SHORT/COARSER",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "SHORT/COARSER",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "LONG/SMOOTHER",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "SHORT/COARSER",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 41,
+      "effect": "41 FAST PITCHSH",
+      "control_id": "voice1_fine",
+      "canonical_vst_index": 43,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "-11",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "-10",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "-10",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "-11",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "-10",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 42,
+      "effect": "42 EQ+CMPRESSOR",
+      "control_id": "comp_ratio",
+      "canonical_vst_index": 44,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "4/1",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "5/1",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "5/1",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "4/1",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "5/1",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    },
+    {
+      "slot": 49,
+      "effect": "49 PARAM EQ",
+      "control_id": "bass_fc",
+      "canonical_vst_index": 45,
+      "dynamic_router_vst_index": 46,
+      "physical_equivalent_q_link": 1,
+      "full_range_tested": false,
+      "tested_cases": [
+        {
+          "case": "minimum",
+          "expected_discrete_point": 0,
+          "resolved_label": "100",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "maximum",
+          "expected_discrete_point": 1,
+          "resolved_label": "101",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "midpoint",
+          "expected_discrete_point": 1,
+          "resolved_label": "101",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_low",
+          "expected_discrete_point": 0,
+          "resolved_label": "100",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "clamp_high",
+          "expected_discrete_point": 1,
+          "resolved_label": "101",
+          "exact_ordered_register_write_match": true,
+          "display_label_matches_point": true
+        },
+        {
+          "case": "repeat_maximum",
+          "exact_ordered_register_write_match": true
+        }
+      ],
+      "note": "Endpoints are the only supported factory-evidenced points. Midpoint rounds to the nearest of these discrete points; it does not imply full-range interpolation."
+    }
+  ],
+  "selection_tests": [
+    {
+      "slot": 1,
+      "package_ready": true
+    },
+    {
+      "slot": 2,
+      "package_ready": true
+    },
+    {
+      "slot": 3,
+      "package_ready": true
+    },
+    {
+      "slot": 4,
+      "package_ready": true
+    },
+    {
+      "slot": 5,
+      "package_ready": true
+    },
+    {
+      "slot": 6,
+      "package_ready": true
+    },
+    {
+      "slot": 7,
+      "package_ready": true
+    },
+    {
+      "slot": 8,
+      "package_ready": true
+    },
+    {
+      "slot": 9,
+      "package_ready": true
+    },
+    {
+      "slot": 10,
+      "package_ready": true
+    },
+    {
+      "slot": 11,
+      "package_ready": true
+    },
+    {
+      "slot": 12,
+      "package_ready": true
+    },
+    {
+      "slot": 13,
+      "package_ready": true
+    },
+    {
+      "slot": 14,
+      "package_ready": true
+    },
+    {
+      "slot": 15,
+      "package_ready": true
+    },
+    {
+      "slot": 16,
+      "package_ready": true
+    },
+    {
+      "slot": 17,
+      "package_ready": true
+    },
+    {
+      "slot": 18,
+      "package_ready": true
+    },
+    {
+      "slot": 19,
+      "package_ready": true
+    },
+    {
+      "slot": 20,
+      "package_ready": true
+    },
+    {
+      "slot": 21,
+      "package_ready": true
+    },
+    {
+      "slot": 22,
+      "package_ready": true
+    },
+    {
+      "slot": 23,
+      "package_ready": true
+    },
+    {
+      "slot": 24,
+      "package_ready": true
+    },
+    {
+      "slot": 25,
+      "package_ready": true
+    },
+    {
+      "slot": 26,
+      "package_ready": true
+    },
+    {
+      "slot": 27,
+      "package_ready": true
+    },
+    {
+      "slot": 28,
+      "package_ready": true
+    },
+    {
+      "slot": 29,
+      "package_ready": true
+    },
+    {
+      "slot": 30,
+      "package_ready": true
+    },
+    {
+      "slot": 31,
+      "package_ready": true
+    },
+    {
+      "slot": 32,
+      "package_ready": true
+    },
+    {
+      "slot": 33,
+      "package_ready": true
+    },
+    {
+      "slot": 34,
+      "package_ready": true
+    },
+    {
+      "slot": 35,
+      "package_ready": true
+    },
+    {
+      "slot": 36,
+      "package_ready": true
+    },
+    {
+      "slot": 37,
+      "package_ready": true
+    },
+    {
+      "slot": 38,
+      "package_ready": true
+    },
+    {
+      "slot": 39,
+      "package_ready": true
+    },
+    {
+      "slot": 40,
+      "package_ready": true
+    },
+    {
+      "slot": 41,
+      "package_ready": true
+    },
+    {
+      "slot": 42,
+      "package_ready": true
+    },
+    {
+      "slot": 43,
+      "package_ready": true
+    },
+    {
+      "slot": 44,
+      "package_ready": true
+    },
+    {
+      "slot": 45,
+      "package_ready": true
+    },
+    {
+      "slot": 46,
+      "package_ready": true
+    },
+    {
+      "slot": 47,
+      "package_ready": true
+    },
+    {
+      "slot": 48,
+      "package_ready": true
+    },
+    {
+      "slot": 49,
+      "package_ready": true
+    },
+    {
+      "slot": 50,
+      "package_ready": true
+    },
+    {
+      "slot": 1,
+      "package_ready": true,
+      "sequence": "HALL_ROOM_PITCH_HALL"
+    },
+    {
+      "slot": 3,
+      "package_ready": true,
+      "sequence": "HALL_ROOM_PITCH_HALL"
+    },
+    {
+      "slot": 39,
+      "package_ready": true,
+      "sequence": "HALL_ROOM_PITCH_HALL"
+    },
+    {
+      "slot": 1,
+      "package_ready": true,
+      "sequence": "HALL_ROOM_PITCH_HALL"
+    }
+  ],
+  "all_50_selection_requested": true,
+  "failed": [],
+  "physical_force": "NOT_TESTED",
+  "state_round_trip": {
+    "effect_slot": 1,
+    "canonical_decay_vst_value": 1.0,
+    "expected_canonical_value": 1.0,
+    "passed": true
+  },
+  "unmapped_control_test": {
+    "slot": 10,
+    "display": "NO VERIFIED CONTROL",
+    "passed": true
+  },
+  "tested_routes": 19,
+  "result": "PASS"
+}

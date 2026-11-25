@@ -1,0 +1,1900 @@
+{
+  "schema": "trollfx-asr10-factory-dsp-parameter-mappings-v05",
+  "source_inventory": "ASR10_FACTORY_EFFECT_EDITOR_INVENTORY_V04.json",
+  "slot_02": "DEFERRED",
+  "policy": "Only exact repeated adjacent points are included; documented ranges remain metadata and do not authorize interpolation.",
+  "controls": [
+    {
+      "slot": 1,
+      "factory_name": "HALL REVERB",
+      "variation": 1,
+      "parameter_id": "low_freq_decay",
+      "display_name": "LOW FREQ DECAY",
+      "editor_order": 5,
+      "documented_label": "LOW FREQ DECAY",
+      "documented_range": "-99 to +99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "LOW FREQ DECAY=+6     ",
+      "observed_lcd_after": "LOW FREQ DECAY=+7     ",
+      "verified_points": [
+        {
+          "value": 6,
+          "text": "+6",
+          "ordered_writes": [
+            {
+              "gpr": "0x5B",
+              "value24": "0x080034"
+            }
+          ]
+        },
+        {
+          "value": 7,
+          "text": "+7",
+          "ordered_writes": [
+            {
+              "gpr": "0x5B",
+              "value24": "0x090034"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-01-var1-low-freq-decay-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.142952",
+        "rms_after": "0.142991",
+        "difference_rms": "0.000368675",
+        "difference_peak": "0.000946045",
+        "peak_before": "0.274445",
+        "peak_after": "0.274445"
+      }
+    },
+    {
+      "slot": 1,
+      "factory_name": "HALL REVERB",
+      "variation": 1,
+      "parameter_id": "diffusion",
+      "display_name": "DIFFUSION",
+      "editor_order": 6,
+      "documented_label": "DIFFUSION",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "DIFFUSION=78          ",
+      "observed_lcd_after": "DIFFUSION=79          ",
+      "verified_points": [
+        {
+          "value": 78,
+          "text": "78",
+          "ordered_writes": [
+            {
+              "gpr": "0x07",
+              "value24": "0x640000"
+            },
+            {
+              "gpr": "0x09",
+              "value24": "0x9c0000"
+            },
+            {
+              "gpr": "0x0A",
+              "value24": "0x31dfff"
+            },
+            {
+              "gpr": "0x0B",
+              "value24": "0x4fb000"
+            },
+            {
+              "gpr": "0x0C",
+              "value24": "0xb05000"
+            },
+            {
+              "gpr": "0x14",
+              "value24": "0x4e63cd"
+            }
+          ]
+        },
+        {
+          "value": 79,
+          "text": "79",
+          "ordered_writes": [
+            {
+              "gpr": "0x07",
+              "value24": "0x650000"
+            },
+            {
+              "gpr": "0x09",
+              "value24": "0x9b0000"
+            },
+            {
+              "gpr": "0x0A",
+              "value24": "0x304dff"
+            },
+            {
+              "gpr": "0x0B",
+              "value24": "0x507c00"
+            },
+            {
+              "gpr": "0x0C",
+              "value24": "0xaf8400"
+            },
+            {
+              "gpr": "0x14",
+              "value24": "0x4d6487"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-01-var1-diffusion-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.142952",
+        "rms_after": "0.142859",
+        "difference_rms": "0.000902286",
+        "difference_peak": "0.00241089",
+        "peak_before": "0.274445",
+        "peak_after": "0.274445"
+      }
+    },
+    {
+      "slot": 1,
+      "factory_name": "HALL REVERB",
+      "variation": 1,
+      "parameter_id": "detune_rate",
+      "display_name": "DETUNE RATE",
+      "editor_order": 9,
+      "documented_label": "DETUNE RATE",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "DETUNE RATE=26 AMT=9  ",
+      "observed_lcd_after": "DETUNE RATE=27 AMT=9  ",
+      "verified_points": [
+        {
+          "value": 26,
+          "text": "26",
+          "ordered_writes": [
+            {
+              "gpr": "0x6A",
+              "value24": "0x000873"
+            }
+          ]
+        },
+        {
+          "value": 27,
+          "text": "27",
+          "ordered_writes": [
+            {
+              "gpr": "0x6A",
+              "value24": "0x000937"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-01-var1-detune-rate-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.142952",
+        "rms_after": "0.14302",
+        "difference_rms": "0.00371755",
+        "difference_peak": "0.0149231",
+        "peak_before": "0.274445",
+        "peak_after": "0.274445"
+      }
+    },
+    {
+      "slot": 1,
+      "factory_name": "HALL REVERB",
+      "variation": 1,
+      "parameter_id": "detune_amount",
+      "display_name": "DETUNE AMT",
+      "editor_order": 10,
+      "documented_label": "DETUNE AMT",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "DETUNE RATE=26 AMT=9  ",
+      "observed_lcd_after": "DETUNE RATE=26 AMT=10 ",
+      "verified_points": [
+        {
+          "value": 9,
+          "text": "9",
+          "ordered_writes": [
+            {
+              "gpr": "0x68",
+              "value24": "0x000600"
+            }
+          ]
+        },
+        {
+          "value": 10,
+          "text": "10",
+          "ordered_writes": [
+            {
+              "gpr": "0x68",
+              "value24": "0x000680"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-01-var1-detune-amt-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.142952",
+        "rms_after": "0.142885",
+        "difference_rms": "0.000451023",
+        "difference_peak": "0.00149536",
+        "peak_before": "0.274445",
+        "peak_after": "0.274445"
+      }
+    },
+    {
+      "slot": 1,
+      "factory_name": "HALL REVERB",
+      "variation": 1,
+      "parameter_id": "pre_delay_time",
+      "display_name": "PRE-DELAY TIME",
+      "editor_order": 11,
+      "documented_label": "PRE-DELAY TIME",
+      "documented_range": "0 to 500",
+      "units": "ms",
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "PRE-DELAY TIME=30     ",
+      "observed_lcd_after": "PRE-DELAY TIME=31     ",
+      "verified_points": [
+        {
+          "value": 30,
+          "text": "30",
+          "ordered_writes": [
+            {
+              "gpr": "0x01",
+              "value24": "0x4dec00"
+            },
+            {
+              "gpr": "0x08",
+              "value24": "0x888600"
+            }
+          ]
+        },
+        {
+          "value": 31,
+          "text": "31",
+          "ordered_writes": [
+            {
+              "gpr": "0x01",
+              "value24": "0x4e0a00"
+            },
+            {
+              "gpr": "0x08",
+              "value24": "0x88a400"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-01-var1-pre-delay-time-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.142952",
+        "rms_after": "0.146323",
+        "difference_rms": "0.0745556",
+        "difference_peak": "0.165222",
+        "peak_before": "0.274445",
+        "peak_after": "0.279694"
+      }
+    },
+    {
+      "slot": 3,
+      "factory_name": "ROOM REVERB",
+      "variation": 1,
+      "parameter_id": "low_freq_decay",
+      "display_name": "LOW FREQ DECAY",
+      "editor_order": 5,
+      "documented_label": "LOW FREQ DECAY",
+      "documented_range": "-99 to +99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "LOW FREQ DECAY=+6     ",
+      "observed_lcd_after": "LOW FREQ DECAY=+7     ",
+      "verified_points": [
+        {
+          "value": 6,
+          "text": "+6",
+          "ordered_writes": [
+            {
+              "gpr": "0x5B",
+              "value24": "0x080000"
+            }
+          ]
+        },
+        {
+          "value": 7,
+          "text": "+7",
+          "ordered_writes": [
+            {
+              "gpr": "0x5B",
+              "value24": "0x090000"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-03-var1-low-freq-decay-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.15458",
+        "rms_after": "0.154606",
+        "difference_rms": "0.000201618",
+        "difference_peak": "0.000549316",
+        "peak_before": "0.29541",
+        "peak_after": "0.295624"
+      }
+    },
+    {
+      "slot": 3,
+      "factory_name": "ROOM REVERB",
+      "variation": 1,
+      "parameter_id": "hi_freq_bandwidth",
+      "display_name": "HI FREQ BANDWIDTH",
+      "editor_order": 8,
+      "documented_label": "HI FREQ BANDWIDTH",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "HI FREQ BANDWIDTH=84  ",
+      "observed_lcd_after": "HI FREQ BANDWIDTH=85  ",
+      "verified_points": [
+        {
+          "value": 84,
+          "text": "84",
+          "ordered_writes": [
+            {
+              "gpr": "0x02",
+              "value24": "0x6c0000"
+            },
+            {
+              "gpr": "0x00",
+              "value24": "0x13ffff"
+            }
+          ]
+        },
+        {
+          "value": 85,
+          "text": "85",
+          "ordered_writes": [
+            {
+              "gpr": "0x02",
+              "value24": "0x6d0000"
+            },
+            {
+              "gpr": "0x00",
+              "value24": "0x12ffff"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-03-var1-hi-freq-bandwidth-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.15458",
+        "rms_after": "0.154556",
+        "difference_rms": "6.04224e-05",
+        "difference_peak": "0.000183105",
+        "peak_before": "0.29541",
+        "peak_after": "0.29541"
+      }
+    },
+    {
+      "slot": 3,
+      "factory_name": "ROOM REVERB",
+      "variation": 1,
+      "parameter_id": "detune_rate",
+      "display_name": "DETUNE RATE",
+      "editor_order": 9,
+      "documented_label": "DETUNE RATE",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "DETUNE RATE=26 AMT=8  ",
+      "observed_lcd_after": "DETUNE RATE=27 AMT=8  ",
+      "verified_points": [
+        {
+          "value": 26,
+          "text": "26",
+          "ordered_writes": [
+            {
+              "gpr": "0x6A",
+              "value24": "0x000873"
+            }
+          ]
+        },
+        {
+          "value": 27,
+          "text": "27",
+          "ordered_writes": [
+            {
+              "gpr": "0x6A",
+              "value24": "0x000937"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-03-var1-detune-rate-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.15458",
+        "rms_after": "0.15502",
+        "difference_rms": "0.0152123",
+        "difference_peak": "0.0569763",
+        "peak_before": "0.29541",
+        "peak_after": "0.295349"
+      }
+    },
+    {
+      "slot": 3,
+      "factory_name": "ROOM REVERB",
+      "variation": 1,
+      "parameter_id": "detune_amount",
+      "display_name": "DETUNE AMT",
+      "editor_order": 10,
+      "documented_label": "DETUNE AMT",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "DETUNE RATE=26 AMT=8  ",
+      "observed_lcd_after": "DETUNE RATE=26 AMT=9  ",
+      "verified_points": [
+        {
+          "value": 8,
+          "text": "8",
+          "ordered_writes": [
+            {
+              "gpr": "0x68",
+              "value24": "0x000580"
+            }
+          ]
+        },
+        {
+          "value": 9,
+          "text": "9",
+          "ordered_writes": [
+            {
+              "gpr": "0x68",
+              "value24": "0x000600"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-03-var1-detune-amt-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.15458",
+        "rms_after": "0.154932",
+        "difference_rms": "0.00171341",
+        "difference_peak": "0.00592041",
+        "peak_before": "0.29541",
+        "peak_after": "0.294861"
+      }
+    },
+    {
+      "slot": 3,
+      "factory_name": "ROOM REVERB",
+      "variation": 1,
+      "parameter_id": "pre_delay_time",
+      "display_name": "PRE-DELAY TIME",
+      "editor_order": 11,
+      "documented_label": "PRE-DELAY TIME",
+      "documented_range": "0 to 500",
+      "units": "ms",
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "PRE-DELAY TIME=1      ",
+      "observed_lcd_after": "PRE-DELAY TIME=2      ",
+      "verified_points": [
+        {
+          "value": 1,
+          "text": "1",
+          "ordered_writes": [
+            {
+              "gpr": "0x01",
+              "value24": "0x164300"
+            },
+            {
+              "gpr": "0x08",
+              "value24": "0x50dd00"
+            }
+          ]
+        },
+        {
+          "value": 2,
+          "text": "2",
+          "ordered_writes": [
+            {
+              "gpr": "0x01",
+              "value24": "0x166100"
+            },
+            {
+              "gpr": "0x08",
+              "value24": "0x50fb00"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-03-var1-pre-delay-time-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.15458",
+        "rms_after": "0.126255",
+        "difference_rms": "0.0853733",
+        "difference_peak": "0.229279",
+        "peak_before": "0.29541",
+        "peak_after": "0.305359"
+      }
+    },
+    {
+      "slot": 4,
+      "factory_name": "DUAL DELAYS",
+      "variation": 1,
+      "parameter_id": "dual_bs1_time_r",
+      "display_name": "BS1 TIME R",
+      "editor_order": 4,
+      "documented_label": "DELAY TIME",
+      "documented_range": "0 to 2000 ms",
+      "units": "ms",
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "BS1 TIME L=350  R=700 ",
+      "observed_lcd_after": "BS1 TIME L=350  R=701 ",
+      "verified_points": [
+        {
+          "value": 700,
+          "text": "700",
+          "ordered_writes": [
+            {
+              "gpr": "0x0C",
+              "value24": "0x520900"
+            }
+          ]
+        },
+        {
+          "value": 701,
+          "text": "701",
+          "ordered_writes": [
+            {
+              "gpr": "0x0C",
+              "value24": "0x522700"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-04-var1-bs1-time-r-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "NO_DIFFERENCE_WITH_1_36S_STIMULUS",
+      "runtime_ready": false,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.105115",
+        "rms_after": "0.105115",
+        "difference_rms": "0",
+        "difference_peak": "0",
+        "peak_before": "0.216827",
+        "peak_after": "0.216827"
+      }
+    },
+    {
+      "slot": 4,
+      "factory_name": "DUAL DELAYS",
+      "variation": 1,
+      "parameter_id": "dual_bus2_feedback",
+      "display_name": "BUS2 FEEDBACK",
+      "editor_order": 6,
+      "documented_label": "BUS1 (and 2) FEEDBACK",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "BUS2 FEEDBACK=25      ",
+      "observed_lcd_after": "BUS2 FEEDBACK=26      ",
+      "verified_points": [
+        {
+          "value": 25,
+          "text": "25",
+          "ordered_writes": [
+            {
+              "gpr": "0x07",
+              "value24": "0xdfdfe0"
+            }
+          ]
+        },
+        {
+          "value": 26,
+          "text": "26",
+          "ordered_writes": [
+            {
+              "gpr": "0x07",
+              "value24": "0xdededf"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-04-var1-bus2-feedback-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.105115",
+        "rms_after": "0.105119",
+        "difference_rms": "0.000572237",
+        "difference_peak": "0.00106812",
+        "peak_before": "0.216827",
+        "peak_after": "0.217865"
+      }
+    },
+    {
+      "slot": 4,
+      "factory_name": "DUAL DELAYS",
+      "variation": 1,
+      "parameter_id": "dual_bs2_time_l",
+      "display_name": "BS2 TIME L",
+      "editor_order": 7,
+      "documented_label": "DELAY TIME",
+      "documented_range": "0 to 2000 ms",
+      "units": "ms",
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "BS2 TIME L=50   R=60  ",
+      "observed_lcd_after": "BS2 TIME L=51   R=60  ",
+      "verified_points": [
+        {
+          "value": 50,
+          "text": "50",
+          "ordered_writes": [
+            {
+              "gpr": "0x0F",
+              "value24": "0xf03e00"
+            }
+          ]
+        },
+        {
+          "value": 51,
+          "text": "51",
+          "ordered_writes": [
+            {
+              "gpr": "0x0F",
+              "value24": "0xf05c00"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-04-var1-bs2-time-l-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.105115",
+        "rms_after": "0.132059",
+        "difference_rms": "0.0659331",
+        "difference_peak": "0.18689",
+        "peak_before": "0.216827",
+        "peak_after": "0.271332"
+      }
+    },
+    {
+      "slot": 6,
+      "factory_name": "CHORUS+REVRB",
+      "variation": 1,
+      "parameter_id": "reverb_decay_time",
+      "display_name": "REVERB DECAY TIME",
+      "editor_order": 3,
+      "documented_label": null,
+      "documented_range": null,
+      "units": null,
+      "range_status": "NOT_FOUND_IN_V1_MANUAL_CATALOG",
+      "observed_lcd_before": "REVERB DECAY TIME =24 ",
+      "observed_lcd_after": "REVERB DECAY TIME =25 ",
+      "verified_points": [
+        {
+          "value": 24,
+          "text": "24",
+          "ordered_writes": [
+            {
+              "gpr": "0x6E",
+              "value24": "0x1f0000"
+            },
+            {
+              "gpr": "0x6C",
+              "value24": "0x07001f"
+            },
+            {
+              "gpr": "0x71",
+              "value24": "0x1f0000"
+            },
+            {
+              "gpr": "0x72",
+              "value24": "0xe10000"
+            },
+            {
+              "gpr": "0x73",
+              "value24": "0x787dff"
+            }
+          ]
+        },
+        {
+          "value": 25,
+          "text": "25",
+          "ordered_writes": [
+            {
+              "gpr": "0x6E",
+              "value24": "0x200000"
+            },
+            {
+              "gpr": "0x6C",
+              "value24": "0x070020"
+            },
+            {
+              "gpr": "0x71",
+              "value24": "0x200000"
+            },
+            {
+              "gpr": "0x72",
+              "value24": "0xe00000"
+            },
+            {
+              "gpr": "0x73",
+              "value24": "0x77ffff"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-06-var1-reverb-decay-time-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.129254",
+        "rms_after": "0.129177",
+        "difference_rms": "0.000155013",
+        "difference_peak": "0.000427246",
+        "peak_before": "0.224182",
+        "peak_after": "0.223999"
+      }
+    },
+    {
+      "slot": 6,
+      "factory_name": "CHORUS+REVRB",
+      "variation": 1,
+      "parameter_id": "diffusion",
+      "display_name": "DIFFUSION",
+      "editor_order": 5,
+      "documented_label": null,
+      "documented_range": null,
+      "units": null,
+      "range_status": "NOT_FOUND_IN_V1_MANUAL_CATALOG",
+      "observed_lcd_before": "DIFFUSION=50          ",
+      "observed_lcd_after": "DIFFUSION=51          ",
+      "verified_points": [
+        {
+          "value": 50,
+          "text": "50",
+          "ordered_writes": [
+            {
+              "gpr": "0x5A",
+              "value24": "0x400000"
+            },
+            {
+              "gpr": "0x5B",
+              "value24": "0xc00000"
+            },
+            {
+              "gpr": "0x5C",
+              "value24": "0x5fffff"
+            }
+          ]
+        },
+        {
+          "value": 51,
+          "text": "51",
+          "ordered_writes": [
+            {
+              "gpr": "0x5A",
+              "value24": "0x410000"
+            },
+            {
+              "gpr": "0x5B",
+              "value24": "0xbf0000"
+            },
+            {
+              "gpr": "0x5C",
+              "value24": "0x5efdff"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-06-var1-diffusion-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.129254",
+        "rms_after": "0.129343",
+        "difference_rms": "0.000256731",
+        "difference_peak": "0.00088501",
+        "peak_before": "0.224182",
+        "peak_after": "0.224365"
+      }
+    },
+    {
+      "slot": 6,
+      "factory_name": "CHORUS+REVRB",
+      "variation": 1,
+      "parameter_id": "bus1_rev_after_chor",
+      "display_name": "BUS1 REV AFTER CHOR",
+      "editor_order": 1,
+      "documented_label": "BUS1 REV AFTER CHOR",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "BUS1 REV AFTER CHOR=25",
+      "observed_lcd_after": "BUS1 REV AFTER CHOR=26",
+      "verified_points": [
+        {
+          "value": 25,
+          "text": "25",
+          "ordered_writes": [
+            {
+              "gpr": "0x7C",
+              "value24": "0x350000"
+            }
+          ]
+        },
+        {
+          "value": 26,
+          "text": "26",
+          "ordered_writes": [
+            {
+              "gpr": "0x7C",
+              "value24": "0x370000"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-06-var1-bus1-rev-after-chor-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "NO_DIFFERENCE_WITH_1_36S_STIMULUS",
+      "runtime_ready": false,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.129254",
+        "rms_after": "0.129254",
+        "difference_rms": "0",
+        "difference_peak": "0",
+        "peak_before": "0.224182",
+        "peak_after": "0.224182"
+      }
+    },
+    {
+      "slot": 6,
+      "factory_name": "CHORUS+REVRB",
+      "variation": 1,
+      "parameter_id": "chorus_feedback",
+      "display_name": "CHORUS FEEDBACK",
+      "editor_order": 14,
+      "documented_label": "CHORUS FEEDBACK",
+      "documented_range": "-99 to +99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "CHORUS FEEDBACK=+9    ",
+      "observed_lcd_after": "CHORUS FEEDBACK=+10   ",
+      "verified_points": [
+        {
+          "value": 9,
+          "text": "+9",
+          "ordered_writes": [
+            {
+              "gpr": "0x86",
+              "value24": "0x0c0000"
+            }
+          ]
+        },
+        {
+          "value": 10,
+          "text": "+10",
+          "ordered_writes": [
+            {
+              "gpr": "0x86",
+              "value24": "0x0d0000"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-06-var1-chorus-feedback-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "NO_DIFFERENCE_WITH_1_36S_STIMULUS",
+      "runtime_ready": false,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.129254",
+        "rms_after": "0.129254",
+        "difference_rms": "0",
+        "difference_peak": "0",
+        "peak_before": "0.224182",
+        "peak_after": "0.224182"
+      }
+    },
+    {
+      "slot": 6,
+      "factory_name": "CHORUS+REVRB",
+      "variation": 1,
+      "parameter_id": "chorus_rate_amount",
+      "display_name": "CHORUS RATE AMT",
+      "editor_order": 12,
+      "documented_label": "CHORUS AMT",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "CHORUS RATE=24 AMT=39 ",
+      "observed_lcd_after": "CHORUS RATE=24 AMT=40 ",
+      "verified_points": [
+        {
+          "value": 39,
+          "text": "39",
+          "ordered_writes": [
+            {
+              "gpr": "0x8D",
+              "value24": "0x001900"
+            }
+          ]
+        },
+        {
+          "value": 40,
+          "text": "40",
+          "ordered_writes": [
+            {
+              "gpr": "0x8D",
+              "value24": "0x001980"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-06-var1-chorus-rate-amt-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "NO_DIFFERENCE_WITH_1_36S_STIMULUS",
+      "runtime_ready": false,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.129254",
+        "rms_after": "0.129254",
+        "difference_rms": "0",
+        "difference_peak": "0",
+        "peak_before": "0.224182",
+        "peak_after": "0.224182"
+      }
+    },
+    {
+      "slot": 8,
+      "factory_name": "FLANGER+REV",
+      "variation": 1,
+      "parameter_id": "flange_center",
+      "display_name": "FLANGE CENTER",
+      "editor_order": 11,
+      "documented_label": "FLANGE CENTER",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "FLANGE CENTER=19      ",
+      "observed_lcd_after": "FLANGE CENTER=20      ",
+      "verified_points": [
+        {
+          "value": 19,
+          "text": "19",
+          "ordered_writes": [
+            {
+              "gpr": "0x68",
+              "value24": "0x006400"
+            },
+            {
+              "gpr": "0x67",
+              "value24": "0x006400"
+            },
+            {
+              "gpr": "0x64",
+              "value24": "0x085500"
+            },
+            {
+              "gpr": "0x63",
+              "value24": "0x085500"
+            }
+          ]
+        },
+        {
+          "value": 20,
+          "text": "20",
+          "ordered_writes": [
+            {
+              "gpr": "0x68",
+              "value24": "0x006800"
+            },
+            {
+              "gpr": "0x67",
+              "value24": "0x006800"
+            },
+            {
+              "gpr": "0x64",
+              "value24": "0x085900"
+            },
+            {
+              "gpr": "0x63",
+              "value24": "0x085900"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-08-var1-flange-center-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "NO_DIFFERENCE_WITH_1_36S_STIMULUS",
+      "runtime_ready": false,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.129974",
+        "rms_after": "0.129974",
+        "difference_rms": "0",
+        "difference_peak": "0",
+        "peak_before": "0.226501",
+        "peak_after": "0.226501"
+      }
+    },
+    {
+      "slot": 8,
+      "factory_name": "FLANGER+REV",
+      "variation": 1,
+      "parameter_id": "flange_width",
+      "display_name": "FLANGE WIDTH",
+      "editor_order": 13,
+      "documented_label": "FLANGE WIDTH",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "FLANGE WIDTH=19       ",
+      "observed_lcd_after": "FLANGE WIDTH=20       ",
+      "verified_points": [
+        {
+          "value": 19,
+          "text": "19",
+          "ordered_writes": [
+            {
+              "gpr": "0x8D",
+              "value24": "0x003232"
+            },
+            {
+              "gpr": "0x8E",
+              "value24": "0x003232"
+            }
+          ]
+        },
+        {
+          "value": 20,
+          "text": "20",
+          "ordered_writes": [
+            {
+              "gpr": "0x8D",
+              "value24": "0x003434"
+            },
+            {
+              "gpr": "0x8E",
+              "value24": "0x003434"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-08-var1-flange-width-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "NO_DIFFERENCE_WITH_1_36S_STIMULUS",
+      "runtime_ready": false,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.129974",
+        "rms_after": "0.129974",
+        "difference_rms": "0",
+        "difference_peak": "0",
+        "peak_before": "0.226501",
+        "peak_after": "0.226501"
+      }
+    },
+    {
+      "slot": 8,
+      "factory_name": "FLANGER+REV",
+      "variation": 1,
+      "parameter_id": "flange_depth",
+      "display_name": "FLANGE DEPTH",
+      "editor_order": 15,
+      "documented_label": "FLANGE DEPTH",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "FLANGE DEPTH=99       ",
+      "observed_lcd_after": "FLANGE DEPTH=98       ",
+      "verified_points": [
+        {
+          "value": 99,
+          "text": "99",
+          "ordered_writes": [
+            {
+              "gpr": "0x88",
+              "value24": "0x7f7f7f"
+            }
+          ]
+        },
+        {
+          "value": 98,
+          "text": "98",
+          "ordered_writes": [
+            {
+              "gpr": "0x88",
+              "value24": "0x7e7e7e"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-08-var1-flange-depth-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "NO_DIFFERENCE_WITH_1_36S_STIMULUS",
+      "runtime_ready": false,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.129974",
+        "rms_after": "0.129974",
+        "difference_rms": "0",
+        "difference_peak": "0",
+        "peak_before": "0.226501",
+        "peak_after": "0.226501"
+      }
+    },
+    {
+      "slot": 38,
+      "factory_name": "8-VOICE CHOR",
+      "variation": 1,
+      "parameter_id": "lfo_rate",
+      "display_name": "LFO RATE",
+      "editor_order": 3,
+      "documented_label": "LFO RATE",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "LFO RATE=5  WIDTH=80  ",
+      "observed_lcd_after": "LFO RATE=6  WIDTH=80  ",
+      "verified_points": [
+        {
+          "value": 5,
+          "text": "5",
+          "ordered_writes": [
+            {
+              "gpr": "0x90",
+              "value24": "0x00033c"
+            },
+            {
+              "gpr": "0x91",
+              "value24": "0x00051a"
+            },
+            {
+              "gpr": "0x92",
+              "value24": "0x000366"
+            },
+            {
+              "gpr": "0x93",
+              "value24": "0x0003ce"
+            },
+            {
+              "gpr": "0x94",
+              "value24": "0x0004a5"
+            },
+            {
+              "gpr": "0x95",
+              "value24": "0x0004c3"
+            },
+            {
+              "gpr": "0x96",
+              "value24": "0x000555"
+            },
+            {
+              "gpr": "0x97",
+              "value24": "0x000423"
+            }
+          ]
+        },
+        {
+          "value": 6,
+          "text": "6",
+          "ordered_writes": [
+            {
+              "gpr": "0x90",
+              "value24": "0x00037c"
+            },
+            {
+              "gpr": "0x91",
+              "value24": "0x00057f"
+            },
+            {
+              "gpr": "0x92",
+              "value24": "0x0003a9"
+            },
+            {
+              "gpr": "0x93",
+              "value24": "0x000419"
+            },
+            {
+              "gpr": "0x94",
+              "value24": "0x000500"
+            },
+            {
+              "gpr": "0x95",
+              "value24": "0x000520"
+            },
+            {
+              "gpr": "0x96",
+              "value24": "0x0005be"
+            },
+            {
+              "gpr": "0x97",
+              "value24": "0x000475"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-38-var1-lfo-rate-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.137518",
+        "rms_after": "0.137221",
+        "difference_rms": "0.160982",
+        "difference_peak": "0.581635",
+        "peak_before": "0.421509",
+        "peak_after": "0.421234"
+      }
+    },
+    {
+      "slot": 38,
+      "factory_name": "8-VOICE CHOR",
+      "variation": 1,
+      "parameter_id": "lfo_width",
+      "display_name": "LFO RATE WIDTH",
+      "editor_order": 4,
+      "documented_label": "WIDTH",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "LFO RATE=5  WIDTH=80  ",
+      "observed_lcd_after": "LFO RATE=5  WIDTH=81  ",
+      "verified_points": [
+        {
+          "value": 80,
+          "text": "80",
+          "ordered_writes": [
+            {
+              "gpr": "0x8D",
+              "value24": "0x006700"
+            }
+          ]
+        },
+        {
+          "value": 81,
+          "text": "81",
+          "ordered_writes": [
+            {
+              "gpr": "0x8D",
+              "value24": "0x006800"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-38-var1-lfo-rate-width-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.137518",
+        "rms_after": "0.137697",
+        "difference_rms": "0.00907954",
+        "difference_peak": "0.0393372",
+        "peak_before": "0.421509",
+        "peak_after": "0.415161"
+      }
+    },
+    {
+      "slot": 38,
+      "factory_name": "8-VOICE CHOR",
+      "variation": 1,
+      "parameter_id": "chorus_regen",
+      "display_name": "CHORUS REGEN",
+      "editor_order": 6,
+      "documented_label": "CHORUS REGEN",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "CHORUS REGEN=13       ",
+      "observed_lcd_after": "CHORUS REGEN=14       ",
+      "verified_points": [
+        {
+          "value": 13,
+          "text": "13",
+          "ordered_writes": [
+            {
+              "gpr": "0x8A",
+              "value24": "0xeeeeef"
+            }
+          ]
+        },
+        {
+          "value": 14,
+          "text": "14",
+          "ordered_writes": [
+            {
+              "gpr": "0x8A",
+              "value24": "0xededee"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-38-var1-chorus-regen-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.137518",
+        "rms_after": "0.137705",
+        "difference_rms": "0.000724812",
+        "difference_peak": "0.00299072",
+        "peak_before": "0.421509",
+        "peak_after": "0.423798"
+      }
+    },
+    {
+      "slot": 38,
+      "factory_name": "8-VOICE CHOR",
+      "variation": 1,
+      "parameter_id": "l_regen_time",
+      "display_name": "L REGEN TIME",
+      "editor_order": 7,
+      "documented_label": "L REGEN TIME",
+      "documented_range": "0 to 800 ms",
+      "units": "ms",
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "L REGEN TIME=300      ",
+      "observed_lcd_after": "L REGEN TIME=301      ",
+      "verified_points": [
+        {
+          "value": 300,
+          "text": "300",
+          "ordered_writes": [
+            {
+              "gpr": "0x45",
+              "value24": "0x233000"
+            }
+          ]
+        },
+        {
+          "value": 301,
+          "text": "301",
+          "ordered_writes": [
+            {
+              "gpr": "0x45",
+              "value24": "0x234e00"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-38-var1-l-regen-time-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.137518",
+        "rms_after": "0.137188",
+        "difference_rms": "0.0181312",
+        "difference_peak": "0.0780945",
+        "peak_before": "0.421509",
+        "peak_after": "0.41571"
+      }
+    },
+    {
+      "slot": 38,
+      "factory_name": "8-VOICE CHOR",
+      "variation": 1,
+      "parameter_id": "r_regen_time",
+      "display_name": "R REGEN TIME",
+      "editor_order": 8,
+      "documented_label": "R REGEN TIME",
+      "documented_range": "0 to 800 ms",
+      "units": "ms",
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "R REGEN TIME=300      ",
+      "observed_lcd_after": "R REGEN TIME=301      ",
+      "verified_points": [
+        {
+          "value": 300,
+          "text": "300",
+          "ordered_writes": [
+            {
+              "gpr": "0x43",
+              "value24": "0xa32900"
+            }
+          ]
+        },
+        {
+          "value": 301,
+          "text": "301",
+          "ordered_writes": [
+            {
+              "gpr": "0x43",
+              "value24": "0xa34700"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-38-var1-r-regen-time-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.137518",
+        "rms_after": "0.137004",
+        "difference_rms": "0.0174551",
+        "difference_peak": "0.0855103",
+        "peak_before": "0.421509",
+        "peak_after": "0.415802"
+      }
+    },
+    {
+      "slot": 38,
+      "factory_name": "8-VOICE CHOR",
+      "variation": 1,
+      "parameter_id": "delay_regen",
+      "display_name": "DELAY REGEN",
+      "editor_order": 9,
+      "documented_label": "DELAY REGEN",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "DELAY REGEN=47        ",
+      "observed_lcd_after": "DELAY REGEN=48        ",
+      "verified_points": [
+        {
+          "value": 47,
+          "text": "47",
+          "ordered_writes": [
+            {
+              "gpr": "0x89",
+              "value24": "0xc2c2c3"
+            }
+          ]
+        },
+        {
+          "value": 48,
+          "text": "48",
+          "ordered_writes": [
+            {
+              "gpr": "0x89",
+              "value24": "0xc1c1c2"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-38-var1-delay-regen-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.137518",
+        "rms_after": "0.137545",
+        "difference_rms": "0.000256754",
+        "difference_peak": "0.000915527",
+        "peak_before": "0.421509",
+        "peak_after": "0.422058"
+      }
+    },
+    {
+      "slot": 39,
+      "factory_name": "PITCH SHIFT",
+      "variation": 1,
+      "parameter_id": "lfo_rate",
+      "display_name": "LFO RATE",
+      "editor_order": 12,
+      "documented_label": "LFO RATE",
+      "documented_range": "0 to 99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "LFO RATE=30 WIDTH=4   ",
+      "observed_lcd_after": "LFO RATE=31 WIDTH=4   ",
+      "verified_points": [
+        {
+          "value": 30,
+          "text": "30",
+          "ordered_writes": [
+            {
+              "gpr": "0x90",
+              "value24": "0x00012f"
+            }
+          ]
+        },
+        {
+          "value": 31,
+          "text": "31",
+          "ordered_writes": [
+            {
+              "gpr": "0x90",
+              "value24": "0x000145"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-39-var1-lfo-rate-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.131132",
+        "rms_after": "0.131126",
+        "difference_rms": "0.0764789",
+        "difference_peak": "0.313293",
+        "peak_before": "0.200012",
+        "peak_after": "0.200012"
+      }
+    },
+    {
+      "slot": 39,
+      "factory_name": "PITCH SHIFT",
+      "variation": 1,
+      "parameter_id": "vc1_semitone",
+      "display_name": "VC1 SEMI",
+      "editor_order": 3,
+      "documented_label": "VC 1 SEMI",
+      "documented_range": "-12 to +12",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "VC1 SEMI=+0  FINE=-5  ",
+      "observed_lcd_after": "VC1 SEMI=+1  FINE=-5  ",
+      "verified_points": [
+        {
+          "value": 0,
+          "text": "+0",
+          "ordered_writes": [
+            {
+              "gpr": "0x60",
+              "value24": "0xff9b75"
+            }
+          ]
+        },
+        {
+          "value": 1,
+          "text": "+1",
+          "ordered_writes": [
+            {
+              "gpr": "0x60",
+              "value24": "0x072f94"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-39-var1-vc1-semi-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.131132",
+        "rms_after": "0.13072",
+        "difference_rms": "0.140387",
+        "difference_peak": "0.399872",
+        "peak_before": "0.200012",
+        "peak_after": "0.200012"
+      }
+    },
+    {
+      "slot": 39,
+      "factory_name": "PITCH SHIFT",
+      "variation": 1,
+      "parameter_id": "vc1_fine",
+      "display_name": "VC1 FINE",
+      "editor_order": 4,
+      "documented_label": "VC 1 FINE",
+      "documented_range": "-99 to +99",
+      "units": null,
+      "range_status": "DOCUMENTED",
+      "observed_lcd_before": "VC1 SEMI=+0  FINE=-5  ",
+      "observed_lcd_after": "VC1 SEMI=+0  FINE=-4  ",
+      "verified_points": [
+        {
+          "value": -5,
+          "text": "-5",
+          "ordered_writes": [
+            {
+              "gpr": "0x60",
+              "value24": "0xff9b75"
+            }
+          ]
+        },
+        {
+          "value": -4,
+          "text": "-4",
+          "ordered_writes": [
+            {
+              "gpr": "0x60",
+              "value24": "0xffa9d2"
+            }
+          ]
+        }
+      ],
+      "probe_evidence_id": "slot-39-var1-vc1-semi-fine-evidence.json",
+      "probe_trials": 2,
+      "display_restored_each_trial": true,
+      "mapping_status": "REGISTER_VERIFIED_ADJACENT_POINTS",
+      "audio_status": "AUDIO_DIFFERENCE_OBSERVED",
+      "runtime_ready": true,
+      "runtime_event_accepted": true,
+      "native_audio_measurement": {
+        "frames": "65536",
+        "finite": "131072",
+        "rms_before": "0.131132",
+        "rms_after": "0.131124",
+        "difference_rms": "0.0875502",
+        "difference_peak": "0.289398",
+        "peak_before": "0.200012",
+        "peak_after": "0.200012"
+      }
+    }
+  ],
+  "unresolved_probes": [
+    {
+      "slot": 1,
+      "factory_name": "HALL REVERB",
+      "variation": 1,
+      "display_name": "HI FREQ BANDWIDTH",
+      "evidence": "slot-01-var1-hi-freq-bandwidth-evidence.json",
+      "lcd_before": "HI FREQ BANDWIDTH=86",
+      "lcd_after": "HI FREQ BANDWIDTH=87",
+      "status": "NOT_PROMOTED_UNSTABLE_REGISTER_STATE"
+    },
+    {
+      "slot": 3,
+      "factory_name": "ROOM REVERB",
+      "variation": 1,
+      "display_name": "REVERB MIX BUS1",
+      "evidence": "slot-03-var1-reverb-mix-bus1-evidence.json",
+      "lcd_before": "REVERB MIX BUS1=39",
+      "lcd_after": "REVERB MIX BUS1=40",
+      "observed_reversible_writes": [
+        {
+          "gpr": "0x7C",
+          "before": "0x5A0000"
+        },
+        {
+          "gpr": "0x7C",
+          "after": "0x5C0000"
+        }
+      ],
+      "status": "NOT_PROMOTED_FINAL_STATE_OVERWRITTEN"
+    },
+    {
+      "slot": 4,
+      "factory_name": "DUAL DELAYS",
+      "variation": 1,
+      "display_name": "BUS1 FEEDBACK",
+      "evidence": "slot-04-var1-bus1-feedback-evidence.json",
+      "status": "NOT_PROMOTED_NO_STABLE_REGISTER_DELTA"
+    },
+    {
+      "slot": 6,
+      "factory_name": "CHORUS+REVRB",
+      "variation": 1,
+      "display_name": "HI FREQ DAMPING",
+      "evidence": "slot-06-var1-hi-freq-damping-evidence.json",
+      "status": "NOT_PROMOTED_NO_STABLE_REGISTER_DELTA"
+    },
+    {
+      "slot": 6,
+      "factory_name": "CHORUS+REVRB",
+      "variation": 1,
+      "display_name": "CHORUS MIX",
+      "evidence": "slot-06-var1-chorus-mix-evidence.json",
+      "lcd_before": "CHORUS MIX=99",
+      "lcd_after": "CHORUS MIX=98",
+      "status": "NOT_PROMOTED_NO_STABLE_REGISTER_DELTA"
+    },
+    {
+      "slot": 8,
+      "factory_name": "FLANGER+REV",
+      "variation": 1,
+      "display_name": "FLANGE FEEDBACK",
+      "evidence": "slot-08-var1-flange-feedback-evidence.json",
+      "lcd_before": "FLANGE FEEDBACK=+58",
+      "lcd_after": "FLANGE FEEDBACK=+59",
+      "observed_reversible_writes": [
+        {
+          "gpr": "0x86",
+          "before": "0x4B0000"
+        },
+        {
+          "gpr": "0x86",
+          "after": "0x4C0000"
+        }
+      ],
+      "status": "REGISTER_WRITES_OBSERVED_BUT_FINAL_STATE_NOT_STABLE"
+    },
+    {
+      "slot": 8,
+      "factory_name": "FLANGER+REV",
+      "variation": 3,
+      "display_name": "FLANGE FEEDBACK",
+      "evidence": "slot-08-var3-flange-feedback-evidence.json",
+      "lcd_before": "FLANGE FEEDBACK=-78",
+      "lcd_after": "FLANGE FEEDBACK=-77",
+      "observed_reversible_writes": [
+        {
+          "gpr": "0x86",
+          "before": "0x9C0000"
+        },
+        {
+          "gpr": "0x86",
+          "after": "0x9D0000"
+        }
+      ],
+      "no_edit_baseline": {
+        "gpr": "0x86",
+        "write_count": 41
+      },
+      "status": "NEGATIVE_POINTS_OBSERVED_BUT_REGISTER_IS_MODULATED_AND_NO_STATIC_MAPPING_PROMOTED"
+    }
+  ]
+}
