@@ -6,9 +6,9 @@
   "release_state": "candidate",
   "playable": false,
   "playable_marker_required": "INTEGRATION_STATUS",
-  "built_utc": "2026-11-25T02:17:03.490127+00:00",
-  "source_commit": "48ca6182b9343ff86a8425081febcac9c26537ff",
-  "source_inputs_sha256": "41683352a56c0bdc0c2a6e3e917fbd220582ead0dd9fa5326344fd2c0a37c095",
+  "built_utc": "2026-11-25T03:25:03.972383+00:00",
+  "source_commit": "f057e6fed75840039a7124d782fe174f3061ebda",
+  "source_inputs_sha256": "ba056c0e75e5266394c41c7172b4751bb292deebe67d4ed7d0ee5bfb7cc1f0ec",
   "sdk": {
     "path": "/mnt/c/Users/Gamer/research/AkaiForceSDK",
     "origin": "https://github.com/420troll/AkaiForceSDK.git",
@@ -32,18 +32,18 @@
     "provider_api": "IValidatedFactoryPackageProvider",
     "production_provider": "local trusted-import index; missing or invalid packages fail closed",
     "binary_bound_native_vst_test": "PASS",
-    "binary_test_report_sha256": "999098fe2508c3993aedbbf8cd2df466effee39dc09de46f2e61d688ecfe3e9e",
+    "binary_test_report_sha256": "fbe3a63bb01e5cf40542850a142b9ed821888fc3f42d6e3136a33f558acafa87",
     "packaged_binary_bound_audio_test": "PASS",
     "playable_release_gate": "BLOCKED_ON_FORCE_EDITOR_VALIDATION",
     "force_editor_hardware_validation": {
       "status": "NOT_RUN",
-      "required": "Verify navigation beyond six tabs, touch layout, physical Q-Link dispatch, and project state recall on an Akai Force"
+      "required": "Verify the single EDIT workspace, effect-conditioned control visibility, dynamic formatted labels, physical Q-Link routing, and project state recall on an Akai Force"
     }
   },
   "targets": {
     "native": {
       "host": "x86_64",
-      "binary_sha256": "cec4b055f9f21dd484ee7833c11704b5d0db7baf2f66a8bb4676d09305017ccd",
+      "binary_sha256": "891ccc767020cbc6a5430c8f0263744d8f5705c9c4fe5b15ab0d31a2c1aacec9",
       "host_sim_parameter_dump": "PASS"
     },
     "arm32": {
@@ -72,8 +72,16 @@
     }
   },
   "binaries": {
-    "arm32_sha256": "f4d21c09a83f13554107cfd3b73aaf19836aad13414ed8c646c3e7114084ff28",
-    "arm64_sha256": "2d10aa7b46115837a35a835cddc81c6ce43fc38756950e1ef6dd74664a3de0f6"
+    "arm32_sha256": "badefa8fa322b812adbf82166d9782e17d770d4453cb06f428b2f9ed98a3cab4",
+    "arm64_sha256": "e0190585ae2e34d77ee5878b5d9403cdb9630e0edb29486d6d13aeff3fe9668f"
+  },
+  "arm32_qemu_validation": {
+    "result": "PASS",
+    "report": "docs/ASR10_FORCE_DYNAMIC_EDITOR_V41_ARMV7_QEMU.json",
+    "report_sha256": "64b7f8c159ac042ee63ec4cb557244072246b591b96904b2f137384bbdd186be",
+    "qemu_version": "qemu-arm version 8.2.2 (Debian 1:8.2.2+ds-0ubuntu1.18)",
+    "processed_slots": 50,
+    "binary_sha256": "badefa8fa322b812adbf82166d9782e17d770d4453cb06f428b2f9ed98a3cab4"
   },
   "build_command": "force_plugin/tools/build_candidate.sh --toolchain auto",
   "package_command": "force_plugin/tools/build_candidate.sh --toolchain auto",

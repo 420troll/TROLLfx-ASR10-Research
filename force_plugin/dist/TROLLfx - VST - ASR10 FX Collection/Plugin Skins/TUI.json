@@ -369,6 +369,181 @@
                     }
                 },
                 {
+                    "key": "knobUni",
+                    "value": {
+                        "version": 2,
+                        "actions": [
+                            {
+                                "version": 1,
+                                "onAction": "Mouse Down",
+                                "handler": "Q-Link",
+                                "handleName": "Data",
+                                "additionalData": ""
+                            },
+                            {
+                                "version": 1,
+                                "onAction": "Double Click",
+                                "handler": "Show Overlay",
+                                "handleName": "Data",
+                                "additionalData": "knob overlay"
+                            },
+                            {
+                                "version": 1,
+                                "onAction": "Enter Pressed",
+                                "handler": "Show Overlay",
+                                "handleName": "Data",
+                                "additionalData": "knob overlay"
+                            }
+                        ],
+                        "backgroundData": {
+                            "version": 1,
+                            "focussed": {
+                                "version": 1,
+                                "colour": "00000000",
+                                "image": "panel_background.png"
+                            },
+                            "unfocussed": {
+                                "version": 1,
+                                "colour": "00000000",
+                                "image": "panel_background.png"
+                            }
+                        },
+                        "ignoreMousePresses": false,
+                        "disableCoarseDataWheel": false,
+                        "componentsData": [
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "focus",
+                                    "type": "Focus",
+                                    "data": {
+                                        "version": 1,
+                                        "backgroundColour": "19ffffff",
+                                        "outlineColour": "ff00c7c2",
+                                        "backgroundInset": 4.0,
+                                        "outlineThickness": 1.0
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 1,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "WhenFocussed",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 0 278 107"
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "knob",
+                                    "type": "Knob",
+                                    "data": {
+                                        "version": 2,
+                                        "knobType": "FilmStrip",
+                                        "filmStrip": "knob_uni.png",
+                                        "numFrames": 127,
+                                        "invert": false,
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 1,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "8 8 90 90"
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "name",
+                                    "type": "Label",
+                                    "data": {
+                                        "version": 1,
+                                        "textStyle": {
+                                            "version": 1,
+                                            "font": {
+                                                "version": 1,
+                                                "name": "Titillium Web",
+                                                "style": "Regular",
+                                                "height": 26.0
+                                            },
+                                            "colour": "ff85949a",
+                                            "justification": "left",
+                                            "case": "Original"
+                                        },
+                                        "type": "Name",
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 1,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "110 12 156 36"
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "value",
+                                    "type": "Label",
+                                    "data": {
+                                        "version": 1,
+                                        "textStyle": {
+                                            "version": 1,
+                                            "font": {
+                                                "version": 1,
+                                                "name": "Titillium Web",
+                                                "style": "Regular",
+                                                "height": 30.0
+                                            },
+                                            "colour": "fff4f8fa",
+                                            "justification": "left",
+                                            "case": "Original"
+                                        },
+                                        "type": "Value",
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 1,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "110 52 156 42"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
                     "key": "faderUni",
                     "value": {
                         "version": 2,
@@ -968,17 +1143,94 @@
                 ]
             },
             {
-                "key": "Parameter 42",
+                "key": "Parameter 46",
                 "value": [
-                    "LONG/SMOOTHER",
-                    "SHORT/COARSER"
+                    "REVERB MIX BUS1: 28",
+                    "REVERB MIX BUS1: 29"
                 ]
             },
             {
-                "key": "Parameter 44",
+                "key": "Parameter 47",
                 "value": [
-                    "4/1",
-                    "5/1"
+                    "REVERB MIX BUS2: 28",
+                    "REVERB MIX BUS2: 29"
+                ]
+            },
+            {
+                "key": "Parameter 48",
+                "value": [
+                    "DECAY TIME: 40",
+                    "DECAY TIME: 41"
+                ]
+            },
+            {
+                "key": "Parameter 49",
+                "value": [
+                    "HI FREQ DAMPING: 31",
+                    "HI FREQ DAMPING: 32"
+                ]
+            },
+            {
+                "key": "Parameter 55",
+                "value": [
+                    "Off",
+                    "On"
+                ]
+            },
+            {
+                "key": "Parameter 56",
+                "value": [
+                    "Off",
+                    "On"
+                ]
+            },
+            {
+                "key": "Parameter 57",
+                "value": [
+                    "Off",
+                    "On"
+                ]
+            },
+            {
+                "key": "Parameter 58",
+                "value": [
+                    "Off",
+                    "On"
+                ]
+            },
+            {
+                "key": "Parameter 59",
+                "value": [
+                    "Off",
+                    "On"
+                ]
+            },
+            {
+                "key": "Parameter 60",
+                "value": [
+                    "Off",
+                    "On"
+                ]
+            },
+            {
+                "key": "Parameter 61",
+                "value": [
+                    "Off",
+                    "On"
+                ]
+            },
+            {
+                "key": "Parameter 62",
+                "value": [
+                    "Off",
+                    "On"
+                ]
+            },
+            {
+                "key": "Parameter 63",
+                "value": [
+                    "Off",
+                    "On"
                 ]
             }
         ],
@@ -1047,120 +1299,6 @@
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
                                 "bounds": "23 45 278 107"
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "text 1",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 30.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "left",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "50 SLOTS / PROVIDER STATUS"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Show",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "343 45 278 107"
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "text 2",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 30.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "left",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "SELECT AN EFFECT TO LOAD"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Show",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "663 45 278 107"
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "text 3",
-                                "type": "Label",
-                                "data": {
-                                    "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 30.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "left",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "EDIT PAGES ARE FIXED Q-LINK MAPS"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": []
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Show",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "983 45 278 107"
                             }
                         },
                         {
@@ -1319,7 +1457,7 @@
             },
             {
                 "version": 1,
-                "tabName": "MIX",
+                "tabName": "EDIT",
                 "fnKeyIndex": 1,
                 "fnKeySubIndex": 0,
                 "componentDefinition": {
@@ -1363,7 +1501,7 @@
                                     },
                                     "type": "Text",
                                     "handleName": "Data",
-                                    "text": "STEREO / NATIVE ES5510"
+                                    "text": "ACTIVE FACTORY PARAMETERS"
                                 }
                             },
                             "handle remapping": {
@@ -1383,83 +1521,328 @@
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "text 1",
-                                "type": "Label",
+                                "name": "EDIT BANK",
+                                "type": "knobUni",
                                 "data": {
                                     "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 30.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "left",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "PROCESSING: EXPERIMENTAL 48 kHz"
+                                    "handleName": "Data"
                                 }
                             },
                             "handle remapping": {
                                 "version": 1,
-                                "map": []
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 54"
+                                    }
+                                ]
                             },
                             "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Show",
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "343 45 278 107"
+                                "bounds": "23 196 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/1/2/Parameter 63"
+                                ]
                             }
                         },
                         {
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "text 2",
-                                "type": "Label",
+                                "name": "EDIT SLOT 5",
+                                "type": "knobUni",
                                 "data": {
                                     "version": 1,
-                                    "textStyle": {
-                                        "version": 1,
-                                        "font": {
-                                            "version": 1,
-                                            "name": "Titillium Web",
-                                            "style": "Regular",
-                                            "height": 30.0
-                                        },
-                                        "colour": "fff4f8fa",
-                                        "justification": "left",
-                                        "case": "Original"
-                                    },
-                                    "type": "Text",
-                                    "handleName": "Data",
-                                    "text": "HOST CONTROLS / FIXED IDs"
+                                    "handleName": "Data"
                                 }
                             },
                             "handle remapping": {
                                 "version": 1,
-                                "map": []
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 50"
+                                    }
+                                ]
                             },
                             "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "No",
-                                "showWhenDataModelInvalid": "Show",
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "663 45 278 107"
+                                "bounds": "23 346 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/1/2/Parameter 59"
+                                ]
                             }
                         },
                         {
                             "version": 2,
                             "componentData": {
                                 "version": 1,
-                                "name": "text 3",
+                                "name": "EDIT SLOT 6",
+                                "type": "knobUni",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 51"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "343 346 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/1/2/Parameter 60"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "EDIT SLOT 7",
+                                "type": "knobUni",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 52"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "663 346 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/1/2/Parameter 61"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "EDIT SLOT 8",
+                                "type": "knobUni",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 53"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "983 346 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/1/2/Parameter 62"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "EDIT SLOT 1",
+                                "type": "knobUni",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 46"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "23 497 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/1/2/Parameter 55"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "EDIT SLOT 2",
+                                "type": "knobUni",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 47"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "343 497 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/1/2/Parameter 56"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "EDIT SLOT 3",
+                                "type": "knobUni",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 48"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "663 497 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/1/2/Parameter 57"
+                                ]
+                            }
+                        },
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "EDIT SLOT 4",
+                                "type": "knobUni",
+                                "data": {
+                                    "version": 1,
+                                    "handleName": "Data"
+                                }
+                            },
+                            "handle remapping": {
+                                "version": 1,
+                                "map": [
+                                    {
+                                        "key": "Data",
+                                        "value": "Parameter 49"
+                                    }
+                                ]
+                            },
+                            "bounds": {
+                                "version": 2,
+                                "acceptsHWFocus": "Yes",
+                                "showWhenDataModelInvalid": "Hide",
+                                "whenVisible": "Always",
+                                "boundsType": "Absolute",
+                                "bounds": "983 497 278 107",
+                                "additionalInvalidatingHandles": [
+                                    "IndexedEnabling/1/2/Parameter 58"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "qlinkBoundsData": [
+                    "38 0 248 624",
+                    "358 0 248 624",
+                    "678 0 248 624",
+                    "998 0 248 624"
+                ]
+            },
+            {
+                "version": 1,
+                "tabName": "MIX",
+                "fnKeyIndex": 2,
+                "fnKeySubIndex": 0,
+                "componentDefinition": {
+                    "version": 2,
+                    "actions": [],
+                    "backgroundData": {
+                        "version": 1,
+                        "focussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        },
+                        "unfocussed": {
+                            "version": 1,
+                            "colour": "ff12171a",
+                            "image": "panel_background.png"
+                        }
+                    },
+                    "ignoreMousePresses": false,
+                    "disableCoarseDataWheel": false,
+                    "componentsData": [
+                        {
+                            "version": 2,
+                            "componentData": {
+                                "version": 1,
+                                "name": "text 0",
                                 "type": "Label",
                                 "data": {
                                     "version": 1,
@@ -1477,7 +1860,7 @@
                                     },
                                     "type": "Text",
                                     "handleName": "Data",
-                                    "text": "Q-LINKS: WET, INPUT, OUTPUT"
+                                    "text": "EFFECT MIX"
                                 }
                             },
                             "handle remapping": {
@@ -1490,7 +1873,7 @@
                                 "showWhenDataModelInvalid": "Show",
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
-                                "bounds": "983 45 278 107"
+                                "bounds": "23 45 278 107"
                             }
                         },
                         {
@@ -1636,986 +2019,6 @@
                                 "whenVisible": "Always",
                                 "boundsType": "Absolute",
                                 "bounds": "983 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "01 EDIT",
-                "fnKeyIndex": 2,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS1 @ 01",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 27"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS2 @ 01",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 28"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "343 497 278 107"
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "DECAY TIME @ 01",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 29"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "663 497 278 107"
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "HI FREQ DAMPING @ 01",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 30"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "983 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "02 EDIT",
-                "fnKeyIndex": 3,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS1 @ 02",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 31"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "REVERB MIX BUS2 @ 02",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 32"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "343 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "03 EDIT",
-                "fnKeyIndex": 4,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "DECAY TIME @ 03",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 33"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "DIFFUSION @ 03",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 34"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "343 497 278 107"
-                            }
-                        },
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "HI FREQ DAMPING @ 03",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 35"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "663 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "04 EDIT",
-                "fnKeyIndex": 5,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "BS1 TIME L @ 04",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 36"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "05 EDIT",
-                "fnKeyIndex": 6,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "BS1 TIME L @ 05",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 37"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "06 EDIT",
-                "fnKeyIndex": 7,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "CHORUS RATE @ 06",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 38"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "07 EDIT",
-                "fnKeyIndex": 8,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "PHASE RATE @ 07",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 39"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "08 EDIT",
-                "fnKeyIndex": 9,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "FLANGE RATE @ 08",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 40"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "28 EDIT",
-                "fnKeyIndex": 10,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "PREAMP GAIN @ 28",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 41"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "39 EDIT",
-                "fnKeyIndex": 11,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "QUALITY @ 39",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 42"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "41 EDIT",
-                "fnKeyIndex": 12,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "VOICE1 FINE @ 41",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 43"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "42 EDIT",
-                "fnKeyIndex": 13,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "COMP RATIO @ 42",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 44"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
-                            }
-                        }
-                    ]
-                },
-                "qlinkBoundsData": [
-                    "38 0 248 624",
-                    "358 0 248 624",
-                    "678 0 248 624",
-                    "998 0 248 624"
-                ]
-            },
-            {
-                "version": 1,
-                "tabName": "49 EDIT",
-                "fnKeyIndex": 14,
-                "fnKeySubIndex": 0,
-                "componentDefinition": {
-                    "version": 2,
-                    "actions": [],
-                    "backgroundData": {
-                        "version": 1,
-                        "focussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        },
-                        "unfocussed": {
-                            "version": 1,
-                            "colour": "ff12171a",
-                            "image": "panel_background.png"
-                        }
-                    },
-                    "ignoreMousePresses": false,
-                    "disableCoarseDataWheel": false,
-                    "componentsData": [
-                        {
-                            "version": 2,
-                            "componentData": {
-                                "version": 1,
-                                "name": "BASS FC @ 49",
-                                "type": "sliderWithFocusMenu",
-                                "data": {
-                                    "version": 1,
-                                    "handleName": "Data"
-                                }
-                            },
-                            "handle remapping": {
-                                "version": 1,
-                                "map": [
-                                    {
-                                        "key": "Data",
-                                        "value": "Parameter 45"
-                                    }
-                                ]
-                            },
-                            "bounds": {
-                                "version": 1,
-                                "acceptsHWFocus": "Yes",
-                                "showWhenDataModelInvalid": "Hide",
-                                "whenVisible": "Always",
-                                "boundsType": "Absolute",
-                                "bounds": "23 497 278 107"
                             }
                         }
                     ]
