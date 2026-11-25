@@ -1,0 +1,70 @@
+row_type,slot,effect,control_id,label,parameter_index,page,bank,qlink,visibility_vs_effect,physical_q_link_to_dsp,save_reload_and_reverse,candidate
+effect,1,HALL REVERB,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,2,44KHZ REVERB,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,3,ROOM REVERB,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,4,DUAL DELAYS,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,5,44KHZ DELAYS,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,6,CHORUS+REVRB,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,7,PHASER+REVRB,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,8,FLANGER+REV,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,9,ROT.SPKR+REV,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,10,CHOR+REV+DDL,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,11,CMP+DIST+REV,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,12,DIST+CHO+REV,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,13,WAH+DIST+REV,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,14,SMALL ROOM,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,15,LARGE ROOM,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,16,HALL REVERB2,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,17,SMALL PLATE,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,18,LARGE PLATE,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,19,REVRSE REVRB,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,20,REVRSE REVB2,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,21,GATED REVERB,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,22,NLIN REVRB 1,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,23,NLIN REVRB 2,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,24,NLIN REVRB 3,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,25,MULTITAP DDL,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,26,EQ+DELAY LFO,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,27,VCF+DISTORT,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,28,GUITAR AMP1,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,29,GUITAR AMP2,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,30,GUITAR AMP3,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,31,SPKR CABINET,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,32,TUNABLE SPKR,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,33,EQ+CHOR+DDL,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,34,EQ+VIBR+DDL,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,35,EQ+FLNGR+DDL,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,36,EQ+TREM+DDL,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,37,PHASER+DDL,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,38,8-VOICE CHOR,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,39,PITCH SHIFT,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,40,PITCH+DDL,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,41,FAST PITCHSH,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,42,EQ+CMPRESSOR,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,43,EXPANDER,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,44,KEYED EXPNDR,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,45,INVRS EXPNDR,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,46,DE-ESSER,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,47,DUCKER,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,48,RUMBLE FILTR,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,49,PARAM EQ,,,,,,,FAIL: see control rows,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+effect,50,VAN DER POL,,,,,,,PASS: no conditional V3 control assignment,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,1,HALL REVERB,reverb_mix_bus1,REVERB MIX BUS1 (HALL),8,EDIT,1,1,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,1,HALL REVERB,reverb_mix_bus2,REVERB MIX BUS2 (HALL),9,EDIT,1,2,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,2,44KHZ REVERB,reverb_mix_bus1,REVERB MIX BUS1 (44KHZ),10,EDIT,1,3,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,2,44KHZ REVERB,reverb_mix_bus2,REVERB MIX BUS2 (44KHZ),11,EDIT,1,4,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,1,HALL REVERB,decay_time,DECAY TIME (HALL),12,EDIT,1,5,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,1,HALL REVERB,hi_freq_damping,HI FREQ DAMPING (HALL),13,EDIT,1,6,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,3,ROOM REVERB,decay_time,DECAY TIME (ROOM),14,EDIT,1,7,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,3,ROOM REVERB,diffusion,DIFFUSION,15,EDIT,1,8,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,3,ROOM REVERB,hi_freq_damping,HI FREQ DAMPING (ROOM),16,EDIT,1,9,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,4,DUAL DELAYS,delay_time_l,BS1 TIME L,17,EDIT,1,10,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,6,CHORUS+REVRB,chorus_rate,CHORUS RATE,18,EDIT,1,11,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,7,PHASER+REVRB,phase_rate,PHASE RATE,19,EDIT,1,12,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,28,GUITAR AMP1,preamp_gain,PREAMP GAIN,20,EDIT,1,13,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,41,FAST PITCHSH,voice1_fine,VOICE1 FINE,21,EDIT,1,14,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,42,EQ+CMPRESSOR,comp_ratio,COMP RATIO,22,EDIT,1,15,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,49,PARAM EQ,bass_fc,BASS FC,23,EDIT,1,16,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,5,44KHZ DELAYS,delay_time_l,BS1 TIME L (44KHZ DELAYS),24,EDIT 2,1,1,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,8,FLANGER+REV,flange_rate,FLANGE RATE,25,EDIT 2,1,2,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
+control,39,PITCH SHIFT,quality,QUALITY,26,EDIT 2,1,3,FAIL: Q-Link map is static while control visibility is effect-conditional,NOT TESTED,NOT TESTED,V3 baseline; V4 pending
