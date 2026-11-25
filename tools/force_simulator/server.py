@@ -49,79 +49,107 @@ class Simulator:
         self.log_path.parent.mkdir(parents=True,exist_ok=True)
         self.ui_page=0
         self.last_trace=self.host.trace_latest()
+        # PC-only edit buffers are independent per factory slot and variation.
         self.inspector_values = {}
+        self.selected_variations = {}
+        self.undo_stacks = {}
 
     def slot(self): return max(1,min(50,int(math.floor(self.host.get(0)*49+0.5))+1))
     def effect_name(self,slot):
         return str(EFFECT_NAMES[slot-1]) if len(EFFECT_NAMES)>=slot else f"FX SLOT {slot:02}"
     def selected(self): return {"slot":self.slot(),"name":self.effect_name(self.slot())}
+    def _variation(self,slot):
+        return int(self.selected_variations.setdefault(str(slot),1))
+    def _variation_options(self,effect):
+        c=next((x for x in effect["controls"] if x["key"]=="effect_variation"),None)
+        labels=(c or {}).get("observed_choices") or (c or {}).get("documented_choices") or []
+        if len(labels)>=4:return [{"value":i+1,"label":str(label)} for i,label in enumerate(labels[:4])]
+        return [{"value":i,"label":f"Variation {i}"} for i in range(1,5)]
+    def _draft_key(self,slot,variation): return f"{slot}:{variation}"
+    def _initial_value(self,c):
+        if c.get("input_disabled"): return c.get("range_text","Not established")
+        if c.get("route") and c["route"].get("point_values"): return c["route"]["point_values"][0]
+        if c.get("type") in ("enumerated","discrete") and c.get("observed_choices"):return c["observed_choices"][0]
+        return c["range"][0] if c.get("range") else 0
     def state(self):
         values={str(i):self.host.get(i) for i in range(self.host.num_params)}
         params=[]
-        for i in range(self.host.num_params):
-            params.append({"index":i,"normalized":values[str(i)],"name":self.host.text(i,True),"display":self.host.text(i)})
-        effect=self.model["factory_effects"][self.slot()-1]
-        current=self.inspector_values.setdefault(str(effect["slot"]), {})
+        for i in range(self.host.num_params): params.append({"index":i,"normalized":values[str(i)],"name":self.host.text(i,True),"display":self.host.text(i)})
+        effect=self.model["factory_effects"][self.slot()-1]; slot=int(effect["slot"]); variation=self._variation(slot)
+        current=self.inspector_values.setdefault(self._draft_key(slot,variation),{})
         controls=[]
         for c in effect["controls"]:
+            if not c.get("editor_visible",True): continue
             v=current.get(c["id"])
-            if v is None:
-                if c["route"]:
-                    v=c["route"]["point_values"][0]
-                elif c["type"] in ("enumerated", "discrete") and c.get("observed_choices"):
-                    v=c["observed_choices"][0]
-                else:
-                    v=c["range"][0] if c["range"] else 0
-                current[c["id"]]=v
+            if v is None: v=self._initial_value(c); current[c["id"]]=v
             controls.append({**c,"value":v})
         return {"params":params,"values":values,"selected_effect":self.selected(),"page":self.model["pages"][self.ui_page]["name"],
-                "inspector_controls":controls,
-                "status":self.host.text(5),"trace_available":self.host.has_trace}
-
-    def set_control(self, control_id, value, qlink=None, bank=0):
-        """Set an inspector value; send only exact factory-VST points to the host."""
+            "inspector_controls":controls,"selected_variation":variation,"variation_options":self._variation_options(effect),
+            "variation_support":"PC-only independent draft buffer; native VST variation routing is not implemented.",
+            "draft_undo_available":bool(self.undo_stacks.get(self._draft_key(slot,variation))),
+            "status":self.host.text(5),"trace_available":self.host.has_trace}
+    def select_variation(self,variation):
         with self.lock:
             slot=self.slot(); effect=self.model["factory_effects"][slot-1]
-            control=next((x for x in effect["controls"] if x["id"]==control_id), None)
+            value=int(variation); allowed={x["value"] for x in self._variation_options(effect)}
+            if value not in allowed: raise ValueError("variation must be one of the four documented choices")
+            previous=self._variation(slot); self.selected_variations[str(slot)]=value
+            event={"schema":"trollfx-force-simulator-event-v1","event_type":"pc_variation_select","selected_effect":{"slot":slot,"name":self.effect_name(slot)},"previous_variation":previous,"selected_variation":value,"dsp_sent":False,"dsp_register_writes_applied":[],"note":"PC draft selection only; no native VST variation route."}
+            with self.log_path.open("a",encoding="utf-8") as f:f.write(json.dumps(event,separators=(",",":"))+"\n")
+            return {"event":event,"state":self.state()}
+    def reset_draft(self):
+        with self.lock:
+            slot=self.slot(); variation=self._variation(slot); key=self._draft_key(slot,variation)
+            self.inspector_values.pop(key,None); self.undo_stacks[key]=[]
+            event={"schema":"trollfx-force-simulator-event-v1","event_type":"pc_draft_reset","selected_effect":{"slot":slot,"name":self.effect_name(slot)},"selected_variation":variation,"dsp_sent":False,"dsp_register_writes_applied":[],"note":"Reset to editor seed values. Factory defaults are not established. No DSP register writes sent."}
+            with self.log_path.open("a",encoding="utf-8") as f:f.write(json.dumps(event,separators=(",",":"))+"\n")
+            return {"event":event,"state":self.state()}
+    def undo_draft(self):
+        with self.lock:
+            slot=self.slot(); variation=self._variation(slot); key=self._draft_key(slot,variation); stack=self.undo_stacks.get(key,[])
+            if not stack: raise ValueError("no PC draft edit to undo")
+            row=stack.pop(); result=self.set_control(row["control_id"],row["before"],variation=variation,record_undo=False,allow_vst=False)
+            result["event"]["event_type"]="pc_draft_undo"; result["event"]["dsp_sent"]=False; result["event"]["dsp_register_writes_applied"]=[]
+            result["event"]["note"]="Undo changed the PC draft only; no DSP write sent."
+            return result
+    def set_control(self, control_id, value, qlink=None, bank=0, variation=None, record_undo=True, allow_vst=True):
+        """Edit the selected variation's draft; send only exact registered VST points."""
+        with self.lock:
+            slot=self.slot(); effect=self.model["factory_effects"][slot-1]; variation=int(variation or self._variation(slot))
+            if variation!=self._variation(slot): raise ValueError("selected variation changed during edit")
+            control=next((x for x in effect["controls"] if x["id"]==control_id and x.get("editor_visible",True)), None)
             if control is None: raise ValueError("control is not part of the selected effect")
             if control["type"] in ("enumerated", "discrete"):
-                try: candidate=str(value)
-                except Exception: candidate=""
-                options=control.get("observed_choices") or []
+                candidate=str(value); options=control.get("observed_choices") or []
                 if not options: raise ValueError("no verified editor choices are available")
                 if candidate not in [str(x) for x in options]: raise ValueError("choice is not in the observed editor list")
                 stored=candidate
             else:
                 stored=float(value)
                 if not math.isfinite(stored): raise ValueError("value must be finite")
-                if control["range"]:
+                if control.get("range"):
                     lo,hi=control["range"]
                     if stored<lo or stored>hi: raise ValueError("value is outside the documented editor range")
-            self.inspector_values.setdefault(str(slot), {})[control_id]=stored
-            event={"schema":"trollfx-force-simulator-event-v1","event_type":"inspector_edit",
-                "selected_effect":{"slot":slot,"name":self.effect_name(slot)},"control_id":control_id,
-                "parameter_name":control["name"],"original_editor_value":stored,
-                "normalized_vst_value":None,"host_parameter_index":None,
-                "canonical_identity":control["route"]["canonical_identity"] if control["route"] else None,
-                "dsp_status":control["status"],"dsp_sent":False,"dsp_register_writes_applied":[],
-                "physical_equivalent_qlink":int(qlink) if qlink else None,"bank":int(bank)}
-            route=control.get("route")
-            point_index=None
-            if route:
-                if stored in route["point_values"]:
-                    point_index=route["point_values"].index(stored)
-                elif str(stored) in [str(x) for x in route["point_labels"]]:
-                    point_index=[str(x) for x in route["point_labels"]].index(str(stored))
+                if control.get("domain"," ").startswith("integer"): stored=int(round(stored))
+            key=self._draft_key(slot,variation); current=self.inspector_values.setdefault(key,{})
+            before=current.get(control_id,self._initial_value(control))
+            if record_undo: self.undo_stacks.setdefault(key,[]).append({"control_id":control_id,"before":before,"after":stored})
+            current[control_id]=stored
+            event={"schema":"trollfx-force-simulator-event-v1","event_type":"inspector_edit","selected_effect":{"slot":slot,"name":self.effect_name(slot)},"selected_variation":variation,"control_id":control_id,
+                "parameter_name":control["name"],"original_editor_value":stored,"normalized_vst_value":None,"host_parameter_index":None,
+                "canonical_identity":control["route"]["canonical_identity"] if control.get("route") else None,
+                "dsp_status":control["status"],"dsp_sent":False,"dsp_register_writes_applied":[],"physical_equivalent_qlink":int(qlink) if qlink else None,"bank":int(bank)}
+            route=control.get("route"); point_index=None
+            if route and allow_vst:
+                if stored in route["point_values"]: point_index=route["point_values"].index(stored)
+                elif str(stored) in [str(x) for x in route["point_labels"]]: point_index=[str(x) for x in route["point_labels"]].index(str(stored))
             if route and point_index is not None:
-                ordinal=point_index
-                norm=ordinal/max(1,len(route["point_values"])-1)
-                if self.host.num_params>54: self.host.set(54,float(route.get("bank",0)))
+                norm=point_index/max(1,len(route["point_values"])-1)
+                if self.host.num_params>54:self.host.set(54,float(route.get("bank",0)))
                 applied=self.set_param(route["host_parameter_index"],norm,"PC EDITOR",qlink)
-                event.update({"normalized_vst_value":norm,"host_parameter_index":route["host_parameter_index"],
-                    "canonical_identity":route["canonical_identity"],"dsp_sent":True,
-                    "dsp_register_writes_applied":applied["dsp_register_writes_applied"],
-                    "resolved_control_register_group_verified":applied["resolved_control_register_group_verified"]})
-            with self.log_path.open("a",encoding="utf-8") as f: f.write(json.dumps(event,separators=(",",":"))+"\n")
+                event.update({"normalized_vst_value":norm,"host_parameter_index":route["host_parameter_index"],"canonical_identity":route["canonical_identity"],"dsp_sent":True,
+                    "dsp_register_writes_applied":applied["dsp_register_writes_applied"],"resolved_control_register_group_verified":applied["resolved_control_register_group_verified"]})
+            with self.log_path.open("a",encoding="utf-8") as f:f.write(json.dumps(event,separators=(",",":"))+"\n")
             return {"event":event,"state":self.state()}
     def _wait_effect(self, slot):
         deadline=time.monotonic()+5.0
@@ -276,11 +304,17 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 event=self.sim.set_param(x["param"],x["normalized"],x.get("page_name"),x.get("qlink"))
                 return self.send_json({"event":event,"state":self.sim.state()})
             if path=="/api/control":
-                x=json.loads(raw); result=self.sim.set_control(x["control_id"],x["value"],x.get("qlink"),x.get("bank",0))
+                x=json.loads(raw); result=self.sim.set_control(x["control_id"],x["value"],x.get("qlink"),x.get("bank",0),x.get("variation"))
                 return self.send_json(result)
             if path=="/api/page":
                 x=json.loads(raw);event=self.sim.select_page(x["page"])
                 return self.send_json({"event":event,"state":self.sim.state()})
+            if path=="/api/variation":
+                x=json.loads(raw);return self.send_json(self.sim.select_variation(x["variation"]))
+            if path=="/api/draft/reset":
+                return self.send_json(self.sim.reset_draft())
+            if path=="/api/draft/undo":
+                return self.send_json(self.sim.undo_draft())
             if path=="/api/process":
                 result=self.sim.process_wav(raw,int(self.headers.get("X-Audio-Block","256")))
                 return self.send_json(result)

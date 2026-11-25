@@ -94,6 +94,27 @@ class NativePluginIntegration(unittest.TestCase):
    self.assertNotEqual(res['wet_sha256'],res['bypass_sha256'])
    self.assertTrue(res['wet_wav_base64'] and res['bypass_wav_base64'])
   finally:sim.close()
+
+ def test_pc_variation_drafts_are_independent_and_unsupported_undo_reset_do_not_write(self):
+  sim=Simulator(ASSETS)
+  try:
+   sim.set_param(0,0,page='BROWSE')
+   sim.select_variation(2)
+   first=sim.set_control('decay_time_1',42)['event']
+   self.assertFalse(first['dsp_sent'])
+   sim.select_variation(3)
+   sim.set_control('decay_time_1',43)
+   sim.select_variation(2)
+   self.assertEqual(next(c['value'] for c in sim.state()['inspector_controls'] if c['id']=='decay_time_1'),42)
+   sim.undo_draft()
+   self.assertEqual(next(c['value'] for c in sim.state()['inspector_controls'] if c['id']=='decay_time_1'),40)
+   sim.set_control('decay_time_1',45)
+   result=sim.reset_draft()
+   self.assertFalse(result['event']['dsp_sent'])
+   self.assertEqual(result['event']['dsp_register_writes_applied'],[])
+   self.assertEqual(next(c['value'] for c in result['state']['inspector_controls'] if c['id']=='decay_time_1'),40)
+  finally: sim.close()
+
  def test_audit_event_logs_page_qlink_vst_canonical_and_dsp(self):
   sim=Simulator(ASSETS)
   try:

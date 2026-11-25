@@ -3,8 +3,9 @@
 <body><header><div><strong>TROLLfx / ASR-10</strong><span>PC Force interface simulator</span></div><div class="status" id="status">Connecting to native VST…</div></header>
 <main><section class="sim">
   <section class="editor">
-    <div class="effect-banner"><div><small>SELECTED FACTORY EFFECT · SLOT <b id="slotNumber">—</b></small><h1 id="editorEffect">—</h1></div><label>Effect <select id="effect"></select></label><div class="editor-mode">PC PARAMETER INSPECTOR <span>DSP writes require exact verified points</span></div></div>
+    <div class="effect-banner"><div><small>SELECTED FACTORY EFFECT · SLOT <b id="slotNumber">—</b></small><h1 id="editorEffect">—</h1></div><label>Effect <select id="effect"></select></label><div class="variation-box"><label>VARIATION <select id="variation"></select></label><small id="variationNote">Independent PC-only draft buffers</small></div><div class="draft-actions"><button id="undoDraft" type="button">UNDO</button><button id="resetDraft" type="button">RESET DRAFT</button></div><div class="editor-mode">PC PARAMETER INSPECTOR <span>DSP writes require exact verified points</span></div></div>
     <div class="bankbar"><div><h2>Effect parameters</h2><p id="controlCount" class="muted"></p></div><div id="banks" class="banks"></div></div>
+    <nav id="sections" class="sections" aria-label="Effect parameter sections"></nav>
     <div class="editor-layout"><div id="controls" class="control-grid"></div><aside class="qlinks"><h2>Virtual Q-Links</h2><p class="muted">PC-only assignment · eight controls per bank</p><div id="qlinkList"></div></aside></div>
   </section>
   <details class="skin-preview"><summary>Force SDK skin preview · BROWSE / EDIT / MIX</summary>

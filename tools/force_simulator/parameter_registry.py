@@ -24,6 +24,31 @@ def _range(text: str):
     try: return [float(m.group(1)), float(m.group(2))]
     except ValueError: return None
 
+def _numeric_domain(text: str, units=None, rich_domain=None):
+    """Parse documented bounds while normalizing mixed time/frequency units."""
+    rich_domain=rich_domain or {}
+    if text:
+        m=re.search(r"(-?\d+(?:\.\d+)?)\s*(µs|us|ms|s|Hz|kHz|KHz)?\s+to\s+(-?\d+(?:\.\d+)?)\s*(µs|us|ms|s|Hz|kHz|KHz)?",text,re.I)
+        if m:
+            a,ua,b,ub=m.groups();ua=ua or ub;ub=ub or ua
+            vals=[float(a),float(b)]
+            def canonical(u):
+                if not u:return None
+                u=u.casefold().replace('µ','u')
+                return {'us':'s','ms':'s','s':'s','hz':'Hz','khz':'kHz'}.get(u,u)
+            ra=ua.replace('µ','u').replace('μ','u').casefold() if ua else None; rb=ub.replace('µ','u').replace('μ','u').casefold() if ub else None
+            if ra and rb and ra!=rb and {ra,rb}<={'us','ms','s'}:
+                factors={'us':1e-6,'ms':1e-3,'s':1.0}; vals=[vals[0]*factors[ra],vals[1]*factors[rb]];units='s'
+            elif ra and rb and ra!=rb and {ra,rb}<={'hz','khz'}:
+                factors={'hz':1.0,'khz':1000.0}; vals=[vals[0]*factors[ra],vals[1]*factors[rb]];units='Hz'
+            else:
+                c=canonical(ua or ub)
+                if c: units={'s':'s','Hz':'Hz','kHz':'kHz'}.get(c,units)
+            return vals,units
+    if rich_domain.get("minimum") is not None and rich_domain.get("maximum") is not None:
+        return [float(rich_domain["minimum"]),float(rich_domain["maximum"])], units
+    return _range(text),units
+
 def _load_vst_controls():
     source = (ROOT / "include/trollfx/es5510_factory_editor_v04.hpp").read_text()
     out = {}
@@ -44,8 +69,24 @@ def _load_vst_controls():
             "point_values": arrays.get(value_id, [])[:count], "point_labels": labels.get(label_id, [])[:count]}
     return out
 
+def _group_for(label: str, ident: str) -> str:
+    text=(label+" "+ident).upper()
+    if "MOD SRC" in text or text.startswith("DST ") or "MIN_" in text or "MAX_" in text: return "Modulation"
+    if any(x in text for x in ("BUS", "MIX", "FEEDBACK", "SEND", "ROUT")): return "Bus mixing & routing"
+    if any(x in text for x in ("REVERB", "DECAY", "DIFFUS", "DAMP", "REFL", "REFLECTION", "PRE-DELAY", "PREDELAY", "DETUNE")): return "Reverb"
+    if any(x in text for x in ("DELAY", "DDL", "ECHO", "REGEN")): return "Delay"
+    if any(x in text for x in ("FILTER", " FC", "FC ", "EQ", "TREBLE", "BASS", "GAIN", "Q ", "LPF", "HPF")): return "Filter / EQ"
+    if any(x in text for x in ("COMP", "THRESH", "RATIO", "ATTACK", "RELEASE", "EXPAN", "GATE", "DUCK")): return "Dynamics"
+    if any(x in text for x in ("CHOR", "FLANGE", "PHASE", "VIBR", "TREMOLO", "LFO", "RATE", "WIDTH", "DEPTH")): return "Modulation effect"
+    if any(x in text for x in ("PAN", "SEMI", "FINE", "PITCH", "QUALITY", "VC ")): return "Pitch & voice"
+    return "Main effect"
+
 def load_registry():
     cat = json.loads((ROOT / "docs/ASR10_FACTORY_PARAMETER_CATALOG_V1.json").read_text())
+    full = json.loads((SIM / "data/ASR10_FULL_FACTORY_PARAMETER_REGISTRY_V1.json").read_text())
+    full_by_slot={int(e["slot"]):e for e in full.get("effects",[])}
+    ui_schema=json.loads((SIM / "data/ASR10_PC_EDITOR_PARAMETER_SCHEMA_V1.json").read_text())
+    ui_by_slot={int(e["slot"]):e for e in ui_schema.get("effects",[])}
     inventory = json.loads((SIM / "data/ASR10_FACTORY_EFFECT_EDITOR_INVENTORY_V04.json").read_text())
     mappings = json.loads((SIM / "data/ASR10_FACTORY_DSP_PARAMETER_MAPPINGS_V05.json").read_text())
     vst = _load_vst_controls()
@@ -57,13 +98,17 @@ def load_registry():
     result = []
     for effect in cat["effects"]:
         controls = []
+        full_effect=full_by_slot.get(int(effect["slot"]),{})
+        full_params={_key(p["id"]):p for p in full_effect.get("parameters",[])}
+        ui_effect=ui_by_slot.get(int(effect["slot"]),{})
+        ui_params={_key(p["id"]):p.get("manual",{}) for p in ui_effect.get("parameters",[])}
         catalog_keys=set()
         for p in sorted(effect["parameters"], key=lambda x: x.get("display_order", 0)):
             ident = _key(p["id"])
             catalog_keys.add(ident)
             route = vst.get((effect["slot"], ident)) or vst_by_label.get((effect["slot"],_label_key(p["display_name"])))
             recovered = v05.get((effect["slot"], ident))
-            source_range = _range(p.get("documented_range", ""))
+            source_range,parsed_units = _numeric_domain(p.get("documented_range", ""),p.get("units"))
             obs = []
             entry = inv.get(effect["slot"], {})
             for field in entry.get("os_observed_fields", []):
@@ -86,17 +131,192 @@ def load_registry():
                 # connected to that mapping yet; never route it through another ID.
                 status = "PARTIAL"
             else: status = "UNMAPPED"
+            rich=full_params.get(ident,{})
+            ui_manual=ui_params.get(ident,{})
+            rich_domain=rich.get("documented_numeric_domain") or ui_manual.get("documented_numeric_domain") or {}
+            source_range,parsed_units=_numeric_domain(p.get("documented_range", ""),parsed_units,rich_domain)
+            choices=rich.get("discrete_choices") or obs
             controls.append({"id": p["id"], "key": ident, "name": p["display_name"],
                 "order": p.get("display_order", 0), "range_text": p.get("documented_range", ""),
                 "range": source_range, "type": p.get("display_type", "numeric_or_continuous"),
                 "format": p.get("display_format", ""), "domain": p.get("display_domain", ""),
                 "range_variants": p.get("documented_range_variants", []),
+                "group": _group_for(p["display_name"],p["id"]),
+                "description": ui_manual.get("description") or rich.get("description", ""),
+                "description_source":ui_manual.get("description_source","registry"),
+                "manual_confidence": rich.get("ui_range_confidence", ui_manual.get("ui_range_confidence", "manual catalog")),
+                "default_value": rich.get("default_value"),
+                "observed_variation_values": rich.get("os_observed_values_across_factory_variations", []),
+                "documented_choices": choices,
+                "supported_values": rich.get("supported_values", []),
                 "display_scale_curve": p.get("display_scale_curve", p.get("editor_scale_curve", [])),
-                "group": p.get("group", p.get("parameter_group", "")),
-                "units": p.get("units"), "evidence": p.get("evidence", ""),
-                "observed_choices": obs, "status": status, "route": route,
+                "group": p.get("group") or p.get("parameter_group") or _group_for(p["display_name"],p["id"]),
+                "units": parsed_units, "evidence": p.get("evidence", ""),
+                "observed_choices": choices, "status": status, "route": route,
                 "v05_runtime_ready": bool(recovered and recovered.get("runtime_ready")),
                 "v05_points": recovered.get("verified_points", []) if recovered else []})
+        # The original Section 6 explicitly says DUAL/44KHZ DELAYS give BUS1 and
+        # BUS2 separate mix/feedback/time values, with independent L/R time values.
+        # Keep the collapsed catalog descriptor for identity/provenance, but replace
+        # it in the editable UI with the manual's independently adjustable controls.
+        if int(effect["slot"]) in (4,5):
+            parent_ids={"bus1_and_2_delay_mix","bus1_and_2_feedback","delay_time"}
+            high=1300 if int(effect["slot"])==5 else 2000
+            for c in controls:
+                if c["key"] in parent_ids: c["editor_visible"]=False
+                if c["key"]=="delay_time_l":
+                    # Existing VST identity is retained as BUS1 left delay time.
+                    c.update({"name":"BUS1 DELAY TIME L","range_text":f"0 to {high} ms","range":[0,high],"type":"numeric_or_continuous","format":"integer","domain":"integer steps documented","group":"Delay","units":"ms","description":"BUS1 left-channel delay time; the manual states left and right channels are independently adjustable.","editor_visible":True})
+            specs=[
+                ("dual_bus1_delay_mix","BUS1 DELAY MIX",[0,99],"The dry/wet balance for the BUS1 delay path."),
+                ("dual_bus2_delay_mix","BUS2 DELAY MIX",[0,99],"The dry/wet balance for the BUS2 delay path."),
+                ("dual_bus1_feedback","BUS1 FEEDBACK",[0,99],"Feedback amount for BUS1; the manual describes this as the amount returned from the right delay output."),
+                ("dual_bus2_feedback","BUS2 FEEDBACK",[0,99],"Feedback amount for BUS2."),
+                ("dual_bus1_delay_time_r","BUS1 DELAY TIME R",[0,high],"BUS1 right-channel delay time in milliseconds; left and right are independently adjustable."),
+                ("dual_bus2_delay_time_l","BUS2 DELAY TIME L",[0,150],"BUS2 left-channel delay time in milliseconds; left and right are independently adjustable."),
+                ("dual_bus2_delay_time_r","BUS2 DELAY TIME R",[0,150],"BUS2 right-channel delay time in milliseconds; left and right are independently adjustable.")]
+            for order,(ident,label,limits,description) in enumerate(specs,500):
+                controls.append({"id":ident,"key":ident,"name":label,"order":order,"range_text":f"{limits[0]} to {limits[1]}"+(" ms" if "time" in ident else ""),"range":limits,"type":"numeric_or_continuous","format":"integer","domain":"integer steps documented","range_variants":[],"display_scale_curve":[],"group":"Delay" if "time" in ident else "Bus mixing & routing","units":"ms" if "time" in ident else None,"evidence":"ASR-10 Musician's Manual Section 6; independently adjustable BUS/L/R controls described in ROM-04/05.","description":description,"manual_confidence":"direct manual statement","default_value":None,"observed_variation_values":[],"documented_choices":[],"supported_values":[],"observed_choices":[],"status":"UNMAPPED","route":None,"v05_runtime_ready":False,"v05_points":[],"catalog_descriptor":False,"manual_subparameter":True,"editor_visible":True})
+        # Manual parameter groups with explicit independently adjustable members.
+        # Their legacy aggregate descriptor remains in metadata but is hidden from
+        # editing; new PC draft IDs do not affect append-only VST parameter IDs.
+        split_specs={
+            9:[("dist_gain_in","DIST GAIN IN","0 to 99","Input gain into the amplifier simulation."),("dist_gain_out","DIST GAIN OUT","0 to 99","Output level of the amplifier distortion path.")],
+            11:[("dist_gain_in","DIST GAIN IN","0 to 99","Input gain into the distortion stage."),("dist_gain_out","DIST GAIN OUT","0 to 99","Output level from the distortion stage."),("dist_lpf","DIST LPF","0 to 99","Low-pass filtering of high frequencies after distortion."),("dist_hpf","DIST HPF","0 to 99","High-pass filtering of low frequencies after distortion.")],
+            12:[("dist_gain_in","DIST GAIN IN","0 to 99","Input gain into the distortion stage."),("dist_gain_out","DIST GAIN OUT","0 to 99","Output level from the distortion stage.")]
+        }
+        if int(effect["slot"]) in split_specs:
+            parents={"dist_gain_in_out_in_and_out","dist_gain_in_and_out","dist_lpf_hpf"}
+            for c in controls:
+                if c["key"] in parents:c["editor_visible"]=False
+            for order,(ident,label,rng,description) in enumerate(split_specs[int(effect["slot"])],600):
+                controls.append({"id":f"manual_{ident}","key":f"manual_{ident}","name":label,"order":order,"range_text":rng,"range":[0,99],"type":"numeric_or_continuous","format":"integer","domain":"integer steps documented","range_variants":[],"display_scale_curve":[],"group":"Main effect","units":None,"evidence":"ASR-10 Musician's Manual Section 6; grouped name explicitly describes two independent controls.","description":description,"manual_confidence":"direct manual statement","default_value":None,"observed_variation_values":[],"documented_choices":[],"supported_values":[],"observed_choices":[],"status":"UNMAPPED","route":None,"v05_runtime_ready":False,"v05_points":[],"catalog_descriptor":False,"manual_subparameter":True,"editor_visible":True})
+        repeated_specs={
+            14:("positn_bal_1_to_3","POSITN BAL",3,[-99,99],"Controls the stereo position balance at one of three room/hall depth positions."),
+            15:("positn_bal_1_to_3","POSITN BAL",3,[-99,99],"Controls the stereo position balance at one of three room/hall depth positions."),
+            16:("positn_bal_1_to_3","POSITN BAL",3,[-99,99],"Controls the stereo position balance at one of three room/hall depth positions."),
+            17:("er_lev_1_to_4","ER LEVEL",4,[-99,99],"Sets the level for one of the four early reflections."),
+            18:("er_lev_1_to_4","ER LEVEL",4,[-99,99],"Sets the level for one of the four early reflections."),
+            21:("er_lev_1_to_4","ER LEVEL",4,[-99,99],"Sets the level for one of the four early reflections."),
+            22:("env_lev_1_to_9","ENV LEVEL",9,[0,99],"Sets the level of one envelope level in the nonlinear reverb."),
+            23:("env_lev_1_to_9","ENV LEVEL",9,[0,99],"Sets the level of one envelope level in the nonlinear reverb."),
+            24:("env_lev_1_to_9","ENV LEVEL",9,[0,99],"Sets the level of one envelope level in the nonlinear reverb.")}
+        if int(effect["slot"]) in repeated_specs:
+            parent,label,count,limits,description=repeated_specs[int(effect["slot"])]
+            for c in controls:
+                if c["key"]==parent:c["editor_visible"]=False
+            for n in range(1,count+1):
+                controls.append({"id":f"manual_{parent.rsplit('_1',1)[0]}_{n}","key":f"manual_{parent.rsplit('_1',1)[0]}_{n}","name":f"{label} {n}","order":650+n,"range_text":f"{limits[0]} to {limits[1]}","range":limits,"type":"numeric_or_continuous","format":"integer","domain":"integer steps documented","range_variants":[],"display_scale_curve":[],"group":"Reverb" if parent.startswith(("positn","er_lev")) else "Main effect","units":None,"evidence":"ASR-10 Musician's Manual Section 6; explicitly plural independent parameter group.","description":description,"manual_confidence":"direct manual statement","default_value":None,"observed_variation_values":[],"documented_choices":[],"supported_values":[],"observed_choices":[],"status":"UNMAPPED","route":None,"v05_runtime_ready":False,"v05_points":[],"catalog_descriptor":False,"manual_subparameter":True,"editor_visible":True})
+        # Reverb groups share one control whose manual range varies by algorithm.
+        slot=int(effect["slot"])
+        if 14<=slot<=16:
+            decay_ranges={14:(0.2,100.0,"0.20 to 100.0 sec."),15:(0.2,150.0,"0.20 to 150.0 sec."),16:(0.7,250.0,"0.70 to 250.0 sec.")}
+            decay=next((c for c in controls if c["key"]=="decay_time_small_room"),None)
+            if decay:
+                lo,hi,label=decay_ranges[slot];decay.update({"name":"DECAY TIME","range":[lo,hi],"range_text":label,"units":"sec"})
+            for c in controls:
+                if c["name"] in ("Large Room","Hall Reverb2"):c["editor_visible"]=False
+        if slot in (17,18):
+            ranges={17:(0.2,100.0,0,500),18:(0.4,140.0,0,430)};decay_lo,decay_hi,pre_lo,pre_hi=ranges[slot]
+            decay=next((c for c in controls if c["key"]=="decay_time_small_plate"),None)
+            pre=next((c for c in controls if c["key"]=="predelay_time_small_plate"),None)
+            if decay:decay.update({"name":"DECAY TIME","range":[decay_lo,decay_hi],"range_text":f"{decay_lo} to {decay_hi} sec","units":"sec"})
+            if pre:pre.update({"name":"PREDELAY TIME","range":[pre_lo,pre_hi],"range_text":f"{pre_lo} to {pre_hi} ms","units":"ms"})
+            for c in controls:
+                if c["name"]=="Large Plate":c["editor_visible"]=False
+        # Section 6 uses named cross-references for shared subassemblies. Expand
+        # only the parameter rows named by each algorithm's text, never the whole
+        # referenced effect and never its bus mix or VAR selector.
+        shared={
+            "hall_chorus":[("DECAY TIME","REVERB DECAY TIME"),("LOW FREQ DECAY","REVERB LOW FREQ DECAY"),("DIFFUSION","REVERB DIFFUSION"),("HI FREQ DAMPING","REVERB HI FREQ DAMPING"),("HI FREQ BANDWIDTH","REVERB HI FREQ BANDWIDTH"),("DETUNE RATE","REVERB DETUNE RATE"),("DETUNE AMT","REVERB DETUNE AMT")],
+            "hall_short":[("DECAY TIME","REVERB DECAY TIME"),("DIFFUSION","REVERB DIFFUSION"),("HI FREQ DAMPING","REVERB HI FREQ DAMPING")],
+            "hall_10":[("DECAY TIME","REVERB DECAY TIME"),("LOW FREQ DECAY","REVERB LOW FREQ DECAY"),("HI FREQ DAMPING","REVERB HI FREQ DAMPING"),("DETUNE RATE","REVERB DETUNE RATE"),("DETUNE AMT","REVERB DETUNE AMT")],
+            "hall_12":[("DECAY TIME","REVERB DECAY TIME"),("LOW FREQ DECAY","REVERB LOW FREQ DECAY"),("HI FREQ DAMPING","REVERB HI FREQ DAMPING"),("HI FREQ BANDWIDTH","REVERB HI FREQ BANDWIDTH"),("DETUNE RATE","REVERB DETUNE RATE"),("DETUNE AMT","REVERB DETUNE AMT")],
+            "hall_13":[("DECAY TIME","REVERB DECAY TIME"),("HI FREQ DAMPING","REVERB HI FREQ DAMPING")],
+            "chorus_core":[("CHORUS RATE","CHORUS RATE"),("CHORUS AMT","CHORUS AMT"),("CHORUS MIX","CHORUS MIX"),("CHORUS FEEDBACK","CHORUS FEEDBACK")],
+            "chorus_short":[("CHORUS RATE","CHORUS RATE"),("CHORUS AMT","CHORUS AMT"),("CHORUS MIX","CHORUS MIX")],
+            "bus_chorus":[("BUS1 REV AFTER CHOR","BUS1 REV AFTER CHOR"),("BUS2 REVERB MIX","BUS2 REVERB MIX")],
+            "bus_dist":[("BUS2 REVERB MIX","BUS2 REVERB MIX")],
+            "dist_refs":[("COMPRESSOR THRESHLD","COMPRESSOR THRESHLD"),("SYSTEM FEEDBACK","SYSTEM FEEDBACK"),("DIST GAIN IN","DIST GAIN IN"),("DIST GAIN OUT","DIST GAIN OUT")]
+        }
+        inherit_specs={
+            6:[("HALL REVERB","hall_chorus")],
+            7:[("HALL REVERB","hall_chorus"),("CHORUS+REVRB","early_only")],
+            8:[("HALL REVERB","hall_chorus"),("CHORUS+REVRB","early_only")],
+            9:[("HALL REVERB","hall_short")],
+            10:[("HALL REVERB","hall_10"),("CHORUS+REVRB","bus_chorus"),("CHORUS+REVRB","chorus_core")],
+            11:[("HALL REVERB","hall_10"),("CHORUS+REVRB","bus_dist")],
+            12:[("HALL REVERB","hall_12"),("CHORUS+REVRB","chorus_short")],
+            13:[("HALL REVERB","hall_13"),("CHORUS+REVRB","bus_dist"),("CMP+DIST+REV","dist_refs")]
+        }
+        if slot:=int(effect["slot"]):
+            specgroups=inherit_specs.get(slot,[])
+            existing={_label_key(c["name"]) for c in controls if c.get("editor_visible",True)}
+            for reference,groupname in specgroups:
+                source_slot=1 if reference=="HALL REVERB" else (6 if reference=="CHORUS+REVRB" else 11)
+                source_effect=next((x for x in result if int(x["slot"])==source_slot),None)
+                source_controls=source_effect["controls"] if source_effect else controls if source_slot==slot else []
+                pairs=shared.get(groupname,[])
+                if groupname=="early_only":pairs=[("EARLY RFLECTION LEV","EARLY RFLECTION LEV")]
+                for source_name,target_name in pairs:
+                    source=next((c for c in source_controls if _label_key(c.get("name",""))==_label_key(source_name) and c.get("editor_visible",True)),None)
+                    if not source or _label_key(target_name) in existing:continue
+                    cloned=dict(source);key="manual_inherited_"+_key(source.get("id",source_name))
+                    cloned.update({"id":key,"key":key,"name":target_name,"order":800+len(controls),"group":_group_for(target_name,key),"route":None,"status":"UNMAPPED","v05_runtime_ready":False,"v05_points":[],"supported_values":[],"catalog_descriptor":False,"manual_subparameter":True,"editor_visible":True,"evidence":f"ASR-10 Musician's Manual Section 6 cross-reference in ROM-{slot:02}; inherited display metadata only; DSP mapping unavailable."})
+                    controls.append(cloned);existing.add(_label_key(target_name))
+            # BUS1/BUS2 controls named directly in these algorithm descriptions.
+            direct_bus={10:[("BUS1 REV AFTER CHOR",6),("BUS2 REVERB MIX",6)],11:[("BUS2 REVERB MIX",6)],12:[],13:[("BUS2 REVERB MIX",6)]}
+            if slot in direct_bus:
+                for source_name,source_slot in direct_bus[slot]:
+                    source_effect=next((x for x in result if int(x["slot"])==source_slot),None)
+                    source_controls=source_effect["controls"] if source_effect else []
+                    source=next((c for c in source_controls if _label_key(c.get("name",""))==_label_key(source_name) and c.get("editor_visible",True)),None)
+                    if source and _label_key(source_name) not in existing:
+                        cloned=dict(source);key=f"manual_inherited_{_key(source.get('id',source_name))}"
+                        cloned.update({"id":key,"key":key,"order":810+len(controls),"group":"Bus mixing & routing","route":None,"status":"UNMAPPED","v05_runtime_ready":False,"v05_points":[],"supported_values":[],"catalog_descriptor":False,"manual_subparameter":True,"editor_visible":True,"evidence":f"ASR-10 Musician's Manual Section 6 ROM-{slot:02}; algorithm-specific bus control."})
+                        controls.append(cloned);existing.add(_label_key(source_name))
+            # Slot 10's explicit chorus/reverb group includes detune and low-frequency decay.
+            if slot==10:
+                for source_name,target_name in [("LOW FREQ DECAY","REVERB LOW FREQ DECAY"),("DETUNE RATE","REVERB DETUNE RATE"),("DETUNE AMT","REVERB DETUNE AMT")]:
+                    source=next((c for c in result[0]["controls"] if _label_key(c.get("name",""))==_label_key(source_name)),None)
+                    if source and _label_key(target_name) not in existing:
+                        cloned=dict(source);key="manual_inherited_"+_key(source.get("id",source_name));cloned.update({"id":key,"key":key,"name":target_name,"order":820+len(controls),"group":"Reverb","route":None,"status":"UNMAPPED","v05_runtime_ready":False,"v05_points":[],"supported_values":[],"catalog_descriptor":False,"manual_subparameter":True,"editor_visible":True,"evidence":"ASR-10 Musician's Manual Section 6 ROM-10 references the Chorus+Reverb detune and reverb parameter group."});controls.append(cloned);existing.add(_label_key(target_name))
+            # Slot 13 explicitly reuses compressor/distortion controls from ROM-11.
+            if slot==13:
+                source_effect=next((x for x in result if int(x["slot"])==11),None)
+                for source_name in ("COMPRESSOR THRESHLD","SYSTEM FEEDBACK","DIST GAIN IN","DIST GAIN OUT"):
+                    source=next((c for c in (source_effect or {}).get("controls",[]) if c.get("name")==source_name and c.get("editor_visible",True)),None)
+                    if source and _label_key(source_name) not in existing:
+                        cloned=dict(source);key="manual_inherited_"+_key(source.get("id",source_name));cloned.update({"id":key,"key":key,"order":830+len(controls),"route":None,"status":"UNMAPPED","v05_runtime_ready":False,"v05_points":[],"supported_values":[],"catalog_descriptor":False,"manual_subparameter":True,"editor_visible":True,"evidence":"ASR-10 Musician's Manual Section 6 ROM-13 cross-references CMP+DIST+REV controls."});controls.append(cloned);existing.add(_label_key(source_name))
+        # ROM-10 says the DDL left/right delay times are independently adjustable.
+        if int(effect["slot"])==10:
+            for c in controls:
+                if c["key"]=="ddl_time_l_r": c["editor_visible"]=False
+            parent=next((x for x in controls if x["key"]=="ddl_time_l_r"),None)
+            for side in ("L","R"):
+                controls.append({**(parent or {}),"id":f"ddl_time_{side.lower()}","key":f"ddl_time_{side.lower()}","name":f"DDL TIME {side}","order":501 if side=="L" else 502,"range_text":"0 to 1500 ms","range":[0,1500],"group":"Delay","units":"ms","description":f"Digital delay time for the {side} channel, independently adjustable.","route":None,"status":"UNMAPPED","catalog_descriptor":False,"manual_subparameter":True,"editor_visible":True})
+        # Section 6 contains explicit MOD SRC/DST/MIN/MAX blocks only for these
+        # algorithms. Do not apply the generic template to the other ROM algorithms.
+        mod_pages={14:109,15:109,16:109,17:111,18:111,19:112,20:113,21:115,22:117,23:117,24:117,25:118,26:120,28:122,29:122,30:124,31:126,32:126,33:127,34:129,37:134,38:136,39:137,40:139,41:140,42:141,44:145,45:148,46:149,47:151,48:152,49:153}
+        if int(effect["slot"]) in mod_pages:
+            sources=["WHEEL","PBEND","PRESS","PEDAL","XCTRL","KBD","VEL","KEYDN","SUSTN","FSW-L","PATCH","OFF"]
+            mod_defs=[
+                ("mod_src_1","MOD SRC 1","discrete",None,sources,"Selects modulation source 1."),
+                ("dst_1","DST 1","discrete",None,[],"Chooses an algorithm-specific parameter destination. Valid destination choices are not enumerated in the available registry."),
+                ("min_1","MIN 1","numeric_or_continuous",[0,99],[],"Sets the lower modulation amount as a percent of the destination range."),
+                ("max_1","MAX 1","numeric_or_continuous",[0,99],[],"Sets the upper modulation amount as a percent of the destination range."),
+                ("mod_src_2","MOD SRC 2","discrete",None,sources,"Selects the independent modulation source 2."),
+                ("dst_2","DST 2","discrete",None,[],"Chooses the second algorithm-specific parameter destination. Valid destination choices are not enumerated in the available registry."),
+                ("min_2","MIN 2","numeric_or_continuous",[0,99],[],"Sets the lower modulation amount for assignment 2 as a percent of its destination range."),
+                ("max_2","MAX 2","numeric_or_continuous",[0,99],[],"Sets the upper modulation amount for assignment 2 as a percent of its destination range.")]
+            for order,(ident,label,kind,limits,choices,description) in enumerate(mod_defs,700):
+                controls.append({"id":f"mod_{ident}","key":f"mod_{ident}","name":label,"order":order,"range_text":("0 to 99 percent of destination range" if limits else (", ".join(choices) if choices else "Algorithm-specific destination; choices not established")),"range":limits,"type":kind,"format":"integer" if limits else "","domain":"integer steps documented" if limits else "enumerated documented source choices","range_variants":[],"display_scale_curve":[],"group":"Modulation","units":"% of destination range" if limits else None,"evidence":f"ASR-10 Musician's Manual Section 6 explicit modulation block (PDF page {mod_pages[int(effect['slot'])]}); source and numeric range from Section 5/6.","description":description,"manual_confidence":"documented; effect-specific live values unverified","default_value":None,"observed_variation_values":[],"documented_choices":choices,"supported_values":[],"observed_choices":choices,"status":"UNMAPPED","route":None,"v05_runtime_ready":False,"v05_points":[],"catalog_descriptor":False,"manual_subparameter":True,"editor_visible":True,"input_disabled":ident.startswith("dst_")})
+        # Variation selection is handled by a dedicated PC draft selector, not as
+        # an ordinary parameter card or as a native-VST write.
+        for c in controls:
+            c.setdefault("editor_visible",True)
+            if c["key"]=="effect_variation": c["editor_visible"]=False
+
         # V1's exact runtime registry contains some proven controls not represented
         # among the 594 manual/editor descriptors (notably the reverb bus selectors).
         # Keep those stable controls visible as exact-point selectors, without
@@ -132,6 +352,13 @@ def load_registry():
                 "v05_runtime_ready":False,"v05_points":[],"catalog_descriptor":False})
         for control in controls:
             control.setdefault("catalog_descriptor",True)
+            control.setdefault("group",_group_for(control.get("name",""),control.get("id","")))
+            if int(effect["slot"]) in (4,5) and control.get("key")=="delay_time_l":
+                high=1300 if int(effect["slot"])==5 else 2000
+                control.update({"name":"BUS1 DELAY TIME L","range_text":f"0 to {high} ms","range":[0,high],"type":"numeric_or_continuous","format":"integer","domain":"integer steps documented","group":"Delay","units":"ms","description":"BUS1 left-channel delay time; the manual states left and right channels are independently adjustable.","editor_visible":True})
         controls.sort(key=lambda c:(c["order"],not c["catalog_descriptor"],c["name"]))
-        result.append({"slot": effect["slot"], "name": effect["factory_name"], "controls": controls})
+        result.append({"slot": effect["slot"], "name": effect["factory_name"],
+            "manual_parameter_count":full_effect.get("parameter_count"),
+            "modulation_note":full_effect.get("modulation_controls", ""),
+            "controls": controls})
     return result

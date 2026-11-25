@@ -1,0 +1,26 @@
+{
+  "schema": "trollfx-asr10-pc-editor-qa-v1",
+  "date_utc": "2026-11-25",
+  "branch_at_test": "feature/asr10-force-pc-gui-simulator",
+  "base_commit": "d3d199b1f43aa454102563ffa00de74dba14b281",
+  "results": {
+    "python_unittest": {
+      "passed": 21,
+      "failed": 0,
+      "coverage": ["50-effect catalog and registry coverage", "all documented numeric ranges and unit normalization", "signed ranges and enums", "BUS1/BUS2 and independent stereo delay controls", "room/plate effect-specific ranges", "repeated position, early-reflection, and envelope controls", "Section 6 effect cross-reference expansion", "modulation applicability", "existing 19 VST control identities", "native VST register trace and host event behavior", "VST state save/restore", "audio callback and wet/bypass processing", "unmapped control no-write behavior", "generated skin overlap and clipping"]
+    },
+    "playwright": {
+      "passed": 16,
+      "failed": 0,
+      "flaky": 0,
+      "coverage": ["all 50 factory effect selections", "control range and bank switching", "mouse-driven Q-Link gestures", "variation-specific PC draft retention", "reset and undo PC drafts", "DUAL DELAYS independent buses and L/R values", "modulation controls and disabled unknown destinations", "mixed-unit precision with no unsupported DSP write", "HALL/ROOM/PITCH transitions", "control clipping across all 50 selected effects", "generated BROWSE/EDIT/MIX preview navigation", "native VST parameter and register traces"]
+    },
+    "factory_package_and_sdk_asset_validation": {"validated_packages": 50, "expected_packages": 50, "result": "passed"},
+    "native_vst_and_register_trace": {"existing_vst_routes": 19, "identity_registry_changed": false, "state_save_restore": "passed", "unsupported_value_no_write": "passed"},
+    "armv7": {"result": "not run", "reason": "The PC simulator's native VST test binary is x86-64 and this GUI branch has no ARMv7 cross-build/test target. No Force binary or installation was produced."},
+    "physical_force": {"result": "not run", "reason": "No Force installation or physical-device test was performed."}
+  },
+  "presentation_schema": {"factory_effects": 50, "catalog_descriptors": 594, "editable_controls_including_manual_subparameters": 907, "manual_described_entries": 590, "manual_description_gap_entries": 4, "manual_gap_effect": "ROM-50 VAN DER POL is absent from Section 6 of the supplied PDF."},
+  "screenshots": ["screenshots/pc-editor-hall-bank-1.png", "screenshots/pc-editor-dual-delays.png", "screenshots/pc-editor-chorus-reverb.png", "screenshots/pc-editor-flanger-reverb.png", "screenshots/pc-editor-pitch-bank-1.png", "screenshots/pc-editor-pitch-bank-2.png"],
+  "dsp_policy": "Only existing exact VST points write. PC-only values, variation drafts, modulation values without verified routes, and unknown modulation destinations send no DSP writes."
+}
