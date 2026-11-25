@@ -27,13 +27,46 @@ No controlled bypass-versus-enabled recording was available to this inspection. 
 
 ### Storage and rollback constraints
 
-Keep both plugin and private packages on the SSD at the exact paths above. Leave root and `/synths` untouched. Do not change mount options: this inspection observed no `noexec`, and the user has confirmed the SSD-installed plugin loads. V1 is the known-working baseline but there was no separate rollback copy. Any eventual V3 replacement must first preserve the exact installed V1 folder as a uniquely named rollback directory, verify its VST hash, and leave the 50-package asset tree in place. Never replace another plugin folder or restart MPC automatically.
+Keep both plugin and private packages on the SSD at the exact paths above. Leave root and `/synths` untouched. Do not change mount options: this inspection observed no `noexec`, and the user has confirmed the SSD-installed plugin loads. Never replace another plugin folder or restart MPC automatically.
+
+#### V1 rollback copy created 2026-11-25
+
+With the user's authorization in this follow-up, a non-destructive copy of the installed V1 package was created at:
+
+`/media/SSD250g/TROLLfx/ASR10/rollback-v1-20261125/TROLLfx - VST - ASR10 FX Collection/`
+
+It is outside `/media/SSD250g/VST2 Plugins/`, so MPC's VST2 scan cannot discover it as another plugin. The copy contains 21 files. Its `SHA256SUMS` validation passed; `factory-assets-path.txt` is byte-identical to the active install and still points to `/media/SSD250g/TROLLfx/ASR10/factory-effects`; its ARMv7 SHA-256 is `225aacdcd3a0a200f5851af924f0128b20f1ff6b4e8c354df343e804fe0d9de5`, matching the active V1 binary. The private package directory was not copied or modified; the configuration points to the existing 50-package SSD collection.
+
+For a future V1 snapshot, the explicit-copy helper requires `--create`, accepts only a dated rollback path under `/media/SSD250g/TROLLfx/ASR10/`, refuses overwrite, checks the known V1 binary hash, copies the active package and validates checksums and the asset-path sidecar:
+
+```sh
+tools/force_hardware/create_v1_backup.sh --create \\
+  --backup-dir /media/SSD250g/TROLLfx/ASR10/rollback-v1-YYYYMMDD akai-force
+```
+
+The copy is not an installer and does not mutate the active plugin. To recheck the existing copy manually:
+
+```sh
+ssh akai-force 'cd "/media/SSD250g/TROLLfx/ASR10/rollback-v1-20261125/TROLLfx - VST - ASR10 FX Collection" && sha256sum -c SHA256SUMS && cat factory-assets-path.txt && sha256sum VST/asr10-fx-collection-arm32.so'
+```
+
+No V1 restore was performed. Any future restore requires MPC closed and explicit user authorization; do not simply copy over an active plugin directory.
+
+### Controlled CPU comparison procedure
+
+`tools/force_hardware/measure_force_cpu.sh` samples the MPC process and system idle percentage from read-only BusyBox `top` output over SSH. It prompts the operator to set each state manually, warms up for 15 seconds, and then records 60 one-second samples by default for plugin bypass, HALL REVERB, 8-VOICE CHOR and PITCH SHIFT. Keep the same project, audio loop, routing, buffer, gain and playback level throughout. Use the Force touchscreen for state selection; the script does not send controls or write to the device. Output is a new local CSV, and the script refuses to overwrite it.
+
+```sh
+tools/force_hardware/measure_force_cpu.sh akai-force 60 1 15 force-cpu-comparison.csv
+```
+
+Each row records state, sample number, MPC `%CPU` and system `%idle`. Run the comparison only during a controlled session with steady playback; note audio glitches and timing separately. This is process/system load evidence, not callback deadline or audio quality proof. No controlled CPU comparison has yet been run, so there are no per-state results to report.
 
 ## V1 desktop package checks
 
 At the supplied V1 integration commit `5910f54`, the release package's SDK validation reported zero errors and zero warnings. The candidate contained ARM32 ELF32 ARMv7 hard-float and AArch64 binaries; the ARM32 maximum GLIBC requirement was 2.27. VSTPluginMain was exported, UI images and Q-Link resources validated, and the ARM32 package hash matches the hash independently read from the Force. These are desktop/package checks, not a new physical V3 validation.
 
-The current published integration branch has moved to `d8f6c29341cc51523fe7a9e16f3be570e9321c1c` (“Package V2 verified parameter controls and ARMv7 evidence”). No V3/per-effect-editor branch or commit was visible in the remote branch listing during this pass. No V3 binary was built, no V3 editor/Q-Link behavior was tested, and V1's playable marker must not be copied to any changed binary.
+The current published integration branch has moved to `d8f6c29341cc51523fe7a9e16f3be570e9321c1c` (“Package V2 verified parameter controls and ARMv7 evidence”). A fresh remote branch check on 2026-11-25 still found no V3/per-effect-editor branch or commit. Release integration remains on hold until Codex 2 publishes the committed GUI branch. No V3 binary was built, no V3 editor/Q-Link behavior was tested, and V1's playable marker must not be copied to any changed binary.
 
 ## Systematic physical procedure for all 50 effects
 
@@ -68,6 +101,6 @@ Physical tests remain a separate gate. Desktop pass results do not imply Force h
 
 ## Deployment policy
 
-No V3 replacement was attempted. Do not install during an active MPC session, do not restart MPC, and do not alter mount options. After every desktop gate passes and the user explicitly authorizes replacement, use the verified local-to-SSD deployment procedure for the exact candidate: validate the package locally, check SSD mount and free space, stage only under `/media/SSD250g`, verify staged checksums, verify the current V1 hash, preserve V1 under a timestamped rollback name, atomically switch only the TROLLfx directory, then verify the new hash and asset sidecar. Keep `/media/SSD250g/TROLLfx/ASR10/factory-effects` untouched. Reversal is a manual rename of the V3 folder aside and the preserved V1 folder back to the exact plugin path; restart MPC only after the session is closed and the user chooses to do so.
+No V3 replacement was attempted. Do not install during an active MPC session, do not restart MPC, and do not alter mount options. After every desktop gate passes and the user explicitly authorizes replacement, use the verified local-to-SSD deployment procedure for the exact candidate: validate the package locally, check SSD mount and free space, stage only under `/media/SSD250g`, verify staged checksums, verify the current V1 hash, preserve V1 under a timestamped rollback name, atomically switch only the TROLLfx directory, then verify the new hash and asset sidecar. Keep `/media/SSD250g/TROLLfx/ASR10/factory-effects` untouched. The manually created dated V1 copy above is a separate recovery baseline and remains outside the plugin scan path. Reversal is a manual rename of the V3 folder aside and the preserved V1 folder back to the exact plugin path; restart MPC only after the session is closed and the user chooses to do so.
 
 The V1 Python installer/rollback wrappers are development-host tools and are not suitable as Force commands because the Force shell did not expose Python. Exact V3 SCP/SSH replacement commands will be generated only for the final, checksummed candidate so paths and hashes are bound to the artifact that passed the gates. No such candidate exists yet.
