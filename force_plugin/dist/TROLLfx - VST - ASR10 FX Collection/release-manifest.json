@@ -6,9 +6,9 @@
   "release_state": "candidate",
   "playable": false,
   "playable_marker_required": "INTEGRATION_STATUS",
-  "built_utc": "2026-11-25T03:25:03.972383+00:00",
-  "source_commit": "f057e6fed75840039a7124d782fe174f3061ebda",
-  "source_inputs_sha256": "ba056c0e75e5266394c41c7172b4751bb292deebe67d4ed7d0ee5bfb7cc1f0ec",
+  "built_utc": "2026-11-25T05:51:40.986009+00:00",
+  "source_commit": "5bf1f321c7f585ddc53dfbc9e1f001648cad4e5b",
+  "source_inputs_sha256": "8291a4871e0609b729bb81fbc4b15951d5188feb3772f4ad5c1a8fe458fe44f7",
   "sdk": {
     "path": "/mnt/c/Users/Gamer/research/AkaiForceSDK",
     "origin": "https://github.com/420troll/AkaiForceSDK.git",
@@ -32,7 +32,7 @@
     "provider_api": "IValidatedFactoryPackageProvider",
     "production_provider": "local trusted-import index; missing or invalid packages fail closed",
     "binary_bound_native_vst_test": "PASS",
-    "binary_test_report_sha256": "fbe3a63bb01e5cf40542850a142b9ed821888fc3f42d6e3136a33f558acafa87",
+    "binary_test_report_sha256": "bbddcf44a9b32e57ff65d0d2a8e197d36ef58f97472b7d413b64b8f5d2e05cef",
     "packaged_binary_bound_audio_test": "PASS",
     "playable_release_gate": "BLOCKED_ON_FORCE_EDITOR_VALIDATION",
     "force_editor_hardware_validation": {
@@ -43,7 +43,7 @@
   "targets": {
     "native": {
       "host": "x86_64",
-      "binary_sha256": "891ccc767020cbc6a5430c8f0263744d8f5705c9c4fe5b15ab0d31a2c1aacec9",
+      "binary_sha256": "8f5cf2b35761657a9b967ff2d84cf9738eff317996baf8e4cffca521a639254b",
       "host_sim_parameter_dump": "PASS"
     },
     "arm32": {

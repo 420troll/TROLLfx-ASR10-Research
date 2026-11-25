@@ -52,7 +52,8 @@ def source_digest() -> str:
             "force_plugin/tests/test_release_infrastructure.py",
             "force_plugin/tools/build_release.py",
             "tools/parameter_controls/build_editor_registry_v03.py",
-            "tools/parameter_controls/build_editor_v04.py")
+            "tools/parameter_controls/build_editor_v04.py",
+            "tools/force_simulator/compact_skin.py")
     inputs += tuple(str(p.relative_to(ROOT)) for p in sorted((ROOT/"force_plugin/assets").rglob("*")) if p.is_file())
     inputs += ("force_plugin/graphics/v3/asset-manifest.json",)
     for rel in inputs:
@@ -201,6 +202,10 @@ def main():
         staged_qlinks=staged_skins/"Q-Links.json"
         if not staged_tui.is_file() or not staged_qlinks.is_file():
             raise RuntimeError("SDK did not generate the required V4 TUI.json and Q-Links.json; refusing release packaging")
+        # Keep the SDK-generated widget positions and parameter/Q-Link bindings,
+        # while fitting long V4.1 value strings into their real label bounds.
+        compacted=run([sys.executable,ROOT/"tools/force_simulator/compact_skin.py",staged_tui],cwd=ROOT)
+        print("Applied generated-skin text profile: "+compacted.stdout.strip())
         tui_data=json.loads(staged_tui.read_text())
         qlink_data=json.loads(staged_qlinks.read_text())
         tabs=tui_data.get("pageData",{}).get("tabs",[])

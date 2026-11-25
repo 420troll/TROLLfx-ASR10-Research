@@ -16,7 +16,7 @@
       "controls": [
         {
           "widget": "text",
-          "text": "TROLLfx / ASR-10 FACTORY FX"
+          "text": "ASR-10 FACTORY FX"
         },
         "empty",
         "empty",
@@ -47,7 +47,7 @@
       "controls": [
         {
           "widget": "text",
-          "text": "ACTIVE FACTORY PARAMETERS"
+          "text": "FACTORY EDIT"
         },
         "empty",
         "empty",

@@ -3,7 +3,7 @@
   "test_instrumented_native_vst_sha256": "c939ef84865a754c381bb2f290db031ecebc02fe62541b9d6dc50b22cc5d38de",
   "factory_packages_discovered_and_validated_by_provider": "50/50 (local private collection; no contents included)",
   "generated_skin_sha256": {
-    "TUI.json": "5afc7be6a265dfaed2e3132cdadb635af1b1993529580c69fde0046eb2adaa84",
+    "TUI.json": "280a9e3b55213c799bdd4de1c89bf6494d6b39d597ca743d9e1f2ff75d0e2730",
     "Q-Links.json": "206400c0a756eaee6fdddb4211756649cf83e50c3288e777d43294efe8e57f2a",
     "panel_background.png": "b33d76620163911169fc71a4006d56c7085e33b7eb8c4e2f5067ecd29a834d1d",
     "knob_uni.png": "3ab20a30126075e377bcf7ad1234439f51e93d84d73c8385f335f235c8853e30",
@@ -12,12 +12,12 @@
     "fader_h_bi.png": "195a064f2cfce377a91cc6c68130bc7cf36c3e6336d33b1c99e73b478f79cca2"
   },
   "preview_sha256": {
-    "hall-browse.png": "e6be61213c056e50aa81c158ecf9d80c90bdbbef5f9542a117aa507b663161f8",
-    "hall-edit.png": "087dbf30cb22169efc9f5034c40fedc2af5f080710d8afb91f8f93d2ef4df31d",
-    "hall-mix.png": "6353bc36455ea352466ec1feb37a92f1bbcce9b1e6d68b3c8b51bc349ee5d5c6",
-    "room-browse.png": "882594be56bc27353918a1d0c92675be015a7542c709c8ee734ccfc226305d0c",
-    "room-edit.png": "da89e5402ade7334f91d0e1dcf5bdb80822a7cf0c05c386c2f1631e1bc60ee87",
-    "room-mix.png": "cae8e114155a81428f5e638bfa052a26a10daa27bdb65222fd8e9fbdbf6ed46c"
+    "hall-browse.png": "2aebd91a0167d82f3acbe5687cfcedb8813d31c8b35eac34b65a08a14af710a2",
+    "hall-edit.png": "997fc0b01ee36027a0e9a01ee406445b70eafc58af4a0cd1538940ce336cbe69",
+    "hall-mix.png": "456d512f7d9e6d157ee68b0efe50046f4301e7b71c5700037290bcd90f86fabd",
+    "room-browse.png": "3c3cc4e6f40a6d2ed9418d309bb5380c5b7a958e5e8a3773404435498d1c2a9a",
+    "room-edit.png": "77109263a80ecd3e51a3afd39b4a6d862919cac954f4823d1660e5a65f06c9c8",
+    "room-mix.png": "57dc52ec361da080b376e7fa3ab77ba3c07c6a4acf000844cfc14354755613ec"
   },
   "pages": {
     "BROWSE": {
@@ -172,12 +172,33 @@
       628
     ],
     "out_of_bounds_errors": 0,
-    "current_text_clipping_warning_count": 2,
+    "current_text_clipping_warning_count": 0,
     "native_slider_art_missing": true
   },
   "hardware": {
     "physical_force_q_link_dispatch": "NOT_TESTED",
     "hardware_accuracy": "NOT_CLAIMED"
   },
-  "redaction": "No ROM, firmware, EFE, checkpoint, package manifest, captured state, input audio, or output audio is included. Register values and event logs remain user-local."
+  "redaction": "No ROM, firmware, EFE, checkpoint, package manifest, captured state, input audio, or output audio is included. Register values and event logs remain user-local.",
+  "sdk_release_validation": {
+    "result": "PASS",
+    "errors": 0,
+    "warnings": 0,
+    "three_generated_pages": true,
+    "release_binary_bound_vst_test": "PASS"
+  },
+  "browser_mouse_tests": {
+    "runner": "Playwright",
+    "expected": 4,
+    "failed": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "passed_test_names": [
+      "navigates the three generated pages",
+      "selects Hall and Room and refreshes the shared EDIT Q-Link values",
+      "mouse Q-Link drag edits Hall Q3 through the VST trace",
+      "mouse Q-Link drag edits Room Q1 through the VST trace"
+    ],
+    "browser": "Chromium via Playwright"
+  }
 }

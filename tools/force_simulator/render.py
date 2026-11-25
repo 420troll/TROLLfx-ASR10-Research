@@ -115,9 +115,21 @@ def layout_report(model, values=None, display=None, name=None):
             for b in labels[i+1:]:
                 ix=max(0,min(a["x"]+a["w"],b["x"]+b["w"])-max(a["x"],b["x"]))
                 iy=max(0,min(a["y"]+a["h"],b["y"]+b["h"])-max(a["y"],b["y"]))
-                if ix>0 and iy>0 and a.get("parent")!=b.get("parent"):
+                if ix>0 and iy>0:
                     collisions.append({"first":a.get("text") or a.get("parent"),"second":b.get("text") or b.get("parent"),"intersection_px":[round(ix,1),round(iy,1)]})
         if collisions: report["warnings"].append({"page":page["name"],"issue":"overlapping label widget bounds","pairs":collisions})
+        mixed=[]
+        widgets=[x for x in page["items"] if x["type"] in ("film","slider","button","image")]
+        for label in labels:
+            for widget in widgets:
+                if label.get("parent") != widget.get("parent"):
+                    continue
+                ix=max(0,min(label["x"]+label["w"],widget["x"]+widget["w"])-max(label["x"],widget["x"]))
+                iy=max(0,min(label["y"]+label["h"],widget["y"]+widget["h"])-max(label["y"],widget["y"]))
+                if ix>0 and iy>0:
+                    mixed.append({"label":label.get("text") or label.get("parent"),"widget":widget.get("type"),
+                                  "intersection_px":[round(ix,1),round(iy,1)]})
+        if mixed: report["warnings"].append({"page":page["name"],"issue":"label overlaps control widget bounds","pairs":mixed})
         texts=[x.get("text","") for x in labels if x.get("type")=="text"]
         duplicates=sorted(t for t in set(texts) if texts.count(t)>1 and t)
         if duplicates: report["warnings"].append({"page":page["name"],"issue":"duplicate text", "values":duplicates})

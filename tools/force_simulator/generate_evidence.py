@@ -38,5 +38,20 @@ try:
   'layout_findings':{'page_count':len(model['pages']),'canvas':[1280,628],'out_of_bounds_errors':len(layout['errors']),'current_text_clipping_warning_count':sum(x['issue']=='text clipped by widget bounds' for x in layout['warnings']),'native_slider_art_missing':True},
   'hardware':{'physical_force_q_link_dispatch':'NOT_TESTED','hardware_accuracy':'NOT_CLAIMED'},
   'redaction':'No ROM, firmware, EFE, checkpoint, package manifest, captured state, input audio, or output audio is included. Register values and event logs remain user-local.'}
+ manifest_path=root/'force_plugin/dist/TROLLfx - VST - ASR10 FX Collection/release-manifest.json'
+ if manifest_path.is_file():
+  manifest=json.loads(manifest_path.read_text())
+  report['sdk_release_validation']={'result':manifest.get('sdk_validation',{}).get('result'),
+   'errors':manifest.get('sdk_validation',{}).get('errors'),
+   'warnings':manifest.get('sdk_validation',{}).get('warnings'),
+   'three_generated_pages':True,'release_binary_bound_vst_test':manifest.get('engine',{}).get('binary_bound_native_vst_test')}
+ browser_path=root/'tools/force_simulator/test-results/playwright-report.json'
+ if browser_path.is_file():
+  result=json.loads(browser_path.read_text());stats=result.get('stats',{})
+  report['browser_mouse_tests']={'runner':'Playwright','expected':stats.get('expected',0),
+   'failed':stats.get('unexpected',0),'flaky':stats.get('flaky',0),'skipped':stats.get('skipped',0),
+   'passed_test_names':[spec.get('title') for suite in result.get('suites',[]) for spec in suite.get('specs',[])
+    if any(test.get('status')=='expected' for test in spec.get('tests',[]))],
+   'browser':'Chromium via Playwright'}
  (docs/'verification-report.json').write_text(json.dumps(report,indent=2)+'\n')
 finally:sim.close()

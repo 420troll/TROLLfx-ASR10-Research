@@ -72,13 +72,13 @@ def build_registry():
 def build_ui(reg):
     pages=[]
     pages.append({"name":"BROWSE","controls":[
-        {"widget":"text","text":"TROLLfx / ASR-10 FACTORY FX"},
+        {"widget":"text","text":"ASR-10 FACTORY FX"},
         "empty","empty","empty",
         "empty","empty","empty","empty",
         {"param":"Host Bypass","widget":"switch"},"empty","empty","empty",
         "Wet / Dry","Input Gain","Output Gain",{"param":"FX Slot","widget":"slider","overlay":"menu"}]})
     edit_cells=["empty"]*16
-    edit_cells[0]={"widget":"text","text":"ACTIVE FACTORY PARAMETERS"}
+    edit_cells[0]={"widget":"text","text":"FACTORY EDIT"}
     edit_cells[4]={"param":"EDIT BANK","widget":"knob","overlay":"knob",
         "visibleWhen":{"param":"BANK SELECT ON","choice":"On"}}
     edit_positions=[12,13,14,15,8,9,10,11]

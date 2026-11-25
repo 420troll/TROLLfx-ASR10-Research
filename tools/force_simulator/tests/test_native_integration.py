@@ -43,7 +43,8 @@ class NativePluginIntegration(unittest.TestCase):
   self.assertEqual(m['pages'][1]['qlinks']['8'],53)
   self.select(1);values={i:self.v.get(i) for i in range(self.v.num_params)}
   report=layout_report(m,values,self.v.text,lambda i:self.v.text(i,True))
-  self.assertTrue(any(w['issue']=='text clipped by widget bounds' for w in report['warnings']))
+  self.assertFalse(any(w['issue']=='text clipped by widget bounds' for w in report['warnings']),report['warnings'])
+  self.assertFalse(any(w['issue'] in ('overlapping label widget bounds','label overlaps control widget bounds') for w in report['warnings']),report['warnings'])
  def test_hall_room_pitch_and_return_route_to_dsp(self):
   cases=[(1,48,'DECAY TIME'),(3,46,'DECAY TIME'),(3,47,'DIFFUSION'),(39,46,'QUALITY'),(1,48,'DECAY TIME')]
   report=[]
