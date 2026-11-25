@@ -1,0 +1,18 @@
+{
+  "schema": "trollfx-asr10-independent-hall-decay-audio-v1",
+  "source_runtime_commit": "3885d3dcc23fb3803b11cc3c8662ee40f8c0ca9d",
+  "native_factory_runtime": "PASS_WITH_LIMITS",
+  "effect": "HALL REVERB",
+  "parameter": "DECAY TIME",
+  "tested_values": [40, 41],
+  "private_run_checkpoint_and_event_schedule": "validated by existing local production-provider audit; hashes and payload remain outside Git",
+  "stimulus": "deterministic stereo 431 Hz and 997 Hz tones plus impulse; 32768-frame warmup; 65536-frame measurement",
+  "frames_per_render": 65536,
+  "finite_stereo_samples_per_render": 131072,
+  "difference_rms": 0.000623683,
+  "difference_peak": 0.0017395,
+  "audio_difference_observed": true,
+  "exact_original_os_audio_match": "NOT_TESTED",
+  "full_0_to_99_audio_range": "NOT_TESTED",
+  "private_audio_files_in_git": false
+}

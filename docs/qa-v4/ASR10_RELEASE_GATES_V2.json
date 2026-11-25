@@ -1,0 +1,26 @@
+{
+  "schema": "trollfx-asr10-independent-release-gates-v2",
+  "candidate_scope": "published PC full-parameter editor 4d4a0d4 and published Force V4.1  f159cde7daa7ba91b5aac8c93999b6a32835bf3f",
+  "gates": [
+    {"id": "rom_effect_identity", "status": "PASS_WITH_SCOPE", "evidence": "Manual Section 6 and catalog match 50 ordered effect identities; ROM-50 is absent from PDF Section 6 description."},
+    {"id": "catalog_descriptor_completeness", "status": "PASS", "evidence": "594 manual descriptors; independent PDF audit found all 542 listed range strings, 50 variation rows, and no missing range row."},
+    {"id": "parameter_identity_and_expansion", "status": "PARTIAL", "evidence": "PC editor has 594 effect-qualified descriptors and claims 907 expanded presentation controls. Indexed subfields must retain parent identity; 907 is not proof of 907 distinct original controls."},
+    {"id": "manual_ranges", "status": "FAIL", "evidence": "Published editor schema misstates ROM-15, ROM-16 and ROM-18 decay domains; see ASR10_PARAMETER_RECONCILIATION_V2.json."},
+    {"id": "os_field_association", "status": "PARTIAL", "evidence": "49 effects, 1,040 associations; 94 manual descriptors unmatched and 500 OS-only associations remain unlinked. Missing observation is not proof of OS absence."},
+    {"id": "variation_and_modulation_state", "status": "PARTIAL", "evidence": "Four edit buffers documented; per-effect modulation destination options, lockout behavior and complete variation coverage not live-verified."},
+    {"id": "full_range_conversion", "status": "NOT_TESTED", "evidence": "No complete recovered LCD-to-register conversion over each documented domain."},
+    {"id": "dsp_register_write_correctness", "status": "PARTIAL", "evidence": "33 mapped-control records claim exact points; existing 19 native VST routes; no full-range correctness claim. At HALL 40/41 final values match but stored mapping write order differs from OS host-event order."},
+    {"id": "measurable_audio_behavior", "status": "PARTIAL", "evidence": "Independent HALL DECAY 40/41 native runtime A/B was finite and different; RMS 0.000623683, peak 0.0017395 over 65,536 frames per render."},
+    {"id": "exact_os_reference_audio", "status": "NOT_TESTED", "evidence": "The HALL A/B demonstrates a change, not bit-exact or perceptual matching to original OS output."},
+    {"id": "pc_editor_python_regression", "status": "PASS", "evidence": "21 tests independently rerun at 4d4a0d4."},
+    {"id": "pc_editor_browser_regression", "status": "NOT_TESTED", "evidence": "Branch reports 16 passed; independent rerun blocked by missing Playwright executable."},
+    {"id": "gui_manual_range_consistency", "status": "FAIL", "evidence": "Independent check found three reverb decay range errors in editor schema."},
+    {"id": "vst_parameter_id_compatibility", "status": "PASS_WITH_LIMITS", "evidence": "Candidate Python tests check the append-only registry and native state restore; no physical-host project corpus regression independently run."},
+    {"id": "vst_chunk_compatibility", "status": "NOT_TESTED", "evidence": "No independent cross-version host chunk corpus tested in this task."},
+    {"id": "armv7_abi_and_runtime", "status": "NOT_TESTED", "evidence": "PC editor branch reports ARMv7 build not run; prior V4.1 desktop/QEMU evidence is not Force hardware proof."},
+    {"id": "physical_force_qlink_delivery", "status": "NOT_TESTED", "evidence": "No readout of physical encoder event through host callback was obtained."},
+    {"id": "nonfinite_vst_input_robustness", "status": "OPEN_DEFECT", "evidence": "Prior QA's non-finite VST input issue remains tracked; not fixed or revalidated here."}
+  ],
+  "release_decision": "NOT_READY",
+  "blockers": ["Correct three manual range mismatches", "Do not promote manual-only subfields as OS or DSP verified", "Obtain physical Force callback evidence", "Run ARMv7 binary and host chunk compatibility tests for the exact candidate", "Resolve or contain the tracked non-finite input defect"]
+}

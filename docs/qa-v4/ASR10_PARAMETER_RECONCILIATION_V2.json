@@ -1,0 +1,59 @@
+{
+  "schema": "trollfx-asr10-parameter-reconciliation-v2",
+  "manual": {
+    "title": "ASR-10 Musician's Manual",
+    "sha256": "e8ab5100904caf91fe355065ed9646aff197761b0663a7d452dc98af1f9a29dc",
+    "sections": [5, 6],
+    "section6_rom_effects": 50,
+    "section6_catalog_descriptors": 594,
+    "range_text_audit": {"exact_range_strings": 542, "shared_variation_rows": 50, "missing_range_rows": 0},
+    "appendix_os2_effects": 12,
+    "appendix_os2_field_headings": 215,
+    "appendix_runtime_status": "MANUAL_ONLY_NOT_LIVE_OS_OR_DSP_VERIFIED"
+  },
+  "os_inventory": {
+    "source": "Codex 1 published ASR10_FACTORY_EFFECT_EDITOR_INVENTORY_V04; ROM-02 deferred",
+    "effects_observed": 49,
+    "field_associations": 1040,
+    "observations": 5484,
+    "exact_or_alias_links": 491,
+    "manual_entries_unmatched_for_review": 94,
+    "os_associations_not_linked_to_catalog_rows": 500,
+    "unique_os_only_labels": 76,
+    "interpretation": "Associations and observations are not counts of distinct controls. Unmatched means not linked in the captured inventory; it does not prove OS absence."
+  },
+  "per_parameter_matrix": "factory-parameter-validation-matrix.json (existing row-level manual/OS/DSP status matrix); ASR10_FACTORY_PARAMETER_SPEC_AUDIT_V1.json retains descriptor-level manual-to-LCD links and all 94 review rows.",
+  "normalization_rules": [
+    {"group": "BUS1/BUS2 mix, feedback and delay", "representation": "Split by bus; split delay by L/R where manual or OS cursor evidence identifies independent fields."},
+    {"group": "ROOM and PLATE decay", "representation": "One DECAY TIME identity per effect, with selected-effect-specific manual domain; do not fan out alternative ranges as multiple knobs."},
+    {"group": "POSITN BAL (1 to 3)", "representation": "Preserve three independently selectable signed members, each -99..+99."},
+    {"group": "ER LEV (1 to 4)", "representation": "Preserve four independently selectable members, each -99..+99."},
+    {"group": "ENV LEV (1 to 9)", "representation": "Manual defines nine. Captured OS inventory shows five values per observed row; four are not OS-confirmed. Keep the remaining members manual-only pending another page/variation capture."},
+    {"group": "Modulation", "representation": "Two independent SRC/DST/MIN/MAX assignments; destination option lists and direct-edit lockout are effect/variation-specific and not established by the broad inventory."},
+    {"group": "ROM-09 FAST-SLOW SWITCH", "representation": "Source-dependent threshold/toggle behavior and polarity reversal are manual-described; not a generic continuous knob."},
+    {"group": "OS2 44 kHz Appendix", "representation": "Keep a separate 12-algorithm namespace; do not append as ROM slots 51-62 or imply live OS/DSP support."}
+  ],
+  "codex2_editor_audit": {
+    "branch": "feature/asr10-force-pc-gui-simulator",
+    "commit": "4d4a0d4",
+    "schema_effects": 50,
+    "schema_descriptors": 594,
+    "claimed_expanded_editor_controls": 907,
+    "unique_effect_qualified_descriptor_identities": 594,
+    "python_tests_independently_rerun": {"passed": 21, "failed": 0},
+    "browser_results": "BRANCH_REPORTED_16_PASS_NOT_RERUN_PLAYWRIGHT_NOT_INSTALLED",
+    "range_findings": [
+      {"slot": 15, "effect": "LARGE ROOM", "field": "DECAY TIME", "editor_range": "0.20 to 100.0 sec.", "manual_range": "0.20 to 150.0 sec.", "status": "FAIL"},
+      {"slot": 16, "effect": "HALL REVERB2", "field": "DECAY TIME", "editor_range": "0.20 to 100.0 sec.", "manual_range": "0.70 to 250.0 sec.", "status": "FAIL"},
+      {"slot": 18, "effect": "LARGE PLATE", "field": "DECAY TIME", "editor_range": "0.2 to 100.0 sec.", "manual_range": "0.4 to 140.0 sec.", "status": "FAIL"}
+    ],
+    "control_identity_note": "907 is the editor's expanded presentation count; schema retains 594 source descriptors. Indexed groups can expand into controls, but 907 is not an independently established count of original physical controls or DSP routes."
+  },
+  "dsp_evidence": {
+    "manual_documented": "Separate from all implementation statuses.",
+    "os_observed": "Separate from register-write evidence.",
+    "register_mapped": "33 source registry controls claim exact points; this is not full-range proof.",
+    "native_vst_routes": 19,
+    "audio_verified": "Only individual tested points/signals; do not generalize to the full manual range."
+  }
+}
