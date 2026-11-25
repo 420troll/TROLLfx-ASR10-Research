@@ -15,6 +15,8 @@ assert [(x["slot"], x["name"]) for x in effects] == expected
 
 ui = json.loads((ROOT / "ui.json").read_text())
 assert ui["kit"]["theme"] == "cyan"
+assert ui["backgroundImage"] == "panel_background.png"
+assert ui["kit"]["accent"] == "ff00c7c2"
 assert [page["name"] for page in ui["pages"]] == ["BROWSE", "MIX", "EDIT", "EDIT 2"]
 for page in ui["pages"]:
     assert len(page["controls"]) == 16
@@ -55,6 +57,23 @@ catalog_v3 = json.loads((ROOT.parent / "docs/ASR10_FACTORY_PARAMETER_RECOVERY_V0
 assert len(catalog_v3["new_verified_controls"]) == 3
 assert len(catalog_v3["range_scans"]) == 3
 release_skin = ROOT / "dist" / "TROLLfx - VST - ASR10 FX Collection" / "Plugin Skins"
+required_skin_assets = {
+    "panel_background.png", "knob_uni.png", "knob_bi.png", "knob_small_uni.png",
+    "knob_small_bi.png", "fader_h_uni.png", "fader_h_bi.png", "toggle_on.png",
+    "toggle_off.png", "button_on.png", "button_off.png", "seg2_on.png", "seg2_off.png",
+    "seg3_on.png", "seg3_off.png", "seg4_on.png", "seg4_off.png",
+}
+if release_skin.is_dir():
+    assert required_skin_assets <= {p.name for p in release_skin.iterdir() if p.is_file()}
+    tui = json.loads((release_skin / "TUI.json").read_text())
+    def strings(value):
+        if isinstance(value, str):
+            yield value
+        elif isinstance(value, dict):
+            for child in value.values(): yield from strings(child)
+        elif isinstance(value, list):
+            for child in value: yield from strings(child)
+    assert "panel_background.png" in set(strings(tui))
 if (release_skin / "Q-Links.json").is_file():
     qlinks = json.loads((release_skin / "Q-Links.json").read_text())
     maps = qlinks["Screen Mode Q-Links"]["map"]

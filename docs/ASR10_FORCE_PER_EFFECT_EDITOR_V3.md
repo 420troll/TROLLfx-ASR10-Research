@@ -63,6 +63,27 @@ runtime schedules only the observed ordered DSP register writes through the
 existing bounded API. No filesystem access, locking, or allocation was added
 to `process()`.
 
+## Retro graphics integration
+
+The graphics pack from `feature/asr10-retro-graphics-v3@febda4f` is now
+integrated into the actual generated skin. `force_plugin/ui.json` selects
+`panel_background.png` and the `ff00c7c2` cyan accent. The release build stages
+the SDK-ready art under `force_plugin/assets/`; the SDK emits the background
+reference in `TUI.json` and copies the branded background plus custom SDK kit
+film strips/buttons into `Plugin Skins/`. The skin includes the background,
+knob/fader strips, toggle and segment button states. The graphics manifest and
+credits remain alongside the source art.
+
+The visual follows the retro charcoal, brushed-panel, cyan and pale-LCD concept,
+but it is not a pixel-identical recreation. The graphics branch did not contain
+a supplied Force screenshot/mockup for direct comparison. The SDK supports a
+static full-page background and native controls, not separate dynamic LCD/card
+images, arbitrary tab artwork, Q-Link image badges, or per-control unavailable
+art. Those remain reference assets; effect names, values, status and Q-Link
+behavior stay in the native generated widgets and maps. The same background is
+used on each tab. A Force display review is still needed to confirm final
+readability and fit.
+
 ## State and compatibility
 
 No existing plugin parameter ID, parameter index, effect slot, package

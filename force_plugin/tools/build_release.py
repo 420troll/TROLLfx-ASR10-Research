@@ -38,6 +38,8 @@ def source_digest() -> str:
             "force_plugin/tools/test_packaged_vst.py",
             "force_plugin/tools/test_arm32_vst_qemu.py",
             "tools/parameter_controls/build_editor_registry_v03.py")
+    inputs += tuple(str(p.relative_to(ROOT)) for p in sorted((ROOT/"force_plugin/assets").rglob("*")) if p.is_file())
+    inputs += ("force_plugin/graphics/v3/asset-manifest.json",)
     for rel in inputs:
         h.update(rel.encode()+b"\0"); h.update((ROOT/rel).read_bytes())
     return h.hexdigest()
@@ -152,6 +154,7 @@ def main():
         (stage/"src").mkdir()
         shutil.copy2(ROOT/"force_plugin/plugin.json",stage/"plugin.json")
         shutil.copy2(ROOT/"force_plugin/ui.json",stage/"ui.json")
+        shutil.copytree(ROOT/"force_plugin/assets",stage/"assets")
         staged_sources=("force_plugin/src/ASR10FXCollection.cpp","force_plugin/src/ES5510DSPBackend.cpp",
                         "force_plugin/src/ES5510FactoryPackageProvider.cpp",
                         "src/es5510.cpp","src/es5510_factory_runtime.cpp")

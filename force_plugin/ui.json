@@ -1,11 +1,12 @@
 {
+  "backgroundImage": "panel_background.png",
   "kit": {
     "theme": "cyan",
-    "accent": "ff00d4d8"
+    "accent": "ff00c7c2"
   },
   "style": {
-    "background": "ff15191c",
-    "accent": "ff00d4d8",
+    "background": "ff12171a",
+    "accent": "ff00c7c2",
     "text": "fff4f8fa",
     "muted": "ff85949a"
   },

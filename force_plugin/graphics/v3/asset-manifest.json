@@ -1,0 +1,648 @@
+{
+  "schema": "trollfx-asr10-graphics-manifest-v1",
+  "canvas_px": {
+    "width": 1280,
+    "height": 628
+  },
+  "png_color_model": "RGBA PNG; alpha stored in PNG samples",
+  "ui_color_format": "ARGB hex string (alpha first), e.g. ff00c7c2",
+  "palette": {
+    "graphite": "#12171A",
+    "teal": "#00C7C2",
+    "pale_lcd": "#C9F2B9",
+    "warm_unavailable": "#E6A448"
+  },
+  "sdk_generator": "Official AkaiForceSDK tools/make_ui_kit.py; no SDK files modified",
+  "kit_metadata": {
+    "kitVersion": 1,
+    "theme": "cyan",
+    "colours": {
+      "bg": "ff1e1d1e",
+      "body": "ff2a2a2d",
+      "bodyLight": "ff3c3c40",
+      "bodyDark": "ff171718",
+      "track": "ff434347",
+      "outline": "ff0e0e0f",
+      "pointer": "fff2f2f2",
+      "thumb": "ffb9b9bd",
+      "thumbLight": "ffe6e6e8",
+      "thumbDark": "ff8a8a8e",
+      "ledOff": "ff214d4e",
+      "textOn": "ffffffff",
+      "accent": "ff00c7c2",
+      "accentDark": "ff058683",
+      "accentGlow": "4600c7c2"
+    },
+    "assets": {
+      "knob_uni": {
+        "file": "knob_uni.png",
+        "width": 90,
+        "height": 90,
+        "frames": 127
+      },
+      "knob_bi": {
+        "file": "knob_bi.png",
+        "width": 90,
+        "height": 90,
+        "frames": 127
+      },
+      "knob_small_uni": {
+        "file": "knob_small_uni.png",
+        "width": 56,
+        "height": 56,
+        "frames": 127
+      },
+      "knob_small_bi": {
+        "file": "knob_small_bi.png",
+        "width": 56,
+        "height": 56,
+        "frames": 127
+      },
+      "fader_h_uni": {
+        "file": "fader_h_uni.png",
+        "width": 248,
+        "height": 36,
+        "frames": 127
+      },
+      "fader_h_bi": {
+        "file": "fader_h_bi.png",
+        "width": 248,
+        "height": 36,
+        "frames": 127
+      },
+      "fader_v_uni": {
+        "file": "fader_v_uni.png",
+        "width": 36,
+        "height": 160,
+        "frames": 127
+      },
+      "fader_v_bi": {
+        "file": "fader_v_bi.png",
+        "width": 36,
+        "height": 160,
+        "frames": 127
+      },
+      "toggle_on": {
+        "file": "toggle_on.png",
+        "width": 64,
+        "height": 32,
+        "frames": 1
+      },
+      "toggle_off": {
+        "file": "toggle_off.png",
+        "width": 64,
+        "height": 32,
+        "frames": 1
+      },
+      "button_on": {
+        "file": "button_on.png",
+        "width": 120,
+        "height": 44,
+        "frames": 1
+      },
+      "button_off": {
+        "file": "button_off.png",
+        "width": 120,
+        "height": 44,
+        "frames": 1
+      },
+      "seg2_on": {
+        "file": "seg2_on.png",
+        "width": 122,
+        "height": 40,
+        "frames": 1
+      },
+      "seg2_off": {
+        "file": "seg2_off.png",
+        "width": 122,
+        "height": 40,
+        "frames": 1
+      },
+      "seg3_on": {
+        "file": "seg3_on.png",
+        "width": 80,
+        "height": 40,
+        "frames": 1
+      },
+      "seg3_off": {
+        "file": "seg3_off.png",
+        "width": 80,
+        "height": 40,
+        "frames": 1
+      },
+      "seg4_on": {
+        "file": "seg4_on.png",
+        "width": 58,
+        "height": 40,
+        "frames": 1
+      },
+      "seg4_off": {
+        "file": "seg4_off.png",
+        "width": 58,
+        "height": 40,
+        "frames": 1
+      }
+    },
+    "notes": "Film strips are vertical, frame 0 = minimum at the top. Draw each asset at its native size: the MPC does not scale film-strip frames or button images."
+  },
+  "assets": [
+    {
+      "path": "panel_background.png",
+      "use": "SDK backgroundImage: whole 1280x628 page; fixed card wells align to native 4x4 control grid.",
+      "integration": "sdk_background",
+      "width_px": 1280,
+      "height_px": 628,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "opaque"
+    },
+    {
+      "path": "parameter_card.png",
+      "use": "Reusable frame reference; incorporated into panel_background because SDK has no arbitrary image widget.",
+      "integration": "concept_component",
+      "width_px": 278,
+      "height_px": 107,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "parameter_card_active.png",
+      "use": "Active-state reference; SDK skin generator does not dynamically swap card backgrounds.",
+      "integration": "concept_component",
+      "width_px": 278,
+      "height_px": 107,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "parameter_card_disabled.png",
+      "use": "Disabled-state reference; requires runtime/widget state support beyond static SDK backgrounds.",
+      "integration": "concept_only",
+      "width_px": 278,
+      "height_px": 107,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "parameter_card_unavailable.png",
+      "use": "Unavailable-state reference with amber hatching; not a dynamic SDK widget skin.",
+      "integration": "concept_only",
+      "width_px": 278,
+      "height_px": 107,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "lcd_frame.png",
+      "use": "Reusable recessed LCD frame; preview/integration reference; dynamic text must use native labels.",
+      "integration": "concept_component",
+      "width_px": 520,
+      "height_px": 82,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "factory_program_display_frame.png",
+      "use": "Blank recessed program display frame; dynamic name and slot text must be native SDK labels.",
+      "integration": "concept_component",
+      "width_px": 640,
+      "height_px": 100,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "trollfx_asr10_wordmark.png",
+      "use": "Brand lockup; used in page background and preview. No Ensoniq logo or firmware artwork.",
+      "integration": "sdk_background_and_preview",
+      "width_px": 420,
+      "height_px": 82,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "separator.png",
+      "use": "Thin cyan separator; can be included in background artwork.",
+      "integration": "sdk_background_component",
+      "width_px": 320,
+      "height_px": 3,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "status_led_active.png",
+      "use": "Pale-green active indicator; static/background use unless represented by a native bool widget.",
+      "integration": "concept_component",
+      "width_px": 20,
+      "height_px": 20,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "status_led_standby.png",
+      "use": "Cyan ready indicator; static/background use unless represented by a native bool widget.",
+      "integration": "concept_component",
+      "width_px": 20,
+      "height_px": 20,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "status_led_warning.png",
+      "use": "Amber unavailable/error indicator; state must be supplied by native UI logic.",
+      "integration": "concept_component",
+      "width_px": 20,
+      "height_px": 20,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "status_led_off.png",
+      "use": "Unlit indicator reference.",
+      "integration": "concept_component",
+      "width_px": 20,
+      "height_px": 20,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "tab_browse_inactive.png",
+      "use": "Preview/concept tab badge; the MPC renders editable native function-key tab labels.",
+      "integration": "concept_only",
+      "width_px": 144,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "tab_browse_active.png",
+      "use": "Preview/concept tab badge; the MPC renders editable native function-key tab labels.",
+      "integration": "concept_only",
+      "width_px": 144,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "tab_edit_inactive.png",
+      "use": "Preview/concept tab badge; the MPC renders editable native function-key tab labels.",
+      "integration": "concept_only",
+      "width_px": 144,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "tab_edit_active.png",
+      "use": "Preview/concept tab badge; the MPC renders editable native function-key tab labels.",
+      "integration": "concept_only",
+      "width_px": 144,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "tab_mix_inactive.png",
+      "use": "Preview/concept tab badge; the MPC renders editable native function-key tab labels.",
+      "integration": "concept_only",
+      "width_px": 144,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "tab_mix_active.png",
+      "use": "Preview/concept tab badge; the MPC renders editable native function-key tab labels.",
+      "integration": "concept_only",
+      "width_px": 144,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "tab_info_inactive.png",
+      "use": "Preview/concept tab badge; the MPC renders editable native function-key tab labels.",
+      "integration": "concept_only",
+      "width_px": 144,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "tab_info_active.png",
+      "use": "Preview/concept tab badge; the MPC renders editable native function-key tab labels.",
+      "integration": "concept_only",
+      "width_px": 144,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "qlink_q1.png",
+      "use": "Preview/concept Q-Link assignment badge; the SDK Q-Link map is native JSON and custom badge placement is unsupported.",
+      "integration": "concept_only",
+      "width_px": 72,
+      "height_px": 72,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "qlink_q2.png",
+      "use": "Preview/concept Q-Link assignment badge; the SDK Q-Link map is native JSON and custom badge placement is unsupported.",
+      "integration": "concept_only",
+      "width_px": 72,
+      "height_px": 72,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "qlink_q3.png",
+      "use": "Preview/concept Q-Link assignment badge; the SDK Q-Link map is native JSON and custom badge placement is unsupported.",
+      "integration": "concept_only",
+      "width_px": 72,
+      "height_px": 72,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "qlink_q4.png",
+      "use": "Preview/concept Q-Link assignment badge; the SDK Q-Link map is native JSON and custom badge placement is unsupported.",
+      "integration": "concept_only",
+      "width_px": 72,
+      "height_px": 72,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "qlink_q5.png",
+      "use": "Preview/concept Q-Link assignment badge; the SDK Q-Link map is native JSON and custom badge placement is unsupported.",
+      "integration": "concept_only",
+      "width_px": 72,
+      "height_px": 72,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "qlink_q6.png",
+      "use": "Preview/concept Q-Link assignment badge; the SDK Q-Link map is native JSON and custom badge placement is unsupported.",
+      "integration": "concept_only",
+      "width_px": 72,
+      "height_px": 72,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "qlink_q7.png",
+      "use": "Preview/concept Q-Link assignment badge; the SDK Q-Link map is native JSON and custom badge placement is unsupported.",
+      "integration": "concept_only",
+      "width_px": 72,
+      "height_px": 72,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "qlink_q8.png",
+      "use": "Preview/concept Q-Link assignment badge; the SDK Q-Link map is native JSON and custom badge placement is unsupported.",
+      "integration": "concept_only",
+      "width_px": 72,
+      "height_px": 72,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha"
+    },
+    {
+      "path": "knob_uni.png",
+      "width_px": 90,
+      "height_px": 11430,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 127,
+      "frame_width_px": 90,
+      "frame_height_px": 90,
+      "use": "Official SDK-generated rotary knob; see kit.json for the theme colors.",
+      "integration": "sdk_filmstrip"
+    },
+    {
+      "path": "knob_bi.png",
+      "width_px": 90,
+      "height_px": 11430,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 127,
+      "frame_width_px": 90,
+      "frame_height_px": 90,
+      "use": "Official SDK-generated rotary knob; see kit.json for the theme colors.",
+      "integration": "sdk_filmstrip"
+    },
+    {
+      "path": "knob_small_uni.png",
+      "width_px": 56,
+      "height_px": 7112,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 127,
+      "frame_width_px": 56,
+      "frame_height_px": 56,
+      "use": "Official SDK-generated rotary knob; see kit.json for the theme colors.",
+      "integration": "sdk_filmstrip"
+    },
+    {
+      "path": "knob_small_bi.png",
+      "width_px": 56,
+      "height_px": 7112,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 127,
+      "frame_width_px": 56,
+      "frame_height_px": 56,
+      "use": "Official SDK-generated rotary knob; see kit.json for the theme colors.",
+      "integration": "sdk_filmstrip"
+    },
+    {
+      "path": "fader_h_uni.png",
+      "width_px": 248,
+      "height_px": 4572,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 127,
+      "frame_width_px": 248,
+      "frame_height_px": 36,
+      "use": "Official SDK-generated horizontal fader; see kit.json for the theme colors.",
+      "integration": "sdk_filmstrip"
+    },
+    {
+      "path": "fader_h_bi.png",
+      "width_px": 248,
+      "height_px": 4572,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 127,
+      "frame_width_px": 248,
+      "frame_height_px": 36,
+      "use": "Official SDK-generated horizontal fader; see kit.json for the theme colors.",
+      "integration": "sdk_filmstrip"
+    },
+    {
+      "path": "toggle_on.png",
+      "width_px": 64,
+      "height_px": 32,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 1,
+      "frame_width_px": 64,
+      "frame_height_px": 32,
+      "use": "Official SDK-generated stateful button / choice segment; see kit.json for the theme colors.",
+      "integration": "sdk_button"
+    },
+    {
+      "path": "toggle_off.png",
+      "width_px": 64,
+      "height_px": 32,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 1,
+      "frame_width_px": 64,
+      "frame_height_px": 32,
+      "use": "Official SDK-generated stateful button / choice segment; see kit.json for the theme colors.",
+      "integration": "sdk_button"
+    },
+    {
+      "path": "button_on.png",
+      "width_px": 120,
+      "height_px": 44,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 1,
+      "frame_width_px": 120,
+      "frame_height_px": 44,
+      "use": "Official SDK-generated stateful button / choice segment; see kit.json for the theme colors.",
+      "integration": "sdk_button"
+    },
+    {
+      "path": "button_off.png",
+      "width_px": 120,
+      "height_px": 44,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 1,
+      "frame_width_px": 120,
+      "frame_height_px": 44,
+      "use": "Official SDK-generated stateful button / choice segment; see kit.json for the theme colors.",
+      "integration": "sdk_button"
+    },
+    {
+      "path": "seg2_on.png",
+      "width_px": 122,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 1,
+      "frame_width_px": 122,
+      "frame_height_px": 40,
+      "use": "Official SDK-generated stateful button / choice segment; see kit.json for the theme colors.",
+      "integration": "sdk_button"
+    },
+    {
+      "path": "seg2_off.png",
+      "width_px": 122,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 1,
+      "frame_width_px": 122,
+      "frame_height_px": 40,
+      "use": "Official SDK-generated stateful button / choice segment; see kit.json for the theme colors.",
+      "integration": "sdk_button"
+    },
+    {
+      "path": "seg3_on.png",
+      "width_px": 80,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 1,
+      "frame_width_px": 80,
+      "frame_height_px": 40,
+      "use": "Official SDK-generated stateful button / choice segment; see kit.json for the theme colors.",
+      "integration": "sdk_button"
+    },
+    {
+      "path": "seg3_off.png",
+      "width_px": 80,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 1,
+      "frame_width_px": 80,
+      "frame_height_px": 40,
+      "use": "Official SDK-generated stateful button / choice segment; see kit.json for the theme colors.",
+      "integration": "sdk_button"
+    },
+    {
+      "path": "seg4_on.png",
+      "width_px": 58,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 1,
+      "frame_width_px": 58,
+      "frame_height_px": 40,
+      "use": "Official SDK-generated stateful button / choice segment; see kit.json for the theme colors.",
+      "integration": "sdk_button"
+    },
+    {
+      "path": "seg4_off.png",
+      "width_px": 58,
+      "height_px": 40,
+      "format": "PNG",
+      "mode": "RGBA",
+      "transparency": "alpha",
+      "frames": 1,
+      "frame_width_px": 58,
+      "frame_height_px": 40,
+      "use": "Official SDK-generated stateful button / choice segment; see kit.json for the theme colors.",
+      "integration": "sdk_button"
+    }
+  ]
+}

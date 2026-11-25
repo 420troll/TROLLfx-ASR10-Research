@@ -188,8 +188,9 @@ def make_ui(registry: dict) -> dict:
     if len(editor_v3) != 16 or len(v3_rows) > 8:
         raise ValueError("V3 editor bank must fit the supported eight-control Q-Link bank")
     return {
-        "kit": {"theme": "cyan", "accent": "ff00d4d8"},
-        "style": {"background": "ff15191c", "accent": "ff00d4d8",
+        "backgroundImage": "panel_background.png",
+        "kit": {"theme": "cyan", "accent": "ff00c7c2"},
+        "style": {"background": "ff12171a", "accent": "ff00c7c2",
                   "text": "fff4f8fa", "muted": "ff85949a"},
         "pages": [
             {"name": "BROWSE", "controls": [
