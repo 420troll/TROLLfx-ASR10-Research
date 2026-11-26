@@ -10,7 +10,7 @@ Release classification: experimental controlled hardware smoke; independent T2 a
 
 The candidate was installed on the original Akai Force and the supported MPC host service was restarted. The Force returned online, the candidate remains installed with the expected hash, and the host service is active. The user then confirmed that the plugin appears on the Force and HALL audio works.
 
-This is a successful physical discovery, HALL audio, and bypass smoke test. It does not establish Force Q-Link behavior, project recall, CPU headroom, or xrun-free long playback. The candidate is not presented as an independently accepted release: the updated test policy requires full ABI and non-finite-input checks bound to the exact binary. Desktop checks against an equivalent rebuild passed, but the matching native build artifact was not retained; an ARM test harness attempt crashed before completing its assertions.
+The user confirmed physical plugin discovery, HALL audio, and bypass. The touchscreen/editor was also evaluated and **failed usability acceptance**: expected effect-editing controls were missing or inaccessible, and the screen was cluttered. Individual Q-Link knob behavior remains **not tested**. The candidate is not accepted as a release: the editor usability failure is a blocker, and the updated test policy also requires full ABI and non-finite-input checks bound to the exact binary. Desktop checks against an equivalent rebuild passed, but the matching native build artifact was not retained; an ARM test harness attempt crashed before completing its assertions.
 
 ## Candidate and build identity
 
@@ -28,7 +28,7 @@ This is a successful physical discovery, HALL audio, and bypass smoke test. It d
 | ARM ABI | ELF32 ARMv7-A, hard-float/VFP; GLIBC requirement at most 2.27 |
 | QEMU | `NOT_RUN`; `qemu-arm` is unavailable. The historical QEMU hash was stale and was not reused. |
 
-The packaged candidate manifest says the exact ARM binary is playable and records its checksum. It also leaves the Force editor hardware gate unrun. The deployment status here preserves that distinction.
+The packaged candidate manifest says the exact ARM binary is playable and records its checksum. That marker reflects audio/package validation; it does not override the later physical editor usability failure recorded here.
 
 ## Asset path and package validation
 
@@ -79,7 +79,9 @@ Results are recorded separately by evidence scope. No result is promoted across 
 | Physical Force plugin discovery | T3 | PASS (user observed) | User confirmed the plugin appears in the Force plugin list. |
 | Physical Force HALL audio | T3 | PASS (user observed) | User confirmed HALL audio works. This is not an audio capture or a measured reference comparison. |
 | Physical bypass | T3 | PASS (user observed) | User confirmed bypass works on the Force. |
-| Physical Q-Link, save/recall, other effects, CPU/xruns | T3 | NOT_TESTED | These interactions were not observed or measured. |
+| Physical touchscreen/editor usability | T3 | FAIL | User observed expected effect-editing controls missing or inaccessible and a cluttered screen. |
+| Individual physical Q-Link knobs | T3 | NOT_TESTED | No individual knob behavior was tested. |
+| Physical save/recall, other effects, CPU/xruns | T3 | NOT_TESTED | These interactions were not observed or measured. |
 | Original-OS or DSP research | T3 | NOT_APPLICABLE | No DSP arithmetic, factory package, or OS mapping was changed in this deployment. |
 | Full repository suite | T0/T1 | PASS, historical run | `python3 -m unittest discover -s tests -v`: 80 tests passed in 65.853 s before the deployment-only package scripts were added. Relevant packaging and rollback tests were then run separately. No full suite was repeated after the policy update. |
 | Release infrastructure tests | T0/T1 | PASS | `AKAI_FORCE_SDK=... PYTHONPATH=... python3 -m unittest discover -s force_plugin/tests -p test_release_infrastructure.py -v`: 9 passed. |
@@ -105,6 +107,6 @@ The supported host restart is `systemctl restart acvs.service`. Use the deployme
 ## Remaining release gates
 
 - Obtain candidate-binary-bound ABI/chunk and NaN/Inf test results. Use a correctly ABI-tagged ARM test harness or retain the exact native candidate artifact during packaging and rerun the independent harness against that hash.
-- Verify physical Q-Link routing, project state recall, effect switching, and at least one additional effect on the Force.
+- Resolve the touchscreen/editor usability failure in the next editor candidate, then verify physical Q-Link routing, project state recall, effect switching, and at least one additional effect on the Force.
 - Measure CPU load, memory, xruns, and longer-run stability on device.
 - Keep the release labeled experimental until these gates are closed and independent T2 acceptance is recorded.
