@@ -53,7 +53,15 @@ void host_write_gpr(ES5510& dsp, std::uint8_t index, std::uint32_t value) noexce
 } // namespace
 
 struct FactoryRuntime::Impl {
-    struct Event { std::uint64_t frame = 0; std::uint64_t order = 0; std::uint8_t index = 0; std::uint32_t value = 0; };
+    struct Event {
+        std::uint64_t frame = 0;
+        std::uint64_t order = 0;
+        std::uint8_t index = 0;
+        std::uint32_t value = 0;
+        bool firmware_write = false;
+        bool parameter_write = false;
+        bool parameter_group_end = false;
+    };
     struct Point { double time = 0.0; float left = 0.0f; float right = 0.0f; };
 
     ES5510 dsp;
@@ -71,6 +79,10 @@ struct FactoryRuntime::Impl {
     std::uint64_t event_order = 0;
     std::uint64_t dsp_frames = 0;
     std::uint64_t applied_writes = 0;
+    std::uint64_t initialization_complete_frame = 0;
+    std::uint16_t pending_firmware_writes = 0;
+    std::uint16_t pending_parameter_writes = 0;
+    bool last_parameter_write_applied = false;
     std::array<Point, kResampleHistory> history{};
     std::size_t history_count = 0;
     std::size_t history_next = 0;
@@ -122,20 +134,39 @@ struct FactoryRuntime::Impl {
         history_next = 1;
         status.processed_dsp_frames = 0;
         status.scheduled_writes_applied = 0;
+        pending_firmware_writes = 0;
+        pending_parameter_writes = 0;
+        initialization_complete_frame = 0;
+        last_parameter_write_applied = false;
+        sync_initialization_status();
+    }
+
+    void sync_initialization_status() noexcept {
+        status.initialization_schedule_complete = pending_firmware_writes == 0;
+        status.initialization_complete_frame = initialization_complete_frame;
+        status.firmware_writes_pending = pending_firmware_writes;
+        status.parameter_writes_pending = pending_parameter_writes;
+        status.last_parameter_write_applied = last_parameter_write_applied;
     }
 
     void install_firmware_schedule() noexcept {
         if (!generic) return;
-        event_count = 0; event_order = 0;
+        event_count = 0; event_order = 0; pending_firmware_writes = 0;
+        initialization_complete_frame = 0;
         for (const auto& e : descriptor.firmware_event_schedule) {
             Event event{e.relative_dsp_frame, event_order++, e.gpr, e.value24};
+            event.firmware_write = true;
             std::size_t pos=event_count;
             while(pos && (events[pos-1].frame>event.frame ||
                   (events[pos-1].frame==event.frame && events[pos-1].order>event.order))) {
                 events[pos]=events[pos-1]; --pos;
             }
             events[pos]=event; ++event_count;
+            ++pending_firmware_writes;
+            initialization_complete_frame = std::max(initialization_complete_frame,
+                                                       e.relative_dsp_frame + 1);
         }
+        sync_initialization_status();
         if (std::any_of(descriptor.firmware_event_schedule.begin(), descriptor.firmware_event_schedule.end(),
                         [](const auto& event) { return event.gpr == 0x6e; })) {
             hall_decay_step_state_valid = false;
@@ -192,11 +223,17 @@ struct FactoryRuntime::Impl {
 
     void execute_dsp_frame(std::int16_t left, std::int16_t right, double time) noexcept {
         while (event_count && events[0].frame == dsp_frames) {
-            host_write_gpr(dsp, events[0].index, events[0].value);
+            const Event event = events[0];
+            host_write_gpr(dsp, event.index, event.value);
+            if (event.firmware_write && pending_firmware_writes) --pending_firmware_writes;
+            if (event.parameter_write && pending_parameter_writes) --pending_parameter_writes;
+            if (event.parameter_group_end && pending_parameter_writes == 0)
+                last_parameter_write_applied = true;
             for (std::size_t i = 1; i < event_count; ++i) events[i - 1] = events[i];
             --event_count;
             ++applied_writes;
         }
+        sync_initialization_status();
         dsp.ser_w(input_left(), left);
         dsp.ser_w(input_right(), right);
         dsp.run_frame();
@@ -346,6 +383,42 @@ bool FactoryRuntime::setRegister(std::uint8_t index, std::uint32_t value, std::u
     return true;
 }
 
+bool FactoryRuntime::scheduleInitializationRegister(std::uint8_t index, std::uint32_t value,
+                                                     std::uint64_t frame) {
+    auto& s = *impl_;
+    if (!s.loaded) { s.set_error(StatusCode::Empty, "no effect is loaded"); return false; }
+    if (index >= 0xc0 || value > 0x00ffffffu) {
+        s.set_error(StatusCode::InvalidArgument, "initialization event is outside the 24-bit GPR domain"); return false;
+    }
+    if (s.dsp_frames != 0 || frame < s.dsp_frames) {
+        s.set_error(StatusCode::InvalidArgument, "initialization events must be installed before DSP processing starts"); return false;
+    }
+    if (s.event_count >= s.events.size() || s.pending_firmware_writes == std::numeric_limits<std::uint16_t>::max()) {
+        s.set_error(StatusCode::EventQueueFull, "fixed event queue cannot fit the initialization event"); return false;
+    }
+    Impl::Event event{frame, s.event_order++, index, value};
+    event.firmware_write = true;
+    std::size_t pos = s.event_count;
+    while (pos && (s.events[pos - 1].frame > event.frame ||
+                   (s.events[pos - 1].frame == event.frame && s.events[pos - 1].order > event.order))) {
+        s.events[pos] = s.events[pos - 1];
+        --pos;
+    }
+    s.events[pos] = event;
+    ++s.event_count;
+    ++s.pending_firmware_writes;
+    s.initialization_complete_frame = std::max(s.initialization_complete_frame, frame + 1);
+    if (index == 0x6e) {
+        s.hall_decay_step_state_valid = false;
+        s.status.hall_decay_step_available = false;
+        s.status.hall_decay_display_value = -1;
+    }
+    s.sync_initialization_status();
+    s.status.code = StatusCode::Ready;
+    s.message = s.status.message = "validated initialization event scheduled";
+    return true;
+}
+
 bool FactoryRuntime::stepHallDecayTime(int direction, std::uint64_t frame) {
     auto& s = *impl_;
     using namespace os353;
@@ -369,8 +442,19 @@ bool FactoryRuntime::stepHallDecayTime(int direction, std::uint64_t frame) {
         s.set_error(StatusCode::EventQueueFull, "fixed register event queue cannot fit the complete HALL decay write group");
         return false;
     }
-    for (const auto& write : writes) {
-        Impl::Event event{frame, s.event_order++, write.gpr, write.value24};
+    if (s.pending_parameter_writes > std::numeric_limits<std::uint16_t>::max() - writes.size()) {
+        s.set_error(StatusCode::EventQueueFull, "pending parameter write count exceeds the bounded status range");
+        return false;
+    }
+    const std::uint64_t apply_frame = s.pending_firmware_writes
+        ? std::max(frame, s.initialization_complete_frame) : frame;
+    s.last_parameter_write_applied = false;
+    s.pending_parameter_writes = static_cast<std::uint16_t>(s.pending_parameter_writes + writes.size());
+    for (std::size_t i = 0; i < writes.size(); ++i) {
+        const auto& write = writes[i];
+        Impl::Event event{apply_frame, s.event_order++, write.gpr, write.value24};
+        event.parameter_write = true;
+        event.parameter_group_end = i + 1 == writes.size();
         std::size_t pos = s.event_count;
         while (pos && (s.events[pos - 1].frame > event.frame ||
                (s.events[pos - 1].frame == event.frame && s.events[pos - 1].order > event.order))) {
@@ -384,8 +468,11 @@ bool FactoryRuntime::stepHallDecayTime(int direction, std::uint64_t frame) {
     s.status.hall_decay_step_available = true;
     s.status.hall_decay_raw_code = next_raw;
     s.status.hall_decay_display_value = hall_decay_display_for_raw(next_raw);
+    s.sync_initialization_status();
     s.status.code = StatusCode::Ready;
-    s.message = s.status.message = "OS-equivalent HALL decay step scheduled";
+    s.message = s.status.message = apply_frame > frame
+        ? "OS-equivalent HALL decay step accepted and deferred until initialization completes"
+        : "OS-equivalent HALL decay step accepted; DSP register writes are pending";
     return true;
 }
 
@@ -394,23 +481,37 @@ bool FactoryRuntime::setParameter(const EffectDescriptor& d, const std::string& 
     if (!impl_->loaded || d.slot != impl_->descriptor.slot) { impl_->set_error(StatusCode::PackageRejected, "parameter descriptor does not match loaded effect"); return false; }
     for (const auto& p : d.parameters) if (p.id == id) {
         for (const auto& point : p.verified_points) if (point.display_value == value) {
-            if (point.ordered_writes.empty())
-                return setRegister(point.gpr, point.value24, frame);
             auto& s = *impl_;
             if (frame < s.dsp_frames) { s.set_error(StatusCode::EventInPast, "parameter event is in the past"); return false; }
-            if (point.ordered_writes.size() > s.events.size() - s.event_count) {
+            const std::size_t write_count = point.ordered_writes.empty() ? 1 : point.ordered_writes.size();
+            if (write_count > s.events.size() - s.event_count) {
                 s.set_error(StatusCode::EventQueueFull, "fixed register event queue cannot fit the complete parameter write group");
                 return false;
             }
             // Validate the whole group before modifying the fixed queue.
-            for (const auto& write : point.ordered_writes) {
+            for (std::size_t i = 0; i < write_count; ++i) {
+                const auto& write = point.ordered_writes.empty()
+                    ? ParameterPoint::RegisterWrite{point.gpr, point.value24} : point.ordered_writes[i];
                 if (write.gpr >= 0xc0 || write.value24 > 0x00ffffffu) {
                     s.set_error(StatusCode::InvalidArgument, "parameter write group contains an invalid GPR value");
                     return false;
                 }
             }
-            for (const auto& write : point.ordered_writes) {
-                Impl::Event event{frame, s.event_order++, write.gpr, write.value24};
+            const std::uint64_t apply_frame = s.pending_firmware_writes
+                ? std::max(frame, s.initialization_complete_frame) : frame;
+            if (s.pending_parameter_writes > std::numeric_limits<std::uint16_t>::max() - write_count) {
+                s.set_error(StatusCode::EventQueueFull, "pending parameter write count exceeds the bounded status range");
+                return false;
+            }
+            s.last_parameter_write_applied = false;
+            s.pending_parameter_writes = static_cast<std::uint16_t>(
+                s.pending_parameter_writes + write_count);
+            for (std::size_t i = 0; i < write_count; ++i) {
+                const auto& write = point.ordered_writes.empty()
+                    ? ParameterPoint::RegisterWrite{point.gpr, point.value24} : point.ordered_writes[i];
+                Impl::Event event{apply_frame, s.event_order++, write.gpr, write.value24};
+                event.parameter_write = true;
+                event.parameter_group_end = i + 1 == write_count;
                 std::size_t pos = s.event_count;
                 while (pos && (s.events[pos - 1].frame > event.frame ||
                        (s.events[pos - 1].frame == event.frame && s.events[pos - 1].order > event.order))) {
@@ -420,14 +521,23 @@ bool FactoryRuntime::setParameter(const EffectDescriptor& d, const std::string& 
                 s.events[pos] = event;
                 ++s.event_count;
             }
-            if (std::any_of(point.ordered_writes.begin(), point.ordered_writes.end(),
-                            [](const auto& write) { return write.gpr == 0x6e; })) {
+            s.sync_initialization_status();
+            bool writes_decay_gpr = false;
+            for (std::size_t i = 0; i < write_count; ++i) {
+                const auto& write = point.ordered_writes.empty()
+                    ? ParameterPoint::RegisterWrite{point.gpr, point.value24} : point.ordered_writes[i];
+                writes_decay_gpr = writes_decay_gpr || write.gpr == 0x6e;
+            }
+            if (writes_decay_gpr) {
                 s.hall_decay_step_state_valid = false;
                 s.status.hall_decay_step_available = false;
                 s.status.hall_decay_display_value = -1;
             }
             s.status.code = StatusCode::Ready;
-            s.message = s.status.message = "ordered parameter write group scheduled";
+            if (apply_frame > frame)
+                s.message = s.status.message = "parameter edit accepted and deferred until initialization completes";
+            else
+                s.message = s.status.message = "parameter edit accepted; DSP register writes are pending";
             return true;
         }
         impl_->set_error(StatusCode::InvalidArgument, "parameter value is not a verified catalog point"); return false;

@@ -8,6 +8,7 @@
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
 #include "public.sdk/source/main/pluginfactory.h"
 #include "pluginterfaces/base/ustring.h"
+#include "input_level.h"
 #include <algorithm>
 #include <cmath>
 #include <cstring>
@@ -101,7 +102,8 @@ void Plugin::collect_midi(ProcessData &data) {
             int32 n = q->getPointCount();
             int32 off; ParamValue v;
             if (id == kVolume && n > 0 && q->getPoint(n - 1, off, v) == kResultOk) {
-                volume = v; eng.analog(Asr10::AN_VOLUME, (uint16_t)(v * 1000));
+                volume = finite_clamp(v, 0.0, 1.0, volume);
+                eng.analog(Asr10::AN_VOLUME, static_cast<uint16_t>(std::lround(volume * 1000.0)));
             } else if (id >= kMidiBase && id < kMidiBase + 16 * kMidiPerChannel) {
                 int idx = (int)(id - kMidiBase), ch = idx / kMidiPerChannel, c = idx % kMidiPerChannel;
                 for (int32 p = 0; p < n; p++) {
@@ -259,9 +261,9 @@ tresult PLUGIN_API Plugin::setState(IBStream *state) {
     // (version 2 also stored a SCSI folder: it now comes from the app)
     float in_level = 0;
     if (s.readFloat(in_level)) eng.set_input_level(in_level);
-    volume = vol; (void)clk;
+    volume = finite_clamp(vol, 0.0, 1.0, volume); (void)clk;
     setParamNormalized(kVolume, volume);
-    eng.analog(Asr10::AN_VOLUME, (uint16_t)(volume * 1000));
+    eng.analog(Asr10::AN_VOLUME, static_cast<uint16_t>(std::lround(volume * 1000.0)));
     eng.restore(floppy, scsi);
     return kResultOk;
 }
@@ -274,7 +276,7 @@ tresult PLUGIN_API Plugin::getMidiControllerAssignment(int32 busIndex, int16 cha
 }
 
 void Plugin::edit_volume(double v) {
-    v = v < 0 ? 0 : v > 1 ? 1 : v;
+    v = finite_clamp(v, 0.0, 1.0, volume);
     beginEdit(kVolume); setParamNormalized(kVolume, v); performEdit(kVolume, v); endEdit(kVolume);
 }
 

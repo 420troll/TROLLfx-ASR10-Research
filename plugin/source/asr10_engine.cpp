@@ -292,7 +292,8 @@ void Asr10Engine::apply_settings(Asr10 &a, bool first) {
     cfg_stamp = cfg_time(cfg);
     Settings st; st.load(cfg);
     lcd_ = st.lcd;
-    if (first && !input_level_set_) input_level_ = st.input_level;   // the app's Input Level pot
+    if (first && !input_level_set_)
+        input_level_ = static_cast<float>(finite_clamp(st.input_level, 0.0, 1.0, INPUT_LEVEL_0DB)); // the app's Input Level pot
     a.input_gain.store(input_level_gain(input_level_.load()));
     if (st.di10() != a.di10) {                 // DI-10 fitted or removed in the app: the OS looks for it at start
         a.di10 = st.di10();
@@ -306,7 +307,7 @@ void Asr10Engine::apply_settings(Asr10 &a, bool first) {
 }
 
 void Asr10Engine::set_input_level(float v) {
-    v = std::clamp(v, 0.0f, 1.0f);
+    v = static_cast<float>(finite_clamp(v, 0.0, 1.0, input_level_.load()));
     input_level_ = v; input_level_set_ = true;
     push(cmd_mx, cmds, [v](Asr10 &a) { a.input_gain.store(input_level_gain(v)); });
 }

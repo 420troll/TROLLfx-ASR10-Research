@@ -43,6 +43,11 @@ struct RuntimeStatus {
     double host_rate_hz = 0.0;
     std::uint64_t processed_dsp_frames = 0;
     std::uint64_t scheduled_writes_applied = 0;
+    bool initialization_schedule_complete = true;
+    std::uint64_t initialization_complete_frame = 0;
+    std::uint16_t firmware_writes_pending = 0;
+    std::uint16_t parameter_writes_pending = 0;
+    bool last_parameter_write_applied = false;
     std::uint32_t active_program_words = 0;
     std::uint32_t algorithmic_latency_host_frames = 0;
     bool hall_decay_step_available = false;
@@ -76,6 +81,11 @@ public:
     // the DSP frame whose zero-based absolute index is scheduled_frame. Calls
     // must be made between audio blocks; events before the next unprocessed frame fail.
     bool setRegister(std::uint8_t index, std::uint32_t value, std::uint64_t scheduled_frame);
+    // Queue one event from a previously validated RUN initialization schedule.
+    // Parameter edits requested before all such events are applied are deferred
+    // behind the final initialization frame.
+    bool scheduleInitializationRegister(std::uint8_t index, std::uint32_t value,
+                                        std::uint64_t scheduled_frame);
     bool setParameter(const EffectDescriptor& descriptor, const std::string& parameter_id,
                       std::int32_t display_value, std::uint64_t scheduled_frame);
     // Applies one authentic OS 3.53 ROM-01 HALL Variation 1 decay editor step.

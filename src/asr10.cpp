@@ -10,6 +10,7 @@
 //   FF6000-FF7FFF  CS1  (write only, unknown)
 #include "u8file.h"
 #include "asr10.h"
+#include "input_level.h"
 #include <cmath>
 #include <cstdio>
 #include <cstring>
@@ -305,12 +306,13 @@ void Asr10::feed_digital(const float *lr, size_t frames, double rate) {
     if (r == 0) return;
     std::lock_guard<std::mutex> g(dig_mx);
     // the receiver gives 24-bit words MSB first; the SCCs keep the first 16 bits (a truncation)
-    auto s16 = [](float x) -> int16_t { double v = std::floor((double)x * 32768.0); return (int16_t)(v > 32767 ? 32767 : v < -32768 ? -32768 : v); };
+    auto s16 = [](float x) -> int16_t { double v = std::floor((double)finite_audio_sample_or_zero(x) * 32768.0); return (int16_t)(v > 32767 ? 32767 : v < -32768 ? -32768 : v); };
     if (rate == r) for (size_t i = 0; i < frames * 2; i++) dig_in.push_back(s16(lr[i]));
     else {
         double &pos = dig_rs_pos;
         for (size_t i = 0; i < frames; i++) {
-            const float l = lr[i * 2], rr = lr[i * 2 + 1];
+            const float l = finite_audio_sample_or_zero(lr[i * 2]);
+            const float rr = finite_audio_sample_or_zero(lr[i * 2 + 1]);
             while (pos < 1.0) {
                 dig_in.push_back(s16(dig_rs_last[0] + (l - dig_rs_last[0]) * (float)pos));
                 dig_in.push_back(s16(dig_rs_last[1] + (rr - dig_rs_last[1]) * (float)pos));
@@ -615,7 +617,7 @@ static inline int16_t to16(int32_t v20) {
 void Asr10::feed_input(const float *lr, size_t frames, double rate) {
     std::lock_guard<std::mutex> g(input_mx);
     input_rate = rate;
-    for (size_t i = 0; i < frames * 2; i++) input.push_back(lr[i]);
+    for (size_t i = 0; i < frames * 2; i++) input.push_back(finite_audio_sample_or_zero(lr[i]));
     // keep at most ~1 s queued (drop the oldest if the producer runs ahead)
     size_t maxs = (size_t)(rate * 0.25) * 2;   // keep latency below ~250 ms
     while (input.size() > maxs) { input.pop_front(); input.pop_front(); }
@@ -639,7 +641,7 @@ void Asr10::input_frame(double frame_rate) {
         }
     }
     in_last_l = l; in_last_r = r;
-    { const float g = input_gain.load(std::memory_order_relaxed); l *= g; r *= g; }   // Input Level pot
+    { const float g = input_gain.load(std::memory_order_relaxed); const float safe_g = std::isfinite(g) ? g : 0.0f; l *= safe_g; r *= safe_g; }   // Input Level pot
     l = std::clamp(l, -1.0f, 1.0f); r = std::clamp(r, -1.0f, 1.0f);                  // the A/D clips
     in_peak = std::max(in_peak, std::max(std::fabs(l), std::fabs(r)));
     in_peak_ch[0] = std::max(in_peak_ch[0], std::fabs(l)); in_peak_ch[1] = std::max(in_peak_ch[1], std::fabs(r));

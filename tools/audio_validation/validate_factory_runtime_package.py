@@ -28,6 +28,9 @@ FIELD = re.compile(r"([a-z_]+)=([^\s]+)")
 def fail(msg: str):
     raise ValueError(msg)
 
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
 
 def validate(effect: str, manifest_path: Path, checkpoint: Path, reference_root: Path, events_path: Path) -> dict:
     if effect not in PROFILES: fail("unknown factory effect profile")
@@ -167,6 +170,65 @@ def validate(effect: str, manifest_path: Path, checkpoint: Path, reference_root:
             "two_boot_checkpoint_match":all(captures),"state_payload_disclosed":False}
 
 
+def validate_collection_package(effect: str, manifest_path: Path, checkpoint: Path,
+                                reference_root: Path, events_path: Path) -> dict:
+    """Strictly adapt the newer private package schema through its trusted importer."""
+    if effect not in PROFILES: fail("unknown factory effect profile")
+    manifest_path = manifest_path.resolve(strict=True)
+    checkpoint = checkpoint.resolve(strict=True)
+    reference_root = reference_root.resolve(strict=True)
+    events_path = events_path.resolve(strict=True)
+    doc = json.loads(manifest_path.read_text())
+    if doc.get("schema") != "asr10-private-rom-effect-package-v1":
+        fail("unsupported private package schema")
+    # Reuse the existing collection importer; it checks program identity,
+    # checkpoint/register/DRAM digests, RUN-boundary evidence, routing, the
+    # complete ordered schedule and the known-slot quarantine rules.
+    from import_factory_effect_collection import validate_one
+    audit = validate_one(manifest_path, {})
+    if not audit.get("capture_state_valid") or not audit.get("registry_eligible"):
+        fail("collection importer rejected or quarantined this factory identity")
+    desc = audit.get("descriptor")
+    if not desc:
+        fail("collection importer did not produce a runtime descriptor")
+    profile = PROFILES[effect]
+    if (int(desc["slot"]) != int(doc["effect_id"]) or
+        desc["factory_name"] != profile["name"] or
+        int(desc["active_program_words"]) != profile["words"] or
+        desc["program_sha256"] != doc["active_program_sha256"]):
+        fail("private package identity does not match the requested runtime effect")
+    if Path(desc["run_checkpoint_path"]).resolve(strict=True) != checkpoint:
+        fail("requested checkpoint is not the checkpoint named by the validated package")
+    if Path(desc["firmware_event_schedule_path"]).resolve(strict=True) != events_path:
+        fail("requested schedule is not the schedule named by the validated package")
+
+    # Independently require exact checkpoint matches from both fresh reference
+    # boots. The collection importer establishes the RUN source correlation;
+    # these files confirm repeatable captured state for the selected package.
+    run_frame = int(audit["run_start_frame"])
+    matched = []
+    for boot in ("boot-a", "boot-b"):
+        folder = reference_root / boot
+        snapshot = folder / "snapshots" / f"run-frame-{run_frame}.esp"
+        log = folder / "session.log"
+        if not snapshot.is_file() or not log.is_file():
+            fail("two-boot RUN reference evidence is incomplete")
+        if sha256_file(snapshot) != sha256_file(checkpoint) or snapshot.read_bytes() != checkpoint.read_bytes():
+            fail("private package checkpoint differs from a fresh-boot RUN reference")
+        matched.append(True)
+    return {"valid": True, "effect": effect,
+            "active_program_words": profile["words"],
+            "run_frame": run_frame, "processing_rate_hz": 48000.0,
+            "factory_reference_rate_hz": float(doc["sample_rate_hz"]),
+            "host_serial": 0x48,
+            "serial_route": "SER2 stereo input -> SER1 stereo output",
+            "firmware_event_count": int(audit["future_schedule_count"]),
+            "terminal_schedule_frame": max(
+                int(item["relative_dsp_frame"]) for item in desc["firmware_event_schedule"]),
+            "two_boot_checkpoint_match": all(matched),
+            "state_payload_disclosed": False}
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--effect",choices=sorted(PROFILES),required=True)
@@ -176,7 +238,12 @@ def main():
     p.add_argument("--events",type=Path,required=True)
     a=p.parse_args()
     try:
-        print(json.dumps(validate(a.effect,a.manifest,a.checkpoint,a.reference_root,a.events),indent=2))
+        schema=json.loads(a.manifest.read_text()).get("schema")
+        if schema == "asr10-private-rom-effect-package-v1":
+            result=validate_collection_package(a.effect,a.manifest,a.checkpoint,a.reference_root,a.events)
+        else:
+            result=validate(a.effect,a.manifest,a.checkpoint,a.reference_root,a.events)
+        print(json.dumps(result,indent=2))
         return 0
     except (OSError,ValueError,KeyError,TypeError,json.JSONDecodeError) as e:
         print(json.dumps({"valid":False,"effect":a.effect,"error":str(e),"state_payload_disclosed":False}),file=sys.stderr)

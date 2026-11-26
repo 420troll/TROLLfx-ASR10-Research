@@ -30,6 +30,10 @@ public:
 
     trollfx::es5510::factory_parameters_v01::EncodeStatus set_bus_parameter(
         Effect effect, trollfx::es5510::factory_parameters_v01::Parameter parameter, int display_value);
+    // Snapshot of the owning runtime's register-schedule state. In particular,
+    // a successful set_bus_parameter() means accepted; last_parameter_write_applied
+    // becomes true only after the DSP frame executes the queued write.
+    trollfx::es5510::RuntimeStatus runtime_status() const noexcept;
     const char* status_message() const noexcept;
 
 private:
@@ -37,6 +41,7 @@ private:
         Effect effect, const PrivateFactoryPackagePaths& paths,
         const std::string& validator_script);
     std::array<trollfx::es5510::EffectPackage,2> packages_;
+    std::array<trollfx::es5510::EffectDescriptor,2> parameter_descriptors_;
     struct FirmwareWrite { std::uint64_t frame; std::uint8_t index; std::uint32_t value; };
     std::array<std::vector<FirmwareWrite>,2> firmware_writes_;
     trollfx::es5510::FactoryRuntime runtime_;

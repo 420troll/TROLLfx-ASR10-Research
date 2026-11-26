@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <filesystem>
+#include <limits>
 #include <new>
 #include <string>
 #include <vector>
@@ -108,6 +109,12 @@ int main() {
         assert(fx.loadEffect(package(EffectId::Rom01Hall,hall_path)));
         assert(fx.getStatus().active_program_words==89);
         assert(fx.getStatus().processing_rate_hz==48000.0);
+        std::array<float,4> nonfinite_input{{std::numeric_limits<float>::quiet_NaN(),
+            std::numeric_limits<float>::infinity(),-std::numeric_limits<float>::infinity(),
+            std::numeric_limits<float>::quiet_NaN()}},nonfinite_output{};
+        assert(fx.processStereo(nonfinite_input.data(),nonfinite_output.data(),2,48000.0));
+        for (float sample : nonfinite_output) assert(std::isfinite(sample));
+        assert(fx.reset());
         assert(fx.setRegister(0x20,0x123456,0));
         assert(!fx.setRegister(0xc0,0,0));
         assert(!fx.setRegister(0x20,0x1000000,0));
@@ -199,10 +206,20 @@ int main() {
         assert(fx.getStatus().active_program_words==3);
         assert(fx.setParameter(short_package.descriptor,"test",7,0));
         assert(fx.setParameter(short_package.descriptor,"group",3,0));
+        auto accepted_status=fx.getStatus();
+        assert(!accepted_status.initialization_schedule_complete);
+        assert(accepted_status.firmware_writes_pending==1);
+        assert(accepted_status.parameter_writes_pending==3);
+        assert(!accepted_status.last_parameter_write_applied);
         assert(!fx.setParameter(short_package.descriptor,"test",8,0));
         std::array<float,4> in{},out{};
         assert(fx.processStereo(in.data(),out.data(),2,32000.0));
         assert(fx.getStatus().scheduled_writes_applied==4); // firmware init + single + ordered two-register group
+        auto applied_status=fx.getStatus();
+        assert(applied_status.initialization_schedule_complete);
+        assert(applied_status.firmware_writes_pending==0);
+        assert(applied_status.parameter_writes_pending==0);
+        assert(applied_status.last_parameter_write_applied);
         assert(fx.loadEffect(*registry.find(50)));
         assert(fx.getStatus().active_program_words==160);
         auto invalid=generic_package(16,60,rom02_path); invalid.descriptor.routing.input_port=4;
@@ -249,8 +266,8 @@ int main() {
                 assert(runtime.loadEffect(definition,RateMode::FactoryReference));
                 assert(runtime.setParameter(definition.descriptor,parameter.id,
                                             parameter.verified_points[1].display_value,0));
-                std::array<float,4> in{},out{};
-                assert(runtime.processStereo(in.data(),out.data(),2,48000.0));
+                std::array<float,8> in{},out{};
+                assert(runtime.processStereo(in.data(),out.data(),4,48000.0));
                 const auto writes=parameter.verified_points[1].ordered_writes.empty()
                     ? 1u : static_cast<unsigned>(parameter.verified_points[1].ordered_writes.size());
                 assert(runtime.getStatus().scheduled_writes_applied==1+writes);
@@ -269,12 +286,15 @@ int main() {
         assert(decay->verified_points.size()==2);
         assert(decay->verified_points[1].display_value==41);
         assert(decay->verified_points[1].ordered_writes.size()==5);
-        assert(decay->verified_points[1].ordered_writes[0].gpr==0x03);
-        assert(decay->verified_points[1].ordered_writes[4].gpr==0x6e);
+        assert(decay->verified_points[1].ordered_writes[0].gpr==0x6e);
+        assert(decay->verified_points[1].ordered_writes[1].gpr==0x5b);
+        assert(decay->verified_points[1].ordered_writes[2].gpr==0x03);
+        assert(decay->verified_points[1].ordered_writes[3].gpr==0x04);
+        assert(decay->verified_points[1].ordered_writes[4].gpr==0x05);
         EffectRegistry registry;
         assert(registry.register_validated(hall));
         FactoryRuntime fx;
-        assert(fx.loadEffect(*registry.find(1),RateMode::FactoryReference));
+        assert(fx.loadEffect(*registry.find(1),RateMode::Experimental48000));
         assert(fx.setParameter(hall.descriptor,"decay_time",41,0));
         std::array<float,4> in{},out{};
         assert(fx.processStereo(in.data(),out.data(),2,48000.0));
@@ -293,6 +313,44 @@ int main() {
         assert(fine!=pitch.descriptor.parameters.end());
         assert(fine->verified_points[0].display_text=="-11");
         assert(fine->verified_points[1].display_value==-10);
+    }
+    {
+        // A validated startup schedule can write the same coefficient group
+        // after RUN. A user edit requested early must be deferred behind the
+        // last startup event rather than accepted and then overwritten.
+        auto hall=generic_package(1,3,short_path);
+        hall.descriptor.factory_variation=1;
+        hall.descriptor.firmware_event_schedule.clear();
+        hall.descriptor.firmware_event_schedule={
+            {3,0x6e,0x340000},{4,0x5b,0x080034},{5,0x03,0x340000},
+            {6,0x04,0xcc0000},{7,0x05,0x6adfff}};
+        assert(parameter_discovery_v02::append_verified_parameters(hall.descriptor));
+        EffectRegistry registry;
+        assert(registry.register_validated(hall));
+        FactoryRuntime fx;
+        assert(fx.loadEffect(*registry.find(1),RateMode::Experimental48000));
+        auto status=fx.getStatus();
+        assert(!status.initialization_schedule_complete);
+        assert(status.initialization_complete_frame==8);
+        assert(status.firmware_writes_pending==5);
+        assert(fx.setParameter(hall.descriptor,"decay_time",41,0));
+        status=fx.getStatus();
+        assert(status.parameter_writes_pending==5);
+        assert(!status.last_parameter_write_applied);
+        assert(!status.initialization_schedule_complete);
+        assert(std::string(status.message).find("deferred")!=std::string::npos);
+        std::array<float,18> in{},out{};
+        assert(fx.processStereo(in.data(),out.data(),8,48000.0));
+        status=fx.getStatus();
+        assert(status.initialization_schedule_complete);
+        assert(status.firmware_writes_pending==0);
+        assert(status.parameter_writes_pending==5);
+        assert(!status.last_parameter_write_applied);
+        assert(fx.processStereo(in.data()+16,out.data()+16,1,48000.0));
+        status=fx.getStatus();
+        assert(status.parameter_writes_pending==0);
+        assert(status.last_parameter_write_applied);
+        assert(status.scheduled_writes_applied==10);
     }
     {
         auto hall = generic_package(1,3,short_path);
@@ -314,9 +372,11 @@ int main() {
         assert(fx.stepHallDecayTime(-1,0)); // raw 3 -> 2, LCD 2 -> 1
         status=fx.getStatus();
         assert(status.hall_decay_raw_code==2 && status.hall_decay_display_value==1);
+        assert(status.parameter_writes_pending==15 && !status.last_parameter_write_applied);
         std::array<float,8> step_in{},step_out{};
         assert(fx.processStereo(step_in.data(),step_out.data(),4,48000.0));
         assert(fx.getStatus().scheduled_writes_applied==16); // package init + three atomic five-write groups
+        assert(fx.getStatus().parameter_writes_pending==0 && fx.getStatus().last_parameter_write_applied);
         assert(fx.setRegister(0x6e,0x010000,fx.getStatus().processed_dsp_frames));
         assert(!fx.getStatus().hall_decay_step_available);
         assert(!fx.stepHallDecayTime(+1,fx.getStatus().processed_dsp_frames));

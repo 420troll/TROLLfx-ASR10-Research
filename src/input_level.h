@@ -6,8 +6,16 @@
 #include <cmath>
 
 constexpr float INPUT_LEVEL_0DB = 2.0f / 3;
+inline float finite_audio_sample_or_zero(float value) noexcept {
+    return std::isfinite(value) ? value : 0.0f;
+}
+inline double finite_clamp(double value, double low, double high, double fallback) noexcept {
+    if (!std::isfinite(value)) value = fallback;
+    if (!std::isfinite(value)) value = low;
+    return std::clamp(value, low, high);
+}
 inline float input_level_db(float pos) {
-    pos = std::clamp(pos, 0.0f, 1.0f);
+    pos = static_cast<float>(finite_clamp(pos, 0.0, 1.0, INPUT_LEVEL_0DB));
     return pos <= 0.005f ? -100.0f : -36.0f + pos * 54.0f;
 }
 inline float input_level_gain(float pos) {

@@ -227,7 +227,15 @@ int main(int argc, char** argv) {
                   << " block_frames=" << block << " switches=" << switches.size() << " parameters=" << parameter_count << "\n"
                   << "processing_ms=" << ms << " realtime_ratio=" << ratio
                   << " estimated_memory_bytes=" << memory_estimate << " processor_latency_frames=" << host.latency_frames() << "\n";
-        if(factory)std::cout<<"runtime_status="<<factory->status_message()<<"\n";
+        if(factory){
+            const auto rs=factory->runtime_status();
+            std::cout<<"runtime_status="<<factory->status_message()<<"\n"
+                     <<"initialization_complete="<<(rs.initialization_schedule_complete?"true":"false")
+                     <<" firmware_writes_pending="<<rs.firmware_writes_pending
+                     <<" parameter_writes_pending="<<rs.parameter_writes_pending
+                     <<" last_parameter_write_applied="<<(rs.last_parameter_write_applied?"true":"false")
+                     <<" processed_dsp_frames="<<rs.processed_dsp_frames<<"\n";
+        }
         return 0;
     } catch (const std::exception& e) {
         std::cerr << "trollfx-audio-host: " << e.what() << "\n";
