@@ -1,0 +1,65 @@
+{
+  "schema": "asr10-vst2-acceptance-contract-v1",
+  "status": "HARNESS_READY_CANDIDATE_NOT_AVAILABLE",
+  "vst2_callback_sequence": [
+    "VSTPluginMain(audioMasterCallback)",
+    "effOpen",
+    "effSetSampleRate",
+    "effSetBlockSize",
+    "effMainsChanged(on)",
+    "AEffect.setParameter",
+    "AEffect.processReplacing",
+    "effGetChunk",
+    "effSetChunk",
+    "effMainsChanged(off)",
+    "effClose"
+  ],
+  "current_plugin_abi_at_qa_baseline": {
+    "source_file": "force_plugin/src/ASR10FXCollection.cpp",
+    "parameter_count": 12,
+    "parameters": [
+      {"index": 0, "id": "effect_slot", "purpose": "effect selection"},
+      {"index": 1, "id": "host_wet", "purpose": "host wet/dry"},
+      {"index": 2, "id": "host_input_gain", "purpose": "host input gain"},
+      {"index": 3, "id": "host_output_gain", "purpose": "host output gain"},
+      {"index": 4, "id": "host_bypass", "purpose": "host bypass"},
+      {"index": 5, "id": "load_status", "purpose": "reported load status"},
+      {"index": 6, "id": "reverb_bus1", "purpose": "legacy serialized selector; skin-hidden"},
+      {"index": 7, "id": "reverb_bus2", "purpose": "legacy serialized selector; skin-hidden"},
+      {"index": 8, "id": "hall_bus1", "purpose": "verified HALL BUS1 choices"},
+      {"index": 9, "id": "hall_bus2", "purpose": "verified HALL BUS2 choices"},
+      {"index": 10, "id": "rom02_bus1", "purpose": "verified ROM-02 BUS1 choices"},
+      {"index": 11, "id": "rom02_bus2", "purpose": "verified ROM-02 BUS2 choices"}
+    ],
+    "hall_decay_full_range_parameter": "ABSENT"
+  },
+  "acceptance_rules": {
+    "binary_identity": "The report must bind the exact native VST2 binary SHA-256 and candidate source commit; ARM32 is separately bound and is not a substitute for native callback testing.",
+    "callback_proof": "The harness must load VSTPluginMain and use AEffect dispatcher/setParameter/processReplacing/getChunk/setChunk callbacks. Direct FactoryRuntime calls are not VST acceptance.",
+    "startup": "A normal parameter edit is accepted only after the selected package's exact expected firmware schedule has completed. HALL's expected schedule is 213/213; other effects have package-specific event counts and must not be forced to 213. Pre-startup stress cases are separately labeled and must prove the deferred edit is applied by the active plugin runtime.",
+    "registers": "VST getParameter or display text is not DSP proof. Candidate evidence must include active program, checkpoint, firmware schedule, initial-state hash, serial route, parameter-application frame, ordered register trace and active register snapshot.",
+    "audio": "Finite stereo output, A/B differences and reference comparisons are measured with fixed gain. No automatic gain normalization or audio-derived shift is permitted.",
+    "alignment": "Default comparison aligns by declared input frame zero after removing only explicitly measured fixed latency. If sample rates differ, polyphase conversion is opt-in and reported. No implicit shift, normalization or clock reinterpretation.",
+    "state": "Chunk save/restore must preserve effect and control values; after restore the callback output and active register state must agree with the restored selection.",
+    "realtime": "Callback allocation counter must remain zero; invalid/non-finite host values and audio must not create non-finite outputs or persistent state."
+  },
+  "existing_callback_harness": {
+    "source": "tests/force_vst_binary_audio_test.cpp",
+    "runner": "force_plugin/tools/test_packaged_vst.py",
+    "covers": ["VSTPluginMain ABI", "selection", "setParameter", "processReplacing", "stereo output", "effect switching", "state chunk round-trip", "missing-package silence", "callback allocations", "wet/dry", "gain", "bypass", "pre-startup edits", "edit during pending initialization", "restart after edit", "non-finite parameter", "non-finite audio"],
+    "not_proven_by_existing_harness": ["DSP register writes unless a register trace is attached", "physical Force Q-Link delivery", "exact original hardware audio equivalence"]
+  },
+  "startup_stress_cases": [
+    {"case": "edit_before_startup", "mechanism": "setParameter before first processReplacing; verify final queued value is applied after startup", "status": "IMPLEMENTED_NOT_EXECUTED"},
+    {"case": "edit_immediately_after_startup", "mechanism": "setParameter after READY, render subsequent callback blocks", "status": "IMPLEMENTED_NOT_EXECUTED"},
+    {"case": "multiple_pending_edits", "mechanism": "send values A/B/C before startup and verify final C plus active DSP state", "status": "PARTIAL_NO_REGISTER_TRACE"},
+    {"case": "rapid_changes_at_boundary", "mechanism": "parameter changes across first startup callback blocks", "status": "PARTIAL_NO_REGISTER_TRACE"},
+    {"case": "switch_during_pending_initialization", "mechanism": "start slot 1, process one short block, select slot 2, require only slot 2 ready", "status": "IMPLEMENTED_NOT_EXECUTED"},
+    {"case": "reset_after_edit", "mechanism": "VST mains off/on after edit; verify restored parameter and READY status", "status": "IMPLEMENTED_NOT_EXECUTED"},
+    {"case": "repeat_fresh_instance", "mechanism": "run same input/state on a newly created VST instance; compare declared alignment and output", "status": "NOT_IMPLEMENTED"},
+    {"case": "non_finite_vst_parameter", "mechanism": "set NaN and +/-Inf through AEffect.setParameter; require finite getter and output", "status": "IMPLEMENTED_NOT_EXECUTED"},
+    {"case": "non_finite_audio", "mechanism": "send NaN input through processReplacing; require finite output", "status": "IMPLEMENTED_NOT_EXECUTED"},
+    {"case": "state_chunk_restore", "mechanism": "effGetChunk/effSetChunk around effect/control changes; then render", "status": "EXISTING_CASE_RETAINED_NOT_EXECUTED_ON_NEW_CANDIDATE"},
+    {"case": "firmware_schedule_integrity", "mechanism": "verify private package-specific event count and schedule hash before accepting edits; HALL specifically requires 213 events", "status": "PACKAGE_GATE_REQUIRED"}
+  ]
+}

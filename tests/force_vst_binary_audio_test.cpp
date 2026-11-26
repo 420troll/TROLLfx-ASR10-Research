@@ -11,6 +11,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <new>
 #include <stdexcept>
 #include <string>
@@ -33,7 +34,9 @@ VstIntPtr host_callback(AEffect*,VstInt32 op,VstInt32,VstIntPtr,void*,float){
 using Entry=AEffect*(*)(audioMasterCallback);
 struct Plugin {
  void* library=nullptr;AEffect* effect=nullptr;
- explicit Plugin(const std::string&path){library=dlopen(path.c_str(),RTLD_NOW|RTLD_LOCAL);if(!library)throw std::runtime_error(dlerror());auto entry=reinterpret_cast<Entry>(dlsym(library,"VSTPluginMain"));if(!entry)throw std::runtime_error("VSTPluginMain missing from packaged binary");effect=entry(host_callback);if(!effect||effect->magic!=kEffectMagic||effect->resvd2!=0||!effect->object||effect->numInputs!=2||effect->numOutputs!=2||!effect->processReplacing)throw std::runtime_error("VST entry/ABI initialization failed");host.effect=effect;effect->dispatcher(effect,effOpen,0,0,nullptr,0);effect->dispatcher(effect,effSetSampleRate,0,0,nullptr,float(kRate));effect->dispatcher(effect,effSetBlockSize,0,kMaxBlock,nullptr,0);effect->dispatcher(effect,effMainsChanged,0,1,nullptr,0);}
+ explicit Plugin(const std::string&path,bool start=true){library=dlopen(path.c_str(),RTLD_NOW|RTLD_LOCAL);if(!library)throw std::runtime_error(dlerror());auto entry=reinterpret_cast<Entry>(dlsym(library,"VSTPluginMain"));if(!entry)throw std::runtime_error("VSTPluginMain missing from packaged binary");effect=entry(host_callback);if(!effect||effect->magic!=kEffectMagic||effect->resvd2!=0||!effect->object||effect->numInputs!=2||effect->numOutputs!=2||!effect->processReplacing)throw std::runtime_error("VST entry/ABI initialization failed");host.effect=effect;effect->dispatcher(effect,effOpen,0,0,nullptr,0);effect->dispatcher(effect,effSetSampleRate,0,0,nullptr,float(kRate));effect->dispatcher(effect,effSetBlockSize,0,kMaxBlock,nullptr,0);if(start)activate();}
+ void activate(){effect->dispatcher(effect,effMainsChanged,0,1,nullptr,0);}
+ void deactivate(){effect->dispatcher(effect,effMainsChanged,0,0,nullptr,0);}
  ~Plugin(){if(effect){effect->dispatcher(effect,effMainsChanged,0,0,nullptr,0);effect->dispatcher(effect,effClose,0,0,nullptr,0);}if(library)dlclose(library);host.effect=nullptr;}
  int plain_status(){char text[64]{};effect->dispatcher(effect,effGetParamDisplay,kStatusParam,0,text,0);if(std::strcmp(text,"READY")==0)return 3;if(std::strcmp(text,"LOADING")==0)return 2;if(std::strcmp(text,"UNAVAIL")==0)return 1;if(std::strcmp(text,"MISSING")==0)return 0;if(std::strcmp(text,"LOAD ERR")==0)return 4;return -1;}
  bool selected_effect_ready(){char text[64]{};effect->dispatcher(effect,effGetParamDisplay,kEffectParam,0,text,0);return std::strstr(text,"/ READY")!=nullptr;}
@@ -51,19 +54,44 @@ void save_raw(const std::string&path,const std::vector<float>&v){std::ofstream f
 }
 
 int main(int argc,char**argv)try{
- if(argc<5||argc>6){std::cerr<<"usage: vst_binary_test PLUGIN ASSET_ROOT STIMULUS OUTPUT_DIR [missing]\n";return 2;}
+ if(argc<5||argc>6){std::cerr<<"usage: vst_binary_test PLUGIN ASSET_ROOT STIMULUS OUTPUT_DIR [missing|nan-parameter|nan-audio]\n";return 2;}
  if(setenv("TROLLFX_FACTORY_PACKAGES_DIR",argv[2],1)!=0)throw std::runtime_error("cannot set local factory asset root");
  Stimulus stimulus(argv[3]);std::filesystem::create_directories(argv[4]);
- Plugin plugin(argv[1]);if(plugin.effect->numParams!=12)throw std::runtime_error("unexpected plugin parameter ABI");
+ // Exercise the actual VST2 setParameter callback before the first audio
+ // callback/startup request. Multiple queued values must settle to the last
+ // host value after the factory runtime becomes ready.
+ Plugin plugin(argv[1],false);if(plugin.effect->numParams!=12)throw std::runtime_error("unexpected plugin parameter ABI");
+ plugin.select(1);plugin.set(8,0.0f);plugin.set(8,1.0f);plugin.set(8,0.0f);plugin.set(9,0.0f);plugin.set(9,1.0f);plugin.set(9,0.0f);
+ if(!std::isfinite(plugin.get(8))||std::abs(plugin.get(8))>1e-4f||std::abs(plugin.get(9))>1e-4f)throw std::runtime_error("pre-startup VST setParameter did not retain final value");
+ plugin.activate();
+ if(argc==6&&std::string(argv[5])=="nan-parameter"){
+  plugin.set(1,std::numeric_limits<float>::quiet_NaN());
+  if(!std::isfinite(plugin.get(1)))throw std::runtime_error("non-finite VST parameter was retained");
+  std::cout<<"NAN_PARAMETER_PASS\n";return 0;
+ }
  if(argc==6&&std::string(argv[5])=="missing"){
   std::size_t cursor=0;BlockResult render;process_frames(plugin,stimulus,2048,cursor,nullptr,&render);
   if(plugin.plain_status()!=1||!plugin.selected_effect_unavailable())throw std::runtime_error("empty local collection was not reported unavailable");
   for(float x:render.output)if(x!=0.0f)throw std::runtime_error("missing package did not fail closed to silence");
   std::cout<<"MISSING_PASS status=Unavailable frames=2048 output=silence\n";return 0;
  }
+ if(argc==6&&std::string(argv[5])=="nan-audio"){
+  std::size_t cursor=0,elapsed=0;if(!wait_ready(plugin,1,stimulus,cursor,elapsed))throw std::runtime_error("cannot prepare HALL for non-finite input test");
+  std::array<float,kMaxBlock> il{},ir{},ol{},orr{};il.fill(std::numeric_limits<float>::quiet_NaN());ir.fill(0.1f);
+  callback(plugin,il.data(),ir.data(),ol.data(),orr.data(),kMaxBlock);
+  for(int i=0;i<kMaxBlock;++i)if(!std::isfinite(ol[i])||!std::isfinite(orr[i]))throw std::runtime_error("non-finite input produced non-finite VST output");
+  std::cout<<"NAN_AUDIO_PASS frames="<<kMaxBlock<<"\n";return 0;
+ }
  // Native host simulator has no package injection hook; this binary-bound
  // harness instead supplies only the external local asset root.
  std::size_t cursor=0,transition_frames=0;
+ // Start one slot, redirect the effect while startup is pending, then require
+ // the requested effect to become ready. This remains callback-level and
+ // does not call FactoryRuntime directly.
+ plugin.select(1);process_frames(plugin,stimulus,127,cursor,nullptr,nullptr);
+ plugin.set(8,1.0f);plugin.set(8,0.0f);plugin.set(8,1.0f);plugin.select(2);
+ std::size_t pending_elapsed=0;if(!wait_ready(plugin,2,stimulus,cursor,pending_elapsed))throw std::runtime_error("effect switch during pending startup failed");
+ std::size_t return_elapsed=0;if(!wait_ready(plugin,1,stimulus,cursor,return_elapsed))throw std::runtime_error("return to HALL after pending switch failed");
  for(unsigned slot=1;slot<=50;++slot){
   std::size_t elapsed=0;if(!wait_ready(plugin,slot,stimulus,cursor,elapsed))throw std::runtime_error("VST could not prepare selected factory slot "+std::to_string(slot));
   if(slot>1&&elapsed<480)throw std::runtime_error("effect switch completed before the required 5 ms fade-out/fade-in span");
@@ -92,6 +120,11 @@ int main(int argc,char**argv)try{
  plugin.set(2,0.5f);plugin.set(3,0.625f);BlockResult output_gain;cursor=0;process_frames(plugin,stimulus,2048,cursor,nullptr,&output_gain);
  double gain_delta=0.0;for(std::size_t i=16;i<dry.output.size();++i)gain_delta+=std::abs(dry.output[i]-input_gain.output[i])+std::abs(dry.output[i]-output_gain.output[i]);
  if(gain_delta<=1e-6)throw std::runtime_error("host gain controls did not change packaged VST output");
+ // Reset/restart after an edit, then prove host parameter storage survives
+ // and the effect becomes active again through processReplacing.
+ plugin.set(8,1.0f);plugin.deactivate();plugin.activate();std::size_t restart_elapsed=0;
+ if(!wait_ready(plugin,1,stimulus,cursor,restart_elapsed))throw std::runtime_error("VST restart after edit failed to initialize");
+ if(std::abs(plugin.get(8)-1.0f)>1e-4f)throw std::runtime_error("VST restart lost edited host parameter state");
  // Save and restore the selected effect, host controls, and verified ROM-02
  // BUS values through the exact packaged VST chunk interface.
  plugin.select(2);plugin.set(10,1.0f);plugin.set(11,0.0f);plugin.set(1,0.75f);plugin.set(2,0.6f);plugin.set(3,0.4f);plugin.set(4,1.0f);
@@ -100,6 +133,15 @@ int main(int argc,char**argv)try{
  plugin.select(1);plugin.set(10,0.0f);plugin.set(11,1.0f);plugin.set(1,0.0f);plugin.set(2,0.5f);plugin.set(3,0.5f);plugin.set(4,0.0f);
  plugin.effect->dispatcher(plugin.effect,effSetChunk,0,bytes,saved.data(),0);
  if(std::abs(plugin.get(kEffectParam)-float(1.0/49.0))>1e-4f||std::abs(plugin.get(10)-1.0f)>1e-4f||std::abs(plugin.get(11))>1e-4f||std::abs(plugin.get(1)-0.75f)>1e-4f||std::abs(plugin.get(2)-0.6f)>1e-4f||std::abs(plugin.get(3)-0.4f)>1e-4f||std::abs(plugin.get(4)-1.0f)>1e-4f)throw std::runtime_error("state restore missed effect, host, or verified parameter values");
+ // Robustness probes run after state coverage so an expected rejection still
+ // leaves the functional callback and chunk tests visible in the log.
+ for(float invalid:{std::numeric_limits<float>::quiet_NaN(),std::numeric_limits<float>::infinity(),-std::numeric_limits<float>::infinity()}){
+  plugin.set(1,invalid);if(!std::isfinite(plugin.get(1)))throw std::runtime_error("non-finite VST parameter was retained");
+ }
+ plugin.set(1,1.0f);std::array<float,kMaxBlock> bad_l{},bad_r{},bad_ol{},bad_or{};
+ bad_l.fill(std::numeric_limits<float>::quiet_NaN());bad_r.fill(0.1f);
+ callback(plugin,bad_l.data(),bad_r.data(),bad_ol.data(),bad_or.data(),kMaxBlock);
+ for(int i=0;i<kMaxBlock;++i)if(!std::isfinite(bad_ol[i])||!std::isfinite(bad_or[i]))throw std::runtime_error("non-finite input produced non-finite VST output");
  std::cout<<"BINARY_PASS entry=VSTPluginMain slots=50 callbacks_allocations="<<callback_allocations.load()<<" transition_frames="<<transition_frames<<" wet_dry=gain=bypass=PASS state_roundtrip=PASS\n";
  return 0;
 }catch(const std::exception&e){std::cerr<<"BINARY_FAIL "<<e.what()<<"\n";return 1;}

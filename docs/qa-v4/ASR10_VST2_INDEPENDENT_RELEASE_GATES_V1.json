@@ -1,0 +1,50 @@
+{
+  "schema": "asr10-vst2-independent-release-gates-v1",
+  "candidate": {
+    "codex1_runtime_commit": "1984744",
+    "codex2_audio_lab_commit": "6a9317f",
+    "vst2_candidate_commit": null,
+    "candidate_status": "BLOCKED_NO_PUBLISHED_VST2_INTEGRATION_CANDIDATE",
+    "baseline_vst_test_source_commit": "611523252079ff579060b539effa7e304877fcd7"
+  },
+  "gates": [
+    {
+      "gate": "Original-OS register equivalence",
+      "status": "PASS",
+      "coverage": "Previously validated HALL DECAY TIME mapped register subset only",
+      "evidence": "Published HALL 40/41 and full-range OS register audits; this is parameter-specific and not whole-plugin audio equivalence."
+    },
+    {
+      "gate": "Standalone native audio",
+      "status": "PASS",
+      "coverage": "HALL standalone extreme-range test matrix only",
+      "evidence": "HALL standalone extreme-range renders and comparisons in ASR10_HALL_EXTREME_RANGE_AUDIO_QA_V1.json; package/firmware evidence in its provenance."
+    },
+    {
+      "gate": "Native desktop VST2 audio",
+      "status": "FAIL",
+      "evidence": "The QA-baseline VST2 binary rendered all 50 slots and passed state chunk round-trip before the callback harness failed: NaN setParameter remained non-finite. Separate NaN processReplacing input also generated non-finite output. Codex 2's future candidate is separately BLOCKED because no candidate was published."
+    },
+    {
+      "gate": "Full-range HALL control",
+      "status": "BLOCKED",
+      "evidence": "Current published plugin interface exposes HALL/ROM-02 bus selectors only; no full-range HALL decay parameter route in plugin source. Candidate callback/register/audio trace required."
+    },
+    {
+      "gate": "ARMv7 binary build",
+      "status": "PASS",
+      "evidence": "QA-baseline source commit 6115232 built ARMv7 hard-float with SDK Zig 0.17.1 and passed SDK validation; this does not transfer to a future Codex 2 binary."
+    },
+    {
+      "gate": "Physical Akai Force operation",
+      "status": "NOT TESTED",
+      "evidence": "No physical test for this candidate; prior V1/V3 observations do not transfer to a new binary."
+    },
+    {
+      "gate": "Exact original-hardware audio equivalence",
+      "status": "NOT TESTED",
+      "evidence": "No same-state VST output against exact OS reference with candidate-bound provenance."
+    }
+  ],
+  "scope_note": "PASS on a research/runtime gate does not imply integrated plugin acceptance or Force release readiness."
+}

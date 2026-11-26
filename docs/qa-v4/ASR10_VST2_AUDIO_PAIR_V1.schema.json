@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://420troll.github.io/TROLLfx-ASR10-Research/qa-v4/asr10-vst2-audio-pair-v1.schema.json",
+  "title": "ASR-10 VST2 audio comparison pair bundle",
+  "type": "object",
+  "required": ["schema", "pairs"],
+  "properties": {
+    "schema": {"const": "asr10-vst2-audio-pair-v1"},
+    "pairs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/pair"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "run": {
+      "type": "object",
+      "required": ["wav", "wav_sha256", "evidence"],
+      "properties": {
+        "wav": {"type": "string"}, "wav_sha256": {"$ref": "#/$defs/sha256"},
+        "evidence": {
+          "type": "object",
+          "required": ["effect_slot", "effect_name", "variation", "display_value", "raw_code", "input_sha256", "processing_rate_hz", "wav_sample_rate_hz", "startup_complete", "firmware_events_expected", "firmware_events_applied", "startup_complete_frame", "initial_state_sha256", "checkpoint_sha256", "program_sha256", "firmware_schedule_sha256", "serial_routing", "parameter_index", "host_parameter_value", "parameter_application_frame", "active_registers", "register_trace_sha256", "frame_zero", "known_latency_frames", "binary_sha256", "source_commit", "vst_callbacks"],
+          "properties": {
+            "effect_slot": {"type": "integer", "minimum": 1, "maximum": 50},
+            "effect_name": {"type": "string"}, "variation": {"type": "integer", "minimum": 1, "maximum": 4},
+            "display_value": {"type": "integer"}, "raw_code": {"type": "integer"},
+            "input_sha256": {"$ref": "#/$defs/sha256"}, "processing_rate_hz": {"type": "number", "exclusiveMinimum": 0},
+            "wav_sample_rate_hz": {"type": "integer", "exclusiveMinimum": 0}, "startup_complete": {"const": true},
+            "firmware_events_expected": {"type": "integer", "minimum": 1}, "firmware_events_applied": {"type": "integer", "minimum": 1},
+            "startup_complete_frame": {"type": "integer", "minimum": 0},
+            "initial_state_sha256": {"$ref": "#/$defs/sha256"}, "checkpoint_sha256": {"$ref": "#/$defs/sha256"},
+            "program_sha256": {"$ref": "#/$defs/sha256"}, "firmware_schedule_sha256": {"$ref": "#/$defs/sha256"},
+            "serial_routing": {"type": "object"}, "parameter_index": {"type": "integer", "minimum": 0},
+            "host_parameter_value": {"type": "number"}, "parameter_application_frame": {"type": "integer", "minimum": 0},
+            "active_registers": {"type": "object", "minProperties": 1}, "register_trace_sha256": {"$ref": "#/$defs/sha256"},
+            "frame_zero": {"enum": ["input_frame_0", "declared_latency_aligned"]},
+            "known_latency_frames": {"type": "integer", "minimum": 0}, "alignment_origin_frames": {"type": "integer"},
+            "binary_sha256": {"$ref": "#/$defs/sha256"}, "source_commit": {"type": "string"},
+            "vst_callbacks": {"type": "array", "items": {"type": "string"}}
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "pair": {
+      "type": "object", "required": ["pair_id", "reference_a", "reference_b", "candidate_a", "candidate_b"],
+      "properties": {
+        "pair_id": {"type": "string"}, "reference_a": {"$ref": "#/$defs/run"},
+        "reference_b": {"$ref": "#/$defs/run"}, "candidate_a": {"$ref": "#/$defs/run"},
+        "candidate_b": {"$ref": "#/$defs/run"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

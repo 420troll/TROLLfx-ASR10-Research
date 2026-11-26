@@ -1,0 +1,67 @@
+{
+  "schema": "asr10-vst2-baseline-callback-results-v1",
+  "test_source_commit": "611523252079ff579060b539effa7e304877fcd7",
+  "runtime_source_commit": "198474474c69280493654cd733b871e83409dd6b",
+  "codex2_audio_lab_commit": "6a9317f5d181f436a0010a1af564488d11829403",
+  "candidate_note": "This is an isolated rebuild from QA baseline source, not a new Codex 2 VST2 candidate.",
+  "build": {
+    "toolchain": "Akai/InMusic SDK Zig 0.17.1",
+    "sdk_commit": "4521c247a2deae30efb9e93d53fc8f9390c51e81",
+    "sdk_validation": {"status": "PASS", "errors": 0, "warnings": 0},
+    "native_elf": "ELF64 x86-64",
+    "native_binary_sha256": "cc586a7ff9efdbf179363b86b566352623a591b47d6ef8aef72b7deaeea9a567",
+    "arm32_binary_sha256": "225aacdcd3a0a200f5851af924f0128b20f1ff6b4e8c354df343e804fe0d9de5",
+    "arm32_validation": "ELF32 ARMv7 hard-float, exports VSTPluginMain, max GLIBC 2.27"
+  },
+  "private_asset_validation": {
+    "eligible_effect_packages": "50/50",
+    "package_provider_index_sha256": "8bbb71d362529d39f94305ec5c927cb7c93477eb6cdcf627afaf90de464b8267",
+    "hall_schedule_events_expected_and_loaded": 213,
+    "all_50_package_schedule_counts_preserved": true,
+    "other_effect_schedule_counts_are_package_specific": true,
+    "observed_package_schedule_count_range": [116, 583],
+    "assets_committed": false
+  },
+  "previously_validated_hall_reference_data": {
+    "extreme_range_manifest_sha256": "e741004b94ce72e6a2f87b3ba92cbee48f813d21286c6d9f12d9ae3a107156d1",
+    "audio_lab_export_manifest_sha256": "a13f3ac5e6c9a16018862acb032146e291069cc578a94ccec4a6858499824eac",
+    "original_float_wav_hashes_verified": 44,
+    "private_pcm32_import_wav_hashes_verified": 44,
+    "private_audio_lab_bundle_hashes_verified": 4,
+    "comparisons": ["HALL 40/41", "10/90", "0/99", "25/75", "raw 51/52", "same raw repeated"],
+    "rates": ["factory reference 29761.89453125 Hz DSP clock", "experimental 48000 Hz"],
+    "stimuli": ["impulse", "noise burst"],
+    "scope": "Standalone native runtime audio only; no VST2 output WAV was compared to these assets in this baseline test."
+  },
+  "vst2_binary_callback_run": {
+    "entry": "VSTPluginMain",
+    "acceptance_harness_sha256": "1fa2d85aa74a3158e89e86286ad54405f13ddc5734a3513b659e16d2dbc16e84",
+    "test_packaged_vst_script_sha256": "0b22968ee7296e531eacb526d16c373ece342cbf9fb5ade7b655fa9fc825b0d4",
+    "dispatcher_open_sample_rate_block_size_mains": "PASS",
+    "setParameter_before_first_audio": "PASS: queued host values retained until processing began",
+    "switch_during_pending_startup": "PASS: requested slot became ready, then returned to HALL",
+    "factory_slots_processed": 50,
+    "factory_slot_audio": "PASS: 50/50 slots yielded finite stereo non-silent output",
+    "wet_dry_gain_bypass": "PASS",
+    "restart_after_edit": "PASS: READY and host parameter retained",
+    "state_chunk_round_trip": "PASS: effect, host controls, and bus parameters restored through effGetChunk/effSetChunk",
+    "callback_allocations_before_failure": 0,
+    "non_finite_setParameter": "FAIL: NaN was retained by getParameter; +Inf/-Inf were not reached after fail-fast assertion",
+    "non_finite_audio_input": "FAIL: NaN left input produced non-finite VST output",
+    "overall": "FAIL_ROBUSTNESS_GATES"
+  },
+  "official_sdk_host_simulator": {
+    "status": "PASS",
+    "native_binary_sha256": "cc586a7ff9efdbf179363b86b566352623a591b47d6ef8aef72b7deaeea9a567",
+    "host_simulator_wav_sha256": "d4363beb1909ac8b616ca2a54e17a47d809c300d0920bf24c1757fe42c103a69",
+    "tests_passed": 20,
+    "warnings": 0,
+    "failures": 0,
+    "coverage_caveat": "Generic finite parameter sweep; it did not send non-finite values or collect DSP register evidence."
+  },
+  "interpretation": {
+    "proven": ["Actual VST2 entry/callback path loads and processes all 50 locally validated packages at the QA baseline.", "State chunks round-trip as tested through VST2 dispatcher.", "SDK host simulator passes its standard finite-input checks."],
+    "not_proven": ["DSP register effects for each selected control", "HALL DECAY TIME full-range VST mapping", "Codex 2 future VST2 candidate", "physical Force operation", "exact original hardware audio equivalence"],
+    "defects": ["Non-finite setParameter value is retained.", "Non-finite processReplacing input can contaminate output."]
+  }
+}
