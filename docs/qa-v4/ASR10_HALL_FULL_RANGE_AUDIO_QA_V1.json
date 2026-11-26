@@ -1,0 +1,294 @@
+{
+  "schema": "trollfx-asr10-hall-full-range-audio-qa-v1",
+  "qa_branch_head_before_run": "6ebe633b76d2c7c5669bacbac54e2d95cf070a2d",
+  "codex1_runtime_commit": "6779dc8a93dbecb30c3ad445ea24aeeb4ec9a03b",
+  "codex2_editor_commit": "0a25d72f83f6ad622771193d0c6bc064a59d75a0",
+  "reference": {
+    "effect": "ROM-01 HALL REVERB",
+    "os": "3.53",
+    "dsp_rate_hz": 29761.89453125,
+    "program_sha256": "34eec2eb04319c0d167a4110608e1e99f2aa13d8b7908f79852c2be3c0aefd4c",
+    "checkpoint_sha256": "a7c4196bd74d0d7d1d28f474620c081ec790b1c912aefd7a732c0ffc555e661d",
+    "checkpoint_initial_gpr6e": "0x2c0831",
+    "input_capture_sha256": "a60cedaac79e7a76eb8eaabd7986781b3733e9a6b5ac2139536330ff9b4efb22",
+    "firmware_schedule_sha256": "c41e0626cf80b77e32bacdba6bbcac6a24039537070a5c447c0701d84f990452",
+    "reference_boot": "boot-a",
+    "same-reference-audio-per-parameter-setting_available": false
+  },
+  "os_parameter_evidence": {
+    "boot_a_trace_sha256": "baa8328929fa9c142e7246bb6607ec1d5a9e99852ebf17760890ec3d6e693217",
+    "boot_b_trace_sha256": "b8fdf7d164ba960c86545a1f4fca3a619460eeb0ce23d5272ed11b29a3f086c5",
+    "raw_codes": 128,
+    "display_values": 100,
+    "duplicate_buckets": 28,
+    "register_order": [
+      "0x6e",
+      "0x5b",
+      "0x03",
+      "0x04",
+      "0x05"
+    ],
+    "groups_per_raw_match_across_boots": true,
+    "coefficient_clamp": "clamp(raw,12,76) for GPR 03-05"
+  },
+  "method": "OS-captured GPR groups applied through FactoryRuntime setRegister to the authenticated HALL RUN checkpoint; runtime source copied to temp and instrumented with a read-only test accessor; no owner source edited.",
+  "private_audio_saved": false,
+  "native_audio": {
+    "full_range_raw_entries": 128,
+    "all_128_output_hashes_distinct": true,
+    "frames_per_setting": 8192,
+    "all_samples_finite": true,
+    "representative_impulse_tails": [
+      {
+        "raw": 0,
+        "frames": 65536,
+        "peak": 0.4999694824,
+        "rms_windows": [
+          0.004717991666,
+          0.0001345690727,
+          5.886380416e-05,
+          6.101186874e-05,
+          6.102817093e-05,
+          6.103469059e-05,
+          6.10328279e-05,
+          6.101978749e-05
+        ]
+      },
+      {
+        "raw": 1,
+        "frames": 65536,
+        "peak": 0.4999694824,
+        "rms_windows": [
+          0.004717998304,
+          0.0001353182447,
+          5.898005344e-05,
+          6.107798206e-05,
+          6.105145222e-05,
+          6.104679667e-05,
+          6.103515625e-05,
+          6.104679667e-05
+        ]
+      },
+      {
+        "raw": 44,
+        "frames": 65536,
+        "peak": 0.4999694824,
+        "rms_windows": [
+          0.00471714754,
+          0.0002984375934,
+          0.0001365010393,
+          0.0001003558149,
+          0.0001019941194,
+          0.0001100644593,
+          0.0001175749324,
+          0.0001210537319
+        ]
+      },
+      {
+        "raw": 51,
+        "frames": 65536,
+        "peak": 0.4999694824,
+        "rms_windows": [
+          0.004717050419,
+          0.0003316575546,
+          0.000159960389,
+          0.0001101008635,
+          0.0001072608065,
+          0.0001151339587,
+          0.000123115439,
+          0.0001295591655
+        ]
+      },
+      {
+        "raw": 52,
+        "frames": 65536,
+        "peak": 0.4999694824,
+        "rms_windows": [
+          0.004717041158,
+          0.0003359368543,
+          0.0001635978882,
+          0.0001117422887,
+          0.0001078461347,
+          0.0001154701817,
+          0.0001241100961,
+          0.0001296091728
+        ]
+      },
+      {
+        "raw": 53,
+        "frames": 65536,
+        "peak": 0.4999694824,
+        "rms_windows": [
+          0.004717062114,
+          0.0003407327658,
+          0.000167311926,
+          0.0001134135905,
+          0.0001086550659,
+          0.0001159190053,
+          0.0001244403385,
+          0.0001304783658
+        ]
+      },
+      {
+        "raw": 76,
+        "frames": 65536,
+        "peak": 0.4999694824,
+        "rms_windows": [
+          0.004718874206,
+          0.0004400167156,
+          0.0002632729535,
+          0.0001723355723,
+          0.0001413946806,
+          0.0001284744347,
+          0.000132805141,
+          0.0001432052418
+        ]
+      },
+      {
+        "raw": 127,
+        "frames": 65536,
+        "peak": 0.4999694824,
+        "rms_windows": [
+          0.004728174979,
+          0.0006988488203,
+          0.0005907943597,
+          0.0005156818053,
+          0.0004901397181,
+          0.0004566315221,
+          0.000452543774,
+          0.0004312887976
+        ]
+      }
+    ],
+    "exact_repeat_runs": [
+      {
+        "raw": 0,
+        "exact": true,
+        "hash": "1689fa91567d05a3"
+      },
+      {
+        "raw": 44,
+        "exact": true,
+        "hash": "79921578c3b2030f"
+      },
+      {
+        "raw": 51,
+        "exact": true,
+        "hash": "d53d4ea056a9a5ca"
+      },
+      {
+        "raw": 52,
+        "exact": true,
+        "hash": "b62348ce6533e518"
+      },
+      {
+        "raw": 53,
+        "exact": true,
+        "hash": "49c29298b0e708f1"
+      },
+      {
+        "raw": 127,
+        "exact": true,
+        "hash": "1021cea8e6c83e04"
+      }
+    ]
+  },
+  "timing_comparison": {
+    "model": "five register writes in one frame versus the OS offsets [0,3,6,8,11]",
+    "windows": [
+      {
+        "index": 0,
+        "frames": 16,
+        "difference_rms": 7.629394531e-06,
+        "difference_peak": 3.051757812e-05,
+        "batched_rms": 0.1076162049,
+        "staggered_rms": 0.1076162801,
+        "batched_max_sample_step": 0.5041503906,
+        "staggered_max_sample_step": 0.5041503906
+      },
+      {
+        "index": 1,
+        "frames": 112,
+        "difference_rms": 6.448015249e-06,
+        "difference_peak": 3.051757812e-05,
+        "batched_rms": 0.008723563893,
+        "staggered_rms": 0.008722899957,
+        "batched_max_sample_step": 0.01473999023,
+        "staggered_max_sample_step": 0.01473999023
+      },
+      {
+        "index": 2,
+        "frames": 3968,
+        "difference_rms": 6.499807368e-06,
+        "difference_peak": 9.155273438e-05,
+        "batched_rms": 0.008072810264,
+        "staggered_rms": 0.008072917139,
+        "batched_max_sample_step": 0.04861450195,
+        "staggered_max_sample_step": 0.04861450195
+      },
+      {
+        "index": 3,
+        "frames": 61440,
+        "difference_rms": 1.677558935e-05,
+        "difference_peak": 6.103515625e-05,
+        "batched_rms": 0.002275365461,
+        "staggered_rms": 0.002275424626,
+        "batched_max_sample_step": 0.01797485352,
+        "staggered_max_sample_step": 0.01797485352
+      }
+    ],
+    "identical_final_gpr_state": true,
+    "finite_samples": 131072,
+    "audibility_conclusion": "NOT_TESTED"
+  },
+  "runtime_api": {
+    "schedule_free_os_seeded_checkpoint": "PASS",
+    "ascending_steps": 99,
+    "descending_steps": 99,
+    "distinct_raw_codes_visited": 128,
+    "ordered_gpr_writes_checked": 990,
+    "authentic_validated_package_with_post_run_schedule": "UNAVAILABLE_GPR_6E_SCHEDULE_INVALIDATES_RAW_STATE"
+  },
+  "result": {
+    "full_raw_register_and_native_audio_sweep": "PASS",
+    "repeatability": "PASS_FOR_SIX_REPEATED_NATIVE_SETTINGS",
+    "batched_vs_staggered": "MEASURED_SMALL_NUMERICAL_DIFFERENCES_NO_NONFINITE_OR_RUNAWAY_OBSERVED",
+    "exact_factory_audio_equivalence": "NOT_TESTED",
+    "physical_force": "NOT_TESTED"
+  },
+  "vst_safety_probe": {
+    "native_vst2_entry_point": "PASS",
+    "parameter_indices_tested": {
+      "FX": 0,
+      "Wet": 1,
+      "In": 2,
+      "Out": 3,
+      "Bypass": 4
+    },
+    "nan_parameter_value_persisted": "PASS",
+    "nan_audio_input_nonfinite_output_samples": 1,
+    "method": "temporary test-only raw bridge invoked AEffect::setParameter without simulator clamping; proprietary package assets remained local",
+    "defect": "comparison-based SDK clamp passes NaN and ES5510DSPBackend does not sanitize input before the dry delay"
+  },
+  "editor_audit": {
+    "codex2_commit": "0a25d72f83f6ad622771193d0c6bc064a59d75a0",
+    "clean_worktree_tests_passed": 33,
+    "manual_range_corrections": {
+      "ROM-15 LARGE ROOM decay": "0.20-150.0 s",
+      "ROM-16 HALL REVERB2 decay": "0.70-250.0 s",
+      "ROM-18 LARGE PLATE decay": "0.4-140.0 s",
+      "ROM-18 LARGE PLATE predelay": "0-430 ms"
+    },
+    "os2_44khz_appendix_algorithms": 12,
+    "appendix_is_separate_from_50_factory_slots": true
+  },
+  "release_gates": {
+    "native_pc_engine_playback": "PASS_EXPERIMENTAL",
+    "native_pc_hall_full_range_control": "NOT_READY",
+    "isolated_hall_step_register_api": "PASS",
+    "armv7_hall_control": "NOT_TESTED",
+    "physical_force": "NOT_TESTED",
+    "exact_original_os_audio_equivalence": "NOT_TESTED",
+    "vst_nonfinite_robustness": "FAIL"
+  }
+}
