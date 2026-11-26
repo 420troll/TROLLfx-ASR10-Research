@@ -10,6 +10,8 @@
 
 Read [ARCHITECTURE & WORKFLOW AUDIT V1](TROLLFX_ASR10_ARCHITECTURE_WORKFLOW_AUDIT_V1.md) for confirmed architectural limitations, release and source-provenance risks, original manual findings and targeted **hypotheses requiring tests** about concurrency, parameter acknowledgement, latency and state restoration. This is a risk register, not a report of newly observed device failures. Codex 1 should prioritize its in-progress Force installation rather than refactoring from the audit; Codex 2/3 can use the focused experiments independently.
 
+**Manual reference:** [Verified local ASR-10 Musician's Manual, SHA-256 and section map](ASR10_MANUAL_LOCAL_REFERENCE.md). The third-party copyrighted PDF is retained locally, not uploaded into this public repository. All agents should compare its hash before using manual-derived parameters.
+
 ## 1. Branch baselines and ownership
 
 | Owner | Branch | Verified snapshot commit | Assignment |
