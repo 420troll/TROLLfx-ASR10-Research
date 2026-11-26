@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #include "ES5510DSPBackend.h"
+#include "trollfx/es5510_hall_decay_control.hpp"
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -176,8 +177,12 @@ void ES5510DSPBackend::process(const float* const* inputs, float* const* outputs
         const std::size_t n=std::min(kChunk,frames-base);
         std::array<float,kChunk*2> input{}, effected{};
         for (std::size_t i=0;i<n;++i) {
-            input[2*i]=(inputs&&inputs[0]?inputs[0][base+i]:0.0f)*in_gain;
-            input[2*i+1]=(inputs&&inputs[1]?inputs[1][base+i]:0.0f)*in_gain;
+            const float source_l=inputs&&inputs[0]?inputs[0][base+i]:0.0f;
+            const float source_r=inputs&&inputs[1]?inputs[1][base+i]:0.0f;
+            input[2*i]=std::isfinite(source_l)?source_l*in_gain:0.0f;
+            input[2*i+1]=std::isfinite(source_r)?source_r*in_gain:0.0f;
+            if(!std::isfinite(input[2*i]))input[2*i]=0.0f;
+            if(!std::isfinite(input[2*i+1]))input[2*i+1]=0.0f;
         }
         const unsigned index=active_index_.load(std::memory_order_acquire);
         const bool has_active=phase_!=Phase::Silent && status_.load(std::memory_order_acquire)!=ES5510BackendStatus::NoProvider &&
@@ -211,8 +216,10 @@ void ES5510DSPBackend::process(const float* const* inputs, float* const* outputs
             const float wet_l=effected[2*i], wet_r=effected[2*i+1];
             const float mix_wet=bypass?0.0f:wet;
             const float mix_dry=bypass?1.0f:1.0f-wet;
-            outputs[0][base+i]=has_active ? ((dry_l*mix_dry+wet_l*mix_wet)*level)*out_gain : 0.0f;
-            outputs[1][base+i]=has_active ? ((dry_r*mix_dry+wet_r*mix_wet)*level)*out_gain : 0.0f;
+            const float output_l=has_active ? ((dry_l*mix_dry+wet_l*mix_wet)*level)*out_gain : 0.0f;
+            const float output_r=has_active ? ((dry_r*mix_dry+wet_r*mix_wet)*level)*out_gain : 0.0f;
+            outputs[0][base+i]=std::isfinite(output_l)?output_l:0.0f;
+            outputs[1][base+i]=std::isfinite(output_r)?output_r:0.0f;
         }
     }
 }
@@ -220,3 +227,40 @@ void ES5510DSPBackend::process(const float* const* inputs, float* const* outputs
 std::uint64_t ES5510DSPBackend::dsp_frames() const noexcept {
     return runtime_[active_index_.load(std::memory_order_acquire)].getStatus().processed_dsp_frames;
 }
+
+trollfx::es5510::RuntimeStatus ES5510DSPBackend::runtime_status() const noexcept {
+    return runtime_[active_index_.load(std::memory_order_acquire)].getStatus();
+}
+
+#if defined(TROLLFX_VST2_TEST_API)
+bool ES5510DSPBackend::set_test_hall_raw(std::uint8_t raw_code) noexcept {
+    using namespace trollfx::es5510;
+    const auto slot = active_slot_.load(std::memory_order_acquire);
+    if (slot != 1 || raw_code > 127 || status_.load(std::memory_order_acquire) != ES5510BackendStatus::Ready)
+        return false;
+    const auto* provider = provider_.load(std::memory_order_acquire);
+    const auto* package = provider ? provider->package_for_slot(slot) : nullptr;
+    if (!package) return false;
+
+    // This local diagnostic descriptor carries exact original-OS raw-register
+    // groups. It does not mutate the immutable package, saved VST state or
+    // stable host parameter registry.
+    EffectDescriptor diagnostic = package->descriptor;
+    // The package provider schema does not carry a variation field. This
+    // test-only caller labels the requested group as Variation 1 based on the
+    // independent OS reference run; production state remains variation-unknown.
+    diagnostic.factory_variation = 1;
+    VerifiedParameterDefinition parameter;
+    parameter.id = "test_only_hall_decay_raw_code";
+    parameter.ui_label = "TEST ONLY HALL DECAY RAW CODE";
+    ParameterPoint point;
+    point.display_value = raw_code;
+    for (const auto& write : os353::hall_decay_registers(raw_code))
+        point.ordered_writes.push_back({write.gpr, write.value24});
+    parameter.verified_points.push_back(std::move(point));
+    diagnostic.parameters.push_back(std::move(parameter));
+    auto& runtime = runtime_[active_index_.load(std::memory_order_acquire)];
+    const auto frame = runtime.getStatus().processed_dsp_frames;
+    return runtime.setParameter(diagnostic, "test_only_hall_decay_raw_code", raw_code, frame);
+}
+#endif

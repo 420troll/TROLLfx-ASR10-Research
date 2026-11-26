@@ -25,10 +25,11 @@ python3 "$ROOT/force_plugin/tools/prepare_native_test_packages.py" \
 python3 "$ROOT/force_plugin/tools/prepare_force_assets.py" "$COLLECTION" "$ASSETS"
 COMMON="-std=c++17 -O2 -Wall -Wextra -Wpedantic -I$ROOT/include -I$ROOT/src -I$ROOT/force_plugin/src -I$OUT"
 $CXX $COMMON "$ROOT/tests/force_es5510_backend_test.cpp" "$ROOT/force_plugin/src/ES5510DSPBackend.cpp" \
-  "$ROOT/src/es5510_factory_runtime.cpp" "$ROOT/src/es5510.cpp" -pthread -o "$OUT/backend-test"
+  "$ROOT/src/es5510_factory_runtime.cpp" "$ROOT/src/es5510.cpp" "$ROOT/src/hall_decay_native_adapter.cpp" \
+  -pthread -o "$OUT/backend-test"
 $CXX $COMMON -I"${AKAI_FORCE_SDK:-/mnt/c/Users/Gamer/research/AkaiForceSDK}/framework" \
   "$ROOT/tests/force_vst_wrapper_audio_test.cpp" "$ROOT/force_plugin/src/ES5510DSPBackend.cpp" \
   "$ROOT/force_plugin/src/ES5510FactoryPackageProvider.cpp" "$ROOT/src/es5510_factory_runtime.cpp" \
-  "$ROOT/src/es5510.cpp" -pthread -ldl -o "$OUT/vst-wrapper-test"
+  "$ROOT/src/es5510.cpp" "$ROOT/src/hall_decay_native_adapter.cpp" -pthread -ldl -o "$OUT/vst-wrapper-test"
 "$OUT/backend-test"
 TROLLFX_FACTORY_PACKAGES_DIR="$ASSETS" "$OUT/vst-wrapper-test"

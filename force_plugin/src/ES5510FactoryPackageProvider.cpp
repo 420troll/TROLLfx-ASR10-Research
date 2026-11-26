@@ -82,6 +82,11 @@ void ES5510FactoryPackageProvider::load_index(){
   while(std::getline(f,line)){auto c=split_tabs(line);Row r;r.c=std::move(c);try{if(r.c.size()!=15)throw std::runtime_error("provider row has wrong field count");auto slot=decimal(r.c[0]);if(slot<1||slot>50)throw std::runtime_error("slot is outside 1..50");r.slot=static_cast<std::uint8_t>(slot);++occurrences[slot];rows.push_back(std::move(r));}catch(const std::exception&e){std::fprintf(stderr,"TROLLfx provider index row rejected: %s\n",e.what());}}
   for(const auto&r:rows){const auto slot=r.slot;if(occurrences[slot]!=1){errors_[slot]="duplicate slot in provider index";continue;}try{
     const auto&c=r.c;ValidatedEffectPackage p;auto&d=p.descriptor;d.slot=slot;d.factory_name=c[1];d.active_program_words=static_cast<std::uint32_t>(decimal(c[2]));d.end_word=static_cast<std::uint32_t>(decimal(c[3]));d.program_sha256=c[4];d.factory_reference_rate_hz=std::stod(c[5]);if(!std::isfinite(d.factory_reference_rate_hz))throw std::runtime_error("invalid factory processing rate");
+    // Codex 1's 64d893f OS capture binds Variation 1 only to this exact
+    // validated ROM-01 HALL program identity. All other slots stay unknown.
+    if(slot==1 && c[1]=="HALL REVERB" && d.active_program_words==89 &&
+       c[4]=="34eec2eb04319c0d167a4110608e1e99f2aa13d8b7908f79852c2be3c0aefd4c")
+        d.factory_variation=1;
     d.routing={0x48,2,1,true};auto manifest=asset_path(root_,c[6]),checkpoint=asset_path(root_,c[8]),history=asset_path(root_,c[10]),schedule=asset_path(root_,c[12]);
     if(!hex64(c[4])||!hex64(c[7])||!hex64(c[9])||!hex64(c[11])||!hex64(c[13]))throw std::runtime_error("malformed SHA-256 identity");
     if(hash_file(manifest)!=c[7])throw std::runtime_error("package manifest digest mismatch");

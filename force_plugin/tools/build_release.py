@@ -27,6 +27,8 @@ def source_digest() -> str:
             "force_plugin/src/ES5510DSPBackend.cpp","force_plugin/src/ES5510DSPBackend.h",
             "force_plugin/src/ES5510FactoryPackageProvider.cpp","force_plugin/src/ES5510FactoryPackageProvider.h","force_plugin/effects.json",
             "src/es5510.cpp","src/es5510.h","src/es5510_capture.h","src/es5510_factory_runtime.cpp",
+            "src/hall_decay_native_adapter.cpp","include/trollfx/hall_decay_native_adapter.hpp",
+            "include/trollfx/es5510_hall_decay_control.hpp",
             "include/trollfx/es5510_factory_runtime.hpp","include/trollfx/es5510_factory_registry.hpp",
             "include/trollfx/es5510_factory_parameter_control_v01.hpp",
             "include/trollfx/es5510_factory_parameter_discovery_v02.hpp",
@@ -173,7 +175,8 @@ def main():
         shutil.copytree(ROOT/"force_plugin/assets",stage/"assets")
         staged_sources=("force_plugin/src/ASR10FXCollection.cpp","force_plugin/src/ES5510DSPBackend.cpp",
                         "force_plugin/src/ES5510FactoryPackageProvider.cpp",
-                        "src/es5510.cpp","src/es5510_factory_runtime.cpp")
+                        "src/es5510.cpp","src/es5510_factory_runtime.cpp",
+                        "src/hall_decay_native_adapter.cpp")
         for rel in staged_sources: shutil.copy2(ROOT/rel,stage/"src"/Path(rel).name)
         shutil.copy2(ROOT/"force_plugin/src/ES5510DSPBackend.h",stage/"src/ES5510DSPBackend.h")
         shutil.copy2(ROOT/"force_plugin/src/ES5510FactoryPackageProvider.h",stage/"src/ES5510FactoryPackageProvider.h")
@@ -183,7 +186,9 @@ def main():
                     "include/trollfx/es5510_factory_parameter_discovery_v02.hpp",
                     "include/trollfx/es5510_factory_parameter_discovery_v03.hpp",
                     "include/trollfx/es5510_factory_editor_v03.hpp",
-                    "include/trollfx/es5510_factory_editor_v04.hpp"):
+                    "include/trollfx/es5510_factory_editor_v04.hpp",
+                    "include/trollfx/hall_decay_native_adapter.hpp",
+                    "include/trollfx/es5510_hall_decay_control.hpp"):
             dest=stage/"src"/Path(rel).name if rel.startswith("src/") else stage/"src"/"trollfx"/Path(rel).name
             dest.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(ROOT/rel,dest)
         # Native audio verification uses the actual SDK plugin wrapper and the

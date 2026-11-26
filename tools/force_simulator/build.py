@@ -25,13 +25,16 @@ def sdk_path(override: str | None = None) -> Path:
 
 def build(sdk: Path, force=False):
     stamp = SIM_DIR / "build.sha256"
+    hall_gate = "1" if os.environ.get("TROLLFX_HALL_DECAY_NATIVE_GATE") == "1" else "0"
     dependencies = list(SOURCES)
     for directory in (ROOT/"include", ROOT/"src", ROOT/"force_plugin/src"):
         dependencies.extend(sorted((*directory.glob("*.h"), *directory.glob("*.hpp"))))
     dependencies.extend(p for p in (sdk/"framework").glob("*.h") if p.name in {
         "mpc_plugin.h", "mpc_vst2_abi.h", "mpc_resources.h"})
     dependencies.append(ROOT/"tools/force_simulator/vst_host.cpp")
+    dependencies.append(ROOT/"tools/force_simulator/build.py")
     digest_builder=hashlib.sha256(str(sdk).encode())
+    digest_builder.update(f"TROLLFX_HALL_DECAY_NATIVE_GATE={hall_gate}".encode())
     for path in sorted(set(dependencies)):
         digest_builder.update(str(path.relative_to(ROOT) if path.is_relative_to(ROOT) else path.name).encode())
         digest_builder.update(path.read_bytes())
@@ -43,11 +46,12 @@ def build(sdk: Path, force=False):
     common = ["g++", "-std=c++17", "-O2", "-fPIC", "-shared"]
     includes = ["-I"+str(sdk/"framework"), "-I"+str(ROOT/"include"), "-I"+str(ROOT/"src"), "-I"+str(ROOT/"force_plugin/src")]
     if rebuild:
-        hall_gate = "1" if os.environ.get("TROLLFX_HALL_DECAY_NATIVE_GATE") == "1" else "0"
-        cmd = common + ["-DTROLLFX_SIMULATOR_TRACE", f"-DTROLLFX_HALL_DECAY_NATIVE_GATE={hall_gate}", *includes, *map(str,SOURCES), "-pthread", "-o", str(PLUGIN)]
+        cmd = common + ["-DTROLLFX_SIMULATOR_TRACE", "-DTROLLFX_VST2_TEST_API",
+            f"-DTROLLFX_HALL_DECAY_NATIVE_GATE={hall_gate}", *includes, *map(str,SOURCES), "-pthread", "-o", str(PLUGIN)]
         subprocess.run(cmd, check=True, cwd=ROOT)
     if rebuild:
         subprocess.run(common + ["-I"+str(sdk/"framework"), str(ROOT/"tools/force_simulator/vst_host.cpp"),
+            "-I"+str(ROOT/"force_plugin/src"),
             "-ldl", "-pthread", "-o", str(HOST)], check=True, cwd=ROOT)
     if rebuild: stamp.write_text(digest + "\n")
     return PLUGIN, HOST

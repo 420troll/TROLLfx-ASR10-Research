@@ -208,6 +208,41 @@ int main() {
         assert(fx.getStatus().active_program_words==160);
         auto invalid=generic_package(16,60,rom02_path); invalid.descriptor.routing.input_port=4;
         assert(!registry.register_validated(invalid));
+
+        // Initialization ownership is derived from the final validated event,
+        // and a verified control edit requested before startup is deferred to
+        // the first frame after that event (not a package-wide hardcoded time).
+        auto startup=generic_package(47,3,short_path);
+        startup.descriptor.firmware_event_schedule.clear();
+        for (std::uint64_t i=0;i<212;++i)
+            startup.descriptor.firmware_event_schedule.push_back({i,static_cast<std::uint8_t>(i%0x40),static_cast<std::uint32_t>(i)});
+        startup.descriptor.firmware_event_schedule.push_back({12983,0x20,0x123456});
+        assert(registry.register_validated(startup));
+        FactoryRuntime initializing;
+        assert(initializing.loadEffect(*registry.find(47),RateMode::Experimental48000));
+        auto init_status=initializing.getStatus();
+        assert(!init_status.initialization_schedule_complete);
+        assert(init_status.firmware_writes_pending==213);
+        assert(init_status.initialization_complete_frame==12984);
+        assert(initializing.setParameter(startup.descriptor,"test",7,0));
+        assert(initializing.getStatus().parameter_writes_pending==1);
+        std::array<float,2*256> zero_in{},zero_out{};
+        std::uint64_t remaining=12983;
+        while(remaining){const auto n=static_cast<std::size_t>(std::min<std::uint64_t>(remaining,256));
+            assert(initializing.processStereo(zero_in.data(),zero_out.data(),n,48000.0));remaining-=n;}
+        init_status=initializing.getStatus();
+        assert(init_status.processed_dsp_frames==12983);
+        assert(init_status.firmware_writes_pending==1 && init_status.parameter_writes_pending==1);
+        assert(initializing.processStereo(zero_in.data(),zero_out.data(),1,48000.0));
+        init_status=initializing.getStatus();
+        assert(init_status.processed_dsp_frames==12984);
+        assert(init_status.initialization_schedule_complete && init_status.firmware_writes_pending==0);
+        assert(init_status.parameter_writes_pending==1 && !init_status.last_parameter_write_applied);
+        assert(initializing.processStereo(zero_in.data(),zero_out.data(),1,48000.0));
+        init_status=initializing.getStatus();
+        assert(init_status.processed_dsp_frames==12985);
+        assert(init_status.parameter_writes_pending==0 && init_status.last_parameter_write_applied);
+
         auto large_schedule=generic_package(49,3,short_path);
         for(std::uint64_t i=0;i<600;++i)
             large_schedule.descriptor.firmware_event_schedule.push_back({i/2,static_cast<std::uint8_t>(i%0x40),static_cast<std::uint32_t>(i&0xffffff)});
@@ -254,10 +289,14 @@ int main() {
                 assert(runtime.loadEffect(definition,RateMode::FactoryReference));
                 assert(runtime.setParameter(definition.descriptor,parameter.id,
                                             parameter.verified_points[1].display_value,0));
-                std::array<float,4> in{},out{};
-                assert(runtime.processStereo(in.data(),out.data(),2,48000.0));
+                std::array<float,16> in{},out{};
+                assert(runtime.processStereo(in.data(),out.data(),8,48000.0));
                 const auto writes=parameter.verified_points[1].ordered_writes.empty()
                     ? 1u : static_cast<unsigned>(parameter.verified_points[1].ordered_writes.size());
+                if (runtime.getStatus().scheduled_writes_applied != 1+writes)
+                    std::fprintf(stderr, "route count mismatch slot=%u id=%s applied=%llu expected=%u pending=%u\n",
+                        slot, parameter.id.c_str(), static_cast<unsigned long long>(runtime.getStatus().scheduled_writes_applied),
+                        1+writes, runtime.getStatus().parameter_writes_pending);
                 assert(runtime.getStatus().scheduled_writes_applied==1+writes);
                 assert(std::isfinite(out[0]) && std::isfinite(out[1]));
             }
@@ -280,8 +319,8 @@ int main() {
         FactoryRuntime fx;
         assert(fx.loadEffect(*registry.find(1),RateMode::FactoryReference));
         assert(fx.setParameter(hall.descriptor,"decay_time",41,0));
-        std::array<float,4> in{},out{};
-        assert(fx.processStereo(in.data(),out.data(),2,48000.0));
+        std::array<float,32> in{},out{};
+        assert(fx.processStereo(in.data(),out.data(),16,48000.0));
         assert(fx.getStatus().scheduled_writes_applied==6); // package init + five ordered writes
         auto chorus=generic_package(6,3,short_path);
         assert(parameter_discovery_v02::append_verified_parameters(chorus.descriptor));

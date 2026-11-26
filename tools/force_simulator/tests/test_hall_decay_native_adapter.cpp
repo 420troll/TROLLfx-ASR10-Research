@@ -40,11 +40,19 @@ static std::string make_checkpoint() {
     return path;
 }
 
-static EffectPackage hall_package(const std::string& path, std::uint8_t variation=1) {
-    EffectPackage p;
-    p.effect=EffectId::Rom01Hall; p.checkpoint_path=path; p.active_program_words=89;
-    p.factory_processing_rate_hz=29761.89453125; p.pipeline_reset_acknowledged=true;
-    p.package_provenance_validated=true; p.serial_route_validated=true; p.factory_variation=variation;
+static ValidatedEffectPackage hall_validated_package(const std::string& path,
+                                                      std::uint8_t raw=52) {
+    ValidatedEffectPackage p;
+    p.validation_receipt_valid=p.initialization_state_valid=p.program_identity_valid=
+        p.pipeline_reset_valid=p.routing_valid=true;
+    auto& d=p.descriptor;
+    d.slot=1; d.factory_name="ROM-01 HALL REVERB"; d.active_program_words=89;
+    d.end_word=88; d.program_sha256=std::string(64,'a');
+    d.factory_reference_rate_hz=29761.89453125; d.factory_variation=1;
+    d.routing.host_serial_mode=0x48; d.routing.input_port=2; d.routing.output_port=1;
+    d.routing.stereo=true; d.run_checkpoint_path=path; d.run_checkpoint_sha256=std::string(64,'b');
+    for (const auto& write : os353::hall_decay_registers(raw))
+        d.firmware_event_schedule.push_back({0,write.gpr,write.value24});
     return p;
 }
 
@@ -67,10 +75,13 @@ static void process_frames(FactoryRuntime& runtime, std::size_t frames=8) {
 int main() {
     const auto path=make_checkpoint();
     FactoryRuntime runtime;
-    assert(runtime.loadEffect(hall_package(path),RateMode::Experimental48000));
+    assert(runtime.loadEffect(hall_validated_package(path),RateMode::Experimental48000));
     HallDecayNativeAdapter adapter;
+    const auto before_startup=adapter.refresh(runtime,1,1);
+    assert(!before_startup.raw_state_available && before_startup.applied_display_value==-1);
+    process_frames(runtime,1);
     auto initial=adapter.refresh(runtime,1,1);
-    assert(initial.raw_state_available && initial.applied_display_value==0 && initial.applied_raw_code==0);
+    assert(initial.raw_state_available && initial.applied_display_value==40 && initial.applied_raw_code==52);
     assert(adapter.stageNumeric(99));
     const auto before_gate=TROLLfx_SimTraceLatest();
     const auto draft_state=adapter.refresh(runtime,1,1);
@@ -84,15 +95,18 @@ int main() {
     assert(adapter.requestStep(runtime,1,2,+1)==HallDecayAdapterResult::UnsupportedContext);
     assert(adapter.requestStep(runtime,1,1,+1)==HallDecayAdapterResult::Pending);
     auto scheduled=adapter.refresh(runtime,1,1);
-    assert(scheduled.has_pending_step && scheduled.applied_raw_code==0 && scheduled.applied_display_value==0);
-    assert(scheduled.pending_raw_code==1 && scheduled.pending_display_value==1);
+    assert(scheduled.has_pending_step && scheduled.applied_raw_code==52 && scheduled.applied_display_value==40);
+    assert(scheduled.pending_raw_code==53 && scheduled.pending_display_value==41);
     process_frames(runtime);
     auto applied=adapter.refresh(runtime,1,1);
-    assert(!applied.has_pending_step && applied.applied_raw_code==1 && applied.applied_display_value==1);
+    assert(!applied.has_pending_step && applied.applied_raw_code==53 && applied.applied_display_value==41);
     auto writes=trace_since(before_gate);
-    const auto expected=os353::hall_decay_registers(1);
+    const auto expected=os353::hall_decay_registers(53);
     assert(writes.size()==5);
     for (std::size_t i=0;i<expected.size();++i) {
+        if (writes[i].gpr!=expected[i].gpr || writes[i].value24!=expected[i].value24)
+            std::fprintf(stderr,"step write %zu got GPR %02X=%06X expected %02X=%06X\n",i,
+                unsigned(writes[i].gpr),unsigned(writes[i].value24),unsigned(expected[i].gpr),unsigned(expected[i].value24));
         assert(writes[i].gpr==expected[i].gpr && writes[i].value24==expected[i].value24);
         assert(writes[i].dsp_frame==writes[0].dsp_frame);
     }
@@ -101,19 +115,20 @@ int main() {
     assert(adapter.requestStep(runtime,1,1,+1)==HallDecayAdapterResult::Pending);
     process_frames(runtime);
     applied=adapter.refresh(runtime,1,1);
-    assert(applied.applied_raw_code==3 && applied.applied_display_value==2); // raw 2 is duplicate LCD 1
+    assert(applied.applied_raw_code==54 && applied.applied_display_value==42);
     assert(adapter.requestStep(runtime,1,1,-1)==HallDecayAdapterResult::Pending);
     process_frames(runtime);
     applied=adapter.refresh(runtime,1,1);
-    assert(applied.applied_raw_code==2 && applied.applied_display_value==1);
+    assert(applied.applied_raw_code==53 && applied.applied_display_value==41);
     assert(TROLLfx_SimTraceLatest()>cursor);
 
     assert(runtime.setRegister(0x6e,0x030000,runtime.getStatus().processed_dsp_frames));
     assert(!runtime.getStatus().hall_decay_step_available);
     assert(adapter.requestStep(runtime,1,1,+1)==HallDecayAdapterResult::UnknownRawState);
-    assert(adapter.reset(runtime,1,1)==HallDecayAdapterResult::Applied);
+    assert(adapter.reset(runtime,1,1)==HallDecayAdapterResult::UnknownRawState);
+    process_frames(runtime,1);
     const auto restored=adapter.refresh(runtime,1,1);
-    assert(restored.applied_display_value==0 && restored.applied_raw_code==0);
+    assert(restored.applied_display_value==40 && restored.applied_raw_code==52);
 #else
     assert(adapter.requestStep(runtime,1,1,+1)==HallDecayAdapterResult::FeatureDisabled);
     assert(TROLLfx_SimTraceLatest()==before_gate);

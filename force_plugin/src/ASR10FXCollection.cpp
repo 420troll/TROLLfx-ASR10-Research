@@ -3,6 +3,9 @@
 #include "mpc_plugin.h"
 #include "ES5510DSPBackend.h"
 #include "ES5510FactoryPackageProvider.h"
+#if defined(TROLLFX_VST2_TEST_API)
+#include "ASR10VST2TestAPI.h"
+#endif
 #include "trollfx/es5510_factory_parameter_control_v01.hpp"
 #include "trollfx/es5510_factory_parameter_discovery_v02.hpp"
 #include "trollfx/es5510_factory_editor_v03.hpp"
@@ -218,6 +221,52 @@ public:
         refreshDynamicEditWorkspace(false);
     }
 
+    // The stock SDK's setParameter callback sends non-finite normalized values
+    // through clamp() (whose comparisons do not reject NaN). Keep the VST2
+    // boundary safe while retaining the SDK's behavior for all finite values.
+    void setVst2Parameter(int index, float normalized) noexcept {
+        if (index < 0 || index >= numParams()) return;
+        // Reject malformed host events without changing the current value.
+        // In particular, a NaN must not propagate into effect selection,
+        // modulation, wet/dry, or verified DSP routing.
+        if (!std::isfinite(normalized)) return;
+        setNormalised(index, normalized);
+    }
+
+#if defined(TROLLFX_VST2_TEST_API)
+    void testEnableRawOverride() noexcept {
+        test_raw_override_.store(true, std::memory_order_release);
+    }
+    bool testSetHallRaw(int raw_code) noexcept {
+        if (raw_code < 0 || raw_code > 127 ||
+            !backend_.set_test_hall_raw(static_cast<std::uint8_t>(raw_code))) return false;
+        test_raw_override_.store(true, std::memory_order_release);
+        return true;
+    }
+    bool testRuntimeStatus(TROLLfxVst2RuntimeStatus& out) const noexcept {
+        if (backend_.status() != ES5510BackendStatus::Ready) return false;
+        const auto status = backend_.runtime_status();
+        out.dsp_frames = status.processed_dsp_frames;
+        out.writes_applied = status.scheduled_writes_applied;
+        out.initialization_complete_frame = status.initialization_complete_frame;
+        out.firmware_writes_pending = status.firmware_writes_pending;
+        out.parameter_writes_pending = status.parameter_writes_pending;
+        out.initialization_complete = status.initialization_schedule_complete;
+        out.last_parameter_write_applied = status.last_parameter_write_applied;
+        out.hall_state_provenance = static_cast<std::uint8_t>(status.hall_decay_state_provenance);
+        out.hall_raw_code = status.hall_decay_raw_code;
+        out.hall_display_value = status.hall_decay_display_value;
+        out.factory_variation = status.factory_variation;
+        return true;
+    }
+    int testStepHallDecay(int variation, int direction) noexcept {
+        // Model the desktop controller's between-block state refresh before
+        // admitting the next directional step.
+        if (variation == 1) backend_.hall_decay_editor_state(1, 1);
+        return static_cast<int>(backend_.step_hall_decay_time(1, static_cast<std::uint8_t>(variation), direction));
+    }
+#endif
+
     void prepare(double rate, int) override {
         const auto selected = static_cast<std::uint8_t>(std::clamp(getInt(Fx), 0, 49) + 1);
         backend_.prepare(selected, rate);
@@ -316,9 +365,16 @@ public:
             applied_slot_ = active;
             applied_control_values_.fill(-1);
         }
-        applyVerifiedControls(active);
-        applyRoutedEditSlots(active, selected);
-        applyV4Controls(active);
+#if defined(TROLLFX_VST2_TEST_API)
+        const bool test_raw_override = test_raw_override_.load(std::memory_order_acquire);
+#else
+        constexpr bool test_raw_override = false;
+#endif
+        if (!test_raw_override) {
+            applyVerifiedControls(active);
+            applyRoutedEditSlots(active, selected);
+            applyV4Controls(active);
+        }
 
         const float* inputs[2] = {context.inputs ? context.inputs[0] : nullptr,
                                   context.inputs ? context.inputs[1] : nullptr};
@@ -426,8 +482,51 @@ private:
     std::array<std::atomic<bool>, kDynamicEditSlotCount> edit_slot_changed_{};
     std::atomic<bool> syncing_edit_workspace_{false};
     std::atomic<bool> applying_routed_edit_slot_{false};
+#if defined(TROLLFX_VST2_TEST_API)
+    std::atomic<bool> test_raw_override_{false};
+#endif
 };
 
 #ifndef TROLLFX_FORCE_PLUGIN_TEST
-MPC_PLUGIN_ENTRY(ASR10FXCollection)
+namespace {
+void setVst2ParameterFinite(AEffect* effect, VstInt32 index, float value) {
+    if (!effect || !effect->object) return;
+    static_cast<ASR10FXCollection*>(effect->object)->setVst2Parameter(index, value);
+}
+}
+
+extern "C" MPC_EXPORT AEffect* VSTPluginMain(audioMasterCallback host) {
+    if (host != nullptr && host(nullptr, audioMasterVersion, 0, 0, nullptr, 0.0f) == 0)
+        return nullptr;
+    auto* effect = mpc::detail::createEffect(new ASR10FXCollection(), host);
+    if (effect) effect->setParameter = &setVst2ParameterFinite;
+    return effect;
+}
+
+#if defined(TROLLFX_VST2_TEST_API)
+extern "C" MPC_EXPORT int TROLLfx_VST2TestSetHallRaw(AEffect* effect, int raw_code) {
+    if (!effect || !effect->object) return 0;
+    return static_cast<ASR10FXCollection*>(effect->object)->testSetHallRaw(raw_code) ? 1 : 0;
+}
+extern "C" MPC_EXPORT int TROLLfx_VST2TestEnableRawOverride(AEffect* effect) {
+    if (!effect || !effect->object) return 0;
+    static_cast<ASR10FXCollection*>(effect->object)->testEnableRawOverride();
+    return 1;
+}
+extern "C" MPC_EXPORT int TROLLfx_VST2TestRuntimeStatus(
+        AEffect* effect, TROLLfxVst2RuntimeStatus* out) {
+    if (!effect || !effect->object || !out) return 0;
+    return static_cast<ASR10FXCollection*>(effect->object)->testRuntimeStatus(*out) ? 1 : 0;
+}
+extern "C" MPC_EXPORT int TROLLfx_VST2TestStepHallDecay(AEffect* effect, int variation, int direction) {
+    if (!effect || !effect->object) return -1;
+    return static_cast<ASR10FXCollection*>(effect->object)->testStepHallDecay(variation, direction);
+}
+#endif
+
+#if defined(__APPLE__)
+extern "C" MPC_EXPORT AEffect* main_macho(audioMasterCallback host) {
+    return VSTPluginMain(host);
+}
+#endif
 #endif

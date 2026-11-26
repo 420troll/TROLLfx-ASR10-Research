@@ -39,6 +39,9 @@ test('unsupported full-range values stay inspection-only and preserve per-effect
 test('exact verified VST point routes to native host and register trace', async ({ page }) => {
   await chooseEffect(page,1,'HALL REVERB');
   const decay=page.locator('[data-control="decay_time_1"] input.numeric');
+  // The seeded HALL draft is already 40. Move through the other exact point
+  // first so the browser emits a real edit event for the 40 callback too.
+  await decay.fill('41'); await decay.press('Tab');
   await decay.fill('40'); await decay.press('Tab');
   await expect(page.locator('.event').first()).toContainText('DSP WRITE');
   await expect(page.locator('.event').first()).toContainText('host 48');

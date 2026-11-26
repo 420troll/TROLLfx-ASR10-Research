@@ -57,6 +57,13 @@ public:
     std::uint8_t active_slot() const noexcept { return active_slot_.load(std::memory_order_acquire); }
     std::uint32_t latency_frames() const noexcept { return latency_frames_; }
     std::uint64_t dsp_frames() const noexcept;
+    // Diagnostic snapshot only; callers must read between process() blocks.
+    trollfx::es5510::RuntimeStatus runtime_status() const noexcept;
+#if defined(TROLLFX_VST2_TEST_API)
+    // Schedules a verified OS-derived raw GPR group for private diagnostic
+    // renders. Never exposed as a VST parameter or built into release packages.
+    bool set_test_hall_raw(std::uint8_t raw_code) noexcept;
+#endif
 
 private:
     void worker_loop() noexcept;

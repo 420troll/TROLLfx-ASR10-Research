@@ -8,6 +8,18 @@ class TraceWrite(ctypes.Structure):
     _fields_ = [("sequence", ctypes.c_uint64), ("dsp_frame", ctypes.c_uint64),
                 ("slot", ctypes.c_uint32), ("gpr", ctypes.c_uint32), ("value24", ctypes.c_uint32)]
 
+class RuntimeStatus(ctypes.Structure):
+    _fields_ = [("dsp_frames", ctypes.c_uint64), ("writes_applied", ctypes.c_uint64),
+                ("initialization_complete_frame", ctypes.c_uint64),
+                ("firmware_writes_pending", ctypes.c_uint32),
+                ("parameter_writes_pending", ctypes.c_uint32),
+                ("initialization_complete", ctypes.c_uint8),
+                ("last_parameter_write_applied", ctypes.c_uint8),
+                ("hall_state_provenance", ctypes.c_uint8),
+                ("hall_raw_code", ctypes.c_uint8),
+                ("hall_display_value", ctypes.c_int16),
+                ("factory_variation", ctypes.c_uint8)]
+
 class VSTBridge:
     def __init__(self, host_library: Path, plugin: Path, assets: Path):
         self.lib = ctypes.CDLL(str(host_library))
@@ -37,6 +49,14 @@ class VSTBridge:
         self.lib.trollfx_vst_trace_reset.argtypes = [ctypes.c_void_p]
         self.lib.trollfx_vst_trace_available.argtypes = [ctypes.c_void_p]
         self.lib.trollfx_vst_trace_available.restype = ctypes.c_int
+        self.lib.trollfx_vst_test_set_hall_raw.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        self.lib.trollfx_vst_test_set_hall_raw.restype = ctypes.c_int
+        self.lib.trollfx_vst_test_enable_raw_override.argtypes = [ctypes.c_void_p]
+        self.lib.trollfx_vst_test_enable_raw_override.restype = ctypes.c_int
+        self.lib.trollfx_vst_test_runtime_status.argtypes = [ctypes.c_void_p, ctypes.POINTER(RuntimeStatus)]
+        self.lib.trollfx_vst_test_runtime_status.restype = ctypes.c_int
+        self.lib.trollfx_vst_test_step_hall_decay.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_int]
+        self.lib.trollfx_vst_test_step_hall_decay.restype = ctypes.c_int
 
     def close(self):
         if self.handle:
@@ -96,6 +116,21 @@ class VSTBridge:
 
     def reset_trace(self):
         self.lib.trollfx_vst_trace_reset(self.handle)
+
+    def set_test_hall_raw(self, raw_code: int):
+        return bool(self.lib.trollfx_vst_test_set_hall_raw(self.handle, int(raw_code)))
+
+    def enable_test_raw_override(self):
+        return bool(self.lib.trollfx_vst_test_enable_raw_override(self.handle))
+
+    def runtime_status(self):
+        value = RuntimeStatus()
+        if not self.lib.trollfx_vst_test_runtime_status(self.handle, ctypes.byref(value)):
+            raise RuntimeError("VST2 test runtime status is unavailable")
+        return {name: getattr(value, name) for name, _ in value._fields_}
+
+    def test_step_hall_decay(self, direction: int, variation: int = 1) -> int:
+        return int(self.lib.trollfx_vst_test_step_hall_decay(self.handle, variation, direction))
 
     @property
     def has_trace(self) -> bool:

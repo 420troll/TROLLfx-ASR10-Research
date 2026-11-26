@@ -16,6 +16,9 @@ enum class StatusCode : std::uint8_t {
     Empty, Ready, InvalidArgument, PackageRejected, CaptureRejected,
     UnsupportedRate, EventQueueFull, EventInPast, InternalError
 };
+enum class HallDecayEditorStateProvenance : std::uint8_t {
+    Unknown, ValidatedOsStartupRegisterGroup, OriginalOsEquivalentStep
+};
 
 // Describes an already-evidenced RUN-boundary package. The referenced capture
 // contains the authentic 160-word image slots, 192 GPRs, 22 SPRs, runtime
@@ -38,16 +41,23 @@ struct EffectPackage {
 struct RuntimeStatus {
     StatusCode code = StatusCode::Empty;
     EffectId effect = EffectId::Rom01Hall;
+    std::uint8_t factory_variation = 0;
     RateMode rate_mode = RateMode::Experimental48000;
     double processing_rate_hz = 0.0;
     double host_rate_hz = 0.0;
     std::uint64_t processed_dsp_frames = 0;
     std::uint64_t scheduled_writes_applied = 0;
+    bool initialization_schedule_complete = true;
+    std::uint64_t initialization_complete_frame = 0;
+    std::uint16_t firmware_writes_pending = 0;
+    std::uint16_t parameter_writes_pending = 0;
+    bool last_parameter_write_applied = false;
     std::uint32_t active_program_words = 0;
     std::uint32_t algorithmic_latency_host_frames = 0;
     bool hall_decay_step_available = false;
     std::uint8_t hall_decay_raw_code = 0;
     std::int16_t hall_decay_display_value = -1;
+    HallDecayEditorStateProvenance hall_decay_state_provenance = HallDecayEditorStateProvenance::Unknown;
     const char* message = "not loaded"; // static storage; valid until next API call
 };
 

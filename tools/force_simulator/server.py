@@ -236,7 +236,14 @@ class Simulator:
             after_slot=self.slot()
             ready=True
             if param==0: ready=self._wait_effect(after_slot)
-            else: self.host.pump(256)
+            else:
+                # The desktop simulator has no continuously-running host audio
+                # callback. Advance the real VST2 callback far enough to finish
+                # this package's validated startup schedule so deferred edits
+                # reach their first safe frame before their trace is reported.
+                status=self.host.runtime_status()
+                frames=max(256,status['initialization_complete_frame']-status['dsp_frames']+2)
+                self.host.pump(frames)
             time.sleep(0.002)
             rows=self.host.trace_since(before_trace)
             resolved=self._route(after_slot,param) if 46<=param<=53 else None
