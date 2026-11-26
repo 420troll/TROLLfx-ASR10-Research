@@ -14,11 +14,6 @@
       "pdf_page": 99,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "DECAY TIME",
           "manual_range": "0 to 99",
           "pdf_page": 99
@@ -65,11 +60,6 @@
       "effect": "44KHZ REVERB",
       "pdf_page": 99,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "DECAY TIME",
           "manual_range": "0 to 99",
@@ -118,11 +108,6 @@
       "pdf_page": 99,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "DECAY TIME",
           "manual_range": "0 to 99",
           "pdf_page": 99
@@ -169,11 +154,6 @@
       "effect": "DUAL DELAYS",
       "pdf_page": 100,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "BUS1 DELAY MIX",
           "manual_range": "0 to 99",
@@ -222,11 +202,6 @@
       "pdf_page": 100,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "BUS1 DELAY MIX",
           "manual_range": "0 to 99",
           "pdf_page": 100
@@ -273,11 +248,6 @@
       "effect": "CHORUS+REVRB",
       "pdf_page": 100,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "BUS1 REV AFTER CHOR",
           "manual_range": "0 to 99",
@@ -355,11 +325,6 @@
       "effect": "PHASER+REVRB",
       "pdf_page": 101,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "BUS1 REVERB MIX",
           "manual_range": "0 to 99",
@@ -443,11 +408,6 @@
       "pdf_page": 102,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "BUS1 REVERB MIX",
           "manual_range": "0 to 99",
           "pdf_page": 102
@@ -530,11 +490,6 @@
       "pdf_page": 102,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "BUS1 REV AFTER ROTO",
           "manual_range": "0 to 99",
           "pdf_page": 102
@@ -606,11 +561,6 @@
       "effect": "CHOR+REV+DDL",
       "pdf_page": 103,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "BUS1 REV AFTER CHOR",
           "manual_range": "See manual",
@@ -694,11 +644,6 @@
       "pdf_page": 104,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "BUS1 REV AFTER DIST",
           "manual_range": "0 to 99",
           "pdf_page": 104
@@ -750,11 +695,6 @@
       "effect": "DIST+CHO+REV",
       "pdf_page": 105,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "BUS1 DIST INTO CHOR MIX",
           "manual_range": "0 to 99",
@@ -843,11 +783,6 @@
       "pdf_page": 106,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "BUS1 REV AFTER DIST",
           "manual_range": "0 to 99",
           "pdf_page": 106
@@ -894,11 +829,6 @@
       "effect": "SMALL ROOM",
       "pdf_page": 107,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "DECAY TIME",
           "manual_range": "Small Room Range:  0.20 to 100.0 sec.",
@@ -1032,11 +962,6 @@
       "pdf_page": 107,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "DECAY TIME",
           "manual_range": "Small Room Range:  0.20 to 100.0 sec.",
           "pdf_page": 107
@@ -1168,11 +1093,6 @@
       "effect": "HALL REVERB2",
       "pdf_page": 107,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "DECAY TIME",
           "manual_range": "Small Room Range:  0.20 to 100.0 sec.",
@@ -1306,11 +1226,6 @@
       "pdf_page": 109,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "DECAY TIME",
           "manual_range": "Small Plate Range:  0.2 to 100.0 sec.",
           "pdf_page": 110
@@ -1398,11 +1313,6 @@
       "pdf_page": 109,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "DECAY TIME",
           "manual_range": "Small Plate Range:  0.2 to 100.0 sec.",
           "pdf_page": 110
@@ -1489,11 +1399,6 @@
       "effect": "REVRSE REVRB",
       "pdf_page": 111,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "HOLD TIME",
           "manual_range": "1ms to 10.0s",
@@ -1592,11 +1497,6 @@
       "pdf_page": 112,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "HOLD TIME",
           "manual_range": "1ms to 10.0s",
           "pdf_page": 112
@@ -1688,11 +1588,6 @@
       "effect": "GATED REVERB",
       "pdf_page": 113,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "ATTACK TIME",
           "manual_range": "1ms to 10.0s",
@@ -1806,11 +1701,6 @@
       "pdf_page": 116,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "HF DAMPING",
           "manual_range": "0 to 99",
           "pdf_page": 116
@@ -1917,11 +1807,6 @@
       "effect": "NLIN REVRB 2",
       "pdf_page": 116,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "HF DAMPING",
           "manual_range": "0 to 99",
@@ -2030,11 +1915,6 @@
       "pdf_page": 116,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "HF DAMPING",
           "manual_range": "0 to 99",
           "pdf_page": 116
@@ -2141,11 +2021,6 @@
       "effect": "MULTITAP DDL",
       "pdf_page": 118,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "DLY 1 TIME",
           "manual_range": "0 to 2186 ms",
@@ -2279,11 +2154,6 @@
       "pdf_page": 119,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "DLY TIME L",
           "manual_range": "0 to 845 ms",
           "pdf_page": 119
@@ -2406,11 +2276,6 @@
       "pdf_page": 121,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "DIST LEVEL IN",
           "manual_range": "0 to 99",
           "pdf_page": 121
@@ -2517,11 +2382,6 @@
       "effect": "GUITAR AMP 1",
       "pdf_page": 122,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "PREAMP GAIN",
           "manual_range": "-48 to +48 dB",
@@ -2665,11 +2525,6 @@
       "pdf_page": 122,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "PREAMP GAIN",
           "manual_range": "-48 to +48 dB",
           "pdf_page": 123
@@ -2811,11 +2666,6 @@
       "effect": "GUITAR AMP 3",
       "pdf_page": 124,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "PREAMP GAIN",
           "manual_range": "-48 to +48 dB",
@@ -2959,11 +2809,6 @@
       "pdf_page": 126,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "OUTPUT GAIN",
           "manual_range": "-48 to +24 dB",
           "pdf_page": 126
@@ -3015,11 +2860,6 @@
       "effect": "TUNABLE SPKR",
       "pdf_page": 126,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "MID1 FC",
           "manual_range": "0 to 9999 Hz",
@@ -3122,11 +2962,6 @@
       "effect": "EQ+CHOR+DDL",
       "pdf_page": 127,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "CHOR RATE",
           "manual_range": "0 to 99",
@@ -3250,11 +3085,6 @@
       "pdf_page": 129,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "VIBR RATE",
           "manual_range": "0 to 99",
           "pdf_page": 129
@@ -3376,11 +3206,6 @@
       "effect": "EQ+FLNGR+DDL",
       "pdf_page": 131,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "FLANGE RATE",
           "manual_range": "0 to 99",
@@ -3519,11 +3344,6 @@
       "pdf_page": 133,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "BUS1 DLY AFT TREM",
           "manual_range": "0 to 99",
           "pdf_page": 133
@@ -3656,11 +3476,6 @@
       "pdf_page": 134,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "PHASE RATE",
           "manual_range": "0 to 99",
           "pdf_page": 135
@@ -3758,11 +3573,6 @@
       "pdf_page": 136,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "LFO RATE",
           "manual_range": "0 to 99",
           "pdf_page": 137
@@ -3844,11 +3654,6 @@
       "effect": "PITCH SHIFT",
       "pdf_page": 137,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "VC 1 SEMI",
           "manual_range": "-12 to +12",
@@ -3951,11 +3756,6 @@
       "effect": "PITCH+DDL",
       "pdf_page": 139,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "VC 1 SEMI",
           "manual_range": "-12 to +12",
@@ -4069,11 +3869,6 @@
       "pdf_page": 140,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "VOICE 1 FINE",
           "manual_range": "-99 to +99",
           "pdf_page": 141
@@ -4160,11 +3955,6 @@
       "effect": "EQ+CMPRESSOR",
       "pdf_page": 141,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "COMP GAIN",
           "manual_range": "-48 to +48 dB",
@@ -4278,11 +4068,6 @@
       "pdf_page": 144,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "EXPANSION RATIO",
           "manual_range": "1/1 to 1/40, INF",
           "pdf_page": 144
@@ -4389,11 +4174,6 @@
       "effect": "KEYED EXPNDR",
       "pdf_page": 145,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "EXPANSION RATIO",
           "manual_range": "1/1 to 1/40, INF",
@@ -4507,11 +4287,6 @@
       "pdf_page": 147,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "EXPANSION RATIO",
           "manual_range": "1/1 to 40/1, INF",
           "pdf_page": 147
@@ -4613,11 +4388,6 @@
       "effect": "DE-ESSER",
       "pdf_page": 148,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "OUTPUT GAIN",
           "manual_range": "-48 to +48 dB",
@@ -4760,11 +4530,6 @@
       "effect": "DUCKER",
       "pdf_page": 150,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "OUTPUT GAIN",
           "manual_range": "-48 to +48 dB",
@@ -4913,11 +4678,6 @@
       "pdf_page": 152,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "HIGH PASS FC",
           "manual_range": "4 to 8000 Hz",
           "pdf_page": 152
@@ -4979,11 +4739,6 @@
       "effect": "PARAM EQ",
       "pdf_page": 152,
       "parameters": [
-        {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
         {
           "name": "BASS FC",
           "manual_range": "0 to 1000 Hz",
@@ -5087,11 +4842,6 @@
       "pdf_page": 153,
       "parameters": [
         {
-          "name": "Original control / disambiguated label",
-          "manual_range": "Manual range",
-          "pdf_page": null
-        },
-        {
           "name": "HIGH PASS FC",
           "manual_range": "4 to 8000 Hz",
           "pdf_page": 153
@@ -5153,88 +4903,281 @@
     {
       "effect": "44LUSH PLATE",
       "pdf_page": 368,
-      "parameters": [],
+      "parameters": [
+        "DECAY TIME",
+        "PREDELAY TIME",
+        "HF DAMPING",
+        "BW",
+        "DETUNE RATE",
+        "DEPTH",
+        "DEFINITION",
+        "DIFFUSION 1",
+        "DIFFUSION 2",
+        "ER TIME L",
+        "ER TIME R",
+        "ER LEVEL L",
+        "ER LEVEL R"
+      ],
       "note": "Appendix names require range cross-check"
     },
     {
       "effect": "44LUSH PLAT2",
       "pdf_page": 368,
-      "parameters": [],
+      "parameters": [
+        "DECAY TIME",
+        "PREDELAY TIME",
+        "HF DAMPING",
+        "BW",
+        "DETUNE RATE",
+        "DEPTH",
+        "DEFINITION",
+        "DIFFUSION 1",
+        "DIFFUSION 2"
+      ],
       "note": "Appendix names require range cross-check"
     },
     {
       "effect": "44PERC PLATE",
       "pdf_page": 368,
-      "parameters": [],
+      "parameters": [
+        "DECAY TIME",
+        "PREDELAY TIME",
+        "HF DAMPING",
+        "BW",
+        "DETUNE RATE",
+        "DEPTH",
+        "DEFINITION",
+        "DIFFUSION 1",
+        "DIFFUSION 2",
+        "ER TIME L",
+        "ER TIME R",
+        "ER LEVEL L",
+        "ER LEVEL R"
+      ],
       "note": "Appendix names require range cross-check"
     },
     {
       "effect": "44EQ+DDL",
       "pdf_page": 369,
-      "parameters": [],
+      "parameters": [
+        "EQ IN",
+        "OUT",
+        "GAIN BASS",
+        "TREB",
+        "MID",
+        "GAIN",
+        "MID BW",
+        "ECHO WET",
+        "DRY",
+        "ECHOTIME L",
+        "ECHOTIME R",
+        "ECHO REGEN L",
+        "ECHO REGEN R",
+        "CROSS REGN L",
+        "CROSS REGN R"
+      ],
       "note": "Appendix names require range cross-check"
     },
     {
       "effect": "44DDL+CH+REV",
       "pdf_page": 370,
-      "parameters": [],
+      "parameters": [
+        "REVERB MIX",
+        "DECAY TIME",
+        "ECHO SEND",
+        "PREDELAY TIME",
+        "REGEN",
+        "HF DAMPING",
+        "ECHOTIME L",
+        "ECHOTIME R",
+        "BW",
+        "CH RATE",
+        "DEFINITION",
+        "DIFFUSION",
+        "CH DRY LEV",
+        "PAN",
+        "CH WET LEV 1–3",
+        "CH WET PAN 1–3",
+        "CH LFORATE 1–3",
+        "CH WIDTH 1–3",
+        "CH DELAY 1–3",
+        "EXPERT PARAMS",
+        "FDBK T",
+        "TIME L",
+        "TIME R",
+        "GAIN L",
+        "GAIN R"
+      ],
       "note": "Appendix names require range cross-check"
     },
     {
       "effect": "44DDL+CHORUS",
       "pdf_page": 371,
-      "parameters": [],
+      "parameters": [
+        "ECHO LEV",
+        "CH RATE",
+        "REGEN",
+        "ECHOTIME L",
+        "ECHOTIME R",
+        "CH LFO SPREAD",
+        "CH WET",
+        "CH WIDTH",
+        "DRY",
+        "DELAY"
+      ],
       "note": "Appendix names require range cross-check"
     },
     {
       "effect": "44DLYLFO+REV",
       "pdf_page": 372,
-      "parameters": [],
+      "parameters": [
+        "REVERB MIX",
+        "BW",
+        "DL WET",
+        "DEFINITION",
+        "DRY",
+        "DIFFUSION 1",
+        "DIFFUSION 2",
+        "DL RATE",
+        "REGEN",
+        "EXPERT PARAMS",
+        "DL WIDTH L",
+        "DL WIDTH R",
+        "FDBK T",
+        "DL DELAY L",
+        "DL DELAY R",
+        "TIME L",
+        "TIME R",
+        "DECAY TIME",
+        "PREDELAY TIME",
+        "GAIN L",
+        "GAIN R",
+        "HF DAMPING"
+      ],
       "note": "Appendix names require range cross-check"
     },
     {
       "effect": "44EQ+DDL+CHO",
       "pdf_page": 373,
-      "parameters": [],
+      "parameters": [
+        "EQ IN",
+        "OUT",
+        "EQ FREQ",
+        "GAIN",
+        "EQ BW",
+        "ECHO LEV",
+        "REGEN",
+        "ECHOTIME L",
+        "ECHOTIME R",
+        "CH RATE",
+        "CH DRY LEV",
+        "PAN",
+        "CH WET LEV 1–3",
+        "CH WET PAN 1–3",
+        "CH LFORATE 1–3",
+        "CH WIDTH 1–3",
+        "DELAY 1–3"
+      ],
       "note": "Appendix names require range cross-check"
     },
     {
       "effect": "44PARAM EQ",
       "pdf_page": 373,
-      "parameters": [],
+      "parameters": [
+        "BASS FC",
+        "GAIN (BASS)",
+        "MID FC",
+        "GAIN (MID)",
+        "MID Q",
+        "TREBLE FC",
+        "GAIN (TREBLE)",
+        "INPUT TRIM"
+      ],
       "note": "Appendix names require range cross-check"
     },
     {
       "effect": "44EQ+REVERB",
       "pdf_page": 374,
-      "parameters": [],
+      "parameters": [
+        "REVERB MIX",
+        "DEFINITION",
+        "EQ IN",
+        "DIFFUSION 1",
+        "DIFFUSION 2",
+        "OUT",
+        "EQ FREQ",
+        "GAIN",
+        "EXPERT PARAMS",
+        "EQ BW",
+        "FDBK T",
+        "DECAY TIME",
+        "TIME L",
+        "PREDELAY TIME",
+        "TIME R",
+        "HF DAMPING",
+        "BW",
+        "GAIN L",
+        "GAIN R"
+      ],
       "note": "Appendix names require range cross-check"
     },
     {
       "effect": "44ROTO+REVRB",
       "pdf_page": 375,
-      "parameters": [],
+      "parameters": [
+        "REVERB MIX",
+        "PREDELAY TIME",
+        "SPKR WET",
+        "HF DAMPING",
+        "DRY",
+        "BW",
+        "SPEED",
+        "DEFINITION",
+        "INERTIA",
+        "DIFFUSION 1",
+        "DIFFUSION 2",
+        "SPEED MIN",
+        "SPEED MAX",
+        "AM MIN",
+        "AM MAX",
+        "FM MIN",
+        "FM MAX",
+        "EXPERT PARAMS",
+        "FDBK T",
+        "TIME L",
+        "TIME R",
+        "GAIN L",
+        "GAIN R",
+        "DECAY TIME"
+      ],
       "note": "Appendix names require range cross-check"
     },
     {
       "effect": "44EQ+ROT+DDL",
       "pdf_page": 376,
       "parameters": [
-        "For **each parameter** maintain separate columns: `manual_name`",
-        "`manual_range`",
-        "`manual_pdf_page`",
-        "`variation`",
-        "`OS_raw_domain`",
-        "`display_to_raw_policy`",
-        "`OS_capture`",
-        "`GPR_write_group`",
-        "`runtime_implemented`",
-        "`VST_callback_test`",
-        "`audio_AB_test`",
-        "`Force_touchscreen_test`",
-        "`Force_QLink_test`",
-        "`saved_state_compatibility`",
-        "`blockers`"
+        "EQ IN",
+        "OUT",
+        "EQ FREQ",
+        "GAIN",
+        "EQ BW",
+        "SPKR WET",
+        "ECHO WET",
+        "DRY",
+        "SPEED",
+        "ECHOTIME L",
+        "ECHOTIME R",
+        "INERTIA",
+        "ECHO REGEN L",
+        "ECHO REGEN R",
+        "SPEED MIN",
+        "SPEED MAX",
+        "CROSS REGN L",
+        "CROSS REGN R",
+        "AM MIN",
+        "AM MAX",
+        "FM MIN",
+        "FM MAX"
       ],
       "note": "Appendix names require range cross-check"
     }
