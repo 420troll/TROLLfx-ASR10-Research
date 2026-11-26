@@ -87,6 +87,23 @@ def arm32_qemu_evidence(report_path: Path, arm32: Path) -> dict:
         result["candidate_binary_sha256"]=digest(arm32)
     return result
 
+def normalized_parameter_layout(params_path: Path) -> dict:
+    document=json.loads(params_path.read_text())
+    params=document.get("params") if isinstance(document,dict) else None
+    if not isinstance(params,list) or len(params)!=64:
+        raise RuntimeError("SDK host parameter dump must contain the stable 64-index VST2 layout")
+    if [p.get("index") for p in params if isinstance(p,dict)]!=list(range(64)):
+        raise RuntimeError("SDK host parameter indices must be contiguous and ordered from 0 through 63")
+    rows=[]
+    for p in params:
+        name=p.get("name");label=p.get("label");kind=p.get("kind")
+        if not isinstance(name,str) or not name or not isinstance(label,str) or not isinstance(kind,str):
+            raise RuntimeError("SDK host parameter layout has missing name, label, or kind")
+        rows.append({"index":p["index"],"id":p.get("id"),"name":name,"label":label,"kind":kind})
+    return {"schema":"trollfx-asr10-vst2-host-parameter-layout-v1","parameter_count":64,
+        "index_contract":"stable host parameter order 0..63; serialized by existing VST2 chunk",
+        "parameters":rows}
+
 def git_value(repo: Path, *args: str, default="unknown") -> str:
     p=run(["git","-C",repo,*args],check=False)
     return p.stdout.strip() if p.returncode == 0 else default
@@ -227,6 +244,7 @@ def main():
         print(built.stdout,end="")
         staged_out=stage/"build"/PLUGIN_FOLDER
         if not staged_out.is_dir(): raise RuntimeError(f"SDK builder output not found: {staged_out}")
+        parameter_layout=normalized_parameter_layout(stage/"build/params.json")
         staged_skins=staged_out/"Plugin Skins"
         staged_tui=staged_skins/"TUI.json"
         staged_qlinks=staged_skins/"Q-Links.json"
@@ -284,6 +302,7 @@ def main():
             shutil.copy2(ROOT/"LICENSE",out/"LICENSE")
             shutil.copytree(ROOT/"force_plugin/LICENSES",out/"LICENSES")
             shutil.copy2(ROOT/"force_plugin/README.md",out/"README.txt")
+            (out/"host-parameter-layout.json").write_text(json.dumps(parameter_layout,indent=2)+"\n")
             asset_root=force_asset_root()
             (out/"factory-assets-path.txt").write_text(asset_root+"\n")
             version=json.loads((out/"plugin.json").read_text())["version"]
@@ -312,6 +331,8 @@ def main():
               "arm32_qemu_validation":arm_qemu_validation,
               "factory_assets":{"device_path":asset_root,"payloads_bundled":False,
                 "local_index_expected":"provider-index.tsv","validated_package_count":50},
+              "host_parameter_layout":{"count":64,"sha256":digest(out/"host-parameter-layout.json"),
+                "report":"host-parameter-layout.json","schema":parameter_layout["schema"]},
               "build_command":"force_plugin/tools/build_candidate.sh --toolchain auto","package_command":"force_plugin/tools/build_candidate.sh --toolchain auto","sdk_validation":{"result":"PASS","errors":int(summary.group(1)),"warnings":int(summary.group(2)),"command":"tools/validate.py"},
               "licensing":{"project":"GPL-3.0-only","sdk_framework":"MIT","proprietary_factory_payloads_included":False}}
             (out/"release-manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")

@@ -48,6 +48,18 @@ class ReleaseInfraTests(unittest.TestCase):
         with patch.dict(build_release.os.environ,{'TROLLFX_FORCE_ASSET_ROOT':'/media/SSD250g/TROLLfx/ASR10/factory-effects'}):
             self.assertEqual(build_release.force_asset_root(),'/media/SSD250g/TROLLfx/ASR10/factory-effects')
 
+    def test_candidate_parameter_layout_preserves_all_ordered_indices(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'params.json'
+            rows=[{'index':i,'id':None,'name':f'Parameter {i}','label':'','kind':'float'} for i in range(64)]
+            path.write_text(json.dumps({'params':rows}))
+            layout=build_release.normalized_parameter_layout(path)
+            self.assertEqual(layout['parameter_count'],64)
+            self.assertEqual([x['index'] for x in layout['parameters']],list(range(64)))
+            rows[32]['index']=33;path.write_text(json.dumps({'params':rows}))
+            with self.assertRaisesRegex(RuntimeError,'contiguous and ordered'):
+                build_release.normalized_parameter_layout(path)
+
     def test_candidate_manifest_and_package_checksums(self):
         with tempfile.TemporaryDirectory() as tmp:
             package=candidate_fixture(tmp);m=json.loads((package/'release-manifest.json').read_text())
