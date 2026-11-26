@@ -109,6 +109,33 @@ Completed callback checks (as of this revision):
   stereo input produces finite output. Existing chunks and the 19 verified
   routes are covered by the simulator regression suites.
 
+The adjusted Codex 3 harness passed again against the SDK-built production
+x86-64 binary: `BINARY_PASS`, 50/50 slots, state round-trip, switch/restart and
+startup races, wet/dry/gain/bypass, zero callback allocations, NaN/±infinity
+parameter rejection, and non-finite audio handling. A focused production-binary
+HALL 40/41 test used VST2 parameter index 29 (`DECAY TIME`), the actual
+`setParameter` callback, and `processReplacing` after startup; its 32,768-frame
+stereo output difference RMS was `0.000150020285`.
+
+The SDK `build.py --target all` completed from source commit `9ef73e6` with zero
+validation errors and warnings. Native host simulation and both ARM package
+targets were produced. The native/ARM32 SHA-256 values are also bound in
+`/tmp/asr10-vst2-packaged-qa.json`; ARM64 was SDK-built and ABI-validated.
+
+| Binary | SHA-256 |
+|---|---|
+| x86-64 native VST2 | `dd5f964ecc8f856ece67793a8154e1881a50a9f465f292144a1725bf41782e26` |
+| ARMv7 hard-float VST2 | `4af2be5d75515c89e83be798e2133cd60bc9640a5dcd26b48c5d2ef1d027868f` |
+| AArch64 VST2 | `2b99e3f7d9dd21d23adc3331231ddf407981b61f231b267422e0ca897a6ef105` |
+
+`force_plugin/tools/test_packaged_vst.py` passed all 50 slots, missing-package
+silence, SDK host simulation, and callback allocation checks against the
+x86-64 binary. `force_plugin/tools/test_es5510_backend.sh` passed its private
+package backend and VST-wrapper HALL/ROOM/ROM-02 checks. ARMv7 ELF32/ARM,
+ARMv7-A, and hard-float ABI attributes were verified. ARM QEMU execution was
+not run because `qemu-arm` is not available in this environment. No binary was
+installed on a Force.
+
 Still gated or requiring further evidence:
 
 - No general full-range HALL VST host parameter is enabled. The diagnostic raw
@@ -119,9 +146,8 @@ Still gated or requiring further evidence:
   parameters. Run an ABI-adjusted temporary copy for callback/state coverage;
   record the unmodified harness result as blocked at its stale parameter-count
   assertion.
-- ARMv7 build and emulator checks must be run against the same candidate source
-  revision before claiming their gate. Physical Force behavior is untested;
-  nothing was installed on the Force.
+- ARMv7 QEMU and physical Force behavior remain untested; `qemu-arm` is absent
+  and nothing was installed on a Force.
 - The candidate has no accepted same-state original-OS WAV versus VST2 audio
   comparison. Standalone reference reconciliation is not hardware-equivalence
   proof.
