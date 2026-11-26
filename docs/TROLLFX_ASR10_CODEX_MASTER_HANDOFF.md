@@ -6,6 +6,10 @@
 
 **All Codex agents must read [TEST POLICY V1](TROLLFX_ASR10_TEST_POLICY_V1.md) and [TEST MATRIX V1](TROLLFX_ASR10_TEST_MATRIX_V1.json) before their next test or release run.** This replaces the informal expectation to run every suite on every change: use T0 quick, change-selected T1, hash-bound T2 for release candidates, and triggered T3 for deep OS/DSP research or real Force operation. The JSON matrix is a policy specification only; automatic selection has not yet been implemented. Never treat an older QEMU result or an unconfigured skipped test as a new candidate PASS. The in-progress Codex 1 installation must still enforce binary checksums, device-local asset path validity and rollback.
 
+## Architecture / workflow audit
+
+Read [ARCHITECTURE & WORKFLOW AUDIT V1](TROLLFX_ASR10_ARCHITECTURE_WORKFLOW_AUDIT_V1.md) for confirmed architectural limitations, release and source-provenance risks, original manual findings and targeted **hypotheses requiring tests** about concurrency, parameter acknowledgement, latency and state restoration. This is a risk register, not a report of newly observed device failures. Codex 1 should prioritize its in-progress Force installation rather than refactoring from the audit; Codex 2/3 can use the focused experiments independently.
+
 ## 1. Branch baselines and ownership
 
 | Owner | Branch | Verified snapshot commit | Assignment |
