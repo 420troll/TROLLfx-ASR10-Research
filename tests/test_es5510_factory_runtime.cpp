@@ -1,5 +1,6 @@
 #include "trollfx/es5510_factory_runtime.hpp"
 #include "trollfx/es5510_factory_parameter_discovery_v02.hpp"
+#include "trollfx/es5510_hall_decay_control.hpp"
 #include "es5510.h"
 
 #include <array>
@@ -107,6 +108,9 @@ int main() {
         assert(!fx.loadEffect(bad));
         assert(fx.getStatus().code==StatusCode::PackageRejected);
         assert(fx.loadEffect(package(EffectId::Rom01Hall,hall_path)));
+        assert(!fx.getStatus().hall_decay_step_available &&
+               fx.getStatus().hall_decay_state_provenance==HallDecayEditorStateProvenance::Unknown);
+        assert(!fx.stepHallDecayTime(+1,0)); // checkpoint register state is not editor-state provenance
         assert(fx.getStatus().active_program_words==89);
         assert(fx.getStatus().processing_rate_hz==48000.0);
         std::array<float,4> nonfinite_input{{std::numeric_limits<float>::quiet_NaN(),
@@ -115,6 +119,7 @@ int main() {
         assert(fx.processStereo(nonfinite_input.data(),nonfinite_output.data(),2,48000.0));
         for (float sample : nonfinite_output) assert(std::isfinite(sample));
         assert(fx.reset());
+        assert(!fx.getStatus().hall_decay_step_available);
         assert(fx.setRegister(0x20,0x123456,0));
         assert(!fx.setRegister(0xc0,0,0));
         assert(!fx.setRegister(0x20,0x1000000,0));
@@ -355,33 +360,83 @@ int main() {
     {
         auto hall = generic_package(1,3,short_path);
         hall.descriptor.factory_variation=1;
+        hall.descriptor.firmware_event_schedule.clear();
+        const auto initial_group=os353::hall_decay_registers(0);
+        for (std::size_t i=0;i<initial_group.size();++i)
+            hall.descriptor.firmware_event_schedule.push_back({i,initial_group[i].gpr,initial_group[i].value24});
         EffectRegistry registry;
         assert(registry.register_validated(hall));
         FactoryRuntime fx;
         assert(fx.loadEffect(*registry.find(1),RateMode::FactoryReference));
         auto status=fx.getStatus();
+        assert(!status.hall_decay_step_available &&
+               status.hall_decay_state_provenance==HallDecayEditorStateProvenance::Unknown);
+        assert(!fx.stepHallDecayTime(+1,0)); // no raw state before RUN writes complete
+        std::array<float,10> init_in{},init_out{};
+        assert(fx.processStereo(init_in.data(),init_out.data(),5,32001.0));
+        status=fx.getStatus();
+        assert(status.initialization_schedule_complete && status.initialization_complete_frame==5);
         assert(status.hall_decay_step_available && status.hall_decay_raw_code==0 &&
-               status.hall_decay_display_value==0);
-        assert(!fx.stepHallDecayTime(0,0));
-        assert(fx.stepHallDecayTime(+1,0)); // raw 0 -> 1, LCD 0 -> 1
+               status.hall_decay_display_value==0 &&
+               status.hall_decay_state_provenance==HallDecayEditorStateProvenance::ValidatedOsStartupRegisterGroup);
+        assert(!fx.stepHallDecayTime(0,5));
+        assert(fx.stepHallDecayTime(+1,5)); // raw 0 -> 1, LCD 0 -> 1
         status=fx.getStatus();
         assert(status.hall_decay_raw_code==1 && status.hall_decay_display_value==1);
-        assert(fx.stepHallDecayTime(+1,0)); // skip duplicate raw 2; LCD 1 -> 2
+        assert(fx.stepHallDecayTime(+1,5)); // skip duplicate raw 2; LCD 1 -> 2
         status=fx.getStatus();
         assert(status.hall_decay_raw_code==3 && status.hall_decay_display_value==2);
-        assert(fx.stepHallDecayTime(-1,0)); // raw 3 -> 2, LCD 2 -> 1
+        assert(fx.stepHallDecayTime(-1,5)); // raw 3 -> 2, LCD 2 -> 1
         status=fx.getStatus();
         assert(status.hall_decay_raw_code==2 && status.hall_decay_display_value==1);
+        assert(status.hall_decay_state_provenance==HallDecayEditorStateProvenance::OriginalOsEquivalentStep);
         assert(status.parameter_writes_pending==15 && !status.last_parameter_write_applied);
         std::array<float,8> step_in{},step_out{};
-        assert(fx.processStereo(step_in.data(),step_out.data(),4,48000.0));
-        assert(fx.getStatus().scheduled_writes_applied==16); // package init + three atomic five-write groups
+        assert(fx.processStereo(step_in.data(),step_out.data(),1,32001.0));
+        assert(fx.getStatus().scheduled_writes_applied==20); // five init writes + three atomic five-write groups
         assert(fx.getStatus().parameter_writes_pending==0 && fx.getStatus().last_parameter_write_applied);
         assert(fx.setRegister(0x6e,0x010000,fx.getStatus().processed_dsp_frames));
         assert(!fx.getStatus().hall_decay_step_available);
         assert(!fx.stepHallDecayTime(+1,fx.getStatus().processed_dsp_frames));
         assert(fx.reset());
+        assert(!fx.getStatus().hall_decay_step_available);
+        assert(fx.processStereo(init_in.data(),init_out.data(),5,32001.0));
         assert(fx.getStatus().hall_decay_step_available && fx.getStatus().hall_decay_raw_code==0);
+    }
+    {
+        auto hall=generic_package(1,3,short_path);
+        hall.descriptor.factory_variation=1;
+        hall.descriptor.firmware_event_schedule.clear();
+        const auto os_initial_group=os353::hall_decay_registers(0x34);
+        for (std::size_t i=0;i<os_initial_group.size();++i)
+            hall.descriptor.firmware_event_schedule.push_back({i,os_initial_group[i].gpr,os_initial_group[i].value24});
+        EffectRegistry registry;
+        assert(registry.register_validated(hall));
+        FactoryRuntime fx;
+        assert(fx.loadEffect(*registry.find(1),RateMode::FactoryReference));
+        std::array<float,10> in{},out{};
+        assert(fx.processStereo(in.data(),out.data(),5,32001.0));
+        const auto status=fx.getStatus();
+        assert(status.hall_decay_step_available && status.hall_decay_raw_code==0x34 &&
+               status.hall_decay_display_value==40 &&
+               status.hall_decay_state_provenance==HallDecayEditorStateProvenance::ValidatedOsStartupRegisterGroup);
+    }
+    {
+        auto hall=generic_package(1,3,short_path);
+        hall.descriptor.factory_variation=1;
+        hall.descriptor.firmware_event_schedule.clear();
+        auto incomplete_group=os353::hall_decay_registers(0x34);
+        incomplete_group.back().value24 ^= 1; // GPR 6E matches raw 0x34, but full OS group does not.
+        for (std::size_t i=0;i<incomplete_group.size();++i)
+            hall.descriptor.firmware_event_schedule.push_back({i,incomplete_group[i].gpr,incomplete_group[i].value24});
+        EffectRegistry registry;
+        assert(registry.register_validated(hall));
+        FactoryRuntime fx;
+        assert(fx.loadEffect(*registry.find(1),RateMode::FactoryReference));
+        std::array<float,10> in{},out{};
+        assert(fx.processStereo(in.data(),out.data(),5,32001.0));
+        assert(!fx.getStatus().hall_decay_step_available);
+        assert(fx.getStatus().hall_decay_state_provenance==HallDecayEditorStateProvenance::Unknown);
     }
     {
         auto hall = generic_package(1,3,short_path); // variation deliberately unknown

@@ -16,6 +16,11 @@ enum class StatusCode : std::uint8_t {
     Empty, Ready, InvalidArgument, PackageRejected, CaptureRejected,
     UnsupportedRate, EventQueueFull, EventInPast, InternalError
 };
+enum class HallDecayEditorStateProvenance : std::uint8_t {
+    Unknown,
+    ValidatedOsStartupRegisterGroup,
+    OriginalOsEquivalentStep
+};
 
 // Describes an already-evidenced RUN-boundary package. The referenced capture
 // contains the authentic 160-word image slots, 192 GPRs, 22 SPRs, runtime
@@ -53,6 +58,7 @@ struct RuntimeStatus {
     bool hall_decay_step_available = false;
     std::uint8_t hall_decay_raw_code = 0;
     std::int16_t hall_decay_display_value = -1;
+    HallDecayEditorStateProvenance hall_decay_state_provenance = HallDecayEditorStateProvenance::Unknown;
     const char* message = "not loaded"; // static storage; valid until next API call
 };
 
@@ -89,8 +95,10 @@ public:
     bool setParameter(const EffectDescriptor& descriptor, const std::string& parameter_id,
                       std::int32_t display_value, std::uint64_t scheduled_frame);
     // Applies one authentic OS 3.53 ROM-01 HALL Variation 1 decay editor step.
-    // direction is -1 (Down) or +1 (Up); the current raw GPR 6E code is retained
-    // across calls so duplicate LCD buckets preserve the original route behavior.
+    // direction is -1 (Down) or +1 (Up); duplicate LCD buckets retain the exact
+    // raw route. State is available only after a validated firmware startup
+    // schedule completes and its complete 6E/5B/03/04/05 group matches an
+    // OS-observed group. A checkpoint's GPR 6E value alone never seeds it.
     // This is not a direct display-value setter and is not supported for other
     // effects/variations. Call between processStereo blocks on the owning thread.
     bool stepHallDecayTime(int direction, std::uint64_t scheduled_frame);

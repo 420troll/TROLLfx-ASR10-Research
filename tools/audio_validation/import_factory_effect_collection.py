@@ -44,6 +44,15 @@ def package_eligibility(slot: int, name: str, words: int, program_sha: str,
         reason = reason or "OS selector to uploaded RUN program correlation is not verified"
     return reason is None, reason
 
+def verified_factory_variation(slot: int, name: str, words: int) -> int:
+    """Return only factory variation defaults directly observed on OS 3.53."""
+    hall = KNOWN[1]
+    if slot == 1 and name == hall["name"] and words == hall["words"]:
+        # Independent HALL editor-state capture observed factory selection at
+        # VAR=1. Defaults for all other effect identities remain unknown.
+        return 1
+    return 0
+
 def validate_one(package_file: Path, quarantined: dict[int,str]) -> dict:
     doc = json.loads(package_file.read_text())
     slot = int(doc["effect_id"])
@@ -124,6 +133,8 @@ def validate_one(package_file: Path, quarantined: dict[int,str]) -> dict:
     if eligible:
         desc = {
             "slot": slot, "factory_name": doc["display_name"],
+            "factory_variation": verified_factory_variation(
+                slot, doc["display_name"], doc["active_program_words"]),
             "active_program_words": doc["active_program_words"],
             "end_word": doc["active_program_words"] - 1,
             "program_sha256": doc["active_program_sha256"],

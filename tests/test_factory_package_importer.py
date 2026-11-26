@@ -28,6 +28,12 @@ class FactoryPackageImporterTests(unittest.TestCase):
         self.assertFalse(ok)
         self.assertEqual(reason, "independent replay identity conflict")
 
+    def test_only_os_observed_hall_factory_default_gets_variation_identity(self):
+        hall = importer.KNOWN[1]
+        self.assertEqual(importer.verified_factory_variation(1, hall["name"], hall["words"]), 1)
+        self.assertEqual(importer.verified_factory_variation(1, hall["name"], 60), 0)
+        self.assertEqual(importer.verified_factory_variation(3, "ROOM REVERB", 60), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

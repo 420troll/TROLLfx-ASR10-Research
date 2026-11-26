@@ -15,10 +15,11 @@ using namespace trollfx::es5510;
 
 static EffectDescriptor read_descriptor(const char* checkpoint, const char* schedule,
                                         const char* program_hash, const char* checkpoint_hash,
-                                        double factory_rate) {
+                                        double factory_rate, std::uint8_t factory_variation) {
     EffectDescriptor descriptor;
     descriptor.slot = 1;
     descriptor.factory_name = "HALL REVERB";
+    descriptor.factory_variation = factory_variation;
     descriptor.active_program_words = 89;
     descriptor.end_word = 88;
     descriptor.program_sha256 = program_hash;
@@ -192,6 +193,15 @@ static void run_pair(const EffectDescriptor& descriptor, RateMode mode,
         initialized_b.initialization_schedule_complete,
         static_cast<unsigned long long>(initialized_b.processed_dsp_frames),
         initialized_b.firmware_writes_pending, initialized_b.parameter_writes_pending);
+    std::printf("EDITOR owner=A available=%d raw=%u display=%d provenance=%u\n",
+        initialized_a.hall_decay_step_available, initialized_a.hall_decay_raw_code,
+        initialized_a.hall_decay_display_value,
+        static_cast<unsigned>(initialized_a.hall_decay_state_provenance));
+    if (!edit_before_startup && descriptor.factory_variation == 1 &&
+        (!initialized_a.hall_decay_step_available || initialized_a.hall_decay_raw_code != 0x34 ||
+         initialized_a.hall_decay_display_value != 40 ||
+         initialized_a.hall_decay_state_provenance != HallDecayEditorStateProvenance::ValidatedOsStartupRegisterGroup))
+        throw std::runtime_error("post-startup HALL editor raw state did not match the OS-proven 0x34 / display 40 baseline");
 
     if (!edit_before_startup) {
         if (!value40.setParameter(accepted->descriptor, "decay_time", 40, complete_frame) ||
@@ -273,8 +283,9 @@ static void run_overwritten_early_pair(const EffectDescriptor& descriptor, RateM
 }
 
 int main(int argc, char** argv) try {
-    if (argc != 6) throw std::runtime_error("usage: hall_startup_ownership CHECKPOINT SCHEDULE.csv PROGRAM_SHA CHECKPOINT_SHA FACTORY_RATE");
-    const auto descriptor = read_descriptor(argv[1], argv[2], argv[3], argv[4], std::stod(argv[5]));
+    if (argc != 7) throw std::runtime_error("usage: hall_startup_ownership CHECKPOINT SCHEDULE.csv PROGRAM_SHA CHECKPOINT_SHA FACTORY_RATE FACTORY_VARIATION");
+    const auto descriptor = read_descriptor(argv[1], argv[2], argv[3], argv[4], std::stod(argv[5]),
+                                            static_cast<std::uint8_t>(std::stoul(argv[6])));
     run_pair(descriptor, RateMode::Experimental48000, true);
     run_pair(descriptor, RateMode::Experimental48000, false);
     run_overwritten_early_pair(descriptor,RateMode::Experimental48000);

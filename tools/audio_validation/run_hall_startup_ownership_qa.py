@@ -46,6 +46,9 @@ def main() -> int:
         raise SystemExit("private audit identifies a different active effect")
     checkpoint = Path(descriptor["run_checkpoint_path"]).resolve(strict=True)
     schedule = Path(descriptor["firmware_event_schedule_path"]).resolve(strict=True)
+    variation = int(descriptor.get("factory_variation", 0))
+    if not 0 <= variation <= 4:
+        raise SystemExit("private audit contains an invalid HALL variation identity")
     if sha256(checkpoint) != descriptor["run_checkpoint_sha256"]:
         raise SystemExit("private HALL checkpoint digest mismatch")
     if sha256(schedule) != descriptor["firmware_event_schedule_sha256"]:
@@ -86,7 +89,7 @@ def main() -> int:
         subprocess.run(command, check=True)
         run = subprocess.run([str(binary), str(checkpoint), str(schedule),
             descriptor["program_sha256"], descriptor["run_checkpoint_sha256"],
-            str(descriptor["factory_reference_rate_hz"])], check=True, text=True,
+            str(descriptor["factory_reference_rate_hz"]), str(variation)], check=True, text=True,
             stdout=subprocess.PIPE)
         print(run.stdout, end="")
     return 0

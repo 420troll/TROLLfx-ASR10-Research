@@ -72,13 +72,21 @@ void print_report(const RenderReport&r) {
 }
 
 int main(int argc,char**argv) try {
-    if(argc<11)throw std::runtime_error("usage: cli SLOT NAME WORDS PROGRAM_SHA CHECKPOINT CHECKPOINT_SHA RATE SCHEDULE.csv INPUT.wav OUTPUT.wav [--block N] [--tail N] [--bypass DRY.wav] [--event FRAME:PARAM_ID:VALUE]... [--compare PARAM_ID VALUE FRAME PREFIX]");
-    auto pkg=package_from_args(argv);EffectRegistry registry;std::string registry_error;
+    if(argc<11)throw std::runtime_error("usage: cli SLOT NAME WORDS PROGRAM_SHA CHECKPOINT CHECKPOINT_SHA RATE SCHEDULE.csv INPUT.wav OUTPUT.wav [--factory-variation 0..4] [--block N] [--tail N] [--bypass DRY.wav] [--event FRAME:PARAM_ID:VALUE]... [--compare PARAM_ID VALUE FRAME PREFIX]");
+    auto pkg=package_from_args(argv);
+    for(int i=11;i<argc;++i)if(std::string(argv[i])=="--factory-variation"){
+        if(i+1>=argc)throw std::runtime_error("missing factory variation value");
+        const auto variation=integer(argv[++i]);
+        if(variation>4)throw std::runtime_error("factory variation must be 0..4");
+        pkg.descriptor.factory_variation=static_cast<std::uint8_t>(variation);
+    }
+    EffectRegistry registry;std::string registry_error;
     if(!registry.register_validated(std::move(pkg),&registry_error))throw std::runtime_error("registry rejected imported package: "+registry_error);
     RenderOptions options;std::vector<ParameterChange> events;std::string bypass_path;
     bool compare=false;std::string compare_id,prefix;std::int32_t compare_value=0;std::uint64_t compare_frame=0;
     for(int i=11;i<argc;++i){const std::string arg=argv[i];auto value=[&](){if(++i>=argc)throw std::runtime_error("missing option value");return std::string(argv[i]);};
-        if(arg=="--block")options.block_frames=integer(value());
+        if(arg=="--factory-variation")(void)value();
+        else if(arg=="--block")options.block_frames=integer(value());
         else if(arg=="--tail")options.tail_frames=integer(value());
         else if(arg=="--bypass")bypass_path=value();
         else if(arg=="--event") {auto f=split(value(),':');if(f.size()!=3)throw std::runtime_error("event must be FRAME:PARAM_ID:VALUE");events.push_back({integer(f[0]),f[1],static_cast<std::int32_t>(std::stol(f[2]))});}

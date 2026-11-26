@@ -59,6 +59,7 @@ def main():
     output=out/f"slot-{a.slot:02d}-processed.wav"
     cmd=[str(binary),str(a.slot),d["factory_name"],str(d["active_program_words"]),d["program_sha256"],
          str(checkpoint),d["run_checkpoint_sha256"],str(d["factory_reference_rate_hz"]),str(schedule),str(source),str(output),
+         "--factory-variation",str(d.get("factory_variation",0)),
          "--block",str(a.block),"--tail",str(a.tail_frames)]
     for event in a.event:
         parts=event.split(":")

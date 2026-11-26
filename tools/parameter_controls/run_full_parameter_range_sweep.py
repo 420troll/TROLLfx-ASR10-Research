@@ -240,13 +240,14 @@ def build_command(args, selector: dict, location: dict, log_id: str) -> list[str
                   str(location["page"]["ordinal"]), str(location["marker_start"]), "0",
                   str(args.edit_button), str(args.revert_button), location["needle"], "field_select"]
     sweep_after = settled + field_timeout + 2.0
-    range_args = [f"{sweep_after:.2f}", f"{args.max_sweep_seconds:.2f}",
-                  f"{args.settle_seconds:.2f}", location["needle"], log_id]
-    command += ["--seconds", f"{sweep_after + args.max_sweep_seconds:.2f}",
+    command += ["--seconds", f"{(sweep_after if args.state_only else sweep_after + args.max_sweep_seconds):.2f}",
                 "--panel-tap-on-display", f"{settled:.2f},45,5,FX=ROM-{args.slot:02d},edit",
                 "--panel-tap-on-display", f"{settled:.2f},45,9,FREE,effects",
-                "--panel-probe-field", ",".join(field_args),
-                "--panel-probe-range", ",".join(range_args)]
+                "--panel-probe-field", ",".join(field_args)]
+    if not args.state_only:
+        range_args = [f"{sweep_after:.2f}", f"{args.max_sweep_seconds:.2f}",
+                      f"{args.settle_seconds:.2f}", location["needle"], log_id]
+        command += ["--panel-probe-range", ",".join(range_args)]
     if getattr(args, "monitor_stdio", False):
         command.append("--monitor-stdio")
     return command
@@ -269,6 +270,8 @@ def main() -> None:
                     help="quiet period after each changed LCD value before closing its GPR write window")
     ap.add_argument("--monitor-stdio", action="store_true",
                     help="also emit exact-cycle LCD telemetry (uses the CLI's nonblocking monitor path)")
+    ap.add_argument("--state-only", action="store_true",
+                    help="select the effect and editor field, then capture its initial OS state without editing it")
     ap.add_argument("--edit-button", type=int, default=10)
     ap.add_argument("--revert-button", type=int, default=11)
     args = ap.parse_args()
@@ -301,7 +304,8 @@ def main() -> None:
                              observed_max == manual_domain["maximum"])
     ui_range_status = ("OS_RANGE_VERIFIED" if parsed["sweep_complete"] and domain_matches_manual else
                        "OS_BOUNDS_OBSERVED_MANUAL_RANGE_UNCONFIRMED" if parsed["sweep_complete"] else "INCOMPLETE")
-    report = {"schema": "trollfx-asr10-full-parameter-range-sweep-v1", "slot": args.slot,
+    report = {"schema": "trollfx-asr10-full-parameter-range-sweep-v1",
+              "capture_mode": "initial_state_only" if args.state_only else "full_range_sweep", "slot": args.slot,
               "factory_name": next(x["factory_name"] for x in inventory["entries"] if x["slot"] == args.slot),
               "variation": args.variation, "parameter_label": args.field,
               "documented_range": range_text, "documented_domain": manual_domain,
@@ -318,7 +322,7 @@ def main() -> None:
                       "ui_range_status": ui_range_status, "domain_matches_manual": domain_matches_manual,
                       "max": parsed["terminal"].get("max"), "min": parsed["terminal"].get("min"),
                       "restore": parsed["terminal"].get("restore"), "exit_code": run.returncode}, indent=2))
-    if run.returncode or not selected or not report["sweep_complete"]:
+    if run.returncode or not selected or (not args.state_only and not report["sweep_complete"]):
         raise SystemExit(2)
 
 
