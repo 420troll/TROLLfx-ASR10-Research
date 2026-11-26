@@ -8,6 +8,8 @@ test.beforeEach(async ({ page }) => {
 });
 async function chooseEffect(page,slot,name){await page.locator('#effect').selectOption(String(slot));await expect(page.locator('#editorEffect')).toContainText(name)}
 async function chooseVariation(page,index){const wait=page.waitForResponse(r=>r.url().endsWith('/api/variation')&&r.request().method()==='POST');await page.locator('#variation').selectOption({index});const r=await wait;if(!r.ok())throw new Error(await r.text())}
+function pcmWavBase64(level,frames=48000,rate=48000){let b=Buffer.alloc(44+frames*4);b.write('RIFF',0);b.writeUInt32LE(36+frames*4,4);b.write('WAVEfmt ',8);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(2,22);b.writeUInt32LE(rate,24);b.writeUInt32LE(rate*4,28);b.writeUInt16LE(4,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(frames*4,40);for(let i=0;i<frames;i++){let s=Math.round(level*Math.sin(2*Math.PI*440*i/rate)*32767);b.writeInt16LE(s,44+i*4);b.writeInt16LE(Math.round(s*.7),46+i*4)}return b.toString('base64')}
+function labFixture(){const wavA=pcmWavBase64(.5),wavB=pcmWavBase64(.25);const render=(display,raw,wav,frame)=>({display_value:display,raw_code:raw,raw_code_basis:'runtime_state',wav_base64:wav,dsp_status:'applied',runtime_status:'ready',firmware_status:'initialized',processing_rate_hz:48000,package_provenance:'synthetic_fixture',provenance_id:'synthetic-ui-fixture',source_commit:'abcdef1',register_updates:[{frame,register:'0x6E'}]});return{schema:'trollfx-asr10-hall-audio-artifacts-v1',source:'ui_fixture',effect_slot:1,effect_name:'HALL REVERB',variation:1,cases:[{case_id:'10_vs_90_impulse',stimulus:'impulse',a:render(10,17,wavA,1),b:render(90,113,wavB,2)},{case_id:'40_vs_41_sweep',stimulus:'sine_sweep',a:render(40,64,wavA,3),b:render(41,65,wavB,4)}]}}
 
 test('renders catalog ranges, states, and controls for the selected effect', async ({ page }) => {
   await chooseEffect(page,1,'HALL REVERB');
@@ -279,4 +281,37 @@ test('captures Hall, Room, and multi-bank Pitch Shift editor evidence', async ({
   await page.locator('[data-control="vc_1_semi_1"] input.numeric').fill('7');await page.locator('[data-control="vc_1_semi_1"] input.numeric').press('Tab');
   await page.screenshot({path:path.join(out,'pc-editor-pitch-bank-1.png'),fullPage:true});
   await page.getByRole('button',{name:'BANK 2'}).click();await page.screenshot({path:path.join(out,'pc-editor-pitch-bank-2.png'),fullPage:true});
+});
+
+test('AUDIO LAB imports explicit artifacts, preserves source/raw labels, plots and plays WAV, exports path-free measurements without DSP writes', async ({ page }) => {
+  let controlPosts=0;page.on('request',r=>{if(r.url().endsWith('/api/control')||r.url().endsWith('/api/set'))controlPosts++});
+  await page.locator('#audioLabMode').click();
+  await expect(page.locator('#audioLab')).toBeVisible();
+  await expect(page.locator('#labCase')).toBeDisabled();
+  await page.locator('#labBundle').setInputFiles({name:'hall-lab-fixture.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(labFixture()))});
+  await expect(page.locator('#labSource')).toContainText('UI TEST FIXTURE · synthetic only');
+  await expect(page.locator('#labAValue')).toHaveText('DECAY 10');
+  await expect(page.locator('#labBValue')).toHaveText('DECAY 90');
+  await expect(page.locator('#labARaw')).toContainText('Raw code 17');
+  await expect(page.locator('#labBRaw')).toContainText('Raw code 113');
+  await expect(page.locator('#labAMetrics')).toContainText('RMS 0.305');
+  const plotted=await page.locator('#labWave').evaluate(el=>{const d=el.getContext('2d').getImageData(0,0,el.width,el.height).data;let teal=0,amber=0;for(let i=0;i<d.length;i+=4){if(d[i+1]>d[i]*1.2&&d[i+2]>d[i]*1.2&&d[i+1]>100)teal++;if(d[i]>d[i+1]*1.2&&d[i+1]>d[i+2]*1.2&&d[i]>100)amber++}return{teal,amber}});
+  expect(plotted.teal).toBeGreaterThan(0);expect(plotted.amber).toBeGreaterThan(0);
+  await expect(page.locator('#labAPlayer')).toHaveJSProperty('readyState',4);
+  await expect(page.locator('#labBPlayer')).toHaveJSProperty('readyState',4);
+  await page.locator('#labAPlayer').evaluate(el=>el.play());
+  await expect(page.locator('#labAPlayer')).toHaveJSProperty('paused',false);
+  await expect(page.locator('#labDelta')).toContainText('Difference RMS:');
+  await expect(page.locator('#labRegisterStatus')).toContainText('0X6E @ frame 1');
+  await page.locator('#labStimulus').selectOption('sine_sweep');
+  await expect(page.locator('#labCase option')).toHaveCount(1);
+  await expect(page.locator('#labCase')).toHaveValue('40_vs_41_sweep');
+  await page.locator('#labStimulus').selectOption('impulse');
+  await page.locator('#labDuration').fill('0.5');
+  const downloaded=page.waitForEvent('download');await page.locator('#labExportReport').click();const dl=await downloaded;
+  const reportPath=path.join('/tmp',`audio-lab-${Date.now()}.json`);await dl.saveAs(reportPath);const report=JSON.parse(fs.readFileSync(reportPath,'utf8'));
+  expect(report.cases[0].display_values).toEqual([10,90]);expect(report.analysis_metrics.a.rms).toBeGreaterThan(0);expect(report.analysis_metrics.difference.rms).toBeGreaterThan(0);expect(JSON.stringify(report)).not.toMatch(/Users\\\\|home\\\\|wav_base64|local_path|checkpoint_path/);
+  expect(controlPosts).toBe(0);
+  const out=path.resolve(__dirname,'../../../docs/force_simulator/screenshots');fs.mkdirSync(out,{recursive:true});
+  await page.screenshot({path:path.join(out,'pc-editor-audio-lab-fixture.png'),fullPage:true});
 });

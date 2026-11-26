@@ -9,3 +9,49 @@ main{grid-template-columns:minmax(0,1fr) 350px;align-items:start}.editor{border:
 /* Full-parameter workflow: each control group is navigable without a crowded wall of cards. */
 .variation-box{display:flex;flex-direction:column;gap:4px;border-left:1px solid #526164;padding-left:14px;color:#bac5bd;font:10px ui-monospace,monospace}.variation-box select{display:block;margin-top:4px;background:#253236;color:#f3eee2;border:1px solid #687a78;padding:7px;max-width:230px}.variation-box small{max-width:230px;color:#c5a975;line-height:1.35}.draft-actions{display:flex;flex-direction:column;gap:6px}.draft-actions button,.sections button{background:#222e30;color:#bac6bd;border:1px solid #495d5e;padding:7px 10px;font:600 10px ui-monospace,monospace;cursor:pointer}.draft-actions button:disabled{opacity:.4;cursor:default}.draft-actions button:last-child{color:#efc18d}.sections{height:auto;min-height:36px;display:flex;flex-wrap:wrap;gap:6px;margin:0 2px 11px}.sections button.active{background:#087e7e;color:white;border-color:#48c9bf}.description{font:11px/1.4 system-ui,sans-serif;color:#a9bab4;min-height:30px;margin:5px 0 7px;overflow-wrap:anywhere}.control-card{min-height:192px}.control-card .value-row{margin-top:auto}.control-grid{align-items:stretch}.bankbar h2{font-size:18px}@media(max-width:900px){.variation-box{border-left:0;padding:0}.draft-actions{flex-direction:row}.sections{height:auto}}
 .badge-stack{display:flex;flex-direction:column;align-items:flex-end;gap:5px}.badge.os-badge{color:#99b7c0;background:#132226;border-color:#375057}.diagnostic{margin:18px 0;padding:12px;border:1px solid var(--line);border-radius:8px;background:#11191b}.diagnostic summary{font-weight:700;cursor:pointer;color:#ffcb8a}.diagnostic dl{display:grid;grid-template-columns:105px minmax(0,1fr);gap:7px 10px;font:12px/1.45 ui-monospace,Consolas,monospace;margin:12px 0}.diagnostic dt{color:#8ca8ad}.diagnostic dd{margin:0;overflow-wrap:anywhere}.os-monitor{padding:10px;border-top:1px solid var(--line);font-size:12px;line-height:1.5;color:#9ec7c0}.os-monitor code{display:block;white-space:pre-wrap;color:#8fe3d4;margin:4px 0}.control-card{cursor:pointer}.control-card:focus-within,.control-card:hover{border-color:#bc8553}
+
+/* Desktop-only measurement workspace. */
+header .appnav{height:auto;display:flex;gap:6px;margin-left:32px}
+header .appnav button{background:#222e30;color:#b9c7c1;border:1px solid #495b5c;padding:8px 15px;font:600 11px ui-monospace,monospace;cursor:pointer}
+header .appnav button.active{background:#7a4b2e;border-color:#d09455;color:#fff1d8}
+main.lab-mode{display:block;max-width:1800px}
+main.lab-mode>.sim{border:0;background:none;box-shadow:none;padding:0}
+main.lab-mode>.trace{display:none}
+.audio-lab{padding:16px;border:1px solid #46585a;border-radius:6px;background:linear-gradient(145deg,#202a2b,#151c1e);box-shadow:inset 0 0 0 2px #101516}
+.lab-heading{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:10px 14px 17px;border-bottom:1px solid #445254}
+.lab-heading .eyebrow{font:11px ui-monospace,monospace;letter-spacing:.12em;color:#8ac6ba}
+.lab-heading h1{font:600 27px "Titillium Web",sans-serif;color:#e7c897;margin:4px 0}
+.lab-heading h1 span{font-size:19px;color:#f4eee1}
+.lab-heading p,.lab-boundary{font-size:12px;color:#9fb0aa;margin:3px 0}
+.lab-import{padding:9px 12px;background:#263538;border:1px solid #687b76;color:#f3e9d5;font:12px ui-monospace,monospace;white-space:nowrap}
+.lab-import input{display:block;margin-top:7px;max-width:320px}
+.lab-source{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:11px 14px;background:#111819;border:1px solid #354749;color:#9fbcb4;font:11px ui-monospace,monospace}
+.lab-source b{color:#f1d4a3;font-size:13px}
+.lab-controls{display:grid;grid-template-columns:minmax(220px,1.4fr) minmax(180px,1fr) minmax(250px,1.3fr) minmax(180px,.8fr);gap:12px;align-items:end;padding:14px 0}
+.lab-controls label{display:flex;flex-direction:column;gap:6px;color:#9bb0aa;font:11px ui-monospace,monospace}
+.lab-controls select,.lab-controls input{background:#202c2e;border:1px solid #566b69;color:#f3eee2;padding:8px}
+.lab-controls input[type=range]{padding:4px;accent-color:#cf945e}
+.lab-controls output,.lab-rate b{color:#f0d2a1;font:600 15px ui-monospace,monospace}
+.lab-rate{display:flex;flex-direction:column;gap:7px;padding:7px 10px;border:1px solid #394b4d;background:#111819;min-height:58px}
+.lab-rate small{color:#91a7a2;font:10px ui-monospace,monospace}
+.lab-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lab-pair article,.lab-plot-grid article{min-width:0;background:#111819;border:1px solid #394b4d;padding:12px}
+.lab-pair article>header{height:auto;min-height:25px;padding:0;background:none;border:0;color:#84cabc;font:11px ui-monospace,monospace}
+.lab-pair article>header span{color:#bdab83;text-align:right;overflow-wrap:anywhere}
+.lab-pair h2{font:600 24px ui-monospace,monospace;color:#f0d3a5;margin:9px 0 2px}
+.lab-pair p{font:11px ui-monospace,monospace;color:#a3b2ac;margin:5px 0}
+.lab-metrics{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0;color:#d8e4dc;font:12px ui-monospace,monospace}
+.lab-pair audio{display:block;width:100%;height:36px;margin-top:8px}
+.lab-download{display:inline-block;margin-top:7px;color:#79d5c5;font:11px ui-monospace,monospace}
+.lab-plot-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.lab-plot-grid h3{font:600 14px "Titillium Web",sans-serif;color:#e2c18f;margin:1px 0 8px}
+.lab-plot-grid canvas{display:block;width:100%;height:auto;border:1px solid #304144}
+.lab-delta{font:12px ui-monospace,monospace;color:#efca95}
+.lab-plot-grid pre{max-height:110px;overflow:auto;white-space:pre-wrap;color:#aec2bb;font:10px/1.5 ui-monospace,monospace}
+.lab-actions{display:flex;align-items:center;gap:14px;margin:12px 0}
+.lab-actions button{padding:8px 12px;background:#7a4b2e;border:1px solid #d09455;color:#fff1d8;font:600 11px ui-monospace,monospace;cursor:pointer}
+.lab-actions button:disabled{opacity:.4;cursor:default}
+.lab-actions span{font:10px ui-monospace,monospace;color:#93a7a0}
+.lab-boundary{padding:10px 12px;background:#29251b;border:1px solid #665538;color:#e0c58e;line-height:1.5}
+.audio-lab[hidden],.editor[hidden],.skin-preview[hidden]{display:none}
+@media(max-width:900px){.lab-controls{grid-template-columns:1fr 1fr}.lab-pair,.lab-plot-grid{grid-template-columns:1fr}.lab-heading{align-items:flex-start;flex-direction:column}.lab-import{white-space:normal}header .appnav{margin-left:6px}}

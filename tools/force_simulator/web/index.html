@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TROLLfx Force Interface Simulator</title><link rel="stylesheet" href="/style.css"></head>
-<body><header><div><strong>TROLLfx / ASR-10</strong><span>PC Force interface simulator</span></div><div class="status" id="status">Connecting to native VST…</div></header>
-<main><section class="sim">
+<body><header><div><strong>TROLLfx / ASR-10</strong><span>PC Force interface simulator</span></div><nav class="appnav"><button id="editorMode" class="active" type="button">EDITOR</button><button id="audioLabMode" type="button">AUDIO LAB</button></nav><div class="status" id="status">Connecting to native VST…</div></header>
+<main id="appMain"><section class="sim">
   <section class="editor">
     <div class="effect-banner"><div><small>SELECTED FACTORY EFFECT · SLOT <b id="slotNumber">—</b></small><h1 id="editorEffect">—</h1></div><label>Effect <select id="effect"></select></label><div class="variation-box"><label>VARIATION <select id="variation"></select></label><small id="variationNote">Independent PC-only draft buffers</small></div><div class="draft-actions"><button id="undoDraft" type="button">UNDO</button><button id="resetDraft" type="button">RESET DRAFT</button></div><div class="editor-mode">PC PARAMETER INSPECTOR <span>DSP writes require exact verified points</span></div></div>
     <div class="bankbar"><div><h2>Effect parameters</h2><p id="controlCount" class="muted"></p></div><div id="banks" class="banks"></div></div>
@@ -16,7 +16,29 @@
   <div class="tools"><label>Audio block <select id="block"><option>64</option><option>128</option><option selected>256</option><option>512</option><option>1024</option></select></label><label class="file">Test WAV <input id="wav" type="file" accept="audio/wav,.wav"></label><button id="process">Process WAV / A-B</button><a id="wetout" hidden>Wet WAV</a><a id="dryout" hidden>Bypass WAV</a><label><input id="hitzones" type="checkbox"> Show touch targets</label>
   </div><p class="fidelity">Skin positions, tab order, images, parameter indices and Q-Link map are read from the packaged TUI.json / Q-Links.json. The SDK Slider child has no track art in this skin; its on-screen drawing is an explicit approximation. This does not emulate MPC/Force font rasterization, focus/overlays, scaling, or hardware Q-Link dispatch.</p>
   </details>
+  <section id="audioLab" class="audio-lab" hidden aria-label="HALL audio comparison lab">
+    <div class="lab-heading"><div><div class="eyebrow">DESKTOP DIAGNOSTIC · FACTORY SLOT 01</div><h1>AUDIO LAB <span>HALL REVERB</span></h1><p>Compare explicit rendered artifacts. This page never sends parameter writes to the VST or Force.</p></div><label class="lab-import">Import comparison bundle <input id="labBundle" type="file" accept="application/json,.json"></label></div>
+    <div class="lab-source"><b id="labSource">No audio artifact loaded</b><span id="labProvenance">Standalone experimental runtime · Actual VST audio · Original-OS reference are separate sources.</span><span id="labPackage">Package/checkpoint provenance: —</span></div>
+    <div class="lab-controls">
+      <label>Comparison preset<select id="labCase" disabled><option selected>Import a rendered pair</option><option disabled>10 vs 90 · artifact required</option><option disabled>0 vs 99 · artifact required</option><option disabled>25 vs 75 · artifact required</option><option disabled>40 vs 41 · artifact required</option></select></label>
+      <label>Test stimulus<select id="labStimulus" disabled><option selected>Available in imported artifacts</option></select></label>
+      <label>Measurement duration<input id="labDuration" type="range" min="0.1" max="1" step="0.01" value="1" disabled><output id="labDurationLabel">—</output></label>
+      <div class="lab-rate"><small>PROCESSING RATE</small><b id="labRate">—</b></div>
+    </div>
+    <div class="lab-pair">
+      <article><header><b>SETTING A</b><span id="labAProvenance">—</span></header><h2 id="labAValue">—</h2><p id="labARaw">Raw code: not reported</p><p id="labAStatus">DSP write status: —</p><div class="lab-metrics" id="labAMetrics"></div><audio id="labAPlayer" controls preload="metadata"></audio><a id="labADownload" class="lab-download" hidden>Download A WAV</a></article>
+      <article><header><b>SETTING B</b><span id="labBProvenance">—</span></header><h2 id="labBValue">—</h2><p id="labBRaw">Raw code: not reported</p><p id="labBStatus">DSP write status: —</p><div class="lab-metrics" id="labBMetrics"></div><audio id="labBPlayer" controls preload="metadata"></audio><a id="labBDownload" class="lab-download" hidden>Download B WAV</a></article>
+    </div>
+    <section class="lab-plot-grid">
+      <article><h3>Stereo waveform · A / B</h3><canvas id="labWave" width="1000" height="300"></canvas></article>
+      <article><h3>Reverb tail envelope · RMS window</h3><canvas id="labEnvelope" width="1000" height="300"></canvas></article>
+      <article><h3>Difference waveform · A − B</h3><canvas id="labDifference" width="1000" height="220"></canvas><p class="lab-delta" id="labDelta">Difference RMS: — · Difference peak: —</p><a id="labDiffDownload" class="lab-download" hidden>Download difference WAV</a></article>
+      <article><h3>Register update timing</h3><canvas id="labRegisterTimeline" width="1000" height="160"></canvas><pre id="labRegisterStatus">No register update evidence loaded.</pre></article>
+    </section>
+    <div class="lab-actions"><button id="labExportReport" disabled>Export measurement report JSON</button><span id="labExportNote">Exports measurements and evidence labels only; no local paths or factory data.</span></div>
+    <p class="lab-boundary">Audio source labels are preserved. Measurements from the standalone experimental runtime, actual VST, and original OS are not interchangeable. Raw codes are shown only when supplied with an evidence basis; the lab never infers them from displayed settings.</p>
+  </section>
 </section><aside class="trace"><h2>Live VST / DSP trace</h2><div class="trace-head"><span id="effectName">Effect: —</span><span id="dspStatus">—</span></div>
   <details class="diagnostic" open><summary>Original OS / PC comparison</summary><div id="diagContent">Select an editor control to inspect its evidence.</div><div id="osMonitor" class="os-monitor">Original-OS monitor: not connected</div></details>
   <h3>Recent parameter events</h3><div id="events" class="events"></div><h3>Audio test</h3><pre id="audioResult">Choose stereo PCM WAV, 48 kHz.</pre><div class="notes"><b>Host issue investigation</b><p>VST set/get, dynamic display text and actual applied GPR writes are observed here. If these pass while the Force encoder does not act, the remaining gap is device host/Q-Link dispatch or how the device activates the generated page map.</p><p>Session logs and private DSP values stay under the local user cache.</p></div></aside></main>
-<script src="/app.js"></script></body></html>
+<script src="/app.js"></script><script src="/audio-lab.js"></script></body></html>

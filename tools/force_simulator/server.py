@@ -10,6 +10,7 @@ from skin_model import load_skin
 from build import SIM_DIR, PLUGIN, HOST
 from parameter_registry import load_registry
 from draft_state import migrate_drafts, SCHEMA as PC_DRAFT_SCHEMA
+from audio_lab import analyze_bundle as analyze_hall_audio_bundle
 
 ROOT=Path(__file__).resolve().parents[2]
 PACKAGE=ROOT/"force_plugin/dist/TROLLfx - VST - ASR10 FX Collection"
@@ -327,6 +328,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         path=urlparse(self.path).path
         if path=="/": return self.send_bytes((WEB/"index.html").read_bytes(),"text/html; charset=utf-8")
         if path=="/app.js": return self.send_bytes((WEB/"app.js").read_bytes(),"text/javascript; charset=utf-8")
+        if path=="/audio-lab.js": return self.send_bytes((WEB/"audio-lab.js").read_bytes(),"text/javascript; charset=utf-8")
         if path=="/style.css": return self.send_bytes((WEB/"style.css").read_bytes(),"text/css; charset=utf-8")
         if path=="/font/regular": return self.send_bytes((Path(__file__).parent/"fonts/TitilliumWeb-Regular.ttf").read_bytes(),"font/ttf")
         if path=="/font/semibold": return self.send_bytes((Path(__file__).parent/"fonts/TitilliumWeb-SemiBold.ttf").read_bytes(),"font/ttf")
@@ -350,6 +352,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
         path=urlparse(self.path).path
         raw=self.rfile.read(int(self.headers.get("Content-Length","0")))
         try:
+            if path=="/api/audio-lab/import":
+                if len(raw)>70*1024*1024: raise ValueError("artifact bundle exceeds 70 MiB")
+                bundle=json.loads(raw)
+                return self.send_json(analyze_hall_audio_bundle(bundle))
             if path=="/api/set":
                 x=json.loads(raw);self.sim.ui_page=max(0,min(int(x.get("page",self.sim.ui_page)),len(self.sim.model["pages"])-1))
                 event=self.sim.set_param(x["param"],x["normalized"],x.get("page_name"),x.get("qlink"))

@@ -1,0 +1,25 @@
+{
+  "schema": "trollfx-asr10-hall-audio-lab-test-report-v1",
+  "tested_utc_date": "2026-11-26",
+  "branch": "feature/asr10-force-pc-gui-simulator",
+  "base_commit": "0a25d72f83f6ad622771193d0c6bc064a59d75a0",
+  "results": {
+    "python_unittest": {"passed": 40, "failed": 0},
+    "playwright_chromium": {"passed": 22, "failed": 0, "wav_decode": "passed", "html_audio_play": "passed", "report_export": "passed"},
+    "audio_lab_tests": {
+      "passed": 7,
+      "covers": [
+        "deterministic stereo WAV analysis and path-free packing",
+        "per-channel/stereo RMS and peak, A/B difference and envelope measurements",
+        "waveform min/max plot data and register frame/address evidence",
+        "display labels retain independently reported raw codes; absent codes stay absent",
+        "standalone runtime, actual VST, original OS and synthetic fixture source classes stay distinct",
+        "private path/unknown metadata rejection, sample alignment and HALL identity checks"
+      ]
+    },
+    "editor_compatibility": {"existing_vst_routes": 19, "parameter_identity_test": "passed", "browser_editor_regressions": "passed", "production_full_range_gate": "disabled"},
+    "actual_hall_10_vs_90_artifacts": "not available; public Codex 3 report does not include its user-local WAVs and currently tested HALL 40/41 rather than 10/90",
+    "synthetic_fixture": "UI_TEST_FIXTURE only; not ASR-10 audio evidence",
+    "force_installation": "not performed"
+  }
+}

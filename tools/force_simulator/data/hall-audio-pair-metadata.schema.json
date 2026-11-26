@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trollfx.invalid/schemas/asr10-hall-audio-pair-metadata-v1.json",
+  "title": "HALL audio pair local packer metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "variation", "stimulus", "case_id", "a", "b"],
+  "properties": {
+    "source": {"enum": ["standalone_experimental_runtime", "actual_vst_audio", "original_os_reference", "ui_fixture"]},
+    "variation": {"type": ["integer", "null"], "minimum": 1, "maximum": 4},
+    "stimulus": {"enum": ["impulse", "sine_sweep", "noise", "sustained_tones", "user_wav", "other"]},
+    "case_id": {"type": "string", "pattern": "^[A-Za-z0-9_-]{1,48}$"},
+    "a": {"$ref": "#/$defs/metadata"},
+    "b": {"$ref": "#/$defs/metadata"}
+  },
+  "$defs": {
+    "metadata": {
+      "type": "object", "additionalProperties": false,
+      "required": ["display_value", "raw_code", "raw_code_basis", "dsp_status", "runtime_status", "firmware_status", "processing_rate_hz", "package_provenance", "provenance_id", "source_commit", "register_updates"],
+      "properties": {
+        "display_value": {"type": "integer", "minimum": 0, "maximum": 99},
+        "raw_code": {"type": ["integer", "null"], "minimum": 0, "maximum": 127},
+        "raw_code_basis": {"enum": ["runtime_state", "original_os_observation", "not_reported"]},
+        "dsp_status": {"enum": ["applied", "partial", "no_write", "unknown"]},
+        "runtime_status": {"enum": ["ready", "initialized", "not_ready", "unknown"]},
+        "firmware_status": {"enum": ["initialized", "not_initialized", "unknown"]},
+        "processing_rate_hz": {"type": ["number", "null"], "minimum": 8000, "maximum": 192000},
+        "package_provenance": {"enum": ["validated_factory_checkpoint", "user_reference", "not_established", "synthetic_fixture"]},
+        "provenance_id": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9_.:-]{1,96}$"},
+        "source_commit": {"type": ["string", "null"], "pattern": "^[0-9a-fA-F]{7,40}$"},
+        "register_updates": {"type": "array", "maxItems": 256, "items": {"type": "object", "additionalProperties": false, "required": ["frame", "register"], "properties": {"frame": {"type": "integer", "minimum": 0}, "register": {"type": "string", "pattern": "^0x[0-9a-fA-F]{1,2}$"}}}}
+      }
+    }
+  }
+}
