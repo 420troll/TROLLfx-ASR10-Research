@@ -50,3 +50,12 @@ Stop and escalate if exact package hashes fail, assets cannot be resolved, ABI/s
 - [Agent 1 deployment](01_DEPLOYMENT.md)
 - [Agent 2 implementation](02_DEVELOPMENT.md)
 - [Agent 3 independent QA](03_QA.md)
+
+
+## 2026-11-26 — New authoritative manual catalog and multi-effect recovery campaign
+
+**READ FIRST FOR CURRENT PRIORITIES:** [PARALLEL_RECOVERY_CAMPAIGN.md](../parameter_recovery/PARALLEL_RECOVERY_CAMPAIGN.md), [manual-derived 50-ROM parameter guide](../parameter_recovery/ASR10_MANUAL_FX_PARAMETER_GUIDE_DRAFT.md) and [machine-readable catalog](../parameter_recovery/ASR10_MANUAL_FX_PARAMETER_CATALOG_DRAFT.json). These are newly committed on `main`. The inventory is a **DRAFT transcription** of Ensoniq's 391-page manual PDF (SHA-256 `e8ab5100904caf91fe355065ed9646aff197761b0663a7d452dc98af1f9a29dc`): ranges and group headings require original-page cross-checks before implementation. Preserve the local copyrighted manual; do not publish it or private factory assets.
+
+**Device update (supersedes preceding 'current physical baseline' for Candidate 3):** The user physically tested the later experimental Candidate 3: it appears and HALL DECAY **0–99 works**, with working HALL audio. The GUI remains unusable; other HALL controls are absent. Installed ARM32 SHA-256 `64cd57dca34214c57c030f21bf12c0398e2c2a6560ca7a516bdf06bf89d17d8c`, external checksum-verified rollback `/media/SSD250g/TROLLfx/ASR10/experimental-smoke-backup-c3-20261126T203250Z/TROLLfx - VST - ASR10 FX Collection`. User-observed discovery overrides deployment agent's inability to inspect a locked remote screen. Individual physical Q-Link knob results and project recall remain open. Existing production installer marker remains intact, Candidate 3 experimental and `playable: false`.
+
+**High priority:** parallel recovery of original controls across as many of the 50 ROM microprograms as independent original OS/GPR/audio evidence permits. Assign disjoint research families and dedicated source ownership; preserve independent QA and keep Agent 1 in HOLD absent new express installation authorization. The priority is **actual DSP-editable controls and a fully scrapped/rebuilt usable two-page GUI**, not just displaying the 908+ draft manual-inventory entries. Treat the guide as names/ranges reference, never proof of original GPR mapping or release readiness. The campaign document contains ownership, families, waves, safety gates and reporting schema. Do not restart worktree recovery if already completed; resume from current clean/dirty worktree state.
