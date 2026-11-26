@@ -1,0 +1,5259 @@
+{
+  "description": "Manual-derived DRAFT inventory, not verified production controls or OS/DSP mappings. Each source entry must be cross-checked against original PDF; some repeated groups or band-qualified names were transcribed.",
+  "source": {
+    "manual": "Ensoniq ASR-10 Musician's Manual",
+    "pdf_sha256": "e8ab5100904caf91fe355065ed9646aff197761b0663a7d452dc98af1f9a29dc",
+    "pdf_pages": 391,
+    "rom_pdf_pages": "99-153",
+    "appendix_pdf_pages": "368-382"
+  },
+  "rom_effects": [
+    {
+      "slot": 1,
+      "effect": "HALL REVERB",
+      "pdf_page": 99,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "DECAY TIME",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "LOW FREQ DECAY",
+          "manual_range": "-99 to +99",
+          "pdf_page": 99
+        },
+        {
+          "name": "DIFFUSION",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "HI FREQ DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "HI FREQ BANDWIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "DETUNE RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "DETUNE AMT",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "PRE-DELAY TIME",
+          "manual_range": "ROOM and HALL REVERB Range:  0 to 500",
+          "pdf_page": 100
+        }
+      ]
+    },
+    {
+      "slot": 2,
+      "effect": "44KHZ REVERB",
+      "pdf_page": 99,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "DECAY TIME",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "LOW FREQ DECAY",
+          "manual_range": "-99 to +99",
+          "pdf_page": 99
+        },
+        {
+          "name": "DIFFUSION",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "HI FREQ DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "HI FREQ BANDWIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "DETUNE RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "DETUNE AMT",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "PRE-DELAY TIME",
+          "manual_range": "ROOM and HALL REVERB Range:  0 to 500",
+          "pdf_page": 100
+        }
+      ]
+    },
+    {
+      "slot": 3,
+      "effect": "ROOM REVERB",
+      "pdf_page": 99,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "DECAY TIME",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "LOW FREQ DECAY",
+          "manual_range": "-99 to +99",
+          "pdf_page": 99
+        },
+        {
+          "name": "DIFFUSION",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "HI FREQ DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "HI FREQ BANDWIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "DETUNE RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 99
+        },
+        {
+          "name": "DETUNE AMT",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "PRE-DELAY TIME",
+          "manual_range": "ROOM and HALL REVERB Range:  0 to 500",
+          "pdf_page": 100
+        }
+      ]
+    },
+    {
+      "slot": 4,
+      "effect": "DUAL DELAYS",
+      "pdf_page": 100,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BUS1 DELAY MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS2 DELAY MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS1 FEEDBACK",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS2 FEEDBACK",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS1 DELAY TIME L",
+          "manual_range": "Dual Delays Bus1 Range:  0 to 2000",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS1 DELAY TIME R",
+          "manual_range": "Dual Delays Bus1 Range:  0 to 2000",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS2 DELAY TIME L",
+          "manual_range": "Dual Delays Bus1 Range:  0 to 2000",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS2 DELAY TIME R",
+          "manual_range": "Dual Delays Bus1 Range:  0 to 2000",
+          "pdf_page": 100
+        }
+      ]
+    },
+    {
+      "slot": 5,
+      "effect": "44KHZ DELAYS",
+      "pdf_page": 100,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BUS1 DELAY MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS2 DELAY MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS1 FEEDBACK",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS2 FEEDBACK",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS1 DELAY TIME L",
+          "manual_range": "Dual Delays Bus1 Range:  0 to 2000",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS1 DELAY TIME R",
+          "manual_range": "Dual Delays Bus1 Range:  0 to 2000",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS2 DELAY TIME L",
+          "manual_range": "Dual Delays Bus1 Range:  0 to 2000",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS2 DELAY TIME R",
+          "manual_range": "Dual Delays Bus1 Range:  0 to 2000",
+          "pdf_page": 100
+        }
+      ]
+    },
+    {
+      "slot": 6,
+      "effect": "CHORUS+REVRB",
+      "pdf_page": 100,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BUS1 REV AFTER CHOR",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "BUS2 REVERB MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 100
+        },
+        {
+          "name": "REVERB DECAY TIME",
+          "manual_range": "See manual",
+          "pdf_page": 100
+        },
+        {
+          "name": "LOW FREQ DECAY",
+          "manual_range": "See manual",
+          "pdf_page": 100
+        },
+        {
+          "name": "DIFFUSION",
+          "manual_range": "See manual",
+          "pdf_page": 100
+        },
+        {
+          "name": "HI FREQ DAMPING",
+          "manual_range": "See manual",
+          "pdf_page": 100
+        },
+        {
+          "name": "HI FREQ BANDWIDTH",
+          "manual_range": "See manual",
+          "pdf_page": 100
+        },
+        {
+          "name": "REVERB DETUNE RATE",
+          "manual_range": "See manual",
+          "pdf_page": 100
+        },
+        {
+          "name": "REVERB DETUNE AMT",
+          "manual_range": "See manual",
+          "pdf_page": 100
+        },
+        {
+          "name": "EARLY RFLECTION LEV",
+          "manual_range": "0 to 99",
+          "pdf_page": 101
+        },
+        {
+          "name": "CHORUS RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 101
+        },
+        {
+          "name": "CHORUS AMT",
+          "manual_range": "0 to 99",
+          "pdf_page": 101
+        },
+        {
+          "name": "CHORUS MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 101
+        },
+        {
+          "name": "CHORUS FEEDBACK",
+          "manual_range": "-99 to +99",
+          "pdf_page": 101
+        }
+      ]
+    },
+    {
+      "slot": 7,
+      "effect": "PHASER+REVRB",
+      "pdf_page": 101,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BUS1 REVERB MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 101
+        },
+        {
+          "name": "BUS2 REVERB MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 101
+        },
+        {
+          "name": "REVERB DECAY TIME",
+          "manual_range": "See manual",
+          "pdf_page": 101
+        },
+        {
+          "name": "LOW FREQ DECAY",
+          "manual_range": "See manual",
+          "pdf_page": 101
+        },
+        {
+          "name": "DIFFUSION",
+          "manual_range": "See manual",
+          "pdf_page": 101
+        },
+        {
+          "name": "HI FREQ DAMPING",
+          "manual_range": "See manual",
+          "pdf_page": 101
+        },
+        {
+          "name": "HI FREQ BANDWIDTH",
+          "manual_range": "See manual",
+          "pdf_page": 101
+        },
+        {
+          "name": "REVERB DETUNE RATE",
+          "manual_range": "See manual",
+          "pdf_page": 101
+        },
+        {
+          "name": "REVERB DETUNE AMT",
+          "manual_range": "See manual",
+          "pdf_page": 101
+        },
+        {
+          "name": "EARLY RFLECTION LEV",
+          "manual_range": "See manual",
+          "pdf_page": 101
+        },
+        {
+          "name": "PHASE CENTER",
+          "manual_range": "0 to 99",
+          "pdf_page": 101
+        },
+        {
+          "name": "PHASE RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 101
+        },
+        {
+          "name": "PHASE WIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 101
+        },
+        {
+          "name": "PHASE FEEDBACK",
+          "manual_range": "-99 to +99",
+          "pdf_page": 101
+        },
+        {
+          "name": "PHASE DEPTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 102
+        }
+      ]
+    },
+    {
+      "slot": 8,
+      "effect": "FLANGER+REV",
+      "pdf_page": 102,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BUS1 REVERB MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 102
+        },
+        {
+          "name": "BUS2 REVERB MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 102
+        },
+        {
+          "name": "REVERB DECAY TIME",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "LOW FREQ DECAY",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "DIFFUSION",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "HI FREQ DAMPING",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "HI FREQ BANDWIDTH",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "REVERB DETUNE RATE",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "REVERB DETUNE AMT",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "EARLY RFLECTION LEV",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "FLANGE CENTER",
+          "manual_range": "0 to 99",
+          "pdf_page": 102
+        },
+        {
+          "name": "FLANGE RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 102
+        },
+        {
+          "name": "FLANGE WIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 102
+        },
+        {
+          "name": "FLANGE FEEDBACK",
+          "manual_range": "-99 to +99",
+          "pdf_page": 102
+        },
+        {
+          "name": "FLANGE DEPTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 102
+        }
+      ]
+    },
+    {
+      "slot": 9,
+      "effect": "ROT. SPKR+REV",
+      "pdf_page": 102,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BUS1 REV AFTER ROTO",
+          "manual_range": "0 to 99",
+          "pdf_page": 102
+        },
+        {
+          "name": "BUS2 REVERB MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 102
+        },
+        {
+          "name": "REVERB DECAY TIME",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "DIFFUSION",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "HI FREQ DAMPING",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "ROTOR FAST",
+          "manual_range": "0 to 99",
+          "pdf_page": 103
+        },
+        {
+          "name": "ROTOR SLOW",
+          "manual_range": "0 to 99",
+          "pdf_page": 103
+        },
+        {
+          "name": "ROTOR INERTIA",
+          "manual_range": "0 to 99",
+          "pdf_page": 103
+        },
+        {
+          "name": "FAST-SLOW SWITCH",
+          "manual_range": "see below",
+          "pdf_page": 103
+        },
+        {
+          "name": "DIST GAIN IN",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "DIST GAIN OUT",
+          "manual_range": "See manual",
+          "pdf_page": 102
+        },
+        {
+          "name": "SPEAKER GAIN",
+          "manual_range": "0 to 99",
+          "pdf_page": 103
+        },
+        {
+          "name": "DISTORTION FILTER",
+          "manual_range": "0 to 99",
+          "pdf_page": 103
+        }
+      ]
+    },
+    {
+      "slot": 10,
+      "effect": "CHOR+REV+DDL",
+      "pdf_page": 103,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BUS1 REV AFTER CHOR",
+          "manual_range": "See manual",
+          "pdf_page": 103
+        },
+        {
+          "name": "BUS2 REVERB MIX",
+          "manual_range": "See manual",
+          "pdf_page": 103
+        },
+        {
+          "name": "BUS3 DDL MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 104
+        },
+        {
+          "name": "REVERB DECAY TIME",
+          "manual_range": "See manual",
+          "pdf_page": 103
+        },
+        {
+          "name": "LOW FREQ DECAY",
+          "manual_range": "See manual",
+          "pdf_page": 103
+        },
+        {
+          "name": "HI FREQ DAMPING",
+          "manual_range": "See manual",
+          "pdf_page": 103
+        },
+        {
+          "name": "REVERB DETUNE RATE",
+          "manual_range": "See manual",
+          "pdf_page": 103
+        },
+        {
+          "name": "REVERB DETUNE AMT",
+          "manual_range": "See manual",
+          "pdf_page": 103
+        },
+        {
+          "name": "CHORUS RATE",
+          "manual_range": "See manual",
+          "pdf_page": 103
+        },
+        {
+          "name": "CHORUS AMT",
+          "manual_range": "See manual",
+          "pdf_page": 103
+        },
+        {
+          "name": "CHORUS MIX",
+          "manual_range": "See manual",
+          "pdf_page": 103
+        },
+        {
+          "name": "CHORUS FEEDBACK",
+          "manual_range": "See manual",
+          "pdf_page": 103
+        },
+        {
+          "name": "DDL TIME L",
+          "manual_range": "0 to 1500",
+          "pdf_page": 104
+        },
+        {
+          "name": "DDL TIME R",
+          "manual_range": "0 to 1500",
+          "pdf_page": 104
+        },
+        {
+          "name": "DDL FEEDBACK",
+          "manual_range": "0 to 99",
+          "pdf_page": 104
+        }
+      ]
+    },
+    {
+      "slot": 11,
+      "effect": "CMP+DIST+REV",
+      "pdf_page": 104,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BUS1 REV AFTER DIST",
+          "manual_range": "0 to 99",
+          "pdf_page": 104
+        },
+        {
+          "name": "BUS2 REVERB MIX",
+          "manual_range": "See manual",
+          "pdf_page": 104
+        },
+        {
+          "name": "REVERB DECAY TIME",
+          "manual_range": "See manual",
+          "pdf_page": 104
+        },
+        {
+          "name": "HI FREQ DAMPING",
+          "manual_range": "See manual",
+          "pdf_page": 104
+        },
+        {
+          "name": "COMPRESSOR THRESHLD",
+          "manual_range": "0 to 99",
+          "pdf_page": 104
+        },
+        {
+          "name": "DIST LPF",
+          "manual_range": "See manual",
+          "pdf_page": 104
+        },
+        {
+          "name": "DIST HPF",
+          "manual_range": "See manual",
+          "pdf_page": 104
+        },
+        {
+          "name": "DIST FLANGE RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 105
+        },
+        {
+          "name": "SYSTEM FEEDBACK",
+          "manual_range": "-99 to +99",
+          "pdf_page": 105
+        }
+      ]
+    },
+    {
+      "slot": 12,
+      "effect": "DIST+CHO+REV",
+      "pdf_page": 105,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BUS1 DIST INTO CHOR MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 105
+        },
+        {
+          "name": "CHOR INTO REV MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 105
+        },
+        {
+          "name": "BUS3 REVERB MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 105
+        },
+        {
+          "name": "DIST FILTER FC",
+          "manual_range": "0 to 99",
+          "pdf_page": 105
+        },
+        {
+          "name": "DIST FILTER Q",
+          "manual_range": "1 to 25",
+          "pdf_page": 105
+        },
+        {
+          "name": "DISTORTION MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 106
+        },
+        {
+          "name": "REVERB DECAY TIME",
+          "manual_range": "See manual",
+          "pdf_page": 105
+        },
+        {
+          "name": "LOW FREQ DECAY",
+          "manual_range": "See manual",
+          "pdf_page": 105
+        },
+        {
+          "name": "HI FREQ DAMPING",
+          "manual_range": "See manual",
+          "pdf_page": 105
+        },
+        {
+          "name": "HI FREQ BANDWIDTH",
+          "manual_range": "See manual",
+          "pdf_page": 105
+        },
+        {
+          "name": "REVERB DETUNE RATE",
+          "manual_range": "See manual",
+          "pdf_page": 105
+        },
+        {
+          "name": "REVERB DETUNE AMT",
+          "manual_range": "See manual",
+          "pdf_page": 105
+        },
+        {
+          "name": "EARLY RFLECTION LEV",
+          "manual_range": "See manual",
+          "pdf_page": 105
+        },
+        {
+          "name": "CHORUS MIX",
+          "manual_range": "See manual",
+          "pdf_page": 105
+        },
+        {
+          "name": "CHORUS RATE",
+          "manual_range": "See manual",
+          "pdf_page": 105
+        },
+        {
+          "name": "CHORUS AMT",
+          "manual_range": "See manual",
+          "pdf_page": 105
+        }
+      ]
+    },
+    {
+      "slot": 13,
+      "effect": "WAH+DIST+REV",
+      "pdf_page": 106,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BUS1 REV AFTER DIST",
+          "manual_range": "0 to 99",
+          "pdf_page": 106
+        },
+        {
+          "name": "BUS2 REVERB MIX",
+          "manual_range": "See manual",
+          "pdf_page": 106
+        },
+        {
+          "name": "REVERB DAMPING",
+          "manual_range": "See manual",
+          "pdf_page": 106
+        },
+        {
+          "name": "REVERB DECAY TIME",
+          "manual_range": "See manual",
+          "pdf_page": 106
+        },
+        {
+          "name": "COMPRESSOR THRESHLD",
+          "manual_range": "See manual",
+          "pdf_page": 106
+        },
+        {
+          "name": "WAH FILTER CENTER",
+          "manual_range": "0 to 99",
+          "pdf_page": 106
+        },
+        {
+          "name": "WAH RANGE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 106
+        },
+        {
+          "name": "SYSTEM FEEDBACK",
+          "manual_range": "See manual",
+          "pdf_page": 106
+        }
+      ]
+    },
+    {
+      "slot": 14,
+      "effect": "SMALL ROOM",
+      "pdf_page": 107,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "DECAY TIME",
+          "manual_range": "Small Room Range:  0.20 to 100.0 sec.",
+          "pdf_page": 107
+        },
+        {
+          "name": "PREDELAY TIME",
+          "manual_range": "0 to 450 ms",
+          "pdf_page": 108
+        },
+        {
+          "name": "LF DECAY TIME",
+          "manual_range": "-99 to +99",
+          "pdf_page": 108
+        },
+        {
+          "name": "HF DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "HF BANDWIDTH",
+          "manual_range": "1 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DIFFUS1",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DIFFUS2",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DECAY DEFINITION",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DETUNE RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DETUNE DEPTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "PRIMARY SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 108
+        },
+        {
+          "name": "REFL 1 TIME",
+          "manual_range": "0 to 120 milliseconds",
+          "pdf_page": 108
+        },
+        {
+          "name": "REFL 1 LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "REFL 1 SEND",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "REFL 2 TIME",
+          "manual_range": "0 to 120 milliseconds",
+          "pdf_page": 109
+        },
+        {
+          "name": "REFL 2 LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "REF 2 SEND",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        }
+      ]
+    },
+    {
+      "slot": 15,
+      "effect": "LARGE ROOM",
+      "pdf_page": 107,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "DECAY TIME",
+          "manual_range": "Small Room Range:  0.20 to 100.0 sec.",
+          "pdf_page": 107
+        },
+        {
+          "name": "PREDELAY TIME",
+          "manual_range": "0 to 450 ms",
+          "pdf_page": 108
+        },
+        {
+          "name": "LF DECAY TIME",
+          "manual_range": "-99 to +99",
+          "pdf_page": 108
+        },
+        {
+          "name": "HF DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "HF BANDWIDTH",
+          "manual_range": "1 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DIFFUS1",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DIFFUS2",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DECAY DEFINITION",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DETUNE RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DETUNE DEPTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "PRIMARY SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 108
+        },
+        {
+          "name": "REFL 1 TIME",
+          "manual_range": "0 to 120 milliseconds",
+          "pdf_page": 108
+        },
+        {
+          "name": "REFL 1 LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "REFL 1 SEND",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "REFL 2 TIME",
+          "manual_range": "0 to 120 milliseconds",
+          "pdf_page": 109
+        },
+        {
+          "name": "REFL 2 LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "REF 2 SEND",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        }
+      ]
+    },
+    {
+      "slot": 16,
+      "effect": "HALL REVERB2",
+      "pdf_page": 107,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "DECAY TIME",
+          "manual_range": "Small Room Range:  0.20 to 100.0 sec.",
+          "pdf_page": 107
+        },
+        {
+          "name": "PREDELAY TIME",
+          "manual_range": "0 to 450 ms",
+          "pdf_page": 108
+        },
+        {
+          "name": "LF DECAY TIME",
+          "manual_range": "-99 to +99",
+          "pdf_page": 108
+        },
+        {
+          "name": "HF DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "HF BANDWIDTH",
+          "manual_range": "1 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DIFFUS1",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DIFFUS2",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DECAY DEFINITION",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DETUNE RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "DETUNE DEPTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 108
+        },
+        {
+          "name": "PRIMARY SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 108
+        },
+        {
+          "name": "REFL 1 TIME",
+          "manual_range": "0 to 120 milliseconds",
+          "pdf_page": 108
+        },
+        {
+          "name": "REFL 1 LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "REFL 1 SEND",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "REFL 2 TIME",
+          "manual_range": "0 to 120 milliseconds",
+          "pdf_page": 109
+        },
+        {
+          "name": "REFL 2 LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "REF 2 SEND",
+          "manual_range": "0 to 99",
+          "pdf_page": 109
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 107
+        }
+      ]
+    },
+    {
+      "slot": 17,
+      "effect": "SMALL PLATE",
+      "pdf_page": 109,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "DECAY TIME",
+          "manual_range": "Small Plate Range:  0.2 to 100.0 sec.",
+          "pdf_page": 110
+        },
+        {
+          "name": "PREDELAY TIME",
+          "manual_range": "Small Plate Range:  0 to 500 ms",
+          "pdf_page": 110
+        },
+        {
+          "name": "HF DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 110
+        },
+        {
+          "name": "HF BANDWIDTH",
+          "manual_range": "1 to 99",
+          "pdf_page": 110
+        },
+        {
+          "name": "DIFFUS1",
+          "manual_range": "0 to 99",
+          "pdf_page": 110
+        },
+        {
+          "name": "DIFFUS2",
+          "manual_range": "0 to 99",
+          "pdf_page": 110
+        },
+        {
+          "name": "DECAY DEFINITION",
+          "manual_range": "0 to 99",
+          "pdf_page": 110
+        },
+        {
+          "name": "L/R BALANCE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 111
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        }
+      ]
+    },
+    {
+      "slot": 18,
+      "effect": "LARGE PLATE",
+      "pdf_page": 109,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "DECAY TIME",
+          "manual_range": "Small Plate Range:  0.2 to 100.0 sec.",
+          "pdf_page": 110
+        },
+        {
+          "name": "PREDELAY TIME",
+          "manual_range": "Small Plate Range:  0 to 500 ms",
+          "pdf_page": 110
+        },
+        {
+          "name": "HF DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 110
+        },
+        {
+          "name": "HF BANDWIDTH",
+          "manual_range": "1 to 99",
+          "pdf_page": 110
+        },
+        {
+          "name": "DIFFUS1",
+          "manual_range": "0 to 99",
+          "pdf_page": 110
+        },
+        {
+          "name": "DIFFUS2",
+          "manual_range": "0 to 99",
+          "pdf_page": 110
+        },
+        {
+          "name": "DECAY DEFINITION",
+          "manual_range": "0 to 99",
+          "pdf_page": 110
+        },
+        {
+          "name": "L/R BALANCE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 111
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 109
+        }
+      ]
+    },
+    {
+      "slot": 19,
+      "effect": "REVRSE REVRB",
+      "pdf_page": 111,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "HOLD TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 111
+        },
+        {
+          "name": "ATTACK TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 111
+        },
+        {
+          "name": "RELEASE TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 111
+        },
+        {
+          "name": "TRIGGER THRESHOLD",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 111
+        },
+        {
+          "name": "HF DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 112
+        },
+        {
+          "name": "DIFFUS1",
+          "manual_range": "0 to 99",
+          "pdf_page": 112
+        },
+        {
+          "name": "DIFFUS2",
+          "manual_range": "0 to 99",
+          "pdf_page": 112
+        },
+        {
+          "name": "DECAY DEFINITION",
+          "manual_range": "0 to 99",
+          "pdf_page": 112
+        },
+        {
+          "name": "SLAPBACK TIME",
+          "manual_range": "0 to 530ms",
+          "pdf_page": 112
+        },
+        {
+          "name": "SLAPBACK LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 112
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 111
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 111
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 111
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 111
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 111
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 111
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 111
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 111
+        }
+      ]
+    },
+    {
+      "slot": 20,
+      "effect": "REVRSE REVB2",
+      "pdf_page": 112,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "HOLD TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 112
+        },
+        {
+          "name": "ATTACK TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 112
+        },
+        {
+          "name": "RELEASE TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 113
+        },
+        {
+          "name": "TRIGGER THRESHOLD",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 113
+        },
+        {
+          "name": "PRE-TRIGGER TIME",
+          "manual_range": "0 to 530 ms",
+          "pdf_page": 113
+        },
+        {
+          "name": "HF DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 113
+        },
+        {
+          "name": "DIFFUS1",
+          "manual_range": "0 to 99",
+          "pdf_page": 113
+        },
+        {
+          "name": "DIFFUS2",
+          "manual_range": "0 to 99",
+          "pdf_page": 113
+        },
+        {
+          "name": "DECAY DEFINITION",
+          "manual_range": "0 to 99",
+          "pdf_page": 113
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 112
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 112
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 112
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 112
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 112
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 112
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 112
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 112
+        }
+      ]
+    },
+    {
+      "slot": 21,
+      "effect": "GATED REVERB",
+      "pdf_page": 113,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "ATTACK TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 114
+        },
+        {
+          "name": "HOLD TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 114
+        },
+        {
+          "name": "DECAY TIME",
+          "manual_range": "0.2 to 100.0 sec.",
+          "pdf_page": 114
+        },
+        {
+          "name": "RELEASE TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 114
+        },
+        {
+          "name": "TRIGGER THRESH",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 115
+        },
+        {
+          "name": "RETRIGGER THRESH",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 115
+        },
+        {
+          "name": "HF DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 115
+        },
+        {
+          "name": "DIFFUS1",
+          "manual_range": "0 to 99",
+          "pdf_page": 115
+        },
+        {
+          "name": "DIFFUS2",
+          "manual_range": "0 to 99",
+          "pdf_page": 115
+        },
+        {
+          "name": "DEFINITION",
+          "manual_range": "0 to 99",
+          "pdf_page": 115
+        },
+        {
+          "name": "SLAPBACK",
+          "manual_range": "0 to 500 ms",
+          "pdf_page": 115
+        },
+        {
+          "name": "SLAPBACK LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 115
+        },
+        {
+          "name": "L/R BALANCE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 115
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 113
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 113
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 113
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 113
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 113
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 113
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 113
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 113
+        }
+      ]
+    },
+    {
+      "slot": 22,
+      "effect": "NLIN REVRB 1",
+      "pdf_page": 116,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "HF DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 116
+        },
+        {
+          "name": "HF BANDWIDTH",
+          "manual_range": "1 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DIFFUS1",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DIFFUS2",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DENSTY 1",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DENSTY 2",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "PRIMARY SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 1 TIME",
+          "manual_range": "Non Lin 1, 3 Range:  0 to 600 ms",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 1 SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 2 TIME",
+          "manual_range": "Non Lin 1, 3 Range:  0 to 600 ms",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 2 SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "L/R BALANCE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        }
+      ]
+    },
+    {
+      "slot": 23,
+      "effect": "NLIN REVRB 2",
+      "pdf_page": 116,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "HF DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 116
+        },
+        {
+          "name": "HF BANDWIDTH",
+          "manual_range": "1 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DIFFUS1",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DIFFUS2",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DENSTY 1",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DENSTY 2",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "PRIMARY SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 1 TIME",
+          "manual_range": "Non Lin 1, 3 Range:  0 to 600 ms",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 1 SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 2 TIME",
+          "manual_range": "Non Lin 1, 3 Range:  0 to 600 ms",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 2 SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "L/R BALANCE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        }
+      ]
+    },
+    {
+      "slot": 24,
+      "effect": "NLIN REVRB 3",
+      "pdf_page": 116,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "HF DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 116
+        },
+        {
+          "name": "HF BANDWIDTH",
+          "manual_range": "1 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DIFFUS1",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DIFFUS2",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DENSTY 1",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "DENSTY 2",
+          "manual_range": "0 to 99",
+          "pdf_page": 117
+        },
+        {
+          "name": "PRIMARY SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 1 TIME",
+          "manual_range": "Non Lin 1, 3 Range:  0 to 600 ms",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 1 SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 2 TIME",
+          "manual_range": "Non Lin 1, 3 Range:  0 to 600 ms",
+          "pdf_page": 117
+        },
+        {
+          "name": "REFL 2 SEND LEVEL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "L/R BALANCE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 117
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 116
+        }
+      ]
+    },
+    {
+      "slot": 25,
+      "effect": "MULTITAP DDL",
+      "pdf_page": 118,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "DLY 1 TIME",
+          "manual_range": "0 to 2186 ms",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 1 RGN",
+          "manual_range": "0 to 99",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 1 LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 1 PAN",
+          "manual_range": "-99 to +99",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 2 TIME",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 2 RGN",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 2 LEVEL",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 2 PAN",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 3 TIME",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 3 RGN",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 3 LEVEL",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 3 PAN",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 4 TIME",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 4 RGN",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 4 LEVEL",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DLY 4 PAN",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "REGEN DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 118
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 118
+        }
+      ]
+    },
+    {
+      "slot": 26,
+      "effect": "EQ + DELAY LFO",
+      "pdf_page": 119,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "DLY TIME L",
+          "manual_range": "0 to 845 ms",
+          "pdf_page": 119
+        },
+        {
+          "name": "DLY TIME R",
+          "manual_range": "0 to 845 ms",
+          "pdf_page": 119
+        },
+        {
+          "name": "LFO RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 119
+        },
+        {
+          "name": "LFO WIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 119
+        },
+        {
+          "name": "L/R LFO",
+          "manual_range": "OUT-OF-PHASE or IN-PHASE",
+          "pdf_page": 119
+        },
+        {
+          "name": "DELAY REGEN",
+          "manual_range": "-99 to +99",
+          "pdf_page": 119
+        },
+        {
+          "name": "DLY CROSS REGEN",
+          "manual_range": "-99 to +99",
+          "pdf_page": 120
+        },
+        {
+          "name": "REGEN DAMPING",
+          "manual_range": "0 to 99",
+          "pdf_page": 120
+        },
+        {
+          "name": "R DELAY INPUT",
+          "manual_range": "OFF or ON",
+          "pdf_page": 120
+        },
+        {
+          "name": "R OUTPUT LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 120
+        },
+        {
+          "name": "BASS FC",
+          "manual_range": "0 to 1000 Hz",
+          "pdf_page": 120
+        },
+        {
+          "name": "BASS GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 120
+        },
+        {
+          "name": "TREBLE FC",
+          "manual_range": "1KHz to 15KHz",
+          "pdf_page": 120
+        },
+        {
+          "name": "TREBLE GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 120
+        },
+        {
+          "name": "EQ TRIM",
+          "manual_range": "-24 to +0 dB",
+          "pdf_page": 120
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 119
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 119
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 119
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 119
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 119
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 119
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 119
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 119
+        }
+      ]
+    },
+    {
+      "slot": 27,
+      "effect": "VCF+DISTORT",
+      "pdf_page": 121,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "DIST LEVEL IN",
+          "manual_range": "0 to 99",
+          "pdf_page": 121
+        },
+        {
+          "name": "DIST LEVEL OUT",
+          "manual_range": "0 to 99",
+          "pdf_page": 121
+        },
+        {
+          "name": "PRE-DIST VCF FC",
+          "manual_range": "1 to 99",
+          "pdf_page": 121
+        },
+        {
+          "name": "PRE-DIST VCF Q",
+          "manual_range": "1 to 25",
+          "pdf_page": 121
+        },
+        {
+          "name": "PRE-DIST ENV FOL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 121
+        },
+        {
+          "name": "POST-DIST VCF FC",
+          "manual_range": "01 to 99",
+          "pdf_page": 122
+        },
+        {
+          "name": "POST-DIST VCF Q",
+          "manual_range": "1 to 25",
+          "pdf_page": 122
+        },
+        {
+          "name": "POST-DIST ENV FOL",
+          "manual_range": "-99 to +99",
+          "pdf_page": 122
+        },
+        {
+          "name": "ATTACK",
+          "manual_range": "50µs to 10.0s",
+          "pdf_page": 122
+        },
+        {
+          "name": "RELEASE",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 122
+        },
+        {
+          "name": "DISTORTION BYPASS",
+          "manual_range": "OFF or ON",
+          "pdf_page": 122
+        },
+        {
+          "name": "PRE-EQ HP FC",
+          "manual_range": "0 to 1000 Hz",
+          "pdf_page": 122
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 121
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 121
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 121
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 121
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 121
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 121
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 121
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 121
+        }
+      ]
+    },
+    {
+      "slot": 28,
+      "effect": "GUITAR AMP 1",
+      "pdf_page": 122,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "PREAMP GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 123
+        },
+        {
+          "name": "OUTPUT LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 123
+        },
+        {
+          "name": "TUBE BIAS",
+          "manual_range": "0 to 99",
+          "pdf_page": 123
+        },
+        {
+          "name": "PRE-EQ TRIM",
+          "manual_range": "-24 to +0 dB",
+          "pdf_page": 123
+        },
+        {
+          "name": "PRE-EQ HIGH",
+          "manual_range": "4 to 1000 Hz",
+          "pdf_page": 123
+        },
+        {
+          "name": "PRE-EQ FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 123
+        },
+        {
+          "name": "PRE-EQ GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 123
+        },
+        {
+          "name": "PRE-EQ Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 123
+        },
+        {
+          "name": "GATE OFF",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 123
+        },
+        {
+          "name": "GATE ON",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 123
+        },
+        {
+          "name": "GATE RELEASE",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 123
+        },
+        {
+          "name": "HIGH PASS FC",
+          "manual_range": "4 to 1000 Hz",
+          "pdf_page": 123
+        },
+        {
+          "name": "EQ1 FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 124
+        },
+        {
+          "name": "EQ1 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 124
+        },
+        {
+          "name": "EQ1 Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 124
+        },
+        {
+          "name": "EQ2 FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 124
+        },
+        {
+          "name": "EQ2 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 124
+        },
+        {
+          "name": "EQ2 Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 124
+        },
+        {
+          "name": "LOW PASS FC",
+          "manual_range": "2.0 to 15.0 KHz",
+          "pdf_page": 124
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        }
+      ]
+    },
+    {
+      "slot": 29,
+      "effect": "GUITAR AMP 2",
+      "pdf_page": 122,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "PREAMP GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 123
+        },
+        {
+          "name": "OUTPUT LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 123
+        },
+        {
+          "name": "TUBE BIAS",
+          "manual_range": "0 to 99",
+          "pdf_page": 123
+        },
+        {
+          "name": "PRE-EQ TRIM",
+          "manual_range": "-24 to +0 dB",
+          "pdf_page": 123
+        },
+        {
+          "name": "PRE-EQ HIGH",
+          "manual_range": "4 to 1000 Hz",
+          "pdf_page": 123
+        },
+        {
+          "name": "PRE-EQ FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 123
+        },
+        {
+          "name": "PRE-EQ GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 123
+        },
+        {
+          "name": "PRE-EQ Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 123
+        },
+        {
+          "name": "GATE OFF",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 123
+        },
+        {
+          "name": "GATE ON",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 123
+        },
+        {
+          "name": "GATE RELEASE",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 123
+        },
+        {
+          "name": "HIGH PASS FC",
+          "manual_range": "4 to 1000 Hz",
+          "pdf_page": 123
+        },
+        {
+          "name": "EQ1 FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 124
+        },
+        {
+          "name": "EQ1 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 124
+        },
+        {
+          "name": "EQ1 Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 124
+        },
+        {
+          "name": "EQ2 FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 124
+        },
+        {
+          "name": "EQ2 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 124
+        },
+        {
+          "name": "EQ2 Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 124
+        },
+        {
+          "name": "LOW PASS FC",
+          "manual_range": "2.0 to 15.0 KHz",
+          "pdf_page": 124
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 122
+        }
+      ]
+    },
+    {
+      "slot": 30,
+      "effect": "GUITAR AMP 3",
+      "pdf_page": 124,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "PREAMP GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 124
+        },
+        {
+          "name": "OUTPUT LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 124
+        },
+        {
+          "name": "PRE-EQ TRIM",
+          "manual_range": "-24 to +00 dB",
+          "pdf_page": 124
+        },
+        {
+          "name": "PRE-EQ FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 125
+        },
+        {
+          "name": "PRE-EQ GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 125
+        },
+        {
+          "name": "PRE-EQ Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 125
+        },
+        {
+          "name": "EXPANSION RATIO",
+          "manual_range": "1:1 to 40:1, infinity",
+          "pdf_page": 125
+        },
+        {
+          "name": "THRESHOLD",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 125
+        },
+        {
+          "name": "GATE OFF",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 125
+        },
+        {
+          "name": "GATE ON",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 125
+        },
+        {
+          "name": "GATE RELEASE",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 125
+        },
+        {
+          "name": "HIGH PASS FC",
+          "manual_range": "4 to 1000 Hz",
+          "pdf_page": 125
+        },
+        {
+          "name": "EQ1 FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 125
+        },
+        {
+          "name": "EQ1 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 125
+        },
+        {
+          "name": "EQ1 Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 125
+        },
+        {
+          "name": "EQ2 FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 125
+        },
+        {
+          "name": "EQ2 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 125
+        },
+        {
+          "name": "EQ2 Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 126
+        },
+        {
+          "name": "LOW PASS FC",
+          "manual_range": "2.0 to 15.0 KHz",
+          "pdf_page": 126
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 124
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 124
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 124
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 124
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 124
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 124
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 124
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 124
+        }
+      ]
+    },
+    {
+      "slot": 31,
+      "effect": "SPKR CABINET",
+      "pdf_page": 126,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "OUTPUT GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 126
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        }
+      ]
+    },
+    {
+      "slot": 32,
+      "effect": "TUNABLE SPKR",
+      "pdf_page": 126,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "MID1 FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 126
+        },
+        {
+          "name": "MID1 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 126
+        },
+        {
+          "name": "MID1 Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 126
+        },
+        {
+          "name": "MID2 FC",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MID2 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 126
+        },
+        {
+          "name": "MID2 Q",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MID3 FC",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MID3 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 126
+        },
+        {
+          "name": "MID3 Q",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "INPUT TRIM",
+          "manual_range": "-24 to +0 dB",
+          "pdf_page": 127
+        },
+        {
+          "name": "OUTPUT GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 127
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 126
+        }
+      ]
+    },
+    {
+      "slot": 33,
+      "effect": "EQ+CHOR+DDL",
+      "pdf_page": 127,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "CHOR RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 128
+        },
+        {
+          "name": "CHOR WIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 128
+        },
+        {
+          "name": "CHORUS CENTER",
+          "manual_range": "0 to 99",
+          "pdf_page": 128
+        },
+        {
+          "name": "L/R LFO",
+          "manual_range": "OUT-OF-PHASE or IN-PHASE",
+          "pdf_page": 128
+        },
+        {
+          "name": "DLY TIME L",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 128
+        },
+        {
+          "name": "DLY TIME R",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 128
+        },
+        {
+          "name": "DELAY REGEN",
+          "manual_range": "-99 to +99",
+          "pdf_page": 128
+        },
+        {
+          "name": "ECHOTIME L",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 128
+        },
+        {
+          "name": "ECHOTIME R",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 128
+        },
+        {
+          "name": "ECHO LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 128
+        },
+        {
+          "name": "BASS FC",
+          "manual_range": "0 to 1000 Hz",
+          "pdf_page": 128
+        },
+        {
+          "name": "BASS GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 128
+        },
+        {
+          "name": "TREBLE FC",
+          "manual_range": "01KHz to 15KHz",
+          "pdf_page": 128
+        },
+        {
+          "name": "TREBLE GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 128
+        },
+        {
+          "name": "EQ TRIM",
+          "manual_range": "-24 to +00 dB",
+          "pdf_page": 129
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 127
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 127
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 127
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 127
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 127
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 127
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 127
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 127
+        }
+      ]
+    },
+    {
+      "slot": 34,
+      "effect": "EQ+VIBR+DDL",
+      "pdf_page": 129,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "VIBR RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 129
+        },
+        {
+          "name": "WIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 129
+        },
+        {
+          "name": "L/R LFO",
+          "manual_range": "OUT-OF-PHASE or IN-PHASE",
+          "pdf_page": 130
+        },
+        {
+          "name": "SAMPLE/HOLD RATE",
+          "manual_range": "0 to 100",
+          "pdf_page": 130
+        },
+        {
+          "name": "DELAY TIME L",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 130
+        },
+        {
+          "name": "DELAY TIME R",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 130
+        },
+        {
+          "name": "DELAY FEEDBACK",
+          "manual_range": "-99 to +99",
+          "pdf_page": 130
+        },
+        {
+          "name": "ECHOTIME L",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 130
+        },
+        {
+          "name": "ECHOTIME R",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 130
+        },
+        {
+          "name": "ECHO LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 130
+        },
+        {
+          "name": "BASS FC",
+          "manual_range": "0 to 1000 Hz",
+          "pdf_page": 130
+        },
+        {
+          "name": "BASS GAIN",
+          "manual_range": "See manual",
+          "pdf_page": 129
+        },
+        {
+          "name": "TREBLE FC",
+          "manual_range": "01KHz to 15KHz",
+          "pdf_page": 130
+        },
+        {
+          "name": "TREBLE GAIN",
+          "manual_range": "See manual",
+          "pdf_page": 129
+        },
+        {
+          "name": "EQ TRIM",
+          "manual_range": "-24 to +0 dB",
+          "pdf_page": 130
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 129
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 129
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 129
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 129
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 129
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 129
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 129
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 129
+        }
+      ]
+    },
+    {
+      "slot": 35,
+      "effect": "EQ+FLNGR+DDL",
+      "pdf_page": 131,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "FLANGE RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 131
+        },
+        {
+          "name": "WIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 131
+        },
+        {
+          "name": "FLANGE CENTER",
+          "manual_range": "0 to 99",
+          "pdf_page": 131
+        },
+        {
+          "name": "FLANGE FEEDBACK",
+          "manual_range": "-99 to +99",
+          "pdf_page": 131
+        },
+        {
+          "name": "NOTCH DEPTH",
+          "manual_range": "-99 to +99",
+          "pdf_page": 131
+        },
+        {
+          "name": "L/R LFO",
+          "manual_range": "OUT-OF-PHASE or IN-PHASE",
+          "pdf_page": 131
+        },
+        {
+          "name": "SAMPLE/HOLD RATE",
+          "manual_range": "0 to 100",
+          "pdf_page": 131
+        },
+        {
+          "name": "DLY TIME L",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 131
+        },
+        {
+          "name": "DLY TIME R",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 131
+        },
+        {
+          "name": "DELAY FEEDBACK",
+          "manual_range": "-99 to +99",
+          "pdf_page": 132
+        },
+        {
+          "name": "ECHO TIME L",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 132
+        },
+        {
+          "name": "ECHO TIME R",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 132
+        },
+        {
+          "name": "ECHO LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 132
+        },
+        {
+          "name": "BASS FC",
+          "manual_range": "0 to 1000 Hz",
+          "pdf_page": 132
+        },
+        {
+          "name": "BASS GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 132
+        },
+        {
+          "name": "TREBLE FC",
+          "manual_range": "1KHz to 15KHz",
+          "pdf_page": 132
+        },
+        {
+          "name": "TREBLE GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 132
+        },
+        {
+          "name": "EQ TRIM",
+          "manual_range": "-24 to +0 dB",
+          "pdf_page": 132
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 131
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 131
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 131
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 131
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 131
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 131
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 131
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 131
+        }
+      ]
+    },
+    {
+      "slot": 36,
+      "effect": "EQ+TREM+DDL",
+      "pdf_page": 133,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BUS1 DLY AFT TREM",
+          "manual_range": "0 to 99",
+          "pdf_page": 133
+        },
+        {
+          "name": "BUS2 DELAY MIX",
+          "manual_range": "See manual",
+          "pdf_page": 133
+        },
+        {
+          "name": "TREM RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 133
+        },
+        {
+          "name": "DEPTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 133
+        },
+        {
+          "name": "L/R LFO",
+          "manual_range": "OUT-OF-PHASE or IN-PHASE",
+          "pdf_page": 133
+        },
+        {
+          "name": "SAMPLE/HOLD RATE",
+          "manual_range": "0 to 100",
+          "pdf_page": 133
+        },
+        {
+          "name": "DLY TIME L",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 134
+        },
+        {
+          "name": "DLY TIME R",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 134
+        },
+        {
+          "name": "DELAY FEEDBACK",
+          "manual_range": "-99 to +99",
+          "pdf_page": 134
+        },
+        {
+          "name": "ECHO TIME L",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 134
+        },
+        {
+          "name": "ECHO TIME R",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 134
+        },
+        {
+          "name": "ECHO LEVEL",
+          "manual_range": "0 to 99",
+          "pdf_page": 134
+        },
+        {
+          "name": "BASS FC",
+          "manual_range": "0 to 1000 Hz",
+          "pdf_page": 134
+        },
+        {
+          "name": "BASS GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 134
+        },
+        {
+          "name": "TREBLE FC",
+          "manual_range": "1KHz to 15KHz",
+          "pdf_page": 134
+        },
+        {
+          "name": "TREBLE GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 134
+        },
+        {
+          "name": "EQ TRIM",
+          "manual_range": "-24 to +0 dB",
+          "pdf_page": 134
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 133
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 133
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 133
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 133
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 133
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 133
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 133
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 133
+        }
+      ]
+    },
+    {
+      "slot": 37,
+      "effect": "PHASER+DDL",
+      "pdf_page": 134,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "PHASE RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 135
+        },
+        {
+          "name": "WIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 135
+        },
+        {
+          "name": "PHASE CENTER",
+          "manual_range": "-99 to +99",
+          "pdf_page": 135
+        },
+        {
+          "name": "PHASER FEEDBACK",
+          "manual_range": "-99 to +99",
+          "pdf_page": 135
+        },
+        {
+          "name": "NOTCH DEPTH",
+          "manual_range": "-99 to +99",
+          "pdf_page": 135
+        },
+        {
+          "name": "L/R LFO",
+          "manual_range": "OUT-OF-PHASE or IN-PHASE",
+          "pdf_page": 135
+        },
+        {
+          "name": "SAMPLE/HOLD RATE",
+          "manual_range": "0 to 100",
+          "pdf_page": 136
+        },
+        {
+          "name": "DLY TIME L",
+          "manual_range": "0 to 1600 ms",
+          "pdf_page": 136
+        },
+        {
+          "name": "DLY TIME R",
+          "manual_range": "0 to 1600 ms",
+          "pdf_page": 136
+        },
+        {
+          "name": "DELAY FEEDBACK",
+          "manual_range": "-99 to +99",
+          "pdf_page": 136
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 134
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 134
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 134
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 134
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 134
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 134
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 134
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 134
+        }
+      ]
+    },
+    {
+      "slot": 38,
+      "effect": "8-VOICE CHOR",
+      "pdf_page": 136,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "LFO RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 137
+        },
+        {
+          "name": "WIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 137
+        },
+        {
+          "name": "STEREO SPREAD",
+          "manual_range": "0 to 99",
+          "pdf_page": 137
+        },
+        {
+          "name": "CHORUS REGEN",
+          "manual_range": "0 to 99",
+          "pdf_page": 137
+        },
+        {
+          "name": "L REGEN TIME",
+          "manual_range": "0 to 800 ms",
+          "pdf_page": 137
+        },
+        {
+          "name": "R REGEN TIME",
+          "manual_range": "0 to 800 ms",
+          "pdf_page": 137
+        },
+        {
+          "name": "DELAY REGEN",
+          "manual_range": "0 to 99",
+          "pdf_page": 137
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 136
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 136
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 136
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 136
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 136
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 136
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 136
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 136
+        }
+      ]
+    },
+    {
+      "slot": 39,
+      "effect": "PITCH SHIFT",
+      "pdf_page": 137,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "VC 1 SEMI",
+          "manual_range": "-12 to +12",
+          "pdf_page": 138
+        },
+        {
+          "name": "VC 1 FINE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 138
+        },
+        {
+          "name": "VC 1 VOL",
+          "manual_range": "0 to 99",
+          "pdf_page": 138
+        },
+        {
+          "name": "VC 1 PAN",
+          "manual_range": "-99 to +99",
+          "pdf_page": 138
+        },
+        {
+          "name": "VC 2 SEMI",
+          "manual_range": "-12 to +12",
+          "pdf_page": 138
+        },
+        {
+          "name": "VC 2 FINE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 138
+        },
+        {
+          "name": "VC 2 VOL",
+          "manual_range": "0 to 99",
+          "pdf_page": 138
+        },
+        {
+          "name": "VC 2 PAN",
+          "manual_range": "-99 to +99",
+          "pdf_page": 138
+        },
+        {
+          "name": "QUALITY",
+          "manual_range": "LONG/SMOOTHER or SHORT/COARSER",
+          "pdf_page": 138
+        },
+        {
+          "name": "LFO RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 138
+        },
+        {
+          "name": "WIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 138
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 137
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 137
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 137
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 137
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 137
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 137
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 137
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 137
+        }
+      ]
+    },
+    {
+      "slot": 40,
+      "effect": "PITCH+DDL",
+      "pdf_page": 139,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "VC 1 SEMI",
+          "manual_range": "-12 to +12",
+          "pdf_page": 139
+        },
+        {
+          "name": "VC 1 FINE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 139
+        },
+        {
+          "name": "VOICE 1 VOL",
+          "manual_range": "0 to 99",
+          "pdf_page": 139
+        },
+        {
+          "name": "VOICE 1 PAN",
+          "manual_range": "-99 to +99",
+          "pdf_page": 139
+        },
+        {
+          "name": "VC 2 SEMI",
+          "manual_range": "-12 to +12",
+          "pdf_page": 140
+        },
+        {
+          "name": "VC 2 FINE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 140
+        },
+        {
+          "name": "VOICE 2 VOL",
+          "manual_range": "0 to 99",
+          "pdf_page": 140
+        },
+        {
+          "name": "VOICE 2 PAN",
+          "manual_range": "-99 to +99",
+          "pdf_page": 140
+        },
+        {
+          "name": "DRY LEVEL TO DDL",
+          "manual_range": "0 to 99",
+          "pdf_page": 140
+        },
+        {
+          "name": "DLY TIME L",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 140
+        },
+        {
+          "name": "DLY TIME R",
+          "manual_range": "0 to 1500 ms",
+          "pdf_page": 140
+        },
+        {
+          "name": "DLY MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 140
+        },
+        {
+          "name": "DLY REGEN",
+          "manual_range": "-99 to +99",
+          "pdf_page": 140
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 139
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 139
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 139
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 139
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 139
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 139
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 139
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 139
+        }
+      ]
+    },
+    {
+      "slot": 41,
+      "effect": "FAST PITCHSH",
+      "pdf_page": 140,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "VOICE 1 FINE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 141
+        },
+        {
+          "name": "VOICE 1 VOL",
+          "manual_range": "0 to 99",
+          "pdf_page": 141
+        },
+        {
+          "name": "VOICE 1 PAN",
+          "manual_range": "-99 to +99",
+          "pdf_page": 141
+        },
+        {
+          "name": "VOICE 2 FINE",
+          "manual_range": "-99 to +99",
+          "pdf_page": 141
+        },
+        {
+          "name": "VOICE 2 VOL",
+          "manual_range": "0 to 99",
+          "pdf_page": 141
+        },
+        {
+          "name": "VOICE 2 PAN",
+          "manual_range": "-99 to +99",
+          "pdf_page": 141
+        },
+        {
+          "name": "LFO RATE",
+          "manual_range": "0 to 99",
+          "pdf_page": 141
+        },
+        {
+          "name": "WIDTH",
+          "manual_range": "0 to 99",
+          "pdf_page": 141
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 140
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 140
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 140
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 140
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 140
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 140
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 140
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 140
+        }
+      ]
+    },
+    {
+      "slot": 42,
+      "effect": "EQ+CMPRESSOR",
+      "pdf_page": 141,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "COMP GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 142
+        },
+        {
+          "name": "COMP RATIO",
+          "manual_range": "1/1 to 40/1, infinity",
+          "pdf_page": 142
+        },
+        {
+          "name": "COMP THRESHOLD",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 142
+        },
+        {
+          "name": "COMP ATTACK",
+          "manual_range": "50µs to 100ms",
+          "pdf_page": 142
+        },
+        {
+          "name": "COMP RELEASE",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 142
+        },
+        {
+          "name": "GATE OFF",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 142
+        },
+        {
+          "name": "GATE ON",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 142
+        },
+        {
+          "name": "GATE RELEASE",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 142
+        },
+        {
+          "name": "BASS FC",
+          "manual_range": "0 to 1000 Hz",
+          "pdf_page": 142
+        },
+        {
+          "name": "BASS GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 142
+        },
+        {
+          "name": "TREBLE FC",
+          "manual_range": "1KHz to 15KHz",
+          "pdf_page": 142
+        },
+        {
+          "name": "TREBLE GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 142
+        },
+        {
+          "name": "EQ TRIM",
+          "manual_range": "-24 to +0 dB",
+          "pdf_page": 142
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 141
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 141
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 141
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 141
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 141
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 141
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 141
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 141
+        }
+      ]
+    },
+    {
+      "slot": 43,
+      "effect": "EXPANDER",
+      "pdf_page": 144,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "EXPANSION RATIO",
+          "manual_range": "1/1 to 1/40, INF",
+          "pdf_page": 144
+        },
+        {
+          "name": "THRESHOLD",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 144
+        },
+        {
+          "name": "ATTACK TIME",
+          "manual_range": "50µs to 100ms",
+          "pdf_page": 144
+        },
+        {
+          "name": "RELEASE TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 144
+        },
+        {
+          "name": "HOLD TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 144
+        },
+        {
+          "name": "EQ GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 144
+        },
+        {
+          "name": "HIGH PASS FC",
+          "manual_range": "4 to 8000 Hz",
+          "pdf_page": 144
+        },
+        {
+          "name": "LOW PASS FC",
+          "manual_range": "100 Hz to 15 KHz",
+          "pdf_page": 144
+        },
+        {
+          "name": "TRIGGER MASK",
+          "manual_range": "OFF or ON",
+          "pdf_page": 145
+        },
+        {
+          "name": "TRIGGER TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 145
+        },
+        {
+          "name": "MASK THRESHOLD",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 145
+        },
+        {
+          "name": "OUTPUT GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 145
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 144
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 144
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 144
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 144
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 144
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 144
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 144
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 144
+        }
+      ]
+    },
+    {
+      "slot": 44,
+      "effect": "KEYED EXPNDR",
+      "pdf_page": 145,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "EXPANSION RATIO",
+          "manual_range": "1/1 to 1/40, INF",
+          "pdf_page": 145
+        },
+        {
+          "name": "THRESHOLD",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 146
+        },
+        {
+          "name": "ATTACK TIME",
+          "manual_range": "50µs to 100ms",
+          "pdf_page": 146
+        },
+        {
+          "name": "RELEASE TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 146
+        },
+        {
+          "name": "HOLD TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 146
+        },
+        {
+          "name": "EQ GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 146
+        },
+        {
+          "name": "HIGH PASS FC",
+          "manual_range": "4 to 8000 Hz",
+          "pdf_page": 146
+        },
+        {
+          "name": "LOW PASS FC",
+          "manual_range": "100 Hz to 15 KHz",
+          "pdf_page": 146
+        },
+        {
+          "name": "TRIGGER MASK",
+          "manual_range": "OFF or ON",
+          "pdf_page": 146
+        },
+        {
+          "name": "TRIGGER TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 146
+        },
+        {
+          "name": "MASK THRESHOLD",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 146
+        },
+        {
+          "name": "OUTPUT MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 146
+        },
+        {
+          "name": "OUTPUT GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 146
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 145
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 145
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 145
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 145
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 145
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 145
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 145
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 145
+        }
+      ]
+    },
+    {
+      "slot": 45,
+      "effect": "INVRS EXPNDR",
+      "pdf_page": 147,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "EXPANSION RATIO",
+          "manual_range": "1/1 to 40/1, INF",
+          "pdf_page": 147
+        },
+        {
+          "name": "THRESHOLD",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 147
+        },
+        {
+          "name": "ATTACK TIME",
+          "manual_range": "50µs to 100ms",
+          "pdf_page": 147
+        },
+        {
+          "name": "RELEASE TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 147
+        },
+        {
+          "name": "GATE OFF",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 147
+        },
+        {
+          "name": "GATE ON",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 147
+        },
+        {
+          "name": "BASS FC",
+          "manual_range": "0 to 1000 Hz",
+          "pdf_page": 147
+        },
+        {
+          "name": "BASS GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 147
+        },
+        {
+          "name": "TREBLE FC",
+          "manual_range": "1KHz to 15KHz",
+          "pdf_page": 147
+        },
+        {
+          "name": "TREBLE GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 147
+        },
+        {
+          "name": "EQ TRIM",
+          "manual_range": "-24 to +0 dB",
+          "pdf_page": 148
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 147
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 147
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 147
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 147
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 147
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 147
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 147
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 147
+        }
+      ]
+    },
+    {
+      "slot": 46,
+      "effect": "DE-ESSER",
+      "pdf_page": 148,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "OUTPUT GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 148
+        },
+        {
+          "name": "COMP RATIO",
+          "manual_range": "1/1 to 40/1, INF",
+          "pdf_page": 148
+        },
+        {
+          "name": "THRESHOLD",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 148
+        },
+        {
+          "name": "ATTACK TIME",
+          "manual_range": "50µs to 100ms",
+          "pdf_page": 148
+        },
+        {
+          "name": "RELEASE TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 149
+        },
+        {
+          "name": "GATE OFF",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 149
+        },
+        {
+          "name": "GATE ON",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 149
+        },
+        {
+          "name": "HIGH PASS FC",
+          "manual_range": "4 to 8000 Hz",
+          "pdf_page": 149
+        },
+        {
+          "name": "BASS FC",
+          "manual_range": "0 to 1000 Hz",
+          "pdf_page": 149
+        },
+        {
+          "name": "BASS GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 149
+        },
+        {
+          "name": "MID1 FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 149
+        },
+        {
+          "name": "MID1 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 149
+        },
+        {
+          "name": "MID1 Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 149
+        },
+        {
+          "name": "MID2 FC",
+          "manual_range": "See manual",
+          "pdf_page": 148
+        },
+        {
+          "name": "MID2 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 149
+        },
+        {
+          "name": "MID2 Q",
+          "manual_range": "See manual",
+          "pdf_page": 148
+        },
+        {
+          "name": "TREBLE FC",
+          "manual_range": "1KHz to 15KHz",
+          "pdf_page": 149
+        },
+        {
+          "name": "TREBLE GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 149
+        },
+        {
+          "name": "EQ TRIM",
+          "manual_range": "-48 to +0 dB",
+          "pdf_page": 149
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 148
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 148
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 148
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 148
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 148
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 148
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 148
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 148
+        }
+      ]
+    },
+    {
+      "slot": 47,
+      "effect": "DUCKER",
+      "pdf_page": 150,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "OUTPUT GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 150
+        },
+        {
+          "name": "OUTPUT MIX",
+          "manual_range": "0 to 99",
+          "pdf_page": 150
+        },
+        {
+          "name": "COMP RATIO",
+          "manual_range": "1/1 to 40/1, INF",
+          "pdf_page": 150
+        },
+        {
+          "name": "THRESHOLD",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 150
+        },
+        {
+          "name": "ATTACK TIME",
+          "manual_range": "50µs to 100ms",
+          "pdf_page": 150
+        },
+        {
+          "name": "RELEASE TIME",
+          "manual_range": "1ms to 10.0s",
+          "pdf_page": 151
+        },
+        {
+          "name": "GATE OFF",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 151
+        },
+        {
+          "name": "GATE ON",
+          "manual_range": "-96 to +0 dB",
+          "pdf_page": 151
+        },
+        {
+          "name": "BASS FC",
+          "manual_range": "0 to 1000Hz",
+          "pdf_page": 151
+        },
+        {
+          "name": "BASS GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 151
+        },
+        {
+          "name": "MID1 FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 151
+        },
+        {
+          "name": "MID1 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 151
+        },
+        {
+          "name": "MID1 Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 151
+        },
+        {
+          "name": "MID2 FC",
+          "manual_range": "See manual",
+          "pdf_page": 150
+        },
+        {
+          "name": "MID2 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 151
+        },
+        {
+          "name": "MID2 Q",
+          "manual_range": "See manual",
+          "pdf_page": 150
+        },
+        {
+          "name": "TREBLE FC",
+          "manual_range": "1KHz to 15KHz",
+          "pdf_page": 151
+        },
+        {
+          "name": "TREBLE GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 151
+        },
+        {
+          "name": "HIGH PASS FC",
+          "manual_range": "4 to 8000 Hz",
+          "pdf_page": 151
+        },
+        {
+          "name": "EQ TRIM",
+          "manual_range": "-48 to +0 dB",
+          "pdf_page": 151
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 150
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 150
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 150
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 150
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 150
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 150
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 150
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 150
+        }
+      ]
+    },
+    {
+      "slot": 48,
+      "effect": "RUMBLE FILTR",
+      "pdf_page": 152,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "HIGH PASS FC",
+          "manual_range": "4 to 8000 Hz",
+          "pdf_page": 152
+        },
+        {
+          "name": "LOW PASS FC",
+          "manual_range": "100 Hz to 15 KHz",
+          "pdf_page": 152
+        },
+        {
+          "name": "FILTER GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 152
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        }
+      ]
+    },
+    {
+      "slot": 49,
+      "effect": "PARAM EQ",
+      "pdf_page": 152,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "BASS FC",
+          "manual_range": "0 to 1000 Hz",
+          "pdf_page": 152
+        },
+        {
+          "name": "BASS GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 152
+        },
+        {
+          "name": "MID1 FC",
+          "manual_range": "0 to 9999 Hz",
+          "pdf_page": 152
+        },
+        {
+          "name": "MID1 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 152
+        },
+        {
+          "name": "MID1 Q",
+          "manual_range": "1 to 18",
+          "pdf_page": 152
+        },
+        {
+          "name": "MID2 FC",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "MID2 GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 152
+        },
+        {
+          "name": "MID2 Q",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "TREBLE FC",
+          "manual_range": "1 to 15 KHz",
+          "pdf_page": 153
+        },
+        {
+          "name": "TREBLE GAIN",
+          "manual_range": "-48 to +24 dB",
+          "pdf_page": 152
+        },
+        {
+          "name": "EQ TRIM",
+          "manual_range": "-24 to +0 dB",
+          "pdf_page": 153
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 152
+        }
+      ]
+    },
+    {
+      "slot": 50,
+      "effect": "VAN DER POL",
+      "pdf_page": 153,
+      "parameters": [
+        {
+          "name": "Original control / disambiguated label",
+          "manual_range": "Manual range",
+          "pdf_page": null
+        },
+        {
+          "name": "HIGH PASS FC",
+          "manual_range": "4 to 8000 Hz",
+          "pdf_page": 153
+        },
+        {
+          "name": "LOW PASS FC",
+          "manual_range": "100 Hz to 15 KHz",
+          "pdf_page": 153
+        },
+        {
+          "name": "FILTER GAIN",
+          "manual_range": "-48 to +48 dB",
+          "pdf_page": 153
+        },
+        {
+          "name": "MOD SRC 1",
+          "manual_range": "See manual",
+          "pdf_page": 153
+        },
+        {
+          "name": "MOD SRC 2",
+          "manual_range": "See manual",
+          "pdf_page": 153
+        },
+        {
+          "name": "DST 1",
+          "manual_range": "See manual",
+          "pdf_page": 153
+        },
+        {
+          "name": "DST 2",
+          "manual_range": "See manual",
+          "pdf_page": 153
+        },
+        {
+          "name": "MIN 1",
+          "manual_range": "See manual",
+          "pdf_page": 153
+        },
+        {
+          "name": "MIN 2",
+          "manual_range": "See manual",
+          "pdf_page": 153
+        },
+        {
+          "name": "MAX 1",
+          "manual_range": "See manual",
+          "pdf_page": 153
+        },
+        {
+          "name": "MAX 2",
+          "manual_range": "See manual",
+          "pdf_page": 153
+        }
+      ]
+    }
+  ],
+  "additional_44khz_effects": [
+    {
+      "effect": "44LUSH PLATE",
+      "pdf_page": 368,
+      "parameters": [],
+      "note": "Appendix names require range cross-check"
+    },
+    {
+      "effect": "44LUSH PLAT2",
+      "pdf_page": 368,
+      "parameters": [],
+      "note": "Appendix names require range cross-check"
+    },
+    {
+      "effect": "44PERC PLATE",
+      "pdf_page": 368,
+      "parameters": [],
+      "note": "Appendix names require range cross-check"
+    },
+    {
+      "effect": "44EQ+DDL",
+      "pdf_page": 369,
+      "parameters": [],
+      "note": "Appendix names require range cross-check"
+    },
+    {
+      "effect": "44DDL+CH+REV",
+      "pdf_page": 370,
+      "parameters": [],
+      "note": "Appendix names require range cross-check"
+    },
+    {
+      "effect": "44DDL+CHORUS",
+      "pdf_page": 371,
+      "parameters": [],
+      "note": "Appendix names require range cross-check"
+    },
+    {
+      "effect": "44DLYLFO+REV",
+      "pdf_page": 372,
+      "parameters": [],
+      "note": "Appendix names require range cross-check"
+    },
+    {
+      "effect": "44EQ+DDL+CHO",
+      "pdf_page": 373,
+      "parameters": [],
+      "note": "Appendix names require range cross-check"
+    },
+    {
+      "effect": "44PARAM EQ",
+      "pdf_page": 373,
+      "parameters": [],
+      "note": "Appendix names require range cross-check"
+    },
+    {
+      "effect": "44EQ+REVERB",
+      "pdf_page": 374,
+      "parameters": [],
+      "note": "Appendix names require range cross-check"
+    },
+    {
+      "effect": "44ROTO+REVRB",
+      "pdf_page": 375,
+      "parameters": [],
+      "note": "Appendix names require range cross-check"
+    },
+    {
+      "effect": "44EQ+ROT+DDL",
+      "pdf_page": 376,
+      "parameters": [
+        "For **each parameter** maintain separate columns: `manual_name`",
+        "`manual_range`",
+        "`manual_pdf_page`",
+        "`variation`",
+        "`OS_raw_domain`",
+        "`display_to_raw_policy`",
+        "`OS_capture`",
+        "`GPR_write_group`",
+        "`runtime_implemented`",
+        "`VST_callback_test`",
+        "`audio_AB_test`",
+        "`Force_touchscreen_test`",
+        "`Force_QLink_test`",
+        "`saved_state_compatibility`",
+        "`blockers`"
+      ],
+      "note": "Appendix names require range cross-check"
+    }
+  ],
+  "tracking_schema": [
+    "effect",
+    "variation",
+    "parameter",
+    "manual_name",
+    "manual_range",
+    "manual_page",
+    "manual_confirmed",
+    "original_OS_raw_domain",
+    "display_raw_mapping",
+    "GPR_or_microprogram_write_evidence",
+    "implemented_production",
+    "actual_VST2_audio_test",
+    "physical_Force_test",
+    "state_compatibility",
+    "blocker"
+  ]
+}
