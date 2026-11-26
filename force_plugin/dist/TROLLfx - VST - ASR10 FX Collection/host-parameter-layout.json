@@ -1,0 +1,455 @@
+{
+  "schema": "trollfx-asr10-vst2-host-parameter-layout-v1",
+  "parameter_count": 64,
+  "index_contract": "stable host parameter order 0..63; serialized by existing VST2 chunk",
+  "parameters": [
+    {
+      "index": 0,
+      "id": null,
+      "name": "FX Slot",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 1,
+      "id": null,
+      "name": "Wet / Dry",
+      "label": "%",
+      "kind": "int"
+    },
+    {
+      "index": 2,
+      "id": null,
+      "name": "Input Gain",
+      "label": "dB",
+      "kind": "float"
+    },
+    {
+      "index": 3,
+      "id": null,
+      "name": "Output Gain",
+      "label": "dB",
+      "kind": "float"
+    },
+    {
+      "index": 4,
+      "id": null,
+      "name": "Host Bypass",
+      "label": "",
+      "kind": "bool"
+    },
+    {
+      "index": 5,
+      "id": null,
+      "name": "Load Status",
+      "label": "",
+      "kind": "float"
+    },
+    {
+      "index": 6,
+      "id": null,
+      "name": "Reverb BUS1",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 7,
+      "id": null,
+      "name": "Reverb BUS2",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 8,
+      "id": null,
+      "name": "REVERB MIX BUS1 (HALL)",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 9,
+      "id": null,
+      "name": "REVERB MIX BUS2 (HALL)",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 10,
+      "id": null,
+      "name": "REVERB MIX BUS1 (44KHZ)",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 11,
+      "id": null,
+      "name": "REVERB MIX BUS2 (44KHZ)",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 12,
+      "id": null,
+      "name": "DECAY TIME (HALL)",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 13,
+      "id": null,
+      "name": "HI FREQ DAMPING (HALL)",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 14,
+      "id": null,
+      "name": "DECAY TIME (ROOM)",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 15,
+      "id": null,
+      "name": "DIFFUSION",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 16,
+      "id": null,
+      "name": "HI FREQ DAMPING (ROOM)",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 17,
+      "id": null,
+      "name": "BS1 TIME L",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 18,
+      "id": null,
+      "name": "CHORUS RATE",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 19,
+      "id": null,
+      "name": "PHASE RATE",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 20,
+      "id": null,
+      "name": "PREAMP GAIN",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 21,
+      "id": null,
+      "name": "VOICE1 FINE",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 22,
+      "id": null,
+      "name": "COMP RATIO",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 23,
+      "id": null,
+      "name": "BASS FC",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 24,
+      "id": null,
+      "name": "BS1 TIME L (44KHZ DELAYS)",
+      "label": "",
+      "kind": "float"
+    },
+    {
+      "index": 25,
+      "id": null,
+      "name": "FLANGE RATE",
+      "label": "",
+      "kind": "float"
+    },
+    {
+      "index": 26,
+      "id": null,
+      "name": "QUALITY",
+      "label": "",
+      "kind": "float"
+    },
+    {
+      "index": 27,
+      "id": null,
+      "name": "REVERB MIX BUS1 @ 01",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 28,
+      "id": null,
+      "name": "REVERB MIX BUS2 @ 01",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 29,
+      "id": null,
+      "name": "DECAY TIME @ 01",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 30,
+      "id": null,
+      "name": "HI FREQ DAMPING @ 01",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 31,
+      "id": null,
+      "name": "REVERB MIX BUS1 @ 02",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 32,
+      "id": null,
+      "name": "REVERB MIX BUS2 @ 02",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 33,
+      "id": null,
+      "name": "DECAY TIME @ 03",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 34,
+      "id": null,
+      "name": "DIFFUSION @ 03",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 35,
+      "id": null,
+      "name": "HI FREQ DAMPING @ 03",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 36,
+      "id": null,
+      "name": "BS1 TIME L @ 04",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 37,
+      "id": null,
+      "name": "BS1 TIME L @ 05",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 38,
+      "id": null,
+      "name": "CHORUS RATE @ 06",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 39,
+      "id": null,
+      "name": "PHASE RATE @ 07",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 40,
+      "id": null,
+      "name": "FLANGE RATE @ 08",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 41,
+      "id": null,
+      "name": "PREAMP GAIN @ 28",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 42,
+      "id": null,
+      "name": "QUALITY @ 39",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 43,
+      "id": null,
+      "name": "VOICE1 FINE @ 41",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 44,
+      "id": null,
+      "name": "COMP RATIO @ 42",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 45,
+      "id": null,
+      "name": "BASS FC @ 49",
+      "label": "",
+      "kind": "int"
+    },
+    {
+      "index": 46,
+      "id": null,
+      "name": "EDIT SLOT 1",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 47,
+      "id": null,
+      "name": "EDIT SLOT 2",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 48,
+      "id": null,
+      "name": "EDIT SLOT 3",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 49,
+      "id": null,
+      "name": "EDIT SLOT 4",
+      "label": "",
+      "kind": "choice"
+    },
+    {
+      "index": 50,
+      "id": null,
+      "name": "EDIT SLOT 5",
+      "label": "",
+      "kind": "float"
+    },
+    {
+      "index": 51,
+      "id": null,
+      "name": "EDIT SLOT 6",
+      "label": "",
+      "kind": "float"
+    },
+    {
+      "index": 52,
+      "id": null,
+      "name": "EDIT SLOT 7",
+      "label": "",
+      "kind": "float"
+    },
+    {
+      "index": 53,
+      "id": null,
+      "name": "EDIT SLOT 8",
+      "label": "",
+      "kind": "float"
+    },
+    {
+      "index": 54,
+      "id": null,
+      "name": "EDIT BANK",
+      "label": "",
+      "kind": "float"
+    },
+    {
+      "index": 55,
+      "id": null,
+      "name": "SLOT 1 ON",
+      "label": "",
+      "kind": "bool"
+    },
+    {
+      "index": 56,
+      "id": null,
+      "name": "SLOT 2 ON",
+      "label": "",
+      "kind": "bool"
+    },
+    {
+      "index": 57,
+      "id": null,
+      "name": "SLOT 3 ON",
+      "label": "",
+      "kind": "bool"
+    },
+    {
+      "index": 58,
+      "id": null,
+      "name": "SLOT 4 ON",
+      "label": "",
+      "kind": "bool"
+    },
+    {
+      "index": 59,
+      "id": null,
+      "name": "SLOT 5 ON",
+      "label": "",
+      "kind": "bool"
+    },
+    {
+      "index": 60,
+      "id": null,
+      "name": "SLOT 6 ON",
+      "label": "",
+      "kind": "bool"
+    },
+    {
+      "index": 61,
+      "id": null,
+      "name": "SLOT 7 ON",
+      "label": "",
+      "kind": "bool"
+    },
+    {
+      "index": 62,
+      "id": null,
+      "name": "SLOT 8 ON",
+      "label": "",
+      "kind": "bool"
+    },
+    {
+      "index": 63,
+      "id": null,
+      "name": "BANK SELECT ON",
+      "label": "",
+      "kind": "bool"
+    }
+  ]
+}
