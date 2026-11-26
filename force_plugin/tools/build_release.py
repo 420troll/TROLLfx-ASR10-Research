@@ -62,6 +62,31 @@ def source_digest() -> str:
         h.update(rel.encode()+b"\0"); h.update((ROOT/rel).read_bytes())
     return h.hexdigest()
 
+def force_asset_root() -> str:
+    value=os.environ.get("TROLLFX_FORCE_ASSET_ROOT",
+        "/media/SSD250g/TROLLfx/ASR10/factory-effects").strip()
+    if not Path(value).is_absolute():
+        raise RuntimeError("TROLLFX_FORCE_ASSET_ROOT must be an absolute device path")
+    return value
+
+def arm32_qemu_evidence(report_path: Path, arm32: Path) -> dict:
+    report=None
+    if report_path.is_file():
+        report=json.loads(report_path.read_text())
+        matches=(report.get("status")=="PASS" and report.get("processed_slots")==50 and
+                 report.get("plugin_sha256")==digest(arm32))
+        if matches:
+            return {"result":"PASS","report":"docs/ASR10_FORCE_DYNAMIC_EDITOR_V41_ARMV7_QEMU.json",
+                "report_sha256":digest(report_path),"qemu_version":report.get("qemu_version"),
+                "processed_slots":50,"binary_sha256":report.get("plugin_sha256")}
+    if shutil.which("qemu-arm"):
+        raise RuntimeError("ARMv7 QEMU evidence is missing or stale; run the QEMU test for this ARM32 binary")
+    result={"result":"NOT_RUN","reason":"qemu-arm is unavailable; no binary-matched QEMU result can be produced"}
+    if report is not None:
+        result["stale_report_binary_sha256"]=report.get("plugin_sha256")
+        result["candidate_binary_sha256"]=digest(arm32)
+    return result
+
 def git_value(repo: Path, *args: str, default="unknown") -> str:
     p=run(["git","-C",repo,*args],check=False)
     return p.stdout.strip() if p.returncode == 0 else default
@@ -250,15 +275,7 @@ def main():
             print("Binary-bound package test not run: set TROLLFX_FACTORY_PACKAGE_COLLECTION to a trusted 50-slot collection.",file=sys.stderr)
         abi={"arm32":readelf_info(readelf,arm32,"arm32"),"arm64":readelf_info(readelf,arm64,"arm64")}
         qemu_report_path=ROOT/"docs/ASR10_FORCE_DYNAMIC_EDITOR_V41_ARMV7_QEMU.json"
-        arm_qemu_validation={"result":"NOT_RUN"}
-        if qemu_report_path.is_file():
-            qemu_report=json.loads(qemu_report_path.read_text())
-            if (qemu_report.get("status")!="PASS" or qemu_report.get("processed_slots")!=50 or
-                qemu_report.get("plugin_sha256")!=digest(arm32)):
-                raise RuntimeError("V4.1 ARMv7 QEMU evidence is stale or does not match this ARM32 binary")
-            arm_qemu_validation={"result":"PASS","report":"docs/ASR10_FORCE_DYNAMIC_EDITOR_V41_ARMV7_QEMU.json",
-                "report_sha256":digest(qemu_report_path),"qemu_version":qemu_report.get("qemu_version"),
-                "processed_slots":qemu_report.get("processed_slots"),"binary_sha256":qemu_report.get("plugin_sha256")}
+        arm_qemu_validation=arm32_qemu_evidence(qemu_report_path,arm32)
         # Build a fresh sibling, validate it, then replace the old candidate atomically.
         temp_pkg=Path(tempfile.mkdtemp(prefix=".force-dist-",dir=ROOT/"force_plugin"))
         try:
@@ -267,6 +284,8 @@ def main():
             shutil.copy2(ROOT/"LICENSE",out/"LICENSE")
             shutil.copytree(ROOT/"force_plugin/LICENSES",out/"LICENSES")
             shutil.copy2(ROOT/"force_plugin/README.md",out/"README.txt")
+            asset_root=force_asset_root()
+            (out/"factory-assets-path.txt").write_text(asset_root+"\n")
             version=json.loads((out/"plugin.json").read_text())["version"]
             revision=git_value(ROOT,"rev-parse","HEAD")
             origin=git_value(sdk,"remote","get-url","origin")
@@ -291,6 +310,8 @@ def main():
                 "force_editor_hardware_validation":{"status":"NOT_RUN","required":"Verify the single EDIT workspace, effect-conditioned control visibility, dynamic formatted labels, physical Q-Link routing, and project state recall on an Akai Force"}},
               "targets":{"native":{"host":platform.machine(),"binary_sha256":digest(native),"host_sim_parameter_dump":"PASS"},**abi},"binaries":{"arm32_sha256":digest(arm32),"arm64_sha256":digest(arm64)},
               "arm32_qemu_validation":arm_qemu_validation,
+              "factory_assets":{"device_path":asset_root,"payloads_bundled":False,
+                "local_index_expected":"provider-index.tsv","validated_package_count":50},
               "build_command":"force_plugin/tools/build_candidate.sh --toolchain auto","package_command":"force_plugin/tools/build_candidate.sh --toolchain auto","sdk_validation":{"result":"PASS","errors":int(summary.group(1)),"warnings":int(summary.group(2)),"command":"tools/validate.py"},
               "licensing":{"project":"GPL-3.0-only","sdk_framework":"MIT","proprietary_factory_payloads_included":False}}
             (out/"release-manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")

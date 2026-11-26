@@ -1,5 +1,6 @@
 import hashlib, json, shutil, subprocess, sys, tempfile, unittest
 from pathlib import Path
+from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[2]
 PACKAGE=ROOT/'force_plugin/dist/TROLLfx - VST - ASR10 FX Collection'
 TOOLS=ROOT/'force_plugin/tools'
@@ -22,6 +23,30 @@ class ReleaseInfraTests(unittest.TestCase):
         sdk=build_release.discover_sdk(None)
         self.assertTrue((sdk/'tools/build.py').is_file())
         self.assertTrue((sdk/'framework/mpc_plugin.h').is_file())
+
+    def test_stale_qemu_report_is_not_applied_to_new_binary(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);binary=root/'candidate-arm32.so';binary.write_bytes(b'new candidate')
+            report=root/'qemu.json';report.write_text(json.dumps({'status':'PASS','processed_slots':50,'plugin_sha256':'0'*64}))
+            with patch.object(build_release.shutil,'which',return_value=None):
+                result=build_release.arm32_qemu_evidence(report,binary)
+            self.assertEqual(result['result'],'NOT_RUN')
+            self.assertNotEqual(result['stale_report_binary_sha256'],result['candidate_binary_sha256'])
+
+    def test_stale_qemu_report_requires_rerun_when_qemu_exists(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);binary=root/'candidate-arm32.so';binary.write_bytes(b'new candidate')
+            report=root/'qemu.json';report.write_text(json.dumps({'status':'PASS','processed_slots':50,'plugin_sha256':'0'*64}))
+            with patch.object(build_release.shutil,'which',return_value='/usr/bin/qemu-arm'):
+                with self.assertRaisesRegex(RuntimeError,'stale'):
+                    build_release.arm32_qemu_evidence(report,binary)
+
+    def test_force_asset_root_requires_absolute_device_path(self):
+        with patch.dict(build_release.os.environ,{'TROLLFX_FORCE_ASSET_ROOT':'relative/FactoryAssets'}):
+            with self.assertRaisesRegex(RuntimeError,'absolute'):
+                build_release.force_asset_root()
+        with patch.dict(build_release.os.environ,{'TROLLFX_FORCE_ASSET_ROOT':'/media/SSD250g/TROLLfx/ASR10/factory-effects'}):
+            self.assertEqual(build_release.force_asset_root(),'/media/SSD250g/TROLLfx/ASR10/factory-effects')
 
     def test_candidate_manifest_and_package_checksums(self):
         with tempfile.TemporaryDirectory() as tmp:
