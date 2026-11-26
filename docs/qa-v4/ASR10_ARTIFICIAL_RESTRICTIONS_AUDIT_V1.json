@@ -1,0 +1,89 @@
+{
+  "schema": "trollfx-asr10-artificial-restrictions-audit-v1",
+  "qa_branch": "qa/asr10-v4-gui-independent",
+  "qa_base": "b800d78",
+  "candidate": {
+    "branch": "feature/asr10-force-pc-gui-simulator",
+    "source_commit": "e5bdee257781fde46829df61ac474a58613e9bff",
+    "integration_ancestry": "9ef73e612356da68e7cee424c542ced4fa4379c1",
+    "native_vst_sha256": "dd5f964ecc8f856ece67793a8154e1881a50a9f465f292144a1725bf41782e26",
+    "asset_index_sha256": "8bbb71d362529d39f94305ec5c927cb7c93477eb6cdcf627afaf90de464b8267",
+    "chunk": {"magic": "MPCP", "version": 2, "parameter_count": 64}
+  },
+  "hardware": {
+    "plugin_load": "PASS_USER_OBSERVED",
+    "hall_wet_audio": "PASS_USER_OBSERVED",
+    "touchscreen_bypass": "PASS_USER_OBSERVED",
+    "onscreen_gain": "PASS_USER_OBSERVED",
+    "touchscreen_editor_usability": "FAIL_USER_OBSERVED",
+    "hall_decay_range": "FAIL_LIMITED_TO_40_41",
+    "hall_high_frequency_damping_audio": "FAIL_NO_AUDIBLE_EFFECT_REPORTED_CAUSE_UNRESOLVED",
+    "physical_q_link_knob_response": "NOT_TESTED",
+    "physical_q_link_delivery": "NOT_TESTED",
+    "note": "The earlier phrase delay-time was clarified to HALL decay. No physical delay-time result is claimed."
+  },
+  "hall_decay": {
+    "variation": 1,
+    "raw_codes": 128,
+    "display_values": 100,
+    "duplicate_display_buckets": 28,
+    "os_transition_groups": 198,
+    "runtime_matching_register_writes": 990,
+    "register_order": ["0x6E", "0x5B", "0x03", "0x04", "0x05"],
+    "coefficient_path": "clamp(raw,12,76) for GPR 03-05; raw code is preserved in GPR 6E and low byte of 5B",
+    "production_vst_parameter_index": 29,
+    "production_points": [40, 41],
+    "full_range_production": "NOT_IMPLEMENTED",
+    "codex2_local_experiment": "TEST_ONLY_NOT_PUBLISHED_NOT_SERIALIZED",
+    "safe_migration_recommendation": "Keep index 29 meaning and old chunk behavior; append/version raw-state storage; test all raw codes and duplicate buckets."
+  },
+  "hall_high_frequency_damping": {
+    "parameter_index": 30,
+    "parameter_id": "factory_v4_slot1_hi_freq_damping",
+    "candidate_display_points": [31, 32],
+    "vst_display_callback_test": "PASS_DISPLAY_ONLY",
+    "os_capture": {
+      "status": "PARTIAL",
+      "first_trial": "31-to-32 window contained 555 GPR writes and periodic/unrelated writes; no clean group attribution",
+      "second_trial": {
+        "31_to_32": [{"gpr": "0x6D", "value24": "0x290000"}, {"gpr": "0x6C", "value24": "0x56FFFF"}],
+        "32_to_31": [{"gpr": "0x6D", "value24": "0x280000"}, {"gpr": "0x6C", "value24": "0x57FFFF"}]
+      },
+      "private_report_sha256": "5507d2c53411a0a67f6795e79cc2ab0d14232c8627d353777971b6dc1e380626",
+      "private_audio_sha256": "2fe173e67b725181f1a22871c4ef2cba3e28e08a5011b8b15b883cd14f3926fe"
+    },
+    "plugin_callback_acceptance": "ROUTE_EXISTS_PACKAGE_DEPENDENT",
+    "per_edit_applied_register_trace": "NOT_TESTED",
+    "controlled_audio_ab": "NOT_TESTED",
+    "physical_audio_observation": "FAIL_NO_AUDIBLE_EFFECT_REPORTED",
+    "production_policy": "Do not mark functional until exact package writes, application, persistent register state and repeatable suitable-signal audio difference are demonstrated."
+  },
+  "findings": [
+    {"id":"AR-01","severity":"HIGH","classification":"CONFIRMED_ARTIFICIAL_CAP","file":"force_plugin/src/ASR10FXCollection.cpp","lines":"125-134","restriction":"legacy builder accepts exactly two verified points","original_reason":"early conservative prototype choice list policy","change_evidence":"variable point model and independent full HALL raw-state evidence","change_risk":"sparse or variation-specific evidence may be mistaken for continuous full-range support","minimum_test":"enumeration, no interpolation, invalid point no-write, per-effect/variation lookup and old chunks","owner":"Codex 2"},
+    {"id":"AR-02","severity":"HIGH","classification":"CONFIRMED_PRODUCTION_GAP","file":"include/trollfx/es5510_factory_editor_v04.hpp","lines":"103-105","restriction":"HALL decay VST index 29 only exposes 40 and 41","original_reason":"only two points promoted; raw-state persistence was not defined","change_evidence":"128 raw states, 100 display values, 28 duplicate buckets and 198 OS transitions","change_risk":"display scalar loses duplicate raw identity and changed choice normalization breaks old state","minimum_test":"append/version raw-state control, old chunk migration, all raw transitions and post-startup applied group/audio test","owner":"Codex 2 + Codex 1"},
+    {"id":"AR-03","severity":"HIGH","classification":"EVIDENCE_BOUNDARY","file":"docs/qa-v4/ASR10_HALL_DECAY_INDEPENDENT_VALIDATION_V2.md","lines":"10-22","restriction":"full raw mapping remains research/runtime rather than installed UI evidence","original_reason":"keep unsupported host/state behavior out of production","change_evidence":"published independent OS transition and runtime register checks","change_risk":"runtime proof does not imply VST, Force state, Q-Link or audible behavior","minimum_test":"binary-bound full-range state/write/audio test and physical UI gate","owner":"Codex 1 + Codex 2 + QA"},
+    {"id":"AR-04","severity":"CRITICAL","classification":"AUDIO_VERIFICATION_FAILURE","file":"tests/force_vst_binary_audio_test.cpp","lines":"38-41,98-100","restriction":"damping is treated as a two-point verified UI control without audio proof","original_reason":"exact points were admitted from evidence; generic audio smoke only checked non-silence","change_evidence":"hardware evaluation reported no audible difference; OS register evidence is partial","change_risk":"callback or queue acceptance can be mislabeled functional","minimum_test":"exact binary VST callback + package GPR trace + post-write snapshot + repeated broadband/high-frequency A/B audio test","owner":"Codex 1 + Codex 2 + QA"},
+    {"id":"AR-05","severity":"HIGH","classification":"CONFIRMED_ACK_LIMITATION","file":"force_plugin/src/ASR10FXCollection.cpp","lines":"438-468","restriction":"accepted queue is cached/cleared as if applied; runtime acknowledgement is global","original_reason":"bounded queue interface returns enqueue success synchronously","change_evidence":"runtime has pending counts and execution point but no per-edit identity","change_risk":"stale UI or false applied indication across startup, overlap or switch","minimum_test":"sequence-correlated accepted/queued/applied acknowledgements and final GPR checks","owner":"Codex 2"},
+    {"id":"AR-06","severity":"MEDIUM","classification":"SUSPECTED_SWITCH_RACE","file":"force_plugin/src/ASR10FXCollection.cpp","lines":"363-377,422-434,459-468","restriction":"router event can be consumed before validating an available target control","original_reason":"single audio-thread router with per-slot flags","change_evidence":"exchange(false) precedes validation; fast effect/bank switching can make stale slot context plausible","change_risk":"dropped edit or wrong/stale value; no confirmed wrong-effect write","minimum_test":"rapid effect-bank switch stress with generation, selected/active slot, control ID and register trace","owner":"Codex 2"},
+    {"id":"AR-07","severity":"HIGH","classification":"ABI_MIGRATION_GATE","file":"tests/force_vst_binary_audio_test.cpp","lines":"28-87","restriction":"current 64 names/IDs and chunk v2 define existing persisted identity","original_reason":"host automation/chunk compatibility","change_evidence":"Codex 2 proposal preserves index 29 and recommends append-only migration","change_risk":"changing choice normalization reinterprets saved 40/41 values; raw duplicates may be lost","minimum_test":"old v2 chunk fixture, new version migration, all raw-state roundtrip, exact ABI order","owner":"Codex 2"},
+    {"id":"AR-08","severity":"HIGH","classification":"TEST_CLAIM_BOUNDARY","file":"force_plugin/tools/test_packaged_vst.py","lines":"45-56","restriction":"static SDK skin/Q-Link validation can be over-read as physical control evidence","original_reason":"desktop/package checks omit a real Force controller","change_evidence":"physical touchscreen usability failed while physical knob delivery remains unconfirmed","change_risk":"release report may claim hardware usability from JSON/desktop simulation","minimum_test":"separate static, simulator and physical statuses; physical trace must confirm encoder-to-setParameter-to-applied-GPR path","owner":"Codex 3 + Codex 2"},
+    {"id":"AR-09","severity":"MEDIUM","classification":"UNRESOLVED_HARNESS_FAILURE","file":"/tmp/trollfx-arm32-qemu/teardown.log","lines":"external log","restriction":"QEMU exits with SIGSEGV after application PASS output","original_reason":"unknown; log does not bind exact candidate hash and lacks core stack","change_evidence":"BINARY_PASS/main/destructor/dlclose precede signal 11","change_risk":"ignoring it may conceal teardown bug; treating as Force crash is unsupported","minimum_test":"reproduce exact binary/assets/command with core, compare host shim and minimal QEMU teardown","owner":"Codex 3 / release QA"},
+    {"id":"AR-10","severity":"HIGH","classification":"CONFIRMED_UI_RANGE_LIMIT","file":"include/trollfx/es5510_factory_editor_v04.hpp","lines":"103-105","restriction":"installed HALL decay offers only 40/41 and editor usability failed","original_reason":"partial evidence promotion and limited UI space","change_evidence":"verified original OS 0-99 display / 128 raw mapping","change_risk":"simple 0-99 mapping loses raw representation, UI may remain cluttered","minimum_test":"focused fixed-page editor, duplicate-aware raw state and physical usability acceptance","owner":"Codex 2"}
+  ],
+  "release_gates": {
+    "touchscreen_usability": "FAIL",
+    "onscreen_bypass_gain": "PASS_USER_OBSERVED",
+    "hall_full_range_vst_and_saved_state": "FAIL_NOT_IMPLEMENTED",
+    "hall_damping_register_application": "NOT_TESTED",
+    "hall_damping_audio": "FAIL_USER_OBSERVED_NO_AUDIBLE_EFFECT; CAUSE_UNRESOLVED",
+    "physical_q_link_knobs": "NOT_TESTED",
+    "qemu_clean_exit_candidate_bound": "NOT_TESTED",
+    "original_hardware_exact_audio": "NOT_TESTED"
+  },
+  "test_record": {
+    "preserved_passes": ["candidate-bound 50-slot native VST test on recorded binary/assets", "64 VST parameter names and IDs plus MPCP v2 chunk identities", "callback allocation count zero", "published HALL OS/runtime raw-state and register tests"],
+    "not_rerun": ["unrelated full regression", "50-slot acceptance", "HALL exhaustive raw sweep", "historical OS capture"],
+    "not_run": ["controlled VST HALL damping register/audio A/B", "physical individual Q-Link tests", "QEMU crash reproduction"],
+    "reason": "Private validated factory package/checkpoint directory was unavailable to this audit execution; no asset was copied into Git."
+  }
+}
