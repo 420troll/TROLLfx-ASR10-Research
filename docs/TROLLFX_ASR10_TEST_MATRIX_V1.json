@@ -1,0 +1,275 @@
+{
+  "schema": "trollfx-asr10-test-selection-policy-v1",
+  "status": "SPECIFICATION_ONLY_NOT_EXECUTABLE",
+  "effective_date": "2026-11-26",
+  "policy": "docs/TROLLFX_ASR10_TEST_POLICY_V1.md",
+  "master_handoff": "docs/TROLLFX_ASR10_CODEX_MASTER_HANDOFF.md",
+  "default_if_unknown": [
+    "T0",
+    "affected_T1",
+    "T2_if_device_candidate"
+  ],
+  "tiers": {
+    "T0": {
+      "purpose": "changed-file sanity, syntax, affected unit tests",
+      "when": "every change"
+    },
+    "T1": {
+      "purpose": "affected subsystem targeted integration",
+      "when": "changes to code, assets or runtime configuration"
+    },
+    "T2": {
+      "purpose": "candidate-specific release acceptance",
+      "when": "binary/asset or release-candidate nomination",
+      "strict_candidate_binding": true
+    },
+    "T3": {
+      "purpose": "deep original-OS/audio research or physical Force validation",
+      "when": "DSP semantics change or hardware test"
+    }
+  },
+  "groups": {
+    "runtime_native": {
+      "sources": [
+        "tools/audio_validation/test_factory_runtime.sh"
+      ],
+      "private_assets": false
+    },
+    "backend_private": {
+      "sources": [
+        "force_plugin/tools/test_es5510_backend.sh"
+      ],
+      "private_assets": true
+    },
+    "vst2_callback_focused": {
+      "sources": [
+        "tools/force_simulator/tests/test_native_integration.py",
+        "tests/force_vst_binary_audio_test.cpp"
+      ],
+      "private_assets": true,
+      "notes": "Select focused test(s), not necessarily whole native suite, on T1"
+    },
+    "gui_focused": {
+      "sources": [
+        "tools/force_simulator/tests/test_skin_layout.py",
+        "tools/force_simulator/browser-tests/editor.spec.js"
+      ],
+      "private_assets": "some"
+    },
+    "audio_lab_focused": {
+      "sources": [
+        "tools/force_simulator/tests/test_audio_lab.py",
+        "tools/force_simulator/browser-tests/editor.spec.js"
+      ],
+      "private_assets": "real-bundle optional; synthetic fixture standard"
+    },
+    "packaging": {
+      "sources": [
+        "force_plugin/tools/test_release_infrastructure.sh",
+        "force_plugin/tests/test_release_infrastructure.py"
+      ],
+      "private_assets": false
+    },
+    "full_candidate": {
+      "sources": [
+        "force_plugin/tools/test_packaged_vst.py",
+        "force_plugin/tools/build_candidate.sh"
+      ],
+      "private_assets": true
+    },
+    "original_os": {
+      "sources": [
+        "tests/parameter_controls/",
+        "tests/audio_validation/"
+      ],
+      "private_assets": "some"
+    },
+    "independent_qa": {
+      "sources": [
+        "tests/force_vst_binary_audio_test.cpp",
+        "tools/force_gui_qa/compare_vst2_audio.py"
+      ],
+      "private_assets": true
+    }
+  },
+  "selection": [
+    {
+      "path_globs": [
+        "src/es5510*",
+        "src/hall_decay_native_adapter.cpp",
+        "include/trollfx/es5510*",
+        "include/trollfx/hall_decay*"
+      ],
+      "tier": "T1",
+      "groups": [
+        "runtime_native",
+        "backend_private",
+        "vst2_callback_focused"
+      ],
+      "extra": "T3 if DSP conversion/microprogram, schedule or timing semantics changed"
+    },
+    {
+      "path_globs": [
+        "force_plugin/src/*",
+        "force_plugin/plugin.json"
+      ],
+      "tier": "T1",
+      "groups": [
+        "vst2_callback_focused",
+        "backend_private"
+      ],
+      "extra": "ABI/state tests mandatory if parameter registry, serialization or plugin identity changed"
+    },
+    {
+      "path_globs": [
+        "force_plugin/ui.json",
+        "force_plugin/assets/**",
+        "force_plugin/graphics/**",
+        "tools/force_simulator/web/**",
+        "tools/force_simulator/skin_model.py",
+        "tools/force_simulator/render.py"
+      ],
+      "tier": "T1",
+      "groups": [
+        "gui_focused"
+      ],
+      "extra": "Add ABI/state tests for changed Q-Link routing, parameter IDs or saved state"
+    },
+    {
+      "path_globs": [
+        "force_plugin/tools/build_release.py",
+        "force_plugin/tools/install_package.py",
+        "force_plugin/tools/rollback_package.py",
+        "force_plugin/tools/mark_playable.py",
+        "force_plugin/tools/prepare_force_assets.py",
+        "force_plugin/schemas/**",
+        "force_plugin/dist/**"
+      ],
+      "tier": "T1",
+      "groups": [
+        "packaging"
+      ],
+      "extra": "All T2 gates required before any install"
+    },
+    {
+      "path_globs": [
+        "force_plugin/src/ES5510FactoryPackageProvider.*",
+        "tools/audio_validation/import_factory_effect_collection.py"
+      ],
+      "tier": "T1",
+      "groups": [
+        "packaging",
+        "backend_private"
+      ],
+      "extra": "Validate real device asset root/index; no guessed private path"
+    },
+    {
+      "path_globs": [
+        "tools/audio_validation/**",
+        "tools/asr10_os_monitor/**",
+        "tools/parameter_controls/**",
+        "tests/parameter_controls/**"
+      ],
+      "tier": "T1",
+      "groups": [
+        "original_os"
+      ],
+      "extra": "Add runtime native if generated mappings alter DSP behavior"
+    },
+    {
+      "path_globs": [
+        "tools/force_simulator/audio_lab*",
+        "tools/force_simulator/web/audio-lab.js",
+        "tools/force_simulator/data/hall-audio*"
+      ],
+      "tier": "T1",
+      "groups": [
+        "audio_lab_focused"
+      ],
+      "extra": "One authorized private bundle when available; four only for release or import schema changes"
+    },
+    {
+      "path_globs": [
+        "tests/**",
+        "tools/force_simulator/tests/**",
+        "tools/force_gui_qa/**"
+      ],
+      "tier": "T1",
+      "groups": [
+        "independent_qa"
+      ],
+      "extra": "Run changed tests and negative fixture; classify any production dependency"
+    },
+    {
+      "path_globs": [
+        "docs/**"
+      ],
+      "tier": "T0",
+      "groups": [],
+      "extra": "ONLY ordinary prose; build-consumed docs, generated manifests and original-OS catalogs are NOT docs-only"
+    }
+  ],
+  "candidate_mandatory": [
+    "full_git_and_binary_provenance",
+    "arm32_abi_and_dynamic_library_validation",
+    "50_private_packages_actual_vst2_callbacks",
+    "complete_64_parameter_abi_and_chunks",
+    "startup_switch_state_and_nonfinite_safety",
+    "no_audio_callback_allocations",
+    "sdk_validation",
+    "full_package_sha256sum_and_release_marker",
+    "actual_device_asset_root_resolution",
+    "installer_and_rollback_dry_run",
+    "explicit_qemu_binary_match_or_not_tested",
+    "independent_gate_status",
+    "physical_smoke_following_install"
+  ],
+  "record_required": [
+    "test_id",
+    "tier",
+    "scope",
+    "source_sha",
+    "native_sha256",
+    "arm32_sha256",
+    "asset_index_sha256",
+    "environment",
+    "status",
+    "command",
+    "result_path",
+    "reason",
+    "timestamp"
+  ],
+  "status_enum": [
+    "PASS",
+    "FAIL",
+    "BLOCKED",
+    "NOT_TESTED"
+  ],
+  "release_rules": {
+    "failed_required_gate": "NO_INSTALL",
+    "unknown_private_asset_path": "NO_INSTALL",
+    "unverified_rollback": "NO_INSTALL",
+    "qemu_unavailable_but_arm_abi_passes": "CONTROLLED_HARDWARE_SMOKE_ALLOWED_WITH_NOT_TESTED",
+    "binary_or_asset_hash_changed": "INVALIDATE_RELEVANT_T2_RESULTS"
+  },
+  "ownership": {
+    "codex1": "package/device T1/T2 and Force T3",
+    "codex2": "production development T0/T1; propose candidate",
+    "codex3": "independent exact-candidate T2 and research T3"
+  },
+  "privacy": "No ROMs/OS, private factory assets, WAVs, secrets, device IPs in Git.",
+  "audit_refs": [
+    {
+      "branch": "feature/asr10-force-pc-gui-simulator",
+      "commit": "e5bdee2"
+    },
+    {
+      "branch": "qa/asr10-v4-gui-independent",
+      "commit": "b800d78"
+    },
+    {
+      "branch": "research/asr10-full-factory-parameter-recovery",
+      "commit": "64d893f"
+    }
+  ]
+}
