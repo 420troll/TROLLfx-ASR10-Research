@@ -137,6 +137,22 @@ class FactoryParameterRegistryTests(unittest.TestCase):
             self.assertEqual(decay['range_text'],range_text)
             self.assertEqual(decay['units'],'sec')
 
+    def test_four_serialized_manual_entries_match_correction_contract(self):
+        import json
+        schema=json.loads((HERE/'data/ASR10_PC_EDITOR_PARAMETER_SCHEMA_V1.json').read_text())
+        targets=[(15,'decay_time_small_room_1','DECAY TIME — Large Room','0.20 to 150.0 sec.',[.2,150.0]),
+                 (16,'decay_time_small_room_1','DECAY TIME — Hall Reverb2','0.70 to 250.0 sec.',[.7,250.0]),
+                 (18,'decay_time_small_plate_1','DECAY TIME — Large Plate','0.4 to 140.0 sec.',[.4,140.0]),
+                 (18,'predelay_time_small_plate_1','PREDELAY TIME — Large Plate','0 to 430 ms',[0,430])]
+        for slot,parameter_id,label,text,bounds in targets:
+            effect=next(e for e in schema['effects'] if e['slot']==slot)
+            entry=next(p for p in effect['parameters'] if p['id']==parameter_id)
+            manual=entry['manual']
+            self.assertEqual(manual['display_name'],label)
+            self.assertEqual(manual['documented_range'],text)
+            self.assertEqual([manual['documented_numeric_domain']['minimum'],manual['documented_numeric_domain']['maximum']],bounds)
+            self.assertTrue(manual['range_correction']['citation']['pdf_page'] in (107,110))
+
     def test_os2_44khz_appendix_stays_in_separate_manual_namespace(self):
         import json
         schema=json.loads((HERE/'data/ASR10_PC_EDITOR_PARAMETER_SCHEMA_V1.json').read_text())

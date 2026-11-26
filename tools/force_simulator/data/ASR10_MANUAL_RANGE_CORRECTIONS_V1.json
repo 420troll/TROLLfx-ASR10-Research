@@ -1,0 +1,59 @@
+{
+  "schema": "trollfx-asr10-manual-range-corrections-v1",
+  "manual": {
+    "title": "ASR-10 Musician's Manual",
+    "sha256": "e8ab5100904caf91fe355065ed9646aff197761b0663a7d452dc98af1f9a29dc",
+    "citation_convention": "PDF page number in the supplied 391-page PDF; also Section 6 effect parameter heading."
+  },
+  "corrections": [
+    {
+      "slot": 15,
+      "effect": "LARGE ROOM",
+      "parameter_identity": "ASR10:ROM-15:decay_time",
+      "manual_label": "DECAY TIME — Large Room",
+      "correct_range": {"minimum": 0.2, "maximum": 150.0, "unit": "s"},
+      "citation": {"section": 6, "pdf_page": 107, "heading": "ROM-15 LARGE ROOM", "text_location": "DECAY TIME range variants"},
+      "os_label": "DECAY TIME",
+      "os_numeric_domain_status": "NOT_INDEPENDENTLY_MEASURED",
+      "dsp_mapping_status": "UNMAPPED",
+      "pc_editor_status": {"registry_range_at_08cc600": "correct", "serialized_descriptor_range_at_08cc600": "stale 0.20 to 100.0 sec; preserve effect-specific normalization source in schema"}
+    },
+    {
+      "slot": 16,
+      "effect": "HALL REVERB2",
+      "parameter_identity": "ASR10:ROM-16:decay_time",
+      "manual_label": "DECAY TIME — Hall Reverb2",
+      "correct_range": {"minimum": 0.7, "maximum": 250.0, "unit": "s"},
+      "citation": {"section": 6, "pdf_page": 107, "heading": "ROM-16 HALL REVERB2", "text_location": "DECAY TIME range variants"},
+      "os_label": "DECAY TIME",
+      "os_numeric_domain_status": "NOT_INDEPENDENTLY_MEASURED",
+      "dsp_mapping_status": "UNMAPPED",
+      "pc_editor_status": {"registry_range_at_08cc600": "correct", "serialized_descriptor_range_at_08cc600": "stale 0.20 to 100.0 sec; preserve effect-specific normalization source in schema"}
+    },
+    {
+      "slot": 18,
+      "effect": "LARGE PLATE",
+      "parameter_identity": "ASR10:ROM-18:decay_time",
+      "manual_label": "DECAY TIME — Large Plate",
+      "correct_range": {"minimum": 0.4, "maximum": 140.0, "unit": "s"},
+      "citation": {"section": 6, "pdf_page": 110, "heading": "ROM-18 LARGE PLATE", "text_location": "DECAY TIME range variants"},
+      "os_label": "DECAY TIME",
+      "os_numeric_domain_status": "NOT_INDEPENDENTLY_MEASURED",
+      "dsp_mapping_status": "UNMAPPED",
+      "pc_editor_status": {"registry_range_at_08cc600": "correct", "serialized_descriptor_range_at_08cc600": "stale 0.2 to 100.0 sec; preserve effect-specific normalization source in schema"}
+    },
+    {
+      "slot": 18,
+      "effect": "LARGE PLATE",
+      "parameter_identity": "ASR10:ROM-18:predelay_time",
+      "manual_label": "PREDELAY TIME — Large Plate",
+      "correct_range": {"minimum": 0, "maximum": 430, "unit": "ms"},
+      "citation": {"section": 6, "pdf_page": 110, "heading": "ROM-18 LARGE PLATE", "text_location": "PREDELAY TIME range variants"},
+      "os_label": "PREDELAY TIME",
+      "os_numeric_domain_status": "NOT_INDEPENDENTLY_MEASURED",
+      "dsp_mapping_status": "UNMAPPED",
+      "pc_editor_status": {"registry_range_at_08cc600": "correct", "serialized_descriptor_range_at_08cc600": "stale small-plate text 0 to 500 ms; preserve effect-specific normalization source in schema"}
+    }
+  ],
+  "usage_rule": "Manual ranges describe original UI domains. They do not authorize native DSP writes. Only exact verified native VST routes and points are writable; all full-range control promotion requires independent conversion and behavior evidence."
+}

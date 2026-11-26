@@ -54,6 +54,9 @@ struct VerifiedParameterDefinition {
 struct EffectDescriptor {
     EffectSlot slot = 0;
     std::string factory_name;
+    // Zero means the factory variation is unknown. A value is trusted only
+    // when the package manifest or validation context establishes it.
+    std::uint8_t factory_variation = 0;
     std::uint32_t active_program_words = 0;
     std::uint32_t end_word = 0;
     std::string program_sha256;

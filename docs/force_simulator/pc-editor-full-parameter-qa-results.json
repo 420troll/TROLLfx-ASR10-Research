@@ -1,11 +1,11 @@
 {
   "schema": "trollfx-asr10-pc-editor-qa-v1",
-  "date_utc": "2026-11-25",
+  "date_utc": "2026-11-26",
   "branch_at_test": "feature/asr10-force-pc-gui-simulator",
-  "base_commit": "08cc6002283c755a0264bda94bc81b8fb20ce5db",
+  "base_commit": "0a1b856cb1c9c5becab3d68263fc3ba84a882515",
   "results": {
     "python_unittest": {
-      "passed": 36,
+      "passed": 33,
       "failed": 0,
       "coverage": [
         "50-effect catalog, QA crosswalk and stable control identities",
@@ -29,7 +29,10 @@
         "HALL direct numeric drafts, pre-QA rejection, Variation 1 gate, atomic failure and scheduled-frame delegation",
         "ROM-15/16/18 corrected manual range boundaries and precision",
         "OS2 44 kHz appendix remains a separate 12-algorithm manual-only namespace",
-        "fractional and out-of-range HALL display entry rejection"
+        "fractional and out-of-range HALL display entry rejection",
+        "production FactoryRuntime HallDecayNativeAdapter native C++ tests in gate-off and gate-on builds",
+        "real VST DECAY 40/41 register writes with stereo audio A/B; outputs remain bit-identical, so audio promotion is blocked",
+        "four serialized manual corrections match source correction contract"
       ]
     },
     "playwright": {
@@ -65,7 +68,10 @@
       "existing_vst_routes": 19,
       "identity_registry_changed": false,
       "state_save_restore": "passed",
-      "unsupported_value_no_write": "passed"
+      "unsupported_value_no_write": "passed",
+      "hall_decay_adapter": "actual FactoryRuntime API compiled and exercised in isolated native test harness",
+      "hall_decay_full_range_gate": "disabled by default; isolated gate-on C++ harness only",
+      "hall_decay_audio": "not accepted: 40/41 trace groups differ as expected, but stereo PCM renders are identical (RMS delta 0.0)"
     },
     "armv7": {
       "result": "not run",
@@ -74,6 +80,10 @@
     "physical_force": {
       "result": "not run",
       "reason": "No Force installation or physical-device test was performed."
+    },
+    "sdk_release_validation": {
+      "result": "not run",
+      "reason": "No Force release package was built; this branch targets the PC simulator. SDK skin preview/browser checks passed. No Force package or installation was touched."
     }
   },
   "independent_matrix": {
@@ -124,9 +134,12 @@
     "codex1_source_commit": "6779dc8",
     "codex1_api": "FactoryRuntime::stepHallDecayTime(direction, scheduled_frame)",
     "codex3_independent_status": "PARTIAL; not accepted for full-range native promotion",
-    "reason": "Independent audit found direction-dependent GPR 0x6E codes, inconclusive independent-run provenance, and 94/196 interior computed GPR 0x03..0x05 groups mismatched.",
-    "pc_adapter": "hall_decay_adapter.py; contract tests use a fake runtime; no production binding is connected",
-    "native_route": "existing 40/41 exact VST points and IDs unchanged; no full-range HALL route enabled",
-    "direct_numeric_value": "PC draft only for stateful path; no raw destination is guessed"
+    "independent_evidence": "198/198 raw/display transitions and 990/990 register writes in Codex 3 synthetic native runtime harness; OS timing still differs from same-frame atomic runtime writes.",
+    "pc_adapter": "HallDecayNativeAdapter calls the actual FactoryRuntime API; tested with native C++ runtime in gate-off and gate-on builds.",
+    "production_gate": "TROLLFX_HALL_DECAY_NATIVE_GATE defaults to 0; no UI or VST route activates the new full-range stepping path.",
+    "native_vst_observation": "Existing DECAY 40/41 VST points emit the expected GPR 03,04,05,5B,6E write group. Real stereo VST renders are bit-identical (RMS delta 0.0), so audible decay behavior is not demonstrated.",
+    "native_route": "existing VST IDs and 40/41 points unchanged; no full-range HALL route enabled",
+    "variation_context": "PC draft can select Variation 1, but current provider package manifest does not establish native factory variation provenance.",
+    "direct_numeric_value": "PC draft only; raw destination is not inferred."
   }
 }

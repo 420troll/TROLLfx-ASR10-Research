@@ -1,0 +1,71 @@
+{
+  "schema": "trollfx-hall-decay-independent-qa-v2",
+  "runtime_source": {
+    "repository": "420troll/TROLLfx-ASR10-Research",
+    "branch": "research/asr10-full-factory-parameter-recovery",
+    "commit": "6779dc8",
+    "isolated_worktree": "/home/gamer/worktrees/asr10-hall-decay-audit-6779dc8"
+  },
+  "os_reference": {
+    "firmware": "ASR-10 OS 3.53 emulator",
+    "variation": "ROM-01 HALL REVERB Variation 1",
+    "runs": [
+      {
+        "cli_pid": "154605",
+        "trace_sha256": "baa8328929fa9c142e7246bb6607ec1d5a9e99852ebf17760890ec3d6e693217",
+        "complete_steps": 200
+      },
+      {
+        "cli_pid": "154697",
+        "trace_sha256": "b8fdf7d164ba960c86545a1f4fca3a619460eeb0ce23d5272ed11b29a3f086c5",
+        "complete_steps": 200
+      }
+    ],
+    "identical_event_arrays": true,
+    "identical_step_arrays": true,
+    "identical_ordered_write_groups_cycle_frame": 198,
+    "raw_codes": 128,
+    "display_values": 100,
+    "duplicate_buckets": 28
+  },
+  "independent_runtime_harness": {
+    "method": "temporary copy of published runtime source with test-only read accessor to DSP register file; owner worktree unchanged",
+    "package": "synthetic structurally valid 89-word capture; no proprietary assets",
+    "display_steps": 198,
+    "up_steps": 99,
+    "down_steps": 99,
+    "raw_codes_covered_across_both_routes": 128,
+    "all_raw_codes_covered": true,
+    "direction_path": "display 0/raw 0 -> display 99/raw 127 -> display 0/raw 0",
+    "parameter_gpr_writes_expected": 990,
+    "parameter_gpr_writes_matched": 990,
+    "register_order": [
+      "0x6e",
+      "0x5b",
+      "0x03",
+      "0x04",
+      "0x05"
+    ],
+    "register_readback": "after processStereo applied scheduled events",
+    "display_state_checked_after_each_step": true,
+    "raw_and_display_model_independently_derived_from_os_trace_table": true,
+    "repeatability_across_runtime_resets": true
+  },
+  "negative_and_restoration_checks": {
+    "zero_direction_rejected": true,
+    "variation_0_rejected": true,
+    "variation_2_rejected": true,
+    "direct_gpr_6e_write_invalidates_step_state": true,
+    "reset_restores_validated_checkpoint_seed_raw": true,
+    "queue_all_or_none_existing_runtime_test": true
+  },
+  "limitations": [
+    "synthetic package is not authentic factory audio evidence",
+    "stepper queues all five register writes at one frame; original OS serializes writes over multiple frames",
+    "endpoint presses are not independently captured from the original OS; runtime schedules an unchanged five-register group at a bound",
+    "full-range acoustic response and exact OS-reference audio equivalence are not tested",
+    "stepper is not wired to stable VST parameter identity, ARMv7 release, or physical Force Q-Link"
+  ],
+  "result": "PASS_FOR_RAW_DISPLAY_TRANSITIONS_AND_APPLIED_REGISTER_VALUES; PARTIAL_FOR_OS_EVENT_TIMING_AND_AUDIO; NOT_NATIVE_RUNTIME_READY",
+  "supersedes": "HALL_DECAY_INDEPENDENT_RUNTIME_QA_V1.json for runtime API coverage"
+}

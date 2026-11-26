@@ -2,6 +2,7 @@
 #pragma once
 
 #include "trollfx/es5510_factory_runtime.hpp"
+#include "trollfx/hall_decay_native_adapter.hpp"
 #include "trollfx/es5510_factory_parameter_control_v01.hpp"
 #include <array>
 #include <atomic>
@@ -44,6 +45,12 @@ public:
     // write group) for the currently active factory package.
     bool set_verified_parameter(std::uint8_t slot, const char* parameter_id,
                                 std::int32_t display_value) noexcept;
+    // Must be called between process() blocks on the owning audio thread.
+    // The HALL full-range route is compile-time gated off by default.
+    trollfx::es5510::HallDecayAdapterResult step_hall_decay_time(
+        std::uint8_t slot, std::uint8_t variation, int direction) noexcept;
+    trollfx::es5510::HallDecayEditorState hall_decay_editor_state(
+        std::uint8_t slot, std::uint8_t variation) noexcept;
     void process(const float* const* inputs, float* const* outputs,
                  std::size_t frames) noexcept;
     ES5510BackendStatus status() const noexcept { return status_.load(std::memory_order_acquire); }
@@ -56,6 +63,7 @@ private:
     static float db_gain(float db) noexcept;
     std::atomic<const IValidatedFactoryPackageProvider*> provider_;
     std::array<trollfx::es5510::FactoryRuntime, 2> runtime_;
+    trollfx::es5510::HallDecayNativeAdapter hall_decay_adapter_;
     double host_rate_ = 48000.0;
     std::uint32_t latency_frames_ = 0;
     std::array<std::array<float, 64>, 2> dry_delay_{};

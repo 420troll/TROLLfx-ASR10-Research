@@ -13,6 +13,7 @@ SOURCES = [
     ROOT / "force_plugin/src/ES5510FactoryPackageProvider.cpp",
     ROOT / "src/es5510.cpp",
     ROOT / "src/es5510_factory_runtime.cpp",
+    ROOT / "src/hall_decay_native_adapter.cpp",
 ]
 
 def sdk_path(override: str | None = None) -> Path:
@@ -42,7 +43,8 @@ def build(sdk: Path, force=False):
     common = ["g++", "-std=c++17", "-O2", "-fPIC", "-shared"]
     includes = ["-I"+str(sdk/"framework"), "-I"+str(ROOT/"include"), "-I"+str(ROOT/"src"), "-I"+str(ROOT/"force_plugin/src")]
     if rebuild:
-        cmd = common + ["-DTROLLFX_SIMULATOR_TRACE", *includes, *map(str,SOURCES), "-pthread", "-o", str(PLUGIN)]
+        hall_gate = "1" if os.environ.get("TROLLFX_HALL_DECAY_NATIVE_GATE") == "1" else "0"
+        cmd = common + ["-DTROLLFX_SIMULATOR_TRACE", f"-DTROLLFX_HALL_DECAY_NATIVE_GATE={hall_gate}", *includes, *map(str,SOURCES), "-pthread", "-o", str(PLUGIN)]
         subprocess.run(cmd, check=True, cwd=ROOT)
     if rebuild:
         subprocess.run(common + ["-I"+str(sdk/"framework"), str(ROOT/"tools/force_simulator/vst_host.cpp"),

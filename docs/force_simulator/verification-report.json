@@ -1,6 +1,6 @@
 {
   "schema": "trollfx-asr10-pc-simulator-independent-evidence-v1",
-  "test_instrumented_native_vst_sha256": "c939ef84865a754c381bb2f290db031ecebc02fe62541b9d6dc50b22cc5d38de",
+  "test_instrumented_native_vst_sha256": "e4797b99cb71f55427c9f639bf6312fbdff51dcf046db9b811b9d2717279f6d1",
   "factory_packages_discovered_and_validated_by_provider": "50/50 (local private collection; no contents included)",
   "generated_skin_sha256": {
     "TUI.json": "280a9e3b55213c799bdd4de1c89bf6494d6b39d597ca743d9e1f2ff75d0e2730",
@@ -15,6 +15,13 @@
     "hall-browse.png": "2aebd91a0167d82f3acbe5687cfcedb8813d31c8b35eac34b65a08a14af710a2",
     "hall-edit.png": "997fc0b01ee36027a0e9a01ee406445b70eafc58af4a0cd1538940ce336cbe69",
     "hall-mix.png": "456d512f7d9e6d157ee68b0efe50046f4301e7b71c5700037290bcd90f86fabd",
+    "pc-editor-chorus-reverb.png": "03c6fb827672d453c0bde25994b92b78eedf0f4456bd2e2390a153e105a36b51",
+    "pc-editor-dual-delays.png": "7ea32f02b24fc671e522e4c3b3439ded8d82e369d44e4c2e51a27fcec20eabbc",
+    "pc-editor-flanger-reverb.png": "7500f1a9d9d51092ce7094a987a977a8f7724e6340d1c72f067613f5d80599b6",
+    "pc-editor-hall-bank-1.png": "accc1eb7957d848f937e4c13dcb65a10a1c8696a1b1a08f158cc2bb30495b3e6",
+    "pc-editor-pitch-bank-1.png": "1b4222a1334338c9571d15dae366d26fc0facf73e51b09d5cc5a15911b2ee28f",
+    "pc-editor-pitch-bank-2.png": "77cd7bbb19776d50d197991301f9a72fdb5457314ecf5ca576ec6b6430f615db",
+    "pc-editor-room-bank-1.png": "d3caf35dbb57f2893d61802edcc08580a87c29b3455445d539214906b62812f4",
     "room-browse.png": "3c3cc4e6f40a6d2ed9418d309bb5380c5b7a958e5e8a3773404435498d1c2a9a",
     "room-edit.png": "77109263a80ecd3e51a3afd39b4a6d862919cac954f4823d1660e5a65f06c9c8",
     "room-mix.png": "57dc52ec361da080b376e7fa3ab77ba3c07c6a4acf000844cfc14354755613ec"
@@ -189,15 +196,32 @@
   },
   "browser_mouse_tests": {
     "runner": "Playwright",
-    "expected": 4,
+    "expected": 21,
     "failed": 0,
     "flaky": 0,
     "skipped": 0,
     "passed_test_names": [
-      "navigates the three generated pages",
-      "selects Hall and Room and refreshes the shared EDIT Q-Link values",
-      "mouse Q-Link drag edits Hall Q3 through the VST trace",
-      "mouse Q-Link drag edits Room Q1 through the VST trace"
+      "renders catalog ranges, states, and controls for the selected effect",
+      "unsupported full-range values stay inspection-only and preserve per-effect drafts",
+      "exact verified VST point routes to native host and register trace",
+      "mapped to unmapped value transition preserves applied VST state",
+      "Codex 1 runtime_ready evidence cannot substitute for a native VST route",
+      "diagnostic panel reports original OS identity and keeps the monitor read-only",
+      "preserves the existing verified HALL bus control identity and exact points",
+      "enumerated native VST labels map only to their registered verified points",
+      "banks switch controls immediately and Q-Link gestures edit the assigned bank control",
+      "supports observed enumerated choices without pretending they are DSP mapped",
+      "HALL to ROOM to PITCH to HALL restores independent editor state",
+      "full editor controls have non-overlapping visible bounds",
+      "keeps the three generated SDK skin pages available as a distinct preview",
+      "variation buffers remain independent and draft reset/undo are PC-only",
+      "exact mapped value in a non-native PC variation stays pending",
+      "manual-derived DUAL DELAYS has independent BUS1/BUS2 and left/right controls",
+      "nonlinear reverb displays five captured envelope values and flags four unresolved manual fields",
+      "modulation is shown only for algorithms with an explicit Section 6 block",
+      "mixed time units are converted to a precise PC display domain without DSP writes",
+      "all fifty factory effects expose selected-effect controls",
+      "captures Hall, Room, and multi-bank Pitch Shift editor evidence"
     ],
     "browser": "Chromium via Playwright"
   }

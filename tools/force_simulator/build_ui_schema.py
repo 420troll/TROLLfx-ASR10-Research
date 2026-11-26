@@ -13,6 +13,9 @@ SOURCE=HERE/'data/ASR10_FULL_FACTORY_PARAMETER_REGISTRY_V1.json'
 CATALOG=ROOT/'docs/ASR10_FACTORY_PARAMETER_CATALOG_V1.json'
 OUT=HERE/'data/ASR10_PC_EDITOR_PARAMETER_SCHEMA_V1.json'
 APPENDIX_44KHZ=HERE/'data/ASR10_OS2_44KHZ_APPENDIX_PARAMETER_CATALOG_V1.json'
+MANUAL_CORRECTIONS=HERE/'data/ASR10_MANUAL_RANGE_CORRECTIONS_V1.json'
+HALL_QA_GATES=HERE/'data/ASR10_HALL_DECAY_ACCEPTANCE_GATES_V1.json'
+HALL_RUNTIME_QA=HERE/'data/HALL_DECAY_INDEPENDENT_RUNTIME_QA_V2.json'
 
 def norm(s): return re.sub(r'[^a-z0-9]+',' ',s.casefold()).strip()
 def extract_manual(pdf_path, labels):
@@ -113,6 +116,20 @@ def main():
     modulation_pages={14:109,15:109,16:109,17:111,18:111,19:112,20:113,21:115,22:117,23:117,24:117,25:118,26:120,28:122,29:122,30:124,31:126,32:126,33:127,34:129,37:134,38:136,39:137,40:139,41:140,42:141,44:145,45:148,46:149,47:151,48:152,49:153}
     adapter=HERE/'data/ASR10_EDITOR_EVIDENCE_ADAPTER_V1.json'
     adapter_data=json.loads(adapter.read_text()) if adapter.is_file() else {}
+    corrections_data=json.loads(MANUAL_CORRECTIONS.read_text()) if MANUAL_CORRECTIONS.is_file() else {}
+    hall_gates=json.loads(HALL_QA_GATES.read_text()) if HALL_QA_GATES.is_file() else {}
+    hall_runtime_qa=json.loads(HALL_RUNTIME_QA.read_text()) if HALL_RUNTIME_QA.is_file() else {}
+    correction_by_slot={}
+    for correction in corrections_data.get('corrections',[]):
+        correction_by_slot.setdefault(int(correction['slot']),[]).append(correction)
+    correction_provenance={'schema':corrections_data.get('schema'),'path':MANUAL_CORRECTIONS.name if corrections_data else None,
+        'sha256':hashlib.sha256(MANUAL_CORRECTIONS.read_bytes()).hexdigest() if corrections_data else None,
+        'source_commit':'e698707'}
+    hall_runtime_provenance={'acceptance_gates_path':HALL_QA_GATES.name if hall_gates else None,
+        'acceptance_gates_sha256':hashlib.sha256(HALL_QA_GATES.read_bytes()).hexdigest() if hall_gates else None,
+        'independent_runtime_qa_path':HALL_RUNTIME_QA.name if hall_runtime_qa else None,
+        'independent_runtime_qa_sha256':hashlib.sha256(HALL_RUNTIME_QA.read_bytes()).hexdigest() if hall_runtime_qa else None,
+        'qa_commit':'35e2a0b','promotion_decision':hall_gates.get('promotion_decision','UNKNOWN')}
     appendix_data=json.loads(APPENDIX_44KHZ.read_text()) if APPENDIX_44KHZ.is_file() else {}
     appendix_namespace={'namespace':'OS2_44KHZ_APPENDIX','path':APPENDIX_44KHZ.name if appendix_data else None,
         'sha256':hashlib.sha256(APPENDIX_44KHZ.read_bytes()).hexdigest() if appendix_data else None,
@@ -121,11 +138,29 @@ def main():
         'scope_note':appendix_data.get('scope_note'),
         'integrated_into_50_factory_effects':False,
         'runtime_relationship':'unverified; manual-only appendix namespace'}
-    result={'schema':'trollfx-asr10-pc-editor-parameter-schema-v1','source_registry':{'path':'ASR10_FULL_FACTORY_PARAMETER_REGISTRY_V1.json','sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),'commit':'7d38ec2bc3369ecd16f9e284ba85ccfd6fe46b55'},'independent_evidence_adapter':{'path':adapter.name,'sha256':hashlib.sha256(adapter.read_bytes()).hexdigest() if adapter.is_file() else None,'schema':adapter_data.get('schema'),'provenance':adapter_data.get('provenance',{})},'manual_source':pdf_source or {'filename':None,'note':'PDF not supplied to schema generator; ranges come from existing manual-derived catalog.'},'coverage':{'factory_effects':50,'manual_registry_parameters':sum(len(e['parameters']) for e in registry['effects']),'shared_documented_modulation_controls':len(shared),'description_labels_matched':len(descriptions),'manual_paraphrase_labels':len(MANUAL_PARAPHRASES),'manual_section6_has_rom50_entry':False,'independent_validation':adapter_data.get('coverage',{})},'separate_manual_namespaces':[appendix_namespace],'shared_controls':shared,'effects':[]}
+    result={'schema':'trollfx-asr10-pc-editor-parameter-schema-v1','source_registry':{'path':'ASR10_FULL_FACTORY_PARAMETER_REGISTRY_V1.json','sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),'commit':'7d38ec2bc3369ecd16f9e284ba85ccfd6fe46b55'},'independent_evidence_adapter':{'path':adapter.name,'sha256':hashlib.sha256(adapter.read_bytes()).hexdigest() if adapter.is_file() else None,'schema':adapter_data.get('schema'),'provenance':adapter_data.get('provenance',{})},'manual_source':pdf_source or {'filename':None,'note':'PDF not supplied to schema generator; ranges come from existing manual-derived catalog.'},'manual_range_corrections':{**correction_provenance,'corrections':corrections_data.get('corrections',[])},'hall_decay_runtime_evidence':hall_runtime_provenance,'coverage':{'factory_effects':50,'manual_registry_parameters':sum(len(e['parameters']) for e in registry['effects']),'shared_documented_modulation_controls':len(shared),'description_labels_matched':len(descriptions),'manual_paraphrase_labels':len(MANUAL_PARAPHRASES),'manual_section6_has_rom50_entry':False,'independent_validation':adapter_data.get('coverage',{})},'separate_manual_namespaces':[appendix_namespace],'shared_controls':shared,'effects':[]}
     for effect in registry['effects']:
         controls=[]
         for p in effect['parameters']:
             manual={k:p.get(k) for k in ('display_name','documented_range','documented_numeric_domain','display_type','units','documented_step','step_confidence','discrete_choices','default_value','ui_range_status','ui_range_confidence','normalized_ui_mapping','evidence')}
+            slot=int(effect['slot'])
+            for correction in correction_by_slot.get(slot,[]):
+                target=correction['parameter_identity'].rsplit(':',1)[-1]
+                param_id=p['id'].rsplit('_1',1)[0]
+                aliases={(15,'decay_time'):'decay_time_small_room',(16,'decay_time'):'decay_time_small_room',
+                         (18,'decay_time'):'decay_time_small_plate',(18,'predelay_time'):'predelay_time_small_plate'}
+                if aliases.get((slot,target)) != param_id:
+                    continue
+                bounds=correction['correct_range']; unit=bounds['unit']
+                text={(15,'decay_time'):'0.20 to 150.0 sec.',(16,'decay_time'):'0.70 to 250.0 sec.',
+                      (18,'decay_time'):'0.4 to 140.0 sec.',(18,'predelay_time'):'0 to 430 ms'}[(slot,target)]
+                manual['display_name']=correction['manual_label']
+                manual['documented_range']=text
+                manual['documented_numeric_domain']={'minimum':bounds['minimum'],'maximum':bounds['maximum']}
+                manual['units']='seconds' if unit=='s' else unit
+                manual['range_correction']={'identity':correction['parameter_identity'],'citation':correction['citation'],
+                    'source':correction_provenance['path'],'source_sha256':correction_provenance['sha256']}
+                break
             manual['description']=descriptions.get(p['display_name']) or MANUAL_PARAPHRASES.get(p['display_name'])
             manual['description_source']='manual_text' if p['display_name'] in descriptions else ('manual_paraphrase' if p['display_name'] in MANUAL_PARAPHRASES else 'unavailable')
             if p['id']=='effect_variation': manual['description']='Selects one of four preset setups. The manual states that each variation is individually editable and acts as its own effect edit buffer.'; manual['description_source']='manual_text'
@@ -151,6 +186,15 @@ def main():
     from parameter_registry import load_registry
     effects=load_registry(); presentation_keys=('id','name','order','range_text','range','type','format','domain','range_variants','units','description','description_source','manual_confidence','default_value','observed_choices','documented_choices','evidence','group','catalog_descriptor','manual_subparameter','editor_visible','input_disabled','canonical_identity','original_parameter_id','canonical_manual_control_id','independent_classification','original_os_evidence','dsp_evidence','runtime_state','runtime_reason','os_scan_status','identity_confidence','mapping_evidence_mismatch')
     effect_rows={int(e['slot']):e for e in result['effects']}
+    for runtime_effect in effects:
+        slot=int(runtime_effect['slot'])
+        for control in runtime_effect['controls']:
+            key=(slot,control.get('canonical_manual_control_id'))
+            correction=next((x for x in correction_by_slot.get(slot,[]) if x['parameter_identity'].rsplit(':',1)[-1]==key[1]),None)
+            if correction:
+                control['manual_range_correction']={'identity':correction['parameter_identity'],'citation':correction['citation'],
+                    'source':correction_provenance['path'],'source_sha256':correction_provenance['sha256']}
+    presentation_keys=presentation_keys+('manual_range_correction',)
     edit_count=0
     for runtime_effect in effects:
         schema_effect=effect_rows[int(runtime_effect['slot'])]

@@ -101,6 +101,21 @@ bool ES5510DSPBackend::set_verified_parameter(
     return runtime.setParameter(descriptor, found->id, display_value, frame);
 }
 
+trollfx::es5510::HallDecayAdapterResult ES5510DSPBackend::step_hall_decay_time(
+        std::uint8_t slot, std::uint8_t variation, int direction) noexcept {
+    if (active_slot_.load(std::memory_order_acquire) != slot ||
+        status_.load(std::memory_order_acquire) != ES5510BackendStatus::Ready)
+        return trollfx::es5510::HallDecayAdapterResult::RuntimeRejected;
+    auto& runtime = runtime_[active_index_.load(std::memory_order_acquire)];
+    return hall_decay_adapter_.requestStep(runtime, slot, variation, direction);
+}
+
+trollfx::es5510::HallDecayEditorState ES5510DSPBackend::hall_decay_editor_state(
+        std::uint8_t slot, std::uint8_t variation) noexcept {
+    auto& runtime = runtime_[active_index_.load(std::memory_order_acquire)];
+    return hall_decay_adapter_.refresh(runtime, slot, variation);
+}
+
 void ES5510DSPBackend::worker_loop() noexcept {
     while (!stop_worker_.load(std::memory_order_acquire)) {
         const auto generation=request_generation_.load(std::memory_order_acquire);

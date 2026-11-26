@@ -1,5 +1,5 @@
 """Focused real-VST2 integration tests; requires local validated factory packages."""
-import os, sys, unittest, math, hashlib, struct, io, wave, json, threading, http.server
+import os, sys, unittest, math, hashlib, struct, io, wave, json, threading, http.server, subprocess, tempfile
 from pathlib import Path
 HERE=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(HERE))
@@ -93,6 +93,51 @@ class NativePluginIntegration(unittest.TestCase):
    self.v.set(4,0);wet=self.v.process(data,n,128)
    self.assertTrue(all(math.isfinite(y) for y in wet+dry),f'effect {slot} non-finite')
    self.assertGreater(sum(abs(a-b) for a,b in zip(wet,dry))/len(wet),1e-5,f'effect {slot} has no wet/bypass difference')
+ def test_hall_decay_register_route_is_not_yet_audible_and_unsupported_values_stay_pending(self):
+  def render_at(value):
+   sim=Simulator(ASSETS)
+   sim.set_param(0,0,page='BROWSE')
+   sim.select_variation(1) # PC Variation 1 context; provider manifest does not establish native variation metadata.
+   event=sim.set_control('decay_time_1',value)['event']
+   n=65536; audio=[]
+   for i in range(n):
+    left=.12*math.sin(2*math.pi*431*i/48000)+.03*math.sin(2*math.pi*997*i/48000)
+    right=.11*math.sin(2*math.pi*563*i/48000)+.02*math.sin(2*math.pi*1301*i/48000)
+    audio.extend((left,right))
+   output=sim.host.process(audio,n,256)
+   return sim,event,output
+  a,e40,out40=render_at(40)
+  b,e41,out41=render_at(41)
+  try:
+   self.assertEqual(e40['selected_effect']['slot'],1);self.assertEqual(e41['selected_variation'],1)
+   self.assertTrue(e40['dsp_sent'] and e41['dsp_sent'])
+   gprs=[int(x['gpr'],16) for x in e41['dsp_register_writes_applied']]
+   self.assertTrue(any(gprs[i:i+5]==[3,4,5,0x5b,0x6e] for i in range(len(gprs)-4)),gprs)
+   self.assertTrue(all(math.isfinite(x) for x in out40+out41))
+   rms=math.sqrt(sum((x-y)**2 for x,y in zip(out40,out41))/len(out40))
+   # The host parameter route emits the known register group, but these two
+   # native VST renders are currently bit-identical. Keep that as an explicit
+   # non-acceptance result: register writes alone do not prove audible DSP use.
+   self.assertEqual(out40,out41)
+   self.assertEqual(rms,0.0)
+   trace=b.host.trace_latest()
+   unsupported=b.set_control('decay_time_1',99)['event']
+   self.assertFalse(unsupported['dsp_sent'])
+   self.assertEqual(unsupported['dsp_register_writes_applied'],[])
+   self.assertEqual(b.host.trace_latest(),trace)
+  finally:a.close();b.close()
+ def test_hall_native_runtime_adapter_real_api_both_gate_states(self):
+  root=HERE.parents[1]
+  source=root/'tools/force_simulator/tests/test_hall_decay_native_adapter.cpp'
+  with tempfile.TemporaryDirectory(prefix='trollfx-hall-native-') as tmp:
+   for gate in (0,1):
+    binary=Path(tmp)/f'hall-adapter-gate-{gate}'
+    command=['g++','-std=c++17','-O2','-Wall','-Wextra','-Wpedantic','-DTROLLFX_SIMULATOR_TRACE',
+      f'-DTROLLFX_HALL_DECAY_NATIVE_GATE={gate}','-I'+str(root/'include'),'-I'+str(root/'src'),str(source),
+      str(root/'src/es5510_factory_runtime.cpp'),str(root/'src/es5510.cpp'),str(root/'src/hall_decay_native_adapter.cpp'),'-pthread','-o',str(binary)]
+    subprocess.run(command,check=True,cwd=root,capture_output=True,text=True)
+    result=subprocess.run([str(binary)],check=True,cwd=root,capture_output=True,text=True)
+    self.assertIn('HALL native adapter tests: PASS',result.stdout)
  def test_wav_endpoint_builds_wet_and_bypass_pcm_outputs(self):
   buf=io.BytesIO(); vals=[]
   for i in range(2048):

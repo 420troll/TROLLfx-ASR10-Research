@@ -30,6 +30,9 @@ struct EffectPackage {
     bool pipeline_reset_acknowledged = false;
     bool package_provenance_validated = false;
     bool serial_route_validated = false;
+    // Zero means unknown; only set to 1 when package evidence establishes
+    // that the HALL checkpoint belongs to Variation 1.
+    std::uint8_t factory_variation = 0;
 };
 
 struct RuntimeStatus {
@@ -42,6 +45,9 @@ struct RuntimeStatus {
     std::uint64_t scheduled_writes_applied = 0;
     std::uint32_t active_program_words = 0;
     std::uint32_t algorithmic_latency_host_frames = 0;
+    bool hall_decay_step_available = false;
+    std::uint8_t hall_decay_raw_code = 0;
+    std::int16_t hall_decay_display_value = -1;
     const char* message = "not loaded"; // static storage; valid until next API call
 };
 
@@ -72,6 +78,9 @@ public:
     bool setRegister(std::uint8_t index, std::uint32_t value, std::uint64_t scheduled_frame);
     bool setParameter(const EffectDescriptor& descriptor, const std::string& parameter_id,
                       std::int32_t display_value, std::uint64_t scheduled_frame);
+    // Directional OS-style step. Does not accept an LCD scalar because LCD
+    // values can correspond to two different raw states.
+    bool stepHallDecayTime(int direction, std::uint64_t scheduled_frame);
 
     // Interleaved stereo float PCM, [-1,+1] nominal. Input/output serial lanes
     // are selected by the validated effect descriptor. Host sample rate is

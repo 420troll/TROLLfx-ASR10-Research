@@ -1,0 +1,78 @@
+{
+  "schema": "trollfx-asr10-hall-decay-acceptance-gates-v1",
+  "parameter": "ROM-01 HALL REVERB Variation 1 DECAY TIME",
+  "promotion_rule": "Do not promote to native runtime-ready until research/runtime gates R1-R6 pass together. Release gates L1-L3 are independent and remain mandatory before a playable Force release. Factory audio equivalence is a separate claim and requires an exact original-OS reference comparison.",
+  "research_runtime_gates": [
+    {
+      "id": "R1_manual_lcd_accuracy",
+      "status": "PASS",
+      "criteria": "Manual domain 0-99 agrees with all 100 OS LCD values; variation, label and selection context are recorded.",
+      "evidence": "Manual-derived catalog and two complete OS traversals; raw/display matrix covers 100 display values."
+    },
+    {
+      "id": "R2_raw_code_transition_correctness",
+      "status": "PASS",
+      "criteria": "All raw codes 0-127 map to the OS display table; Up/Down transition semantics preserve both codes for every duplicate bucket and match all captured steps.",
+      "evidence": "128 raw codes, 100 displays, 28 duplicate buckets, 198/198 transitions and 0 transition mismatches in two full-startup traces."
+    },
+    {
+      "id": "R3_register_values_order_and_timing",
+      "status": "PARTIAL",
+      "criteria": "GPR 6E/5B/03/04/05 values and order match the OS; event timing or a justified and audio-validated atomic replacement must be proven.",
+      "evidence": "198/198 OS groups match values and order. OS writes span multiple DSP frames; runtime API currently queues all five at one frame."
+    },
+    {
+      "id": "R4_full_range_runtime_coverage",
+      "status": "PASS_WITH_LIMITS",
+      "criteria": "Runtime traverses display 0-99 and 99-0 across all 128 raw codes and duplicate routes against independent raw/display/register expectations; rejects unsupported states and restores its checkpoint.",
+      "evidence": "Temporary instrumented runtime harness passed 198/198 UI steps and 990/990 parameter writes against OS-observed raw/register values from two sweeps using a synthetic package; all 128 raw codes were visited. No authentic-package full-range replay was performed."
+    },
+    {
+      "id": "R5_audio_behavior",
+      "status": "PARTIAL",
+      "criteria": "Finite meaningful output is measured across the full range, including duplicate paths, state transitions, endpoints and the chosen event timing; no false no-op claims.",
+      "evidence": "A 40/41 native A/B has measurable difference; full range and intermediate-frame behavior have not been tested."
+    },
+    {
+      "id": "R6_independent_reproducibility",
+      "status": "PASS",
+      "criteria": "At least two independent clean OS boots reproduce the raw/display table, every transition, ordered register values and timing; record boot provenance.",
+      "evidence": "Two full original-OS emulator sweeps were captured under caller-recorded distinct CLI PIDs 154605 and 154697. Their complete 200-step event and step arrays match exactly, including 198 ordered register groups and cycle/frame stamps; independent matrix comparison reports zero mismatches. Emulator, not physical silicon."
+    }
+  ],
+  "release_gates": [
+    {
+      "id": "L1_vst_state_compatibility",
+      "status": "NOT_TESTED",
+      "criteria": "Native parameter identity and saved host chunk remain compatible across the candidate upgrade; no stale control overwrites the stepper raw state.",
+      "evidence": "Stepper is not integrated into the stable 19-route VST parameter registry."
+    },
+    {
+      "id": "L2_armv7_compatibility",
+      "status": "NOT_TESTED",
+      "criteria": "Fresh ARMv7 hard-float build, ABI/link/dependency checks and runtime tests for the integrated candidate.",
+      "evidence": "No ARMv7 build of this new API integration was performed."
+    },
+    {
+      "id": "L3_physical_force_compatibility",
+      "status": "NOT_TESTED",
+      "criteria": "Physical Force host delivers the intended control event and wet audio remains correct across effect changes and save/reload.",
+      "evidence": "No device test or installation performed."
+    }
+  ],
+  "separate_claim_gates": [
+    {
+      "id": "factory_audio_equivalence",
+      "status": "NOT_TESTED",
+      "criteria": "Exact numerical or explicitly tolerance-bounded comparison against matching original-OS audio with identical stimulus, state, timing, routing and alignment.",
+      "evidence": "The 40/41 difference test proves response only; it is not an OS-reference comparison."
+    }
+  ],
+  "promotion_decision": "NOT_NATIVE_RUNTIME_READY",
+  "blocking_items": [
+    "R3 runtime event timing differs from OS timing and has no intermediate-state audio validation",
+    "R5 lacks full-range audio behavior evidence",
+    "L1-L3 are untested release gates"
+  ],
+  "known_robustness_defect": "Non-finite VST input remains an open tracked issue and is not waived by this parameter validation."
+}

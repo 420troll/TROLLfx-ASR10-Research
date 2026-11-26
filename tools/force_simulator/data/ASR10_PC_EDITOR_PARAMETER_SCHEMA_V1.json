@@ -30,6 +30,118 @@
       153
     ]
   },
+  "manual_range_corrections": {
+    "schema": "trollfx-asr10-manual-range-corrections-v1",
+    "path": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+    "sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab",
+    "source_commit": "e698707",
+    "corrections": [
+      {
+        "slot": 15,
+        "effect": "LARGE ROOM",
+        "parameter_identity": "ASR10:ROM-15:decay_time",
+        "manual_label": "DECAY TIME — Large Room",
+        "correct_range": {
+          "minimum": 0.2,
+          "maximum": 150.0,
+          "unit": "s"
+        },
+        "citation": {
+          "section": 6,
+          "pdf_page": 107,
+          "heading": "ROM-15 LARGE ROOM",
+          "text_location": "DECAY TIME range variants"
+        },
+        "os_label": "DECAY TIME",
+        "os_numeric_domain_status": "NOT_INDEPENDENTLY_MEASURED",
+        "dsp_mapping_status": "UNMAPPED",
+        "pc_editor_status": {
+          "registry_range_at_08cc600": "correct",
+          "serialized_descriptor_range_at_08cc600": "stale 0.20 to 100.0 sec; preserve effect-specific normalization source in schema"
+        }
+      },
+      {
+        "slot": 16,
+        "effect": "HALL REVERB2",
+        "parameter_identity": "ASR10:ROM-16:decay_time",
+        "manual_label": "DECAY TIME — Hall Reverb2",
+        "correct_range": {
+          "minimum": 0.7,
+          "maximum": 250.0,
+          "unit": "s"
+        },
+        "citation": {
+          "section": 6,
+          "pdf_page": 107,
+          "heading": "ROM-16 HALL REVERB2",
+          "text_location": "DECAY TIME range variants"
+        },
+        "os_label": "DECAY TIME",
+        "os_numeric_domain_status": "NOT_INDEPENDENTLY_MEASURED",
+        "dsp_mapping_status": "UNMAPPED",
+        "pc_editor_status": {
+          "registry_range_at_08cc600": "correct",
+          "serialized_descriptor_range_at_08cc600": "stale 0.20 to 100.0 sec; preserve effect-specific normalization source in schema"
+        }
+      },
+      {
+        "slot": 18,
+        "effect": "LARGE PLATE",
+        "parameter_identity": "ASR10:ROM-18:decay_time",
+        "manual_label": "DECAY TIME — Large Plate",
+        "correct_range": {
+          "minimum": 0.4,
+          "maximum": 140.0,
+          "unit": "s"
+        },
+        "citation": {
+          "section": 6,
+          "pdf_page": 110,
+          "heading": "ROM-18 LARGE PLATE",
+          "text_location": "DECAY TIME range variants"
+        },
+        "os_label": "DECAY TIME",
+        "os_numeric_domain_status": "NOT_INDEPENDENTLY_MEASURED",
+        "dsp_mapping_status": "UNMAPPED",
+        "pc_editor_status": {
+          "registry_range_at_08cc600": "correct",
+          "serialized_descriptor_range_at_08cc600": "stale 0.2 to 100.0 sec; preserve effect-specific normalization source in schema"
+        }
+      },
+      {
+        "slot": 18,
+        "effect": "LARGE PLATE",
+        "parameter_identity": "ASR10:ROM-18:predelay_time",
+        "manual_label": "PREDELAY TIME — Large Plate",
+        "correct_range": {
+          "minimum": 0,
+          "maximum": 430,
+          "unit": "ms"
+        },
+        "citation": {
+          "section": 6,
+          "pdf_page": 110,
+          "heading": "ROM-18 LARGE PLATE",
+          "text_location": "PREDELAY TIME range variants"
+        },
+        "os_label": "PREDELAY TIME",
+        "os_numeric_domain_status": "NOT_INDEPENDENTLY_MEASURED",
+        "dsp_mapping_status": "UNMAPPED",
+        "pc_editor_status": {
+          "registry_range_at_08cc600": "correct",
+          "serialized_descriptor_range_at_08cc600": "stale small-plate text 0 to 500 ms; preserve effect-specific normalization source in schema"
+        }
+      }
+    ]
+  },
+  "hall_decay_runtime_evidence": {
+    "acceptance_gates_path": "ASR10_HALL_DECAY_ACCEPTANCE_GATES_V1.json",
+    "acceptance_gates_sha256": "0eeb9bc504f1141f87c6f104a8c2490076c42943a1afb80ddb81bb306503f3fe",
+    "independent_runtime_qa_path": "HALL_DECAY_INDEPENDENT_RUNTIME_QA_V2.json",
+    "independent_runtime_qa_sha256": "499b1514e48b65f9ec733bd4fea8667d05185efb9144dde28d8e170c1421643d",
+    "qa_commit": "35e2a0b",
+    "promotion_decision": "NOT_NATIVE_RUNTIME_READY"
+  },
   "coverage": {
     "factory_effects": 50,
     "manual_registry_parameters": 594,
@@ -21439,9 +21551,12 @@
           "id": "decay_time_small_room_1",
           "order": 1,
           "manual": {
-            "display_name": "DECAY TIME Small Room",
-            "documented_range": "0.20 to 100.0 sec.",
-            "documented_numeric_domain": null,
+            "display_name": "DECAY TIME — Large Room",
+            "documented_range": "0.20 to 150.0 sec.",
+            "documented_numeric_domain": {
+              "minimum": 0.2,
+              "maximum": 150.0
+            },
             "display_type": "numeric_or_continuous",
             "units": "seconds",
             "documented_step": null,
@@ -21452,6 +21567,17 @@
             "ui_range_confidence": "no numeric range established",
             "normalized_ui_mapping": null,
             "evidence": "ASR-10 Musician's Manual; not independently verified in the OS emulator",
+            "range_correction": {
+              "identity": "ASR10:ROM-15:decay_time",
+              "citation": {
+                "section": 6,
+                "pdf_page": 107,
+                "heading": "ROM-15 LARGE ROOM",
+                "text_location": "DECAY TIME range variants"
+              },
+              "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+              "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+            },
             "description": "Sets the time for the reverb to decay to a very low level after the input stops.",
             "description_source": "manual_paraphrase"
           },
@@ -22325,7 +22451,18 @@
           "runtime_state": "UNMAPPED",
           "runtime_reason": "No accepted native VST route is available for this parameter.",
           "os_scan_status": "complete",
-          "mapping_evidence_mismatch": false
+          "mapping_evidence_mismatch": false,
+          "manual_range_correction": {
+            "identity": "ASR10:ROM-15:decay_time",
+            "citation": {
+              "section": 6,
+              "pdf_page": 107,
+              "heading": "ROM-15 LARGE ROOM",
+              "text_location": "DECAY TIME range variants"
+            },
+            "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+            "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+          }
         },
         {
           "id": "large_room_1",
@@ -22371,7 +22508,18 @@
           "runtime_state": "UNMAPPED",
           "runtime_reason": "No accepted native VST route is available for this parameter.",
           "os_scan_status": "complete",
-          "mapping_evidence_mismatch": false
+          "mapping_evidence_mismatch": false,
+          "manual_range_correction": {
+            "identity": "ASR10:ROM-15:decay_time",
+            "citation": {
+              "section": 6,
+              "pdf_page": 107,
+              "heading": "ROM-15 LARGE ROOM",
+              "text_location": "DECAY TIME range variants"
+            },
+            "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+            "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+          }
         },
         {
           "id": "hall_reverb2_1",
@@ -22417,7 +22565,18 @@
           "runtime_state": "UNMAPPED",
           "runtime_reason": "No accepted native VST route is available for this parameter.",
           "os_scan_status": "complete",
-          "mapping_evidence_mismatch": false
+          "mapping_evidence_mismatch": false,
+          "manual_range_correction": {
+            "identity": "ASR10:ROM-15:decay_time",
+            "citation": {
+              "section": 6,
+              "pdf_page": 107,
+              "heading": "ROM-15 LARGE ROOM",
+              "text_location": "DECAY TIME range variants"
+            },
+            "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+            "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+          }
         },
         {
           "id": "predelay_time_1",
@@ -24072,9 +24231,12 @@
           "id": "decay_time_small_room_1",
           "order": 1,
           "manual": {
-            "display_name": "DECAY TIME Small Room",
-            "documented_range": "0.20 to 100.0 sec.",
-            "documented_numeric_domain": null,
+            "display_name": "DECAY TIME — Hall Reverb2",
+            "documented_range": "0.70 to 250.0 sec.",
+            "documented_numeric_domain": {
+              "minimum": 0.7,
+              "maximum": 250.0
+            },
             "display_type": "numeric_or_continuous",
             "units": "seconds",
             "documented_step": null,
@@ -24085,6 +24247,17 @@
             "ui_range_confidence": "no numeric range established",
             "normalized_ui_mapping": null,
             "evidence": "ASR-10 Musician's Manual; not independently verified in the OS emulator",
+            "range_correction": {
+              "identity": "ASR10:ROM-16:decay_time",
+              "citation": {
+                "section": 6,
+                "pdf_page": 107,
+                "heading": "ROM-16 HALL REVERB2",
+                "text_location": "DECAY TIME range variants"
+              },
+              "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+              "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+            },
             "description": "Sets the time for the reverb to decay to a very low level after the input stops.",
             "description_source": "manual_paraphrase"
           },
@@ -24958,7 +25131,18 @@
           "runtime_state": "UNMAPPED",
           "runtime_reason": "No accepted native VST route is available for this parameter.",
           "os_scan_status": "complete",
-          "mapping_evidence_mismatch": false
+          "mapping_evidence_mismatch": false,
+          "manual_range_correction": {
+            "identity": "ASR10:ROM-16:decay_time",
+            "citation": {
+              "section": 6,
+              "pdf_page": 107,
+              "heading": "ROM-16 HALL REVERB2",
+              "text_location": "DECAY TIME range variants"
+            },
+            "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+            "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+          }
         },
         {
           "id": "large_room_1",
@@ -25004,7 +25188,18 @@
           "runtime_state": "UNMAPPED",
           "runtime_reason": "No accepted native VST route is available for this parameter.",
           "os_scan_status": "complete",
-          "mapping_evidence_mismatch": false
+          "mapping_evidence_mismatch": false,
+          "manual_range_correction": {
+            "identity": "ASR10:ROM-16:decay_time",
+            "citation": {
+              "section": 6,
+              "pdf_page": 107,
+              "heading": "ROM-16 HALL REVERB2",
+              "text_location": "DECAY TIME range variants"
+            },
+            "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+            "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+          }
         },
         {
           "id": "hall_reverb2_1",
@@ -25050,7 +25245,18 @@
           "runtime_state": "UNMAPPED",
           "runtime_reason": "No accepted native VST route is available for this parameter.",
           "os_scan_status": "complete",
-          "mapping_evidence_mismatch": false
+          "mapping_evidence_mismatch": false,
+          "manual_range_correction": {
+            "identity": "ASR10:ROM-16:decay_time",
+            "citation": {
+              "section": 6,
+              "pdf_page": 107,
+              "heading": "ROM-16 HALL REVERB2",
+              "text_location": "DECAY TIME range variants"
+            },
+            "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+            "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+          }
         },
         {
           "id": "predelay_time_1",
@@ -28600,9 +28806,12 @@
           "id": "decay_time_small_plate_1",
           "order": 1,
           "manual": {
-            "display_name": "DECAY TIME Small Plate",
-            "documented_range": "0.2 to 100.0 sec.",
-            "documented_numeric_domain": null,
+            "display_name": "DECAY TIME — Large Plate",
+            "documented_range": "0.4 to 140.0 sec.",
+            "documented_numeric_domain": {
+              "minimum": 0.4,
+              "maximum": 140.0
+            },
             "display_type": "numeric_or_continuous",
             "units": "seconds",
             "documented_step": null,
@@ -28613,6 +28822,17 @@
             "ui_range_confidence": "no numeric range established",
             "normalized_ui_mapping": null,
             "evidence": "ASR-10 Musician's Manual; not independently verified in the OS emulator",
+            "range_correction": {
+              "identity": "ASR10:ROM-18:decay_time",
+              "citation": {
+                "section": 6,
+                "pdf_page": 110,
+                "heading": "ROM-18 LARGE PLATE",
+                "text_location": "DECAY TIME range variants"
+              },
+              "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+              "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+            },
             "description": "Sets the time for the plate reverberation to decay.",
             "description_source": "manual_paraphrase"
           },
@@ -28658,9 +28878,12 @@
           "id": "predelay_time_small_plate_1",
           "order": 3,
           "manual": {
-            "display_name": "PREDELAY TIME Small Plate",
-            "documented_range": "0 to 500 ms",
-            "documented_numeric_domain": null,
+            "display_name": "PREDELAY TIME — Large Plate",
+            "documented_range": "0 to 430 ms",
+            "documented_numeric_domain": {
+              "minimum": 0,
+              "maximum": 430
+            },
             "display_type": "numeric_or_continuous",
             "units": "ms",
             "documented_step": null,
@@ -28671,6 +28894,17 @@
             "ui_range_confidence": "no numeric range established",
             "normalized_ui_mapping": null,
             "evidence": "ASR-10 Musician's Manual; not independently verified in the OS emulator",
+            "range_correction": {
+              "identity": "ASR10:ROM-18:predelay_time",
+              "citation": {
+                "section": 6,
+                "pdf_page": 110,
+                "heading": "ROM-18 LARGE PLATE",
+                "text_location": "PREDELAY TIME range variants"
+              },
+              "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+              "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+            },
             "description": "Sets the delay before the input signal reaches the plate reverb.",
             "description_source": "manual_paraphrase"
           },
@@ -29155,7 +29389,18 @@
           "runtime_state": "UNMAPPED",
           "runtime_reason": "No accepted native VST route is available for this parameter.",
           "os_scan_status": "complete",
-          "mapping_evidence_mismatch": false
+          "mapping_evidence_mismatch": false,
+          "manual_range_correction": {
+            "identity": "ASR10:ROM-18:decay_time",
+            "citation": {
+              "section": 6,
+              "pdf_page": 110,
+              "heading": "ROM-18 LARGE PLATE",
+              "text_location": "DECAY TIME range variants"
+            },
+            "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+            "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+          }
         },
         {
           "id": "large_plate_1",
@@ -29201,7 +29446,18 @@
           "runtime_state": "UNMAPPED",
           "runtime_reason": "No accepted native VST route is available for this parameter.",
           "os_scan_status": "complete",
-          "mapping_evidence_mismatch": false
+          "mapping_evidence_mismatch": false,
+          "manual_range_correction": {
+            "identity": "ASR10:ROM-18:decay_time",
+            "citation": {
+              "section": 6,
+              "pdf_page": 110,
+              "heading": "ROM-18 LARGE PLATE",
+              "text_location": "DECAY TIME range variants"
+            },
+            "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+            "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+          }
         },
         {
           "id": "predelay_time_small_plate_1",
@@ -29247,7 +29503,18 @@
           "runtime_state": "UNMAPPED",
           "runtime_reason": "No accepted native VST route is available for this parameter.",
           "os_scan_status": "complete",
-          "mapping_evidence_mismatch": false
+          "mapping_evidence_mismatch": false,
+          "manual_range_correction": {
+            "identity": "ASR10:ROM-18:predelay_time",
+            "citation": {
+              "section": 6,
+              "pdf_page": 110,
+              "heading": "ROM-18 LARGE PLATE",
+              "text_location": "PREDELAY TIME range variants"
+            },
+            "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+            "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+          }
         },
         {
           "id": "large_plate_2",
@@ -29293,7 +29560,18 @@
           "runtime_state": "UNMAPPED",
           "runtime_reason": "No accepted native VST route is available for this parameter.",
           "os_scan_status": "complete",
-          "mapping_evidence_mismatch": false
+          "mapping_evidence_mismatch": false,
+          "manual_range_correction": {
+            "identity": "ASR10:ROM-18:predelay_time",
+            "citation": {
+              "section": 6,
+              "pdf_page": 110,
+              "heading": "ROM-18 LARGE PLATE",
+              "text_location": "PREDELAY TIME range variants"
+            },
+            "source": "ASR10_MANUAL_RANGE_CORRECTIONS_V1.json",
+            "source_sha256": "3123b12d30365564c2d5d854fc0597aba7d327dc51129763ad4e0b58abf1a0ab"
+          }
         },
         {
           "id": "hf_damping_1",

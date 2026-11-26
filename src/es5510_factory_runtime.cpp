@@ -1,4 +1,5 @@
 #include "trollfx/es5510_factory_runtime.hpp"
+#include "trollfx/es5510_hall_decay_control.hpp"
 #include "es5510.h"
 
 #include <algorithm>
@@ -109,12 +110,26 @@ struct FactoryRuntime::Impl {
     std::int16_t previous_input_right = 0;
     bool have_previous_input = false;
     bool loaded = false;
+    bool hall_decay_step_state_valid = false;
+    std::uint8_t hall_decay_raw = 0;
     const char* message = "not loaded";
 
     std::uint8_t input_left() const noexcept { return static_cast<std::uint8_t>(descriptor.routing.input_port * 2); }
     std::uint8_t input_right() const noexcept { return static_cast<std::uint8_t>(descriptor.routing.input_port * 2 + 1); }
     std::uint8_t output_left() const noexcept { return static_cast<std::uint8_t>(descriptor.routing.output_port * 2); }
     std::uint8_t output_right() const noexcept { return static_cast<std::uint8_t>(descriptor.routing.output_port * 2 + 1); }
+
+    void seed_hall_decay_step_state(bool is_hall_variation_1) noexcept {
+        const auto value = dsp.register_value(0x6e);
+        hall_decay_step_state_valid = is_hall_variation_1 && (value & 0xffffu) == 0 &&
+                                      (value >> 16) <= 127;
+        hall_decay_raw = hall_decay_step_state_valid
+            ? static_cast<std::uint8_t>(value >> 16) : 0;
+        status.hall_decay_step_available = hall_decay_step_state_valid;
+        status.hall_decay_raw_code = hall_decay_raw;
+        status.hall_decay_display_value = hall_decay_step_state_valid
+            ? os353::hall_decay_display_for_raw(hall_decay_raw) : -1;
+    }
 
     void set_error(StatusCode code, const char* text) noexcept {
         status.code = code;
@@ -152,6 +167,12 @@ struct FactoryRuntime::Impl {
                 events[pos]=events[pos-1]; --pos;
             }
             events[pos]=event; ++event_count;
+        }
+        if (std::any_of(descriptor.firmware_event_schedule.begin(), descriptor.firmware_event_schedule.end(),
+                        [](const auto& event) { return event.gpr == 0x6e; })) {
+            hall_decay_step_state_valid = false;
+            status.hall_decay_step_available = false;
+            status.hall_decay_display_value = -1;
         }
     }
 
@@ -241,6 +262,7 @@ bool FactoryRuntime::loadEffect(const EffectPackage& p, RateMode mode) {
     s.descriptor = {};
     s.descriptor.slot = static_cast<EffectSlot>(p.effect);
     s.descriptor.factory_name = p.effect == EffectId::Rom01Hall ? "ROM-01 HALL REVERB" : "ROM-02 44KHZ REVERB";
+    s.descriptor.factory_variation = p.factory_variation;
     s.descriptor.active_program_words = p.active_program_words;
     s.descriptor.factory_reference_rate_hz = p.factory_processing_rate_hz;
     s.descriptor.routing.input_port = kDefaultInputPort;
@@ -248,6 +270,7 @@ bool FactoryRuntime::loadEffect(const EffectPackage& p, RateMode mode) {
     s.loaded = false;
     if (!s.open_checkpoint()) return false;
     s.loaded = true;
+    s.seed_hall_decay_step_state(p.effect == EffectId::Rom01Hall && p.factory_variation == 1);
     s.mode = mode;
     s.dsp_rate = mode == RateMode::Experimental48000 ? 48000.0 : p.factory_processing_rate_hz;
     s.clear_stream_state();
@@ -277,10 +300,12 @@ bool FactoryRuntime::loadEffect(const ValidatedEffectPackage& p, RateMode mode) 
     s.package.checkpoint_path = d.run_checkpoint_path;
     s.package.active_program_words = d.active_program_words;
     s.package.factory_processing_rate_hz = d.factory_reference_rate_hz;
+    s.package.factory_variation = d.factory_variation;
     s.descriptor = d;
     s.generic = true;
     s.loaded = false;
     if (!s.open_checkpoint()) return false;
+    s.seed_hall_decay_step_state(d.slot == 1 && d.factory_variation == 1);
     // Install the descriptor's deterministic firmware post-RUN writes at frame zero.
     s.event_count = 0; s.event_order = 0; s.dsp_frames = 0;
     for (const auto& e : d.firmware_event_schedule) {
@@ -305,6 +330,9 @@ bool FactoryRuntime::reset() {
     auto& s = *impl_;
     if (!s.loaded) { s.set_error(StatusCode::Empty, "no effect is loaded"); return false; }
     if (!s.open_checkpoint()) { s.loaded = false; return false; }
+    s.seed_hall_decay_step_state(s.generic
+        ? s.descriptor.slot == 1 && s.descriptor.factory_variation == 1
+        : s.package.effect == EffectId::Rom01Hall && s.package.factory_variation == 1);
     s.clear_stream_state();
     s.install_firmware_schedule();
     s.status.code = StatusCode::Ready;
@@ -342,8 +370,56 @@ bool FactoryRuntime::setRegister(std::uint8_t index, std::uint32_t value, std::u
     }
     s.events[pos] = event;
     ++s.event_count;
+    if (index == 0x6e) {
+        s.hall_decay_step_state_valid = false;
+        s.status.hall_decay_step_available = false;
+        s.status.hall_decay_display_value = -1;
+    }
     s.status.code = StatusCode::Ready;
     s.message = s.status.message = "register event scheduled";
+    return true;
+}
+
+bool FactoryRuntime::stepHallDecayTime(int direction, std::uint64_t frame) {
+    auto& s = *impl_;
+    using namespace os353;
+    if (!s.loaded) { s.set_error(StatusCode::Empty, "no effect is loaded"); return false; }
+    if (s.descriptor.slot != 1 || s.descriptor.factory_variation != 1) {
+        s.set_error(StatusCode::InvalidArgument, "HALL decay stepping requires factory slot 1, Variation 1 state");
+        return false;
+    }
+    if (!s.hall_decay_step_state_valid) {
+        s.set_error(StatusCode::InvalidArgument, "HALL decay raw state is unknown; reload the validated checkpoint");
+        return false;
+    }
+    if (direction != -1 && direction != 1) {
+        s.set_error(StatusCode::InvalidArgument, "HALL decay direction must be -1 or +1");
+        return false;
+    }
+    if (frame < s.dsp_frames) { s.set_error(StatusCode::EventInPast, "HALL decay event is in the past"); return false; }
+    const auto next_raw = hall_decay_raw_step(s.hall_decay_raw, direction);
+    const auto writes = hall_decay_registers(next_raw);
+    if (writes.size() > s.events.size() - s.event_count) {
+        s.set_error(StatusCode::EventQueueFull, "fixed register event queue cannot fit the complete HALL decay write group");
+        return false;
+    }
+    for (const auto& write : writes) {
+        Impl::Event event{frame, s.event_order++, write.gpr, write.value24};
+        std::size_t pos = s.event_count;
+        while (pos && (s.events[pos - 1].frame > event.frame ||
+               (s.events[pos - 1].frame == event.frame && s.events[pos - 1].order > event.order))) {
+            s.events[pos] = s.events[pos - 1];
+            --pos;
+        }
+        s.events[pos] = event;
+        ++s.event_count;
+    }
+    s.hall_decay_raw = next_raw;
+    s.status.hall_decay_step_available = true;
+    s.status.hall_decay_raw_code = next_raw;
+    s.status.hall_decay_display_value = hall_decay_display_for_raw(next_raw);
+    s.status.code = StatusCode::Ready;
+    s.message = s.status.message = "OS-equivalent HALL decay step scheduled";
     return true;
 }
 
@@ -377,6 +453,12 @@ bool FactoryRuntime::setParameter(const EffectDescriptor& d, const std::string& 
                 }
                 s.events[pos] = event;
                 ++s.event_count;
+            }
+            if (std::any_of(point.ordered_writes.begin(), point.ordered_writes.end(),
+                            [](const auto& write) { return write.gpr == 0x6e; })) {
+                s.hall_decay_step_state_valid = false;
+                s.status.hall_decay_step_available = false;
+                s.status.hall_decay_display_value = -1;
             }
             s.status.code = StatusCode::Ready;
             s.message = s.status.message = "ordered parameter write group scheduled";
