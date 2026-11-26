@@ -1,0 +1,297 @@
+{
+  "schema": "trollfx-asr10-real-audio-lab-browser-qa-v1",
+  "source": "Codex 3 standalone experimental native ES5510 artifacts",
+  "bundles": [
+    {
+      "file": "hall-audio-lab-experimental48000-impulse.json",
+      "sha256": "42f0d3a51c85dd88fa34712c796ca34e3d0092c04b7899a9d4d636d4dd942252",
+      "source": "standalone_experimental_runtime",
+      "rate_mode": "Experimental48000",
+      "stimulus": "impulse",
+      "cases": [
+        {
+          "file": "hall-audio-lab-experimental48000-impulse.json",
+          "case": "display_10_vs_90_impulse_48k",
+          "display": [
+            10,
+            90
+          ],
+          "raw": [
+            13,
+            115
+          ],
+          "difference_rms": 0.0006454823118187443,
+          "difference_peak": 0.016082763671875,
+          "tail_rms_8_10s": 0.0000764451118788883
+        },
+        {
+          "file": "hall-audio-lab-experimental48000-impulse.json",
+          "case": "display_0_vs_99_impulse_48k",
+          "display": [
+            0,
+            99
+          ],
+          "raw": [
+            0,
+            127
+          ],
+          "difference_rms": 0.0008097542303921854,
+          "difference_peak": 0.016326904296875,
+          "tail_rms_8_10s": 0.000061007135634966895
+        },
+        {
+          "file": "hall-audio-lab-experimental48000-impulse.json",
+          "case": "display_25_vs_75_impulse_48k",
+          "display": [
+            25,
+            75
+          ],
+          "raw": [
+            32,
+            96
+          ],
+          "difference_rms": 0.00034168826517701044,
+          "difference_peak": 0.01123046875,
+          "tail_rms_8_10s": 0.00009177739341621113
+        },
+        {
+          "file": "hall-audio-lab-experimental48000-impulse.json",
+          "case": "display_40_vs_41_impulse_48k",
+          "display": [
+            40,
+            41
+          ],
+          "raw": [
+            51,
+            53
+          ],
+          "difference_rms": 0.000052459397240109825,
+          "difference_peak": 0.000518798828125,
+          "tail_rms_8_10s": 0.0001220703125
+        }
+      ]
+    },
+    {
+      "file": "hall-audio-lab-experimental48000-noise_burst.json",
+      "sha256": "6f312faf8561bb847de02ccee2c6eaf11d472e1541c6a4ec2a5a900ad13d82e2",
+      "source": "standalone_experimental_runtime",
+      "rate_mode": "Experimental48000",
+      "stimulus": "noise_burst",
+      "cases": [
+        {
+          "file": "hall-audio-lab-experimental48000-noise_burst.json",
+          "case": "display_10_vs_90_noise_48k",
+          "display": [
+            10,
+            90
+          ],
+          "raw": [
+            13,
+            115
+          ],
+          "difference_rms": 0.00813245297265079,
+          "difference_peak": 0.078216552734375,
+          "tail_rms_8_10s": 0.00006283510080323371
+        },
+        {
+          "file": "hall-audio-lab-experimental48000-noise_burst.json",
+          "case": "display_0_vs_99_noise_48k",
+          "display": [
+            0,
+            99
+          ],
+          "raw": [
+            0,
+            127
+          ],
+          "difference_rms": 0.01554228125825682,
+          "difference_peak": 0.098175048828125,
+          "tail_rms_8_10s": 0.00006214347525280544
+        },
+        {
+          "file": "hall-audio-lab-experimental48000-noise_burst.json",
+          "case": "display_25_vs_75_noise_48k",
+          "display": [
+            25,
+            75
+          ],
+          "raw": [
+            32,
+            96
+          ],
+          "difference_rms": 0.004370155886726478,
+          "difference_peak": 0.056060791015625,
+          "tail_rms_8_10s": 0.00010285259084619675
+        },
+        {
+          "file": "hall-audio-lab-experimental48000-noise_burst.json",
+          "case": "display_40_vs_41_noise_48k",
+          "display": [
+            40,
+            41
+          ],
+          "raw": [
+            51,
+            53
+          ],
+          "difference_rms": 0.00015252775596769053,
+          "difference_peak": 0.002349853515625,
+          "tail_rms_8_10s": 0.00016329671500458405
+        }
+      ]
+    },
+    {
+      "file": "hall-audio-lab-factoryreference-impulse.json",
+      "sha256": "921618ccd15b81e9234fd94bce38aa4dea35496b3b9b3621f8e5317e6e929920",
+      "source": "standalone_experimental_runtime",
+      "rate_mode": "FactoryReference",
+      "stimulus": "impulse",
+      "cases": [
+        {
+          "file": "hall-audio-lab-factoryreference-impulse.json",
+          "case": "display_10_vs_90_impulse_factory",
+          "display": [
+            10,
+            90
+          ],
+          "raw": [
+            13,
+            115
+          ],
+          "difference_rms": 0.0004944356342274337,
+          "difference_peak": 0.016082763671875,
+          "tail_rms_8_10s": 0.0000764062214041505
+        },
+        {
+          "file": "hall-audio-lab-factoryreference-impulse.json",
+          "case": "display_0_vs_99_impulse_factory",
+          "display": [
+            0,
+            99
+          ],
+          "raw": [
+            0,
+            127
+          ],
+          "difference_rms": 0.0006555480575929676,
+          "difference_peak": 0.016326904296875,
+          "tail_rms_8_10s": 0.000061008233442154844
+        },
+        {
+          "file": "hall-audio-lab-factoryreference-impulse.json",
+          "case": "display_25_vs_75_impulse_factory",
+          "display": [
+            25,
+            75
+          ],
+          "raw": [
+            32,
+            96
+          ],
+          "difference_rms": 0.00028842626333932495,
+          "difference_peak": 0.01123046875,
+          "tail_rms_8_10s": 0.0000921123900833055
+        },
+        {
+          "file": "hall-audio-lab-factoryreference-impulse.json",
+          "case": "display_40_vs_41_impulse_factory",
+          "display": [
+            40,
+            41
+          ],
+          "raw": [
+            51,
+            53
+          ],
+          "difference_rms": 0.0000464280890676711,
+          "difference_peak": 0.000518798828125,
+          "tail_rms_8_10s": 0.0001220703125
+        }
+      ]
+    },
+    {
+      "file": "hall-audio-lab-factoryreference-noise_burst.json",
+      "sha256": "e19c0572ddbfb730dbb82c118e0513942d12c2bef62219f4c15c6656f398a273",
+      "source": "standalone_experimental_runtime",
+      "rate_mode": "FactoryReference",
+      "stimulus": "noise_burst",
+      "cases": [
+        {
+          "file": "hall-audio-lab-factoryreference-noise_burst.json",
+          "case": "display_10_vs_90_noise_factory",
+          "display": [
+            10,
+            90
+          ],
+          "raw": [
+            13,
+            115
+          ],
+          "difference_rms": 0.008700198394861554,
+          "difference_peak": 0.066436767578125,
+          "tail_rms_8_10s": 0.00006272951142759872
+        },
+        {
+          "file": "hall-audio-lab-factoryreference-noise_burst.json",
+          "case": "display_0_vs_99_noise_factory",
+          "display": [
+            0,
+            99
+          ],
+          "raw": [
+            0,
+            127
+          ],
+          "difference_rms": 0.015592369012162363,
+          "difference_peak": 0.075836181640625,
+          "tail_rms_8_10s": 0.00006105854381092076
+        },
+        {
+          "file": "hall-audio-lab-factoryreference-noise_burst.json",
+          "case": "display_25_vs_75_noise_factory",
+          "display": [
+            25,
+            75
+          ],
+          "raw": [
+            32,
+            96
+          ],
+          "difference_rms": 0.004620915177732366,
+          "difference_peak": 0.05078125,
+          "tail_rms_8_10s": 0.000091552734375
+        },
+        {
+          "file": "hall-audio-lab-factoryreference-noise_burst.json",
+          "case": "display_40_vs_41_noise_factory",
+          "display": [
+            40,
+            41
+          ],
+          "raw": [
+            51,
+            53
+          ],
+          "difference_rms": 0.00015692197828640005,
+          "difference_peak": 0.00189208984375,
+          "tail_rms_8_10s": 0.00016312592348528474
+        }
+      ]
+    }
+  ],
+  "repeatability": "PCM32 exact hashes checked against Codex 3 render manifest",
+  "startup": {
+    "schedule_events_expected": 213,
+    "schedule_events_applied": 213,
+    "last_schedule_frame": 12983,
+    "settle_frames": 12985,
+    "explicit_runtime_reset_each_run": true,
+    "post_schedule_initial_register_state_identical": true,
+    "serial_routing": {
+      "host_serial_mode": 72,
+      "input_port": 2,
+      "output_port": 1,
+      "stereo": true
+    }
+  }
+}

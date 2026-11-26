@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
@@ -314,4 +315,119 @@ test('AUDIO LAB imports explicit artifacts, preserves source/raw labels, plots a
   expect(controlPosts).toBe(0);
   const out=path.resolve(__dirname,'../../../docs/force_simulator/screenshots');fs.mkdirSync(out,{recursive:true});
   await page.screenshot({path:path.join(out,'pc-editor-audio-lab-fixture.png'),fullPage:true});
+});
+
+test('imports Codex 3 real HALL AUDIO LAB bundles and reconciles browser playback, tail plots, and hashes', async ({ page }) => {
+  const bundleDir=process.env.TROLLFX_HALL_AUDIO_LAB_BUNDLE_DIR,qaPath=process.env.TROLLFX_HALL_AUDIO_LAB_QA_REPORT;
+  test.skip(!bundleDir||!qaPath,'Set TROLLFX_HALL_AUDIO_LAB_BUNDLE_DIR and TROLLFX_HALL_AUDIO_LAB_QA_REPORT to run against local Codex 3 artifacts');
+  test.setTimeout(180000);
+  const qa=JSON.parse(fs.readFileSync(qaPath,'utf8'));
+  const files=fs.readdirSync(bundleDir).filter(x=>/^hall-audio-lab-.*\.json$/.test(x)).sort();
+  expect(files).toHaveLength(4);
+  expect(qa.validator.bundle_analysis).toBe('PASS_FOR_ALL_FOUR_BUNDLES');
+  expect(qa.startup.schedule_events_applied).toBe(qa.startup.schedule_events_expected);
+  expect(qa.startup.schedule_events_applied).toBe(213);
+  expect(qa.startup.explicit_runtime_reset_each_run).toBe(true);
+  expect(qa.startup.post_schedule_initial_register_state_identical).toBe(true);
+  const manifest=qa.audio_lab_bundles;
+  const expectedRows=qa.audio_lab_measurements.flatMap(x=>x.cases);
+  const renders=qa.render_manifest;
+  const posted=[];let forbiddenWrites=0;
+  page.on('request',r=>{if(r.url().endsWith('/api/control')||r.url().endsWith('/api/set'))forbiddenWrites++});
+  await page.locator('#audioLabMode').click();
+  for(const filename of files){
+    const fullPath=path.join(bundleDir,filename),bytes=fs.readFileSync(fullPath),bundle=JSON.parse(bytes.toString('utf8'));
+    const bundleSha=crypto.createHash('sha256').update(bytes).digest('hex');
+    const manifestRow=manifest.find(x=>x.filename===filename);
+    expect(manifestRow,`QA bundle manifest missing ${filename}`).toBeTruthy();
+    expect(bundleSha).toBe(manifestRow.sha256);
+    expect(bundle.source).toBe('standalone_experimental_runtime');
+    expect(bundle.effect_slot).toBe(1);expect(bundle.effect_name).toBe('HALL REVERB');expect(bundle.variation).toBe(1);
+    const mode=manifestRow.rate_mode,shotStimulus=manifestRow.stimulus;
+    const upload=page.waitForResponse(r=>r.url().endsWith('/api/audio-lab/import')&&r.request().method()==='POST');
+    await page.locator('#labBundle').setInputFiles(fullPath);
+    const response=await upload;expect(response.status(),`AUDIO LAB import failed for ${filename}`).toBe(200);
+    await expect(page.locator('#labSource')).toContainText('Standalone experimental native ES5510 runtime');
+    expect(await page.locator('#labSource').textContent()).not.toMatch(/synthetic|VST audio/i);
+    // The API response resolves before the file-input handler finishes its
+    // follow-up UI update. Wait for the selector state rather than reading a
+    // stale value from the preceding imported bundle.
+    await expect(page.locator('#labStimulus')).toHaveValue(bundle.cases[0].stimulus);
+    expect(await page.locator('#labCase option')).toHaveCount(4);
+    const sourceCaseRows=[];
+    for(let i=0;i<bundle.cases.length;i++){
+      const inputCase=bundle.cases[i];
+      await page.locator('#labCase').selectOption(inputCase.case_id);
+      const expected=expectedRows.find(x=>x.stimulus===inputCase.stimulus&&
+        JSON.stringify(x.display_values)==JSON.stringify([inputCase.a.display_value,inputCase.b.display_value])&&
+        Math.abs(x.processing_rates_hz[0]-inputCase.a.processing_rate_hz)<0.01&&
+        Math.abs(x.processing_rates_hz[1]-inputCase.b.processing_rate_hz)<0.01);
+      expect(expected,`${inputCase.case_id}: QA measurement row missing`).toBeTruthy();
+      await expect(page.locator('#labAValue')).toHaveText(`DECAY ${inputCase.a.display_value}`);
+      await expect(page.locator('#labBValue')).toHaveText(`DECAY ${inputCase.b.display_value}`);
+      await expect(page.locator('#labARaw')).toContainText(`Raw code ${inputCase.a.raw_code}`);
+      await expect(page.locator('#labBRaw')).toContainText(`Raw code ${inputCase.b.raw_code}`);
+      await expect(page.locator('#labAStatus')).toContainText('DSP APPLIED');
+      await expect(page.locator('#labAStatus')).toContainText('runtime READY');
+      await expect(page.locator('#labAStatus')).toContainText('firmware INITIALIZED');
+      await expect(page.locator('#labRegisterStatus')).toContainText('5 updates');
+      const loaded=await page.evaluate(()=>({a:labDecoded.get('a').frames,b:labDecoded.get('b').frames,
+        ar:labDecoded.get('a').rate,br:labDecoded.get('b').rate,computed:labComputed,
+        wavHashes:[labCase.a.wav_sha256,labCase.b.wav_sha256],
+        provenance:[labCase.a.package_provenance,labCase.b.package_provenance],
+        provenanceIds:[labCase.a.provenance_id,labCase.b.provenance_id],
+        sourceCommit:[labCase.a.source_commit,labCase.b.source_commit],
+        processingRates:[labCase.a.processing_rate_hz,labCase.b.processing_rate_hz],
+        registerRows:[labCase.a.register_updates,labCase.b.register_updates]}));
+      expect(loaded.a).toBe(loaded.b);expect(loaded.ar).toBe(loaded.br);
+      expect(loaded.ar).toBe(expected.sample_rate_hz);
+      expect(loaded.computed.a.rms).toBeCloseTo(expected.rms[0],11);
+      expect(loaded.computed.b.rms).toBeCloseTo(expected.rms[1],11);
+      expect(loaded.computed.a.peak).toBeCloseTo(expected.peak[0],11);
+      expect(loaded.computed.b.peak).toBeCloseTo(expected.peak[1],11);
+      expect(loaded.computed.difference.rms).toBeCloseTo(expected.difference_rms,11);
+      expect(loaded.computed.difference.peak).toBeCloseTo(expected.difference_peak,11);
+      expect(loaded.wavHashes).toEqual(expected.wav_sha256);
+      expect(loaded.provenance).toEqual(['validated_factory_checkpoint','validated_factory_checkpoint']);
+      expect(loaded.provenanceIds).toEqual(expected.provenance_ids);
+      expect(loaded.sourceCommit).toEqual([qa.provenance.runtime_source_commit,qa.provenance.runtime_source_commit]);
+      expect(loaded.processingRates).toEqual(expected.processing_rates_hz);
+      expect(loaded.registerRows[0]).toHaveLength(5);
+      expect(loaded.registerRows[0].map(x=>x.register)).toEqual(qa.provenance.register_order.map(x=>x.toUpperCase()));
+      const renderA=renders.find(x=>x.wav_pcm32_sha256===expected.wav_sha256[0]);
+      expect(renderA,`${inputCase.case_id}: PCM32 render hash absent from QA manifest`).toBeTruthy();
+      expect(renderA.late_tail_rms_8_10s).toBeGreaterThan(0);
+      const tail=await page.evaluate(()=>{const d=labDecoded.get('a'),start=Math.min(d.frames,Math.floor(d.rate*8)),end=d.frames;let sum=0;for(let i=start;i<end;i++)sum+=(d.left[i]**2+d.right[i]**2)/2;return Math.sqrt(sum/Math.max(1,end-start))});
+      // Browser Float32 decoding and the independent PCM32 analyzer differ by
+      // at most a few 1e-10 here; keep a 1e-8 absolute tolerance.
+      expect(Math.abs(tail-renderA.late_tail_rms_8_10s)).toBeLessThan(1e-8);
+      const plots=await page.evaluate(()=>{function colors(id){let c=document.querySelector(id),d=c.getContext('2d').getImageData(0,0,c.width,c.height).data,t=0,o=0,r=0;for(let i=0;i<d.length;i+=4){if(d[i+1]>d[i]*1.2&&d[i+2]>d[i]*1.2&&d[i+1]>100)t++;if(d[i]>d[i+1]*1.2&&d[i+1]>d[i+2]*1.2&&d[i]>100)o++;if(d[i]>d[i+1]*1.2&&d[i]>d[i+2]*1.2&&d[i]>100)r++}return{teal:t,amber:o,red:r}}return{wave:colors('#labWave'),envelope:colors('#labEnvelope'),difference:colors('#labDifference')}});
+      expect(plots.wave.teal).toBeGreaterThan(0);
+      expect(loaded.a).toBeGreaterThan(0);expect(loaded.b).toBe(loaded.a);
+      expect(plots.envelope.teal).toBeGreaterThan(0);expect(plots.envelope.amber).toBeGreaterThan(0);
+      expect(plots.difference.red).toBeGreaterThan(0);
+      for(const selector of ['#labAPlayer','#labBPlayer']){
+        await expect(page.locator(selector)).toHaveJSProperty('readyState',4);
+        const playing=await page.locator(selector).evaluate(async el=>{await el.play();let ok=!el.paused;el.pause();return ok});expect(playing).toBe(true);
+      }
+      const rowCase={file:filename,case:inputCase.case_id,display:[inputCase.a.display_value,inputCase.b.display_value],
+        raw:[inputCase.a.raw_code,inputCase.b.raw_code],difference_rms:loaded.computed.difference.rms,
+        difference_peak:loaded.computed.difference.peak,tail_rms_8_10s:tail};
+      sourceCaseRows.push(rowCase);
+      if(i===0){
+        const modeName=mode==='FactoryReference'?'factoryreference':'experimental48000';
+        const stimName=shotStimulus;
+        const out=path.resolve(__dirname,'../../../docs/force_simulator/screenshots');fs.mkdirSync(out,{recursive:true});
+        await page.screenshot({path:path.join(out,`pc-editor-audio-lab-real-${modeName}-${stimName}.png`),fullPage:true});
+      }
+    }
+    posted.push({file:filename,sha256:bundleSha,source:bundle.source,rate_mode:mode,stimulus:shotStimulus,cases:sourceCaseRows});
+  }
+  expect(forbiddenWrites).toBe(0);
+  const repeatRows=renders.filter(x=>x.raw_code===51&&x.repeat===true);
+  for(const repeated of repeatRows){
+    const original=renders.find(x=>x.rate_mode===repeated.rate_mode&&x.stimulus===repeated.stimulus&&x.raw_code===51&&x.repeat===false);
+    expect(original).toBeTruthy();expect(repeated.wav_pcm32_sha256).toBe(original.wav_pcm32_sha256);
+  }
+  fs.writeFileSync(path.resolve(__dirname,'../../../docs/force_simulator/real-audio-lab-browser-results.json'),JSON.stringify({schema:'trollfx-asr10-real-audio-lab-browser-qa-v1',source:'Codex 3 standalone experimental native ES5510 artifacts',bundles:posted,repeatability:'PCM32 exact hashes checked against Codex 3 render manifest',startup:qa.startup},null,2)+'\n');
 });

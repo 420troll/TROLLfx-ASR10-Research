@@ -16,7 +16,7 @@ module.exports = defineConfig({
     command: `python3 launch.py --host 127.0.0.1 --port ${port} --assets "${assets}"`,
     cwd: simulatorDir,
     url: `http://127.0.0.1:${port}/api/state`,
-    reuseExistingServer: false,
+    reuseExistingServer: process.env.TROLLFX_SIM_REUSE_SERVER === '1',
     timeout: 120_000,
     env: { ...process.env, TROLLFX_FACTORY_PACKAGES_DIR: assets },
   },

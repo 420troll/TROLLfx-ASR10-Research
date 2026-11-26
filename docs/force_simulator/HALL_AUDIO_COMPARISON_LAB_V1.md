@@ -82,6 +82,20 @@ cd tools/force_simulator && npm run test:browser
 
 The `test_audio_lab.py` suite checks deterministic metrics, raw-code non-inference, stereo audio integrity, exact plot-data bins, source separation, private-field rejection and mismatched-pair rejection. The Playwright test imports a labeled synthetic fixture, checks setting labels and plot colors, decodes and plays WAV audio in Chromium, exercises stimulus/duration selection and report download, and verifies the AUDIO LAB sends no `/api/control` or `/api/set` requests. Existing browser tests continue to exercise the editor and VST routes.
 
+## Codex 3 real HALL artifact validation
+
+The real-artifact Playwright test accepts local paths through `TROLLFX_HALL_AUDIO_LAB_BUNDLE_DIR` and `TROLLFX_HALL_AUDIO_LAB_QA_REPORT`; these paths are not embedded in the test output. It imports all four Codex 3 bundles (experimental 48 kHz and factory-reference processing rate, each with impulse and noise-burst stimuli), checks the supplied bundle SHA-256 values, effect/variation, display/raw pairs, runtime/firmware/register status, and reconciles browser-decoded A/B and difference measurements plus 8–10 second tail RMS against Codex 3's independent report. It also verifies both WAV elements decode to their full duration and can play in Chromium, both stereo waveforms and envelopes render, the difference plot is visible, repeated PCM32 hashes match, and no VST control-write request occurs.
+
+Run it with:
+
+```sh
+TROLLFX_HALL_AUDIO_LAB_BUNDLE_DIR=/path/to/audio-lab-export \
+TROLLFX_HALL_AUDIO_LAB_QA_REPORT=/path/to/ASR10_HALL_AUDIO_LAB_EXPORT_V1.json \
+npx playwright test -c playwright.config.js -g 'imports Codex 3 real HALL'
+```
+
+The verified browser report is [`real-audio-lab-browser-results.json`](real-audio-lab-browser-results.json). Four screenshots capture the real data: [experimental 48 kHz impulse](screenshots/pc-editor-audio-lab-real-experimental48000-impulse.png), [experimental 48 kHz noise burst](screenshots/pc-editor-audio-lab-real-experimental48000-noise_burst.png), [factory-reference impulse](screenshots/pc-editor-audio-lab-real-factoryreference-impulse.png), and [factory-reference noise burst](screenshots/pc-editor-audio-lab-real-factoryreference-noise_burst.png). The displayed source is the **standalone experimental native ES5510 runtime** in both processing-rate modes; it is not audio captured from the native VST or the physical Force, and “factory reference” identifies the runtime's processing-rate mode, not original-OS reference audio. The synthetic fixture remains explicitly labeled synthetic.
+
 Playback was verified in Chromium through WAV metadata decode and successful `HTMLAudioElement.play()` state. This verifies simulator/browser playback only; it says nothing about physical Force audio or whether a setting affects the DSP.
 
 No Force SDK package was built or installed. ARMv7 and physical-device behavior remain outside this desktop lab.
