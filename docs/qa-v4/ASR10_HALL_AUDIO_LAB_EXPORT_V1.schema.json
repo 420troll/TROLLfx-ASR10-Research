@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://420troll.github.io/TROLLfx-ASR10-Research/qa-v4/asr10-hall-audio-lab-export-v1.schema.json",
+  "title": "TROLLfx ASR-10 HALL AUDIO LAB export manifest, V1",
+  "type": "object",
+  "required": [
+    "schema", "effect", "source", "provenance", "startup", "stimuli", "rates",
+    "render_count", "original_float_wavs_preserved", "render_manifest", "comparison_pairs",
+    "audio_lab_bundles", "audio_lab_measurements", "log_envelope_plots", "validator", "import_instructions"
+  ],
+  "properties": {
+    "schema": { "const": "trollfx-asr10-hall-audio-lab-export-v1" },
+    "effect": {
+      "type": "object", "required": ["slot", "name", "variation"],
+      "properties": { "slot": { "const": 1 }, "name": { "const": "HALL REVERB" }, "variation": { "const": 1 } }
+    },
+    "source": { "type": "string" },
+    "provenance": { "type": "object" },
+    "startup": {
+      "type": "object", "required": ["schedule_events_expected", "schedule_events_applied", "last_schedule_frame", "settle_frames", "serial_routing"],
+      "properties": {
+        "schedule_events_expected": { "type": "integer", "minimum": 1 },
+        "schedule_events_applied": { "type": "integer", "minimum": 1 },
+        "last_schedule_frame": { "type": "integer", "minimum": 0 },
+        "settle_frames": { "type": "integer", "minimum": 0 },
+        "serial_routing": { "type": "object" }
+      }
+    },
+    "stimuli": { "type": "object" },
+    "rates": { "type": "array", "minItems": 2 },
+    "render_count": { "const": 44 },
+    "original_float_wavs_preserved": { "const": true },
+    "render_manifest": { "type": "array", "minItems": 44, "maxItems": 44, "items": { "$ref": "#/$defs/render" } },
+    "comparison_pairs": { "type": "array", "minItems": 16, "maxItems": 16, "items": { "type": "object" } },
+    "audio_lab_bundles": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "object" } },
+    "audio_lab_measurements": { "type": "array", "minItems": 4 },
+    "additional_qa_comparisons": { "type": "array" },
+    "log_envelope_plots": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "string" } },
+    "format_note": { "type": "string" },
+    "validator": { "type": "object" },
+    "import_instructions": { "type": "object" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "render": {
+      "type": "object",
+      "required": ["rate_mode", "stimulus", "display_value", "raw_code", "frames", "duration_seconds", "processing_rate_hz", "wav_float32_filename", "wav_float32_sha256", "wav_pcm32_filename", "wav_pcm32_sha256", "rms", "peak", "tail_energy_bands"],
+      "properties": {
+        "rate_mode": { "enum": ["FactoryReference", "Experimental48000"] },
+        "stimulus": { "enum": ["impulse", "noise_burst"] },
+        "display_value": { "type": "integer", "minimum": 0, "maximum": 99 },
+        "raw_code": { "type": "integer", "minimum": 0, "maximum": 127 },
+        "frames": { "type": "integer", "minimum": 1 },
+        "duration_seconds": { "type": "number", "exclusiveMinimum": 0 },
+        "processing_rate_hz": { "type": "number", "exclusiveMinimum": 0 },
+        "wav_float32_filename": { "type": "string" },
+        "wav_float32_sha256": { "$ref": "#/$defs/sha256" },
+        "wav_pcm32_filename": { "type": "string" },
+        "wav_pcm32_sha256": { "$ref": "#/$defs/sha256" },
+        "rms": { "type": "number", "minimum": 0 },
+        "peak": { "type": "number", "minimum": 0 },
+        "tail_energy_bands": { "type": "object" }
+      }
+    }
+  },
+  "additionalProperties": true
+}
